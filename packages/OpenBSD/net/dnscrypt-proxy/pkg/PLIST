@@ -1,0 +1,7 @@
+@comment $OpenBSD$
+@newgroup _dnscrypt-proxy:686
+@newuser _dnscrypt-proxy:686:_dnscrypt-proxy:daemon:dnscrypt-proxy user:/nonexistent:/sbin/nologin
+@man man/man8/dnscrypt-proxy.8
+@bin sbin/dnscrypt-proxy
+share/doc/dnscrypt-proxy
+@rcscript ${RCDIR}/dnscrypt_proxy

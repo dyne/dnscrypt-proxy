@@ -1,0 +1,12 @@
+#!/bin/sh
+
+daemon="${TRUEPREFIX}/sbin/dnscrypt-proxy"
+
+# Use OpenDNS resolvers
+daemon_flags="--user=_dnscrypt-proxy"
+
+. /etc/rc.d/rc.subr
+
+rc_reload=NO
+
+rc_cmd $1
