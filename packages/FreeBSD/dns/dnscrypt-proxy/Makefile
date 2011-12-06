@@ -6,7 +6,7 @@
 PORTNAME=	dnscrypt-proxy
 PORTVERSION=	0.7
 CATEGORIES=	dns
-MASTER_SITES=	file:///tmp/
+MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 LICENSE=	BSD
 
 MAINTAINER=	dnscrypt@opendns.com
