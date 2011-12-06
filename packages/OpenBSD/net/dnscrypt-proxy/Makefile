@@ -1,3 +1,4 @@
+# $OpenBSD$
 
 COMMENT=	secure communications between a client and a DNS resolver
 
