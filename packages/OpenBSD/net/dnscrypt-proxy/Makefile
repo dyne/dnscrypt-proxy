@@ -3,9 +3,10 @@ COMMENT=	secure communications between a client and a DNS resolver
 
 DISTNAME=	dnscrypt-proxy-0.7
 CATEGORIES=	net
-MASTER_SITES=	file:///tmp/
+MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
+EXTRACT_SUFX=	.tar.bz2
 
-HOMEPAGE=	http://www.dnscrypt.org/
+HOMEPAGE=	http://www.opendns.com/technology/dnscrypt/
 
 MAINTAINER=	OpenDNS Inc. <dnscrypt@opendns.com>
 
