@@ -1,3 +1,7 @@
+# $OpenBSD$
+
+# NaCl needs porting to work on other arch; tested: sparc64 arm powerpc
+ONLY_FOR_ARCHS=	i386 amd64
 
 COMMENT=	secure communications between a client and a DNS resolver
 
@@ -13,7 +17,10 @@ PERMIT_PACKAGE_CDROM=	No
 PERMIT_PACKAGE_FTP=	No
 PERMIT_DISTFILES_CDROM=	No
 PERMIT_DISTFILES_FTP=	No
-WANTLIB=		c m
+
+WANTLIB=	c execinfo m pthread
+
+LIB_DEPENDS=	devel/libexecinfo
 
 CONFIGURE_STYLE= gnu
 

@@ -1,9 +1,11 @@
 #!/bin/sh
+#
+# $OpenBSD$
 
 daemon="${TRUEPREFIX}/sbin/dnscrypt-proxy"
 
 # Use OpenDNS resolvers
-daemon_flags="--user=_dnscrypt-proxy"
+daemon_flags="-d --user=_dnscrypt-proxy"
 
 . /etc/rc.d/rc.subr
 
