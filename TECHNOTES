@@ -62,9 +62,8 @@ The following information has to be provided to the proxy:
 - The provider public key.
 - The resolver IP address.
 
-At startup and every hour, the proxy directly connects to the
-specified resolver IP address and issues a TXT query for the provider
-name.
+At startup and 60 minute, the proxy directly connects to the specified
+resolver IP address and issues a TXT query for the provider name.
 
 One or more TXT records are returned, each containing a signed certificate.
 The provider public key is only used to verify a certificate, not for
@@ -72,11 +71,11 @@ authenticating/encrypting queries.
 
 Certificates have the following header:
 - 4 byte magic header DNSC
-- 2 byte Major version
-- 2 byte Minor version
+- 2 byte major version
+- 2 byte minor version
 
 Followed by signed content (the signature adds 512 bits to the payload):
-- Server 256-bit public key
+- server 256-bit public key
 - 8 byte magic header to use for queries using this specific key
 - 4 byte serial number
 - 4 + 4 byte validity period (two timestamps)
@@ -100,8 +99,7 @@ The proxy always generates a new, in-memory only key pair at startup.
 
 Random padding is added to queries and replies, using a 64 byte block size.
 
-Encrypted/signed queries are prefixed with the following header
-structure:
+Encrypted queries are prefixed with the following header structure:
 
 - 8 byte magic header (provided by the chosen certificate)
 - A 256 bit client public key
