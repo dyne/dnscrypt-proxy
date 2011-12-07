@@ -28,6 +28,7 @@ PRNG
   
 - Not the latest, not the fastest, not the safest, but widespread and good
   enough for our needs.
+
 - However, OpenBSD happens to be the only operating system able to
   reseed it with a system call (= safe in an empty chroot environment).
 
