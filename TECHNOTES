@@ -16,10 +16,10 @@ Cryptographic library
   so that portable packages can be built. CPU-specific implementations are
   used server-side.
 
-- crypto_box_curve25519xsalsa20poly1305() for signing/encrypting queries and
-  replies, crypto_sign_edwards25519sha512batch() for signing
-  certificates (+ crypto_stream_xsalsa20() server-side, mainly for random
-  padding). See the NaCl documentation for details.
+- crypto_box_curve25519xsalsa20poly1305_*() for signing/encrypting
+  queries and replies, crypto_sign_edwards25519sha512batch_*() for
+  signing certificates (+ crypto_stream_xsalsa20_*() server-side, mainly
+  for random padding). See the NaCl documentation for details.
 
 PRNG
 ----
