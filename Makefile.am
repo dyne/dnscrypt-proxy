@@ -4,7 +4,8 @@ AUTOMAKE_OPTIONS = gnu
 
 EXTRA_DIST = \
 	autogen.sh \
-	README.markdown
+	README.markdown \
+	THANKS
 
 SUBDIRS = \
 	man \
