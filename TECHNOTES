@@ -13,19 +13,20 @@ Cryptographic library
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf
 
 - Faster, but CPU-specific implementations have been removed, though,
-  so that portable packages can be built.
+  so that portable packages can be built. CPU-specific implementations are
+  used server-side.
 
 - crypto_box_curve25519xsalsa20poly1305() for signing/encrypting queries and
   replies, crypto_sign_edwards25519sha512batch() for signing
   certificates (+ crypto_stream_xsalsa20() server-side, mainly for random
-  padding). See NaCl documentation for details.
+  padding). See the NaCl documentation for details.
 
 PRNG
 ----
 
-- Uses arc4random() that any sane C library (providing strlcpy()/strlcat())
-  already implements.
-  
+- Uses arc4random() that any sane (= providing strlcpy()/strlcat()) C
+  library already implements.
+
 - Not the latest, not the fastest, not the safest, but widespread and good
   enough for our needs.
 
@@ -39,9 +40,9 @@ Event-notification library
 --------------------------
 
 - Uses NodeJS' libuv, which wraps libev, native Windows functions, and
-  provides nice cross-platform wrappers for common functions. (unbound's
+  provides nice cross-platform wrappers for common functions. Unbound's
   boilerplate is also excellent, but it hasn't been packaged as a
-  standalone library yet).
+  standalone library yet.
 
 - Because it is totally awesome for writing software that has to
   eventually work on Windows.
@@ -62,7 +63,7 @@ The following information has to be provided to the proxy:
 - The provider public key.
 - The resolver IP address.
 
-At startup and 60 minute, the proxy directly connects to the specified
+At startup and every 60 minute, the proxy directly connects to the specified
 resolver IP address and issues a TXT query for the provider name.
 
 One or more TXT records are returned, each containing a signed certificate.
