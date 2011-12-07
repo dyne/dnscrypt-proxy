@@ -80,6 +80,9 @@ AX_CHECK_LINK_FLAG([-z now], [LDFLAGS="$LDFLAGS -z now"])
 AC_ARG_VAR([RONN], [path to the ronn text processor])
 AC_PATH_PROG([RONN], [ronn], [#])
 
+AC_ARG_VAR([SIXJACK], [path to 6jack])
+AC_PATH_PROG([SIXJACK], [sixjack], [#])
+
 AC_ARG_VAR([AR], [path to the ar utility])
 AC_CHECK_TOOL([AR], [ar], [ar])
 
