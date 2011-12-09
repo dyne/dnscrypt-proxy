@@ -79,7 +79,7 @@ string, with optional columns.
 
 ## ADVANCED USAGE EXAMPLE
 
-    $ dnscrypt-proxy --provider-key=3D5B:E53A:F5CB:0538:2E7A:7561:A5A1:9DF2:8D95:43F8:C617:E552:4360:D0BE:91EC:7FEA --provider-name=2.dnscrypt-cert.dnscrypt.org. --resolver-ip=208.67.220.220 --daemonize
+    $ dnscrypt-proxy --provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 --provider-name=2.dnscrypt-cert.dnscrypt.org. --resolver-ip=208.67.220.220 --daemonize
 
 ## COPYRIGHT
 
