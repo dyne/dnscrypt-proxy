@@ -51,8 +51,8 @@ Event-notification library
 
 - It currently uses static per-OS config.h definitions, which makes
   compilation faster, but breaks on operating systems with older libc, like
-  Openwall Linux. The bundled version may introduce some changes to cope
-  with that -if only for Openwall Linux-
+  Openwall Linux. The bundled version has minor local changes in order
+  to support Openwall Linux.
 
 Certificates
 ------------
@@ -64,7 +64,9 @@ The following information has to be provided to the proxy:
 - The resolver IP address (defaults to 208.67.222.222).
 
 At startup and every 60 minute, the proxy directly connects to the specified
-resolver IP address and issues a TXT query for the provider name.
+resolver IP address and issues a TXT query for the provider name. The
+first component of the provider name indicates the latest protocol version,
+or the version range, supported by the client.
 
 One or more TXT records are returned, each containing a signed certificate.
 The provider public key is only used to verify a certificate, never for
