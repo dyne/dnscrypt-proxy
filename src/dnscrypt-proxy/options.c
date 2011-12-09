@@ -49,7 +49,7 @@ static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:V";
     "D0BE:91EC:7FEA"
 #endif
 #ifndef DEFAULT_PROVIDER_NAME
-# define DEFAULT_PROVIDER_NAME "dnscrypt-cert.opendns.com."
+# define DEFAULT_PROVIDER_NAME "2.dnscrypt-cert.opendns.com."
 #endif
 #ifndef DEFAULT_RESOLVER_IP
 # define DEFAULT_RESOLVER_IP "208.67.220.220"

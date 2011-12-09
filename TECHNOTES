@@ -17,9 +17,9 @@ Cryptographic library
   used server-side.
 
 - crypto_box_curve25519xsalsa20poly1305_*() for signing/encrypting
-  queries and replies, crypto_sign_edwards25519sha512batch_*() for
-  signing certificates (+ crypto_stream_xsalsa20_*() server-side, mainly
-  for random padding). See the NaCl documentation for details.
+  queries and replies, crypto_sign_ed25519_*() for signing certificates
+  (+ crypto_stream_xsalsa20_*() server-side, mainly for random padding).
+  See the NaCl documentation for details.
 
 PRNG
 ----
@@ -59,7 +59,7 @@ Certificates
 
 The following information has to be provided to the proxy:
 
-- The provider name (defaults to dnscrypt-cert.opendns.com.)
+- The provider name (defaults to 2.dnscrypt-cert.opendns.com.)
 - The provider public key (defaults to the current one for OpenDNS).
 - The resolver IP address (defaults to 208.67.222.222).
 
