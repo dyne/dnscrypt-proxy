@@ -27,7 +27,15 @@
 #include <assert.h>
 #include <errno.h>
 
-#include <sys/inotify.h>
+#ifndef USE_INOTIFY
+# if __linux && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 4))
+#  define USE_INOTIFY 1
+# endif
+#endif
+
+#ifdef USE_INOTIFY
+# include <sys/inotify.h>
+#endif
 #include <sys/sysinfo.h>
 #include <unistd.h>
 #include <time.h>
@@ -82,6 +90,8 @@ uint64_t uv_get_free_memory(void) {
 uint64_t uv_get_total_memory(void) {
   return (uint64_t) sysconf(_SC_PAGESIZE) * sysconf(_SC_PHYS_PAGES);
 }
+
+#ifdef USE_INOTIFY
 
 static int new_inotify_fd(void) {
 #if defined(IN_NONBLOCK) && defined(IN_CLOEXEC)
@@ -199,6 +209,7 @@ int uv_fs_event_init(uv_loop_t* loop,
   return 0;
 }
 
+#endif
 
 void uv__fs_event_destroy(uv_fs_event_t* handle) {
   ev_io_stop(handle->loop->ev, &handle->read_watcher);
