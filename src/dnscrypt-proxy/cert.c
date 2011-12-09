@@ -10,7 +10,7 @@
 
 #include "cert.h"
 #include "cert_p.h"
-#include "crypto_sign.h"
+#include "crypto_sign_ed25519.h"
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "probes.h"
@@ -115,9 +115,9 @@ cert_open_bincert(ProxyContext * const proxy_context,
         (size_t) (signed_bincert->signed_data - signed_bincert->magic_cert);
     assert(bincert_size - (size_t) (bincert->server_publickey -
                                     bincert->magic_cert) == signed_data_len);
-    if (crypto_sign_open(bincert->server_publickey, &bincert_data_len_ul,
-                         signed_bincert->signed_data, signed_data_len,
-                         proxy_context->provider_publickey) != 0) {
+    if (crypto_sign_ed25519_open(bincert->server_publickey, &bincert_data_len_ul,
+                                 signed_bincert->signed_data, signed_data_len,
+                                 proxy_context->provider_publickey) != 0) {
         free(bincert);
         logger_noformat(proxy_context, LOG_ERR,
                         "Suspicious certificate received");

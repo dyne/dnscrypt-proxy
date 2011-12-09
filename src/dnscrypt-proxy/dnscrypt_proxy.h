@@ -10,7 +10,7 @@
 #include "app.h"
 #include "cert.h"
 #include "crypto_box.h"
-#include "crypto_sign.h"
+#include "crypto_sign_ed25519.h"
 #include "dnscrypt_client.h"
 #include "uv.h"
 
@@ -55,7 +55,7 @@
 
 typedef struct ProxyContext_ {
     uint8_t                  dnscrypt_magic_query[DNSCRYPT_MAGIC_QUERY_LEN];
-    uint8_t                  provider_publickey[crypto_sign_PUBLICKEYBYTES];
+    uint8_t                  provider_publickey[crypto_sign_ed25519_PUBLICKEYBYTES];
     uint8_t                  resolver_publickey[crypto_box_PUBLICKEYBYTES];
     DNSCryptClient           dnscrypt_client;
     CertUpdater              cert_updater;
