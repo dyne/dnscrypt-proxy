@@ -184,7 +184,6 @@
 ./crypto_secretbox/xsalsa20poly1305/ref/box.c
 ./crypto_secretbox/xsalsa20poly1305/selected
 ./crypto_secretbox/xsalsa20poly1305/used
-./crypto_sign/ed25519/checksum
 ./crypto_sign/ed25519/description
 ./crypto_sign/ed25519/designers
 ./crypto_sign/ed25519/ref/api.h
@@ -197,6 +196,8 @@
 ./crypto_sign/ed25519/ref/implementors
 ./crypto_sign/ed25519/ref/sc25519.c
 ./crypto_sign/ed25519/ref/sc25519.h
+./crypto_sign/ed25519/selected
+./crypto_sign/ed25519/used
 ./crypto_sign/edwards25519sha512batch/ref/api.h
 ./crypto_sign/edwards25519sha512batch/ref/fe25519.c
 ./crypto_sign/edwards25519sha512batch/ref/fe25519.h
