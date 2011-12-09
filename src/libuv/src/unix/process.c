@@ -104,7 +104,7 @@ static int uv__make_socketpair(int fds[2], int flags) {
 
 
 static int uv__make_pipe(int fds[2], int flags) {
-#if HAVE_SYS_PIPE2
+#if defined(HAVE_SYS_PIPE2) && defined(O_CLOEXEC)
   int fl;
 
   fl = O_CLOEXEC;
