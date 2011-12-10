@@ -36,12 +36,17 @@ AX_CHECK_COMPILE_FLAG([-fPIE], [CFLAGS="$CFLAGS -fPIE"])
 AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior], [CFLAGS="$CFLAGS -fcatch-undefined-c99-behavior"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"])
-AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [CFLAGS="$CFLAGS -fstack-protector-all"])
 
-AS_IF([test "x$ac_compiler_gnu" = "xyes"],[
-  AS_IF([$CC --version 2>/dev/null | $GREP "Free Software Foundation" > /dev/null 2>&1],[
-    CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
-    AX_CHECK_COMPILE_FLAG([--param ssp-buffer-size=1], [CFLAGS="$CFLAGS --param ssp-buffer-size=1"])
+AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
+  AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
+  AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
+], [
+  AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [CFLAGS="$CFLAGS -fstack-protector-all"])
+  AS_IF([test "x$ac_compiler_gnu" = "xyes"],[
+    AS_IF([$CC --version 2>/dev/null | $GREP "Free Software Foundation" > /dev/null 2>&1],[
+      CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
+      AX_CHECK_COMPILE_FLAG([--param ssp-buffer-size=1], [CFLAGS="$CFLAGS --param ssp-buffer-size=1"])
+    ])
   ])
 ])
 
@@ -76,8 +81,6 @@ AX_CHECK_COMPILE_FLAG([-Wvariable-decl], [CWFLAGS="$CWFLAGS -Wvariable-decl"])
 AX_CHECK_LINK_FLAG([-pie], [LDFLAGS="$LDFLAGS -pie"])
 AX_CHECK_LINK_FLAG([-z relro], [LDFLAGS="$LDFLAGS -z relro"])
 AX_CHECK_LINK_FLAG([-z now], [LDFLAGS="$LDFLAGS -z now"])
-AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
-AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
 
 AC_ARG_VAR([RONN], [path to the ronn text processor])
 AC_PATH_PROG([RONN], [ronn], [#])
