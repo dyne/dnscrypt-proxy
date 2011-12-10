@@ -33,7 +33,7 @@ Installation
 ------------
 
 The daemon is known to work on recent versions of OSX, OpenBSD,
-NetBSD, Dragonfly BSD, FreeBSD and Linux.
+NetBSD, Dragonfly BSD, FreeBSD, Linux and Cygwin/Win32.
 
 Compile and install it using the standard procedure:
 
