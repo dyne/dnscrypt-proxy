@@ -105,15 +105,20 @@ run it as a forwarder for a local DNS cache, like `unbound`, `pdns` or
 `dnscache`.
 
 Both can safely run on the same machine as long as they are listening
-to different IP addresses or different ports.
+to different IP addresses (preferred) or different ports.
 
-If your DNS cache is unbound, all you need is to edit the
-`unbound.conf` file and add the following lines to the `server`
+If your DNS cache is `unbound`, all you need is to edit the
+`unbound.conf` file and add the following lines at the end of the `server`
 section:
+
+    do-not-query-localhost: no
 
     forward-zone:
       name: "."
       forward-addr: 127.0.0.1@40
+
+The first line is not required if you are using different IP addresses
+instead of different ports.
 
 Then start `dnscrypt-proxy`, telling it to use a specific port (`40`, in
 this example):
