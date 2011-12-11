@@ -3,7 +3,7 @@
 VERSION="0.7"
 TMPDIR=${TMPDIR:-/tmp}
 BASE_DIR=$(mktemp -d "$TMPDIR"/dnscrypt.XXXXXX)
-INSTALL_DIR="$BASE_DIR/usr/local"
+INSTALL_DIR="$BASE_DIR/usr"
 
 ./configure --prefix="$INSTALL_DIR" && make -j4 install
 
