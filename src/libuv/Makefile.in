@@ -18,14 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+AR=@AR@
 CC=@CC@
 CFLAGS=@CFLAGS@
 CPP=@CPPFLAGS@
+GREP=@GREP@
 LDFLAGS=@LDFLAGS@
 LIBS=@LIBS@
 
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
-
+cc_mingw := $(shell sh -c '$CC --version 2> /dev/null | $GREP GCC | $GREP mingw- 2> /dev/null || echo unknown)
+ifneq (,$(findstring mingw,$(uname_S)))
+uname_S := MINGW
+endif
 ifdef MSVC
 uname_S := MINGW
 endif

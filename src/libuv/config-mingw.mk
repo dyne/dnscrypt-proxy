@@ -18,14 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# Use make -f Makefile.gcc PREFIX=i686-w64-mingw32-
-# for cross compilation
-CC = $(PREFIX)gcc
-AR = $(PREFIX)ar
 E=.exe
 
-CFLAGS=$(CPPFLAGS) -g --std=gnu89 -D_WIN32_WINNT=0x0600 -Isrc/ares/config_win32
-LINKFLAGS=-lm
+CFLAGS=$(CPPFLAGS) -D_WIN32_WINNT=0x0600 -Isrc/ares/config_win32
+LINKFLAGS=($LDFLAGS) $(LIBS)
 
 CARES_OBJS += src/ares/windows_port.o
 CARES_OBJS += src/ares/ares_platform.o
