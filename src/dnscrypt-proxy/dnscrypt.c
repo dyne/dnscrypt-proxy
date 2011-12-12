@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "dnscrypt.h"
-#include "alt_arc4random.h"
+#include "salsa20_random.h"
 #include "randombytes.h"
 
 size_t
@@ -30,28 +30,6 @@ dnscrypt_query_header_size(void)
         + crypto_box_MACBYTES;
 }
 
-static int
-dnscrypt_discard_random_bytes(const size_t max_bytes)
-{
-    int      ret = 0;
-    uint32_t discard_count;
-    uint32_t discard_count_max;
-    uint32_t i = 0U;
-
-    if (max_bytes / 4U > (size_t) UINT32_MAX) {
-        discard_count_max = (uint32_t) UINT32_MAX;
-        ret = -1;
-        errno = EOVERFLOW;
-    } else {
-        discard_count_max = (uint32_t) (max_bytes / 4U);
-    }
-    discard_count = alt_arc4random_uniform(discard_count_max);
-    for (i = (uint32_t) 0U; i < discard_count; i++) {
-        (void) alt_arc4random();
-    }
-    return ret;
-}
-
 size_t
 dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
 {
@@ -62,7 +40,7 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
         return len;
     }
     padded_len = len + DNSCRYPT_MIN_PAD_LEN +
-        alt_arc4random_uniform(max_len - len - DNSCRYPT_MIN_PAD_LEN + 1U);
+        salsa20_random_uniform(max_len - len - DNSCRYPT_MIN_PAD_LEN + 1U);
     padded_len += DNSCRYPT_BLOCK_SIZE - padded_len % DNSCRYPT_BLOCK_SIZE;
     if (padded_len > max_len) {
         padded_len = max_len;
@@ -71,11 +49,10 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
     padding_len = padded_len - len;
 
 #ifdef DNSCRYPT_USE_ONLY_ONE_BYTE_FROM_PRNG_FOR_PADDING
-    memset(buf_padding_area, (int) alt_arc4random(), padding_len);
+    memset(buf_padding_area, (int) salsa20_random(), padding_len);
 #else
-    alt_arc4random_buf(buf_padding_area, padding_len);
+    salsa20_random_buf(buf_padding_area, padding_len);
     assert(max_len >= padded_len);
-    dnscrypt_discard_random_bytes(max_len - padded_len);
 #endif
     return padded_len;
 }
@@ -84,7 +61,7 @@ void
 randombytes(unsigned char * const buf, const unsigned long long buf_len)
 {
     assert(buf_len <= SIZE_MAX);
-    alt_arc4random_buf(buf, buf_len);
+    salsa20_random_buf(buf, buf_len);
 }
 
 void

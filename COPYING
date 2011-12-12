@@ -29,5 +29,4 @@ The externally maintained libraries used by dnscrypt-proxy are:
   - libuv (https://github.com/joyent/libuv). MIT license.
     + libuv dependencies, see src/libuv/LICENSE.
 
-  - alt_arc4random.c reuses code from OpenBSD. BSD license,
-    see the alt_arc4random.c header.
+  - salsa20_random.c reuses BSD code from OpenBSD written by Damien Miller.

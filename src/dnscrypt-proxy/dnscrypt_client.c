@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "dnscrypt_client.h"
-#include "alt_arc4random.h"
+#include "salsa20_random.h"
 #include "uv.h"
 
 static void
@@ -27,7 +27,7 @@ dnscrypt_make_client_nonce(DNSCryptClient * const client,
 
     (void) sizeof(char[crypto_box_HALF_NONCEBYTES == 12U ? 1 : -1]);
     memcpy(client_nonce, &ts, 8U);
-    suffix = alt_arc4random();
+    suffix = salsa20_random();
     memcpy(client_nonce + 8U, &suffix, 4U);
 }
 
@@ -160,7 +160,7 @@ dnscrypt_client_init_nmkey(DNSCryptClient * const client,
 int
 dnscrypt_client_wipe_secretkey(DNSCryptClient * const client)
 {
-    alt_arc4random_buf(client->secretkey, crypto_box_SECRETKEYBYTES);
+    salsa20_random_buf(client->secretkey, crypto_box_SECRETKEYBYTES);
 
     return 0;
 }
@@ -183,7 +183,7 @@ dnscrypt_client_create_key_pair(DNSCryptClient * const client,
 {
     (void) client;
     crypto_box_keypair(client_publickey, client_secretkey);
-    alt_arc4random_stir();
+    salsa20_random_stir();
 
     return 0;
 }

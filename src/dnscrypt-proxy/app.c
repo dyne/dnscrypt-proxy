@@ -14,7 +14,7 @@
 #include "app.h"
 #include "dnscrypt_client.h"
 #include "dnscrypt_proxy.h"
-#include "alt_arc4random.h"
+#include "salsa20_random.h"
 #include "logger.h"
 #include "options.h"
 #include "stack_trace.h"
@@ -84,7 +84,7 @@ revoke_privileges(ProxyContext * const proxy_context)
 #ifdef DEBUG
     (void) proxy_context;
 #else
-    alt_arc4random_stir();
+    salsa20_random_stir();
     init_tz();
     (void) strerror(ENOENT);
     if (proxy_context->user_dir != NULL) {
@@ -160,7 +160,7 @@ main(int argc, char *argv[])
     udp_listener_stop(&proxy_context);
     uv_loop_delete(event_loop);
     proxy_context_free(&proxy_context);
-    alt_arc4random_close();
+    salsa20_random_close();
 
     return 0;
 }

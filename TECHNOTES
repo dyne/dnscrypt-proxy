@@ -17,24 +17,10 @@ Cryptographic library
   used server-side.
 
 - crypto_box_curve25519xsalsa20poly1305_*() for signing/encrypting
-  queries and replies, crypto_sign_ed25519_*() for signing certificates
-  (+ crypto_stream_xsalsa20_*() server-side, mainly for random padding).
+  queries and replies, crypto_sign_ed25519_*() for signing certificates, and
+  crypto_stream_salsa20_*() as a PRNG.
+
   See the NaCl documentation for details.
-
-PRNG
-----
-
-- Uses arc4random() that any sane (= providing strlcpy()/strlcat()) C
-  library already implements.
-
-- Not the latest, not the fastest, not the safest, but widespread and good
-  enough for our needs.
-
-- However, OpenBSD happens to be the only operating system able to
-  reseed it with a system call (= safe in an empty chroot environment).
-
-- alt_arc4random.c (actually imported from pure-ftpd) is OpenBSD's
-  arc4random() using a descriptor we open before the chroot() call.
 
 Event-notification library
 --------------------------

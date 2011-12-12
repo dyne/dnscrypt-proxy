@@ -3,8 +3,6 @@ sbin_PROGRAMS = \
 	dnscrypt-proxy
 
 dnscrypt_proxy_SOURCES = \
-	alt_arc4random.c \
-	alt_arc4random.h \
 	app.c \
 	app.h \
 	cert.c \
@@ -28,6 +26,8 @@ dnscrypt_proxy_SOURCES = \
 	probes_no_dtrace.h \
 	safe_rw.c \
 	safe_rw.h \
+	salsa20_random.c \
+	salsa20_random.h \
 	stack_trace.c \
 	stack_trace.h \
 	tcp_request.c \
