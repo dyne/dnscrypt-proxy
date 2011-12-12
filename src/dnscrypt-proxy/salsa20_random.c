@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "crypto_core_salsa20.h"
 #include "crypto_hash_sha256.h"
 #include "crypto_stream_salsa20.h"
 #include "salsa20_random.h"
@@ -16,16 +17,23 @@
 #include "utils.h"
 #include "uv.h"
 
-typedef struct Salsa20RandomStream_ {
+#define SALSA20_RANDOM_BLOCK_SIZE crypto_core_salsa20_OUTPUTBYTES
+
+typedef struct Salsa20Random_ {
     unsigned char key[crypto_stream_salsa20_KEYBYTES];
+    unsigned char rnd32[SALSA20_RANDOM_BLOCK_SIZE];
     uint64_t      nonce;
+    size_t        rnd32_outleft;
     pid_t         pid;
     int           random_data_source_fd;
     _Bool         initialized;
-} Salsa20RandomStream;
+} Salsa20Random;
 
-static Salsa20RandomStream stream = { .random_data_source_fd = -1,
-                                      .initialized = 0 };
+static Salsa20Random stream = {
+    .random_data_source_fd = -1,
+    .rnd32_outleft = (size_t) 0U,
+    .initialized = 0
+};
 
 static int
 salsa20_random_random_dev_open(void)
@@ -61,6 +69,8 @@ salsa20_random_stir(void)
 {
     unsigned char key0[crypto_stream_salsa20_KEYBYTES];
 
+    memset(stream.rnd32, 0, sizeof stream.rnd32);
+    stream.rnd32_outleft = (size_t) 0U;
     if (stream.initialized == 0) {
         salsa20_random_init();
         stream.initialized = 1;
@@ -91,12 +101,19 @@ salsa20_random_getword(void)
 {
     uint32_t val;
 
-    C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
-    assert(crypto_stream_salsa20((unsigned char *) &val,
-                                 (unsigned long long) sizeof val,
-                                 (unsigned char *) &stream.nonce,
-                                 stream.key) == 0);
-    stream.nonce++;
+    C_ASSERT(sizeof stream.rnd32 >= sizeof val);
+    C_ASSERT(sizeof stream.rnd32 % sizeof val == (size_t) 0U);
+    if (stream.rnd32_outleft <= (size_t) 0U) {
+        C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
+        assert(crypto_stream_salsa20((unsigned char *) stream.rnd32,
+                                     (unsigned long long) sizeof stream.rnd32,
+                                     (unsigned char *) &stream.nonce,
+                                     stream.key) == 0);
+        stream.nonce++;
+        stream.rnd32_outleft = sizeof stream.rnd32;
+    }
+    stream.rnd32_outleft -= sizeof val;
+    memcpy(&val, &stream.rnd32[stream.rnd32_outleft], sizeof val);
 
     return val;
 }
