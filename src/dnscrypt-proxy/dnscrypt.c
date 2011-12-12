@@ -14,6 +14,7 @@
 #include "dnscrypt.h"
 #include "salsa20_random.h"
 #include "randombytes.h"
+#include "utils.h"
 
 size_t
 dnscrypt_response_header_size(void)
@@ -71,8 +72,8 @@ dnscrypt_key_to_fingerprint(char fingerprint[80U], const uint8_t * const key)
     size_t       fingerprint_pos = (size_t) 0U;
     size_t       key_pos = (size_t) 0U;
 
-    assert(crypto_box_PUBLICKEYBYTES == 32U);
-    assert(crypto_box_SECRETKEYBYTES == 32U);
+    C_ASSERT(crypto_box_PUBLICKEYBYTES == 32U);
+    C_ASSERT(crypto_box_SECRETKEYBYTES == 32U);
     for (;;) {
         assert(fingerprint_size > fingerprint_pos);
         snprintf(&fingerprint[fingerprint_pos],
