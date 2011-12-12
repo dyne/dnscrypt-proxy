@@ -218,6 +218,7 @@
 ./test/benchmark-udp-packet-storm.c
 ./test/blackhole-server.c
 ./test/test-cwd-and-chdir.c
+./test/test-counters-init.c
 ./test/dns-server.c
 ./test/echo-server.c
 ./test/fixtures/empty_file
