@@ -339,56 +339,6 @@ do
   done
 done
 
-echo "=== `date` === starting curvecp"
-
-okabi \
-| awk '
-  { if ($1=="amd64" || $1=="ia64" || $1=="ppc64" || $1=="sparcv9" || $1=="mips64") print 1,$1
-    else if ($1 == "mips32") print 2,$1
-    else print 3,$1
-  }
-' \
-| sort \
-| while read okabipriority abi
-do
-  [ -x "$bin/curvecpmessage" ] && break
-  libs=`"oklibs-$abi"`
-  libs="$lib/$abi/cpucycles.o $libs"
-  libs="$libs $lib/$abi/randombytes.o"
-
-  okc-$abi \
-  | while read compiler
-  do
-    [ -x "$bin/curvecpmessage" ] && break
-
-    echo "=== `date` === curvecp $abi $compiler"
-    rm -rf "$work"
-    mkdir -p "$work/compile"
-    cp curvecp/* "$work/compile"
-    (
-      cd "$work/compile"
-      cat SOURCES \
-      | while read x
-      do
-        $compiler -I"$include" -I"$include/$abi" -c "$x.c"
-      done
-
-      if okar-$abi cr curvecplibs.a `cat LIBS`
-      then
-        cat TARGETS \
-	| while read x
-	do
-	  $compiler -I"$include" -I"$include/$abi" \
-	  -o "$x" "$x.o" \
-	  curvecplibs.a "$lib/$abi/lib${project}.a" $libs \
-	  && cp -p "$x" "$bin/$x"
-	done
-      fi
-    )
-  done
-
-done
-
 echo "=== `date` === finishing"
 
 touch .done
