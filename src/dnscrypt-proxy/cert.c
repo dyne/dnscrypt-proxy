@@ -14,6 +14,7 @@
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "probes.h"
+#include "utils.h"
 
 static int
 cert_parse_version(ProxyContext * const proxy_context,
@@ -243,12 +244,12 @@ cert_query_cb(void *arg, int status, int timeouts, unsigned char *abuf,
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
         return;
     }
-    (void) sizeof(int[sizeof proxy_context->resolver_publickey ==
-                      sizeof bincert->server_publickey ? 1 : -1]);
+    C_ASSERT(sizeof proxy_context->resolver_publickey ==
+             sizeof bincert->server_publickey);
     memcpy(proxy_context->resolver_publickey, bincert->server_publickey,
            sizeof proxy_context->resolver_publickey);
-    (void) sizeof(int[sizeof proxy_context->dnscrypt_magic_query ==
-                      sizeof bincert->magic_query ? 1 : -1]);
+    C_ASSERT(sizeof proxy_context->dnscrypt_magic_query ==
+             sizeof bincert->magic_query);
     memcpy(proxy_context->dnscrypt_magic_query, bincert->magic_query,
            sizeof proxy_context->dnscrypt_magic_query);
     cert_print_server_key(proxy_context);

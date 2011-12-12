@@ -13,6 +13,7 @@
 #include "crypto_stream_salsa20.h"
 #include "salsa20_random.h"
 #include "safe_rw.h"
+#include "utils.h"
 #include "uv.h"
 
 typedef struct Salsa20RandomStream_ {
@@ -68,8 +69,8 @@ salsa20_random_stir(void)
                   sizeof key0) != (ssize_t) sizeof key0) {
         abort();
     }
-    (void) sizeof(char[sizeof stream.key == (size_t) 32U ? 1 : -1]);
-    (void) sizeof(char[sizeof stream.key <= sizeof key0 ? 1 : -1]);
+    C_ASSERT(sizeof stream.key == (size_t) 32U);
+    C_ASSERT(sizeof stream.key <= sizeof key0);
     crypto_hash_sha256(stream.key, key0, sizeof key0);
     memset(key0, 0, sizeof key0);
 }
@@ -90,8 +91,7 @@ salsa20_random_getword(void)
 {
     uint32_t val;
 
-    (void) sizeof(char[sizeof stream.nonce ==
-                       crypto_stream_salsa20_NONCEBYTES ? 1 : -1]);
+    C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
     assert(crypto_stream_salsa20((unsigned char *) &val,
                                  (unsigned long long) sizeof val,
                                  (unsigned char *) &stream.nonce,
@@ -126,8 +126,7 @@ void
 salsa20_random_buf(void * const buf, const size_t size)
 {
     salsa20_random_stir_if_needed();
-    (void) sizeof(char[sizeof stream.nonce ==
-                       crypto_stream_salsa20_NONCEBYTES ? 1 : -1]);
+    C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
     assert(size <= ULONG_LONG_MAX);
     assert(crypto_stream_salsa20(buf, (unsigned long long) size,
                                  (unsigned char *) &stream.nonce,
