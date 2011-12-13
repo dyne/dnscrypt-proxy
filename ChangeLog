@@ -1,0 +1,222 @@
+Date:   2011-12-12
+
+    Rename C_ASSERT, because Windows defines a macro with the same name.
+
+Date:   2011-12-12
+
+    Don't use substitution in a $(shell) statement.
+
+Date:   2011-12-12
+
+    Unfortunately, ULONG_LONG_MAX isn't always defined.
+
+Date:   2011-12-12
+
+    Sync dist files
+
+Date:   2011-12-12
+
+    Fix autoconf test.
+
+Date:   2011-12-12
+
+    Don't include crypto_int32.h
+
+Date:   2011-12-12
+
+    Missing quote
+
+Date:   2011-12-12
+
+    Sync libuv
+
+Date:   2011-12-11
+
+    assert() -> C_ASSERT()
+
+Date:   2011-12-11
+
+    Ignore .DS_Store
+
+Date:   2011-12-11
+
+    Typo
+
+Date:   2011-12-11
+
+    Make getword() a bit faster by using all the output bytes.
+
+Date:   2011-12-11
+
+    Rephrase.
+
+Date:   2011-12-11
+
+    Introduce a C_ASSERT() macro instead of repeating (void) sizeof(char[X?1:-1])
+
+Date:   2011-12-11
+
+    Switch to salsa20/20 as a stream cipher.
+
+Date:   2011-12-11
+
+    curvecp is fantastic but we don't use it for now. So don't ship a copy of it.
+
+Date:   2011-12-10
+
+    Move Linux packages to /usr
+
+Date:   2011-12-10
+
+    Provide better detection for Mingw when used on Windows.
+
+Date:   2011-12-10
+
+    Disable -fstack-protector-all on Windows but enable specific flags for ASLR & DEP.
+
+Date:   2011-12-10
+
+    Enable ASLR and DEP on Win32.
+
+Date:   2011-12-10
+
+    Works out of the box on Windows using Cygwin (for now, native port is coming).
+
+Date:   2011-12-10
+
+    Mention do-not-query-localhost: no for Unbound.
+
+Date:   2011-12-09
+
+    We do support Openwall Linux now.
+
+Date:   2011-12-09
+
+    Don't try compiling inotify-related functions on Linux distros without inotify.
+
+Date:   2011-12-09
+
+    Provide compatibility with glibc versions that don't provide pipe2()/O_CLOEXEC
+
+Date:   2011-12-09
+
+    resync dist-files.
+
+Date:   2011-12-09
+
+    Moving on.
+
+Date:   2011-12-09
+
+    Add the default public key for ed25519-signed certs.
+
+Date:   2011-12-08
+
+    Switch to 2.dnscrypt-cert.opendns.com
+
+Date:   2011-12-08
+
+    Switch to ed25519
+
+Date:   2011-12-08
+
+    Sync libuv
+
+Date:   2011-12-08
+
+    Import ed25519 - thanks to djb for his feedback.
+
+Date:   2011-12-07
+
+    Add a sample .plist file.
+
+Date:   2011-12-07
+
+    Add a formula for Homebrew
+
+Date:   2011-12-07
+
+    Nits
+
+Date:   2011-12-07
+
+    Nits
+
+Date:   2011-12-07
+
+    Nits
+
+Date:   2011-12-07
+
+    Downcase + remove some redundant stuff.
+
+Date:   2011-12-07
+
+    Spacing
+
+Date:   2011-12-07
+
+    Per popular request, add a description of the protocol + implementation details.
+
+Date:   2011-12-07
+
+    Add links & credits for NaCl and libuv.
+
+Date:   2011-12-07
+
+    Add THANKS file, credit sthen@ for his help on the OpenBSD port.
+
+Date:   2011-12-07
+
+    dnscrypt has been written by humans.
+
+Date:   2011-12-07
+
+    Test presence of 6Jack, that will be required for new tests.
+
+Merge: 2a196e1 cfbb34c
+Date:   2011-12-06
+
+    Merge pull request #1 from sthen/master
+    
+    OpenBSD port tweaks
+
+Date:   2011-12-06
+
+    add ONLY_FOR_ARCH, NaCl needs more work on !i386/amd64
+
+Date:   2011-12-06
+
+    picks up libexecinfo if installed; add dep
+
+Date:   2011-12-06
+
+    add OpenBSD cvs id
+
+Date:   2011-12-06
+
+    needs a homedir to chroot to; use /var/empty
+
+Date:   2011-12-06
+
+    daemonize in rc script, add cvs id for OpenBSD
+
+Date:   2011-12-06
+
+    Fix MASTER_SITE and HOMEPAGE
+
+Date:   2011-12-06
+
+    Switch back to using the .tar.gz file since the github CDN finally has it.
+
+Date:   2011-12-06
+
+    Update the OpenBSD package.
+
+Date:   2011-12-06
+
+    OpenBSD uid 685/686 were taken by other ports already. Switch to uid 688, reserved by sthen@
+
+Date:   2011-10-18
+
+    Initial public release.

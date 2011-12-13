@@ -1,0 +1,11 @@
+
+* Version 0.8:
+ - Support for Windows (through Cygwin, for now) has been improved.
+ - Documentation has been improved.
+ - Signatures are now using ed25519 instead of edwards25519sha512batch.
+ - The proxy now compiles on Openwall Linux.
+ - Libuv has been updated.
+ - A sample .plist file and a Homebrew formula for OSX are now provided.
+
+* Version 0.7:
+ - Initial public release.
