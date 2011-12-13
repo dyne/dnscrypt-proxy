@@ -1,5 +1,6 @@
 ./.gitignore
 ./.mailmap
+./.travis.yml
 ./AUTHORS
 ./build/gcc_version.py
 ./common.gypi
@@ -217,8 +218,6 @@
 ./test/benchmark-thread.c
 ./test/benchmark-udp-packet-storm.c
 ./test/blackhole-server.c
-./test/test-cwd-and-chdir.c
-./test/test-counters-init.c
 ./test/dns-server.c
 ./test/echo-server.c
 ./test/fixtures/empty_file
@@ -234,6 +233,8 @@
 ./test/test-async.c
 ./test/test-callback-stack.c
 ./test/test-connection-fail.c
+./test/test-counters-init.c
+./test/test-cwd-and-chdir.c
 ./test/test-delayed-accept.c
 ./test/test-error.c
 ./test/test-fail-always.c

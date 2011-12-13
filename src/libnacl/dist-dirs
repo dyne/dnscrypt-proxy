@@ -67,7 +67,6 @@
 ./crypto_verify/16/ref
 ./crypto_verify/32
 ./crypto_verify/32/ref
-./curvecp
 ./inttypes
 ./okcompilers
 ./randombytes
