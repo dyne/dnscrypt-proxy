@@ -222,7 +222,7 @@ AC_HEADER_ASSERT
 
 AC_ARG_WITH(debug,
 [AS_HELP_STRING(--with-debug,For maintainers only - please do not use)],
-[ AS_IF(["x$withval" = "xyes"], [
+[ AS_IF([test "x$withval" = "xyes"], [
     AS_IF([test "x$LX_CFLAGS" = "xNONE"], [
       nxflags=""
       for flag in `echo $CFLAGS`; do
