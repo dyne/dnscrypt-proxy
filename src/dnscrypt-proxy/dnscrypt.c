@@ -72,8 +72,8 @@ dnscrypt_key_to_fingerprint(char fingerprint[80U], const uint8_t * const key)
     size_t       fingerprint_pos = (size_t) 0U;
     size_t       key_pos = (size_t) 0U;
 
-    C_ASSERT(crypto_box_PUBLICKEYBYTES == 32U);
-    C_ASSERT(crypto_box_SECRETKEYBYTES == 32U);
+    COMPILER_ASSERT(crypto_box_PUBLICKEYBYTES == 32U);
+    COMPILER_ASSERT(crypto_box_SECRETKEYBYTES == 32U);
     for (;;) {
         assert(fingerprint_size > fingerprint_pos);
         snprintf(&fingerprint[fingerprint_pos],

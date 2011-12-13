@@ -181,7 +181,7 @@ proxy_client_send_truncated(UDPRequest * const udp_request)
 {
     DNSCRYPT_PROXY_REQUEST_UDP_TRUNCATED(udp_request);
 
-    C_ASSERT(sizeof udp_request->dns_packet > DNS_OFFSET_FLAGS2);
+    COMPILER_ASSERT(sizeof udp_request->dns_packet > DNS_OFFSET_FLAGS2);
     udp_request->dns_packet[DNS_OFFSET_FLAGS] |= DNS_FLAGS_TC | DNS_FLAGS_QR;
     udp_request->dns_packet[DNS_OFFSET_FLAGS2] |= DNS_FLAGS2_RA;
 

@@ -79,8 +79,8 @@ salsa20_random_stir(void)
                   sizeof key0) != (ssize_t) sizeof key0) {
         abort();
     }
-    C_ASSERT(sizeof stream.key == (size_t) 32U);
-    C_ASSERT(sizeof stream.key <= sizeof key0);
+    COMPILER_ASSERT(sizeof stream.key == (size_t) 32U);
+    COMPILER_ASSERT(sizeof stream.key <= sizeof key0);
     crypto_hash_sha256(stream.key, key0, sizeof key0);
     memset(key0, 0, sizeof key0);
 }
@@ -101,10 +101,10 @@ salsa20_random_getword(void)
 {
     uint32_t val;
 
-    C_ASSERT(sizeof stream.rnd32 >= sizeof val);
-    C_ASSERT(sizeof stream.rnd32 % sizeof val == (size_t) 0U);
+    COMPILER_ASSERT(sizeof stream.rnd32 >= sizeof val);
+    COMPILER_ASSERT(sizeof stream.rnd32 % sizeof val == (size_t) 0U);
     if (stream.rnd32_outleft <= (size_t) 0U) {
-        C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
+        COMPILER_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
         assert(crypto_stream_salsa20((unsigned char *) stream.rnd32,
                                      (unsigned long long) sizeof stream.rnd32,
                                      (unsigned char *) &stream.nonce,
@@ -143,7 +143,7 @@ void
 salsa20_random_buf(void * const buf, const size_t size)
 {
     salsa20_random_stir_if_needed();
-    C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
+    COMPILER_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
 #ifdef ULONG_LONG_MAX
     assert(size <= ULONG_LONG_MAX);
 #endif

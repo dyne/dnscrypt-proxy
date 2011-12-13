@@ -244,12 +244,12 @@ cert_query_cb(void *arg, int status, int timeouts, unsigned char *abuf,
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
         return;
     }
-    C_ASSERT(sizeof proxy_context->resolver_publickey ==
-             sizeof bincert->server_publickey);
+    COMPILER_ASSERT(sizeof proxy_context->resolver_publickey ==
+                    sizeof bincert->server_publickey);
     memcpy(proxy_context->resolver_publickey, bincert->server_publickey,
            sizeof proxy_context->resolver_publickey);
-    C_ASSERT(sizeof proxy_context->dnscrypt_magic_query ==
-             sizeof bincert->magic_query);
+    COMPILER_ASSERT(sizeof proxy_context->dnscrypt_magic_query ==
+                    sizeof bincert->magic_query);
     memcpy(proxy_context->dnscrypt_magic_query, bincert->magic_query,
            sizeof proxy_context->dnscrypt_magic_query);
     cert_print_server_key(proxy_context);

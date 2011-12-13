@@ -26,7 +26,7 @@ dnscrypt_make_client_nonce(DNSCryptClient * const client,
     }
     client->nonce_ts_last = ts;
 
-    C_ASSERT(crypto_box_HALF_NONCEBYTES == 12U);
+    COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES == 12U);
     memcpy(client_nonce, &ts, 8U);
     suffix = salsa20_random();
     memcpy(client_nonce + 8U, &suffix, 4U);
@@ -138,7 +138,7 @@ int
 dnscrypt_client_init_magic_query(DNSCryptClient * const client,
                                  const uint8_t magic_query[DNSCRYPT_MAGIC_QUERY_LEN])
 {
-    C_ASSERT(DNSCRYPT_MAGIC_QUERY_LEN == sizeof client->magic_query);
+    COMPILER_ASSERT(DNSCRYPT_MAGIC_QUERY_LEN == sizeof client->magic_query);
     memcpy(client->magic_query, magic_query, sizeof client->magic_query);
 
     return 0;
