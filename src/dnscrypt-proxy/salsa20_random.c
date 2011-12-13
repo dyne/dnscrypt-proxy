@@ -144,7 +144,9 @@ salsa20_random_buf(void * const buf, const size_t size)
 {
     salsa20_random_stir_if_needed();
     C_ASSERT(sizeof stream.nonce == crypto_stream_salsa20_NONCEBYTES);
+#ifdef ULONG_LONG_MAX
     assert(size <= ULONG_LONG_MAX);
+#endif
     assert(crypto_stream_salsa20(buf, (unsigned long long) size,
                                  (unsigned char *) &stream.nonce,
                                  stream.key) == 0);
