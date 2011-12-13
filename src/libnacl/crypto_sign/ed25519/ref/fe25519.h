@@ -1,7 +1,6 @@
 #ifndef FE25519_H
 #define FE25519_H
 
-#include "crypto_int32.h"
 #include "crypto_uint32.h"
 
 #define fe25519              crypto_sign_ed25519_ref_fe25519
