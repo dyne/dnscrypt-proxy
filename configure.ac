@@ -41,7 +41,10 @@ AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
   AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
   AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
 ], [
-  AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [CFLAGS="$CFLAGS -fstack-protector-all"])
+  AS_IF([test `(uname -s) 2>/dev/null` = "DragonFly"],
+    [AX_CHECK_COMPILE_FLAG([-fstack-protector], [CFLAGS="$CFLAGS -fstack-protector"])],
+    [AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [CFLAGS="$CFLAGS -fstack-protector-all"])]
+  )
   AS_IF([test "x$ac_compiler_gnu" = "xyes"],[
     AS_IF([$CC --version 2>/dev/null | $GREP "Free Software Foundation" > /dev/null 2>&1],[
       CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
