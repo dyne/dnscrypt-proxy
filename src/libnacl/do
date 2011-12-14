@@ -39,6 +39,7 @@ mkdir -p "$lib"
 mkdir -p "$include"
 
 exec 5>"$top/data"
+exec 2>"$top/errors"
 exec </dev/null
 
 echo "=== `date` === starting"
