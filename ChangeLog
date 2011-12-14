@@ -1,5 +1,18 @@
 Date:   2011-12-13
 
+    We can detect accept4() while SOCK_CLOEXEC and SOCK_NONBLOCK are unavailable.
+    Fixes compilation on Openwall-current.
+
+Date:   2011-12-13
+
+    Redirect compile-time tests to an errors file.
+
+Date:   2011-12-13
+
+    Update for Dragonfly BSD.
+
+Date:   2011-12-13
+
     -fstack-protector-all is causing trouble with Dragonfly BSD and NaCl.
     Use -fstack-protector only on Dragonfly BSD for now.
 
