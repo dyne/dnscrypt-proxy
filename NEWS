@@ -2,6 +2,7 @@
 * Version 0.8:
  - Support for Windows (through Cygwin, for now) has been improved.
  - Documentation has been improved.
+ - The package now compiles on Dragonfly BSD-current.
  - Signatures are now using ed25519 instead of edwards25519sha512batch.
  - The proxy now compiles on Openwall Linux.
  - Libuv has been updated.

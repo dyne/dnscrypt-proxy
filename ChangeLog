@@ -1,3 +1,16 @@
+Date:   2011-12-13
+
+    -fstack-protector-all is causing trouble with Dragonfly BSD and NaCl.
+    Use -fstack-protector only on Dragonfly BSD for now.
+
+Date:   2011-12-13
+
+    Update packages to 0.8 - distinfo files have to be regenerated though.
+
+Date:   2011-12-13
+
+    Update NEWS / ChangeLog
+
 Date:   2011-12-12
 
     Rename C_ASSERT, because Windows defines a macro with the same name.
