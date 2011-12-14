@@ -7,7 +7,7 @@ class DnscryptProxy < Formula
   md5 '9c573da27aa897f27a564214c92bcddb'
 
   def install
-    system "./configure", "--prefix=#{prefix}"
+    system "./configure", "--prefix=#{prefix}", "--disable-dependency-tracking"
     system "make install"
   end
 end
