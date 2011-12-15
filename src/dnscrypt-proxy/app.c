@@ -65,14 +65,14 @@ int init_tz(void)
 
     tzset();
     time(&now);
-    if ((tm = localtime(&now)) == NULL ||
-        strftime(stbuf, sizeof stbuf, "%z", tm) != (size_t) 5U) {
-        return -1;
+    if ((tm = localtime(&now)) != NULL &&
+        strftime(stbuf, sizeof stbuf, "%z", tm) == (size_t) 5U) {
+        snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
+                 "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
+                 stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
     }
-    snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
-             "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
-             stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
     putenv(default_tz_for_putenv);
+    (void) localtime(&now);
     (void) gmtime(&now);
 
     return 0;
