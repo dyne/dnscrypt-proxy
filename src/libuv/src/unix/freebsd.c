@@ -164,11 +164,7 @@ uv_err_t uv_resident_set_memory(size_t* rss) {
   kinfo = kvm_getprocs(kd, KERN_PROC_PID, pid, &nprocs);
   if (kinfo == NULL) goto error;
 
-#ifdef __DragonFly__   
-  *rss = kinfo->kp_vm_rssize * page_size;
-#else
   *rss = kinfo->ki_rssize * page_size;
-#endif
 
   kvm_close(kd);
 
@@ -227,21 +223,6 @@ uv_err_t uv_cpu_info(uv_cpu_info_t** cpu_infos, int* count) {
     free(*cpu_infos);
     return uv__new_sys_error(errno);
   }
-   
-#ifndef CPUSTATES
-  for (int i = 0; i < numcpus; i++) {
-    cpu_info = &(*cpu_infos)[i];
-    
-    cpu_info->cpu_times.user = 0U;
-    cpu_info->cpu_times.nice = 0U;
-    cpu_info->cpu_times.sys = 0U;
-    cpu_info->cpu_times.idle = 0U;
-    cpu_info->cpu_times.irq = 0U;
-
-    cpu_info->model = strdup(model);
-    cpu_info->speed = cpuspeed;
-  }   
-#else
   // kern.cp_times on FreeBSD i386 gives an array up to maxcpus instead of ncpu
   size = sizeof(maxcpus);
   if (sysctlbyname("kern.smp.maxcpus", &maxcpus, &size, NULL, 0) < 0) {
@@ -269,7 +250,7 @@ uv_err_t uv_cpu_info(uv_cpu_info_t** cpu_infos, int* count) {
 
     cur+=CPUSTATES;
   }
-#endif
+
   return uv_ok_;
 }
 
