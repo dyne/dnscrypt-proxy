@@ -49,10 +49,3 @@ TEST_IMPL(thread_create) {
 
   return 0;
 }
-
-
-TEST_IMPL(thread_self) {
-  uv_thread_t tid;
-  tid = uv_thread_self();
-  return 0;
-}
