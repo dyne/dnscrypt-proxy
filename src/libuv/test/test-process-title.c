@@ -21,38 +21,22 @@
 
 #include "uv.h"
 #include "task.h"
+#include <string.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+TEST_IMPL(process_title) {
+  char buffer[512];
+  uv_err_t err;
 
+  err = uv_get_process_title(buffer, sizeof(buffer));
+  ASSERT(UV_OK == err.code);
 
-static volatile int thread_called;
+  err = uv_set_process_title("new title");
+  ASSERT(UV_OK == err.code);
 
+  err = uv_get_process_title(buffer, sizeof(buffer));
+  ASSERT(UV_OK == err.code);
 
-static void thread_entry(void* arg) {
-  ASSERT(arg == (void *) 42);
-  thread_called++;
-}
+  ASSERT(strcmp(buffer, "new title") == 0);
 
-
-TEST_IMPL(thread_create) {
-  uv_thread_t tid;
-  int r;
-
-  r = uv_thread_create(&tid, thread_entry, (void *) 42);
-  ASSERT(r == 0);
-
-  r = uv_thread_join(&tid);
-  ASSERT(r == 0);
-
-  ASSERT(thread_called == 1);
-
-  return 0;
-}
-
-
-TEST_IMPL(thread_self) {
-  uv_thread_t tid;
-  tid = uv_thread_self();
   return 0;
 }
