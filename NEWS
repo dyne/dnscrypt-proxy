@@ -1,4 +1,7 @@
 
+* Version 0.11:
+ - libuv has been updated.
+
 * Version 0.8:
  - Support for Windows (through Cygwin, for now) has been improved.
  - Documentation has been improved.
