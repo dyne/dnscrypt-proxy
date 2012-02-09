@@ -63,10 +63,7 @@ static void uv__chld(EV_P_ ev_child* watcher, int revents) {
 }
 
 
-#define UV__F_IPC        (1 << 0)
-#define UV__F_NONBLOCK   (1 << 1)
-
-static int uv__make_socketpair(int fds[2], int flags) {
+int uv__make_socketpair(int fds[2], int flags) {
 #ifdef SOCK_NONBLOCK
   int fl;
 
@@ -103,8 +100,8 @@ static int uv__make_socketpair(int fds[2], int flags) {
 }
 
 
-static int uv__make_pipe(int fds[2], int flags) {
-#if defined(HAVE_SYS_PIPE2) && defined(O_CLOEXEC)
+int uv__make_pipe(int fds[2], int flags) {
+#if HAVE_SYS_PIPE2
   int fl;
 
   fl = O_CLOEXEC;

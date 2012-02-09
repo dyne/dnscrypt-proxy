@@ -22,9 +22,7 @@
 #include "task.h"
 #include "uv.h"
 
-#ifndef __sun__
-# include <math.h>
-#endif
+#include <math.h>
 #include <stdio.h>
 
 

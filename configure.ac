@@ -216,6 +216,7 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
+AC_SEARCH_LIBS(kvm_open, [kvm])
 
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])

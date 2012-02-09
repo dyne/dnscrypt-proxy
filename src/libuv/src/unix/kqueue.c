@@ -31,6 +31,7 @@
 #include <sys/sysctl.h>
 #include <sys/types.h>
 #include <sys/event.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
 
@@ -43,10 +44,12 @@ static void uv__fs_event_start(uv_fs_event_t* handle) {
              handle->fd,
              EV_LIBUV_KQUEUE_HACK);
   ev_io_start(handle->loop->ev, &handle->event_watcher);
+  ev_unref(handle->loop->ev);
 }
 
 
 static void uv__fs_event_stop(uv_fs_event_t* handle) {
+  ev_ref(handle->loop->ev);
   ev_io_stop(handle->loop->ev, &handle->event_watcher);
 }
 
@@ -138,13 +141,13 @@ int uv_fs_event_init(uv_loop_t* loop,
 
 
 void uv__fs_event_destroy(uv_fs_event_t* handle) {
-  assert(0 && "unreachable");
+  UNREACHABLE();
 }
 
 
 /* Called by libev, don't touch. */
 void uv__kqueue_hack(EV_P_ int fflags, ev_io *w) {
-  assert(0 && "unreachable");
+  UNREACHABLE();
 }
 
 #endif /* HAVE_KQUEUE */

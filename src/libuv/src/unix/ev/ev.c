@@ -158,9 +158,7 @@
  
 #endif
 
-#ifndef __sun__
-# include <math.h>
-#endif
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -1959,6 +1957,12 @@ ev_loop_new (unsigned int flags)
 }
 
 #endif /* multiplicity */
+
+int
+ev_loop_refcount (EV_P)
+{
+  return activecnt;
+}
 
 #if EV_VERIFY
 static void noinline

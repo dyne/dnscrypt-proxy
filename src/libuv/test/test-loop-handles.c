@@ -67,9 +67,8 @@
 #include "uv.h"
 #include "task.h"
 
-#ifndef __sun__
-# include <math.h>
-#endif
+#include <math.h>
+
 
 #define IDLE_COUNT      7
 #define ITERATIONS      21

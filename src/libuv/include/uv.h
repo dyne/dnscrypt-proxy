@@ -41,8 +41,9 @@ extern "C" {
 #   define UV_EXTERN /* nothing */
 #   define CARES_STATICLIB 1
 # endif
+#elif __GNUC__ >= 4
+# define UV_EXTERN __attribute__((visibility("default")))
 #else
-  /* Unix. TODO: symbol hiding */
 # define UV_EXTERN /* nothing */
 #endif
 
@@ -115,7 +116,9 @@ typedef intptr_t ssize_t;
   XX( 45, EAISOCKTYPE, "") \
   XX( 46, ESHUTDOWN, "") \
   XX( 47, EEXIST, "file already exists") \
-  XX( 48, ESRCH, "no such process")
+  XX( 48, ESRCH, "no such process") \
+  XX( 49, ENAMETOOLONG, "name too long") \
+  XX( 50, EPERM, "operation not permitted")
 
 
 #define UV_ERRNO_GEN(val, name, s) UV_##name = val,
@@ -177,6 +180,9 @@ typedef struct uv_async_s uv_async_t;
 typedef struct uv_getaddrinfo_s uv_getaddrinfo_t;
 typedef struct uv_process_s uv_process_t;
 typedef struct uv_counters_s uv_counters_t;
+typedef struct uv_cpu_info_s uv_cpu_info_t;
+typedef struct uv_interface_address_s uv_interface_address_t;
+typedef struct uv_stream_info_s uv_stream_info_t;
 /* Request types */
 typedef struct uv_req_s uv_req_t;
 typedef struct uv_shutdown_s uv_shutdown_t;
@@ -199,6 +205,9 @@ typedef struct uv_work_s uv_work_t;
  */
 UV_EXTERN uv_loop_t* uv_loop_new(void);
 UV_EXTERN void uv_loop_delete(uv_loop_t*);
+
+/* This is a debugging tool. It's NOT part of the official API. */
+UV_EXTERN int uv_loop_refcount(const uv_loop_t*);
 
 
 /*
@@ -525,6 +534,28 @@ UV_EXTERN int uv_tcp_getpeername(uv_tcp_t* handle, struct sockaddr* name,
     int* namelen);
 
 /*
+ * uv_stream_info_t is used to store exported stream (using uv_export),
+ * which can be imported into a different event-loop within the same process
+ * (using uv_import).
+ */
+struct uv_stream_info_s {
+  uv_handle_type type;
+  UV_STREAM_INFO_PRIVATE_FIELDS
+};
+
+/*
+ * Exports uv_stream_t as uv_stream_info_t value, which could
+ * be used to initialize shared streams within the same process.
+ */
+UV_EXTERN int uv_export(uv_stream_t* stream, uv_stream_info_t* info);
+
+/*
+ * Imports uv_stream_info_t value into uv_stream_t to initialize
+ * shared stream.
+ */
+UV_EXTERN int uv_import(uv_stream_t* stream, uv_stream_info_t* info);
+
+/*
  * uv_tcp_connect, uv_tcp_connect6
  * These functions establish IPv4 and IPv6 TCP connections. Provide an
  * initialized TCP handle and an uninitialized uv_connect_t*. The callback
@@ -647,6 +678,59 @@ UV_EXTERN int uv_udp_getsockname(uv_udp_t* handle, struct sockaddr* name,
 UV_EXTERN int uv_udp_set_membership(uv_udp_t* handle,
     const char* multicast_addr, const char* interface_addr,
     uv_membership membership);
+
+/*
+ * Set IP multicast loop flag. Makes multicast packets loop back to
+ * local sockets.
+ *
+ * Arguments:
+ *  handle              UDP handle. Should have been initialized with
+ *                      `uv_udp_init`.
+ *  on                  1 for on, 0 for off
+ *
+ * Returns:
+ *  0 on success, -1 on error.
+ */
+UV_EXTERN int uv_udp_set_multicast_loop(uv_udp_t* handle, int on);
+
+/*
+ * Set the multicast ttl
+ *
+ * Arguments:
+ *  handle              UDP handle. Should have been initialized with
+ *                      `uv_udp_init`.
+ *  ttl                 1 through 255
+ *
+ * Returns:
+ *  0 on success, -1 on error.
+ */
+UV_EXTERN int uv_udp_set_multicast_ttl(uv_udp_t* handle, int ttl);
+
+/*
+ * Set broadcast on or off
+ *
+ * Arguments:
+ *  handle              UDP handle. Should have been initialized with
+ *                      `uv_udp_init`.
+ *  on                  1 for on, 0 for off
+ *
+ * Returns:
+ *  0 on success, -1 on error.
+ */
+UV_EXTERN int uv_udp_set_broadcast(uv_udp_t* handle, int on);
+
+/*
+ * Set the time to live
+ *
+ * Arguments:
+ *  handle              UDP handle. Should have been initialized with
+ *                      `uv_udp_init`.
+ *  ttl                 1 through 255
+ *
+ * Returns:
+ *  0 on success, -1 on error.
+ */
+UV_EXTERN int uv_udp_set_ttl(uv_udp_t* handle, int ttl);
 
 /*
  * Send data. If the socket has not previously been bound with `uv_udp_bind`
@@ -1036,7 +1120,48 @@ UV_EXTERN int uv_queue_work(uv_loop_t* loop, uv_work_t* req,
     uv_work_cb work_cb, uv_after_work_cb after_work_cb);
 
 
+struct uv_cpu_info_s {
+  char* model;
+  int speed;
+  struct uv_cpu_times_s {
+    uint64_t user;
+    uint64_t nice;
+    uint64_t sys;
+    uint64_t idle;
+    uint64_t irq;
+  } cpu_times;
+};
 
+struct uv_interface_address_s {
+  char* name;
+  int is_internal;
+  union {
+    struct sockaddr_in address4;
+    struct sockaddr_in6 address6;
+  } address;
+};
+
+UV_EXTERN char** uv_setup_args(int argc, char** argv);
+UV_EXTERN uv_err_t uv_get_process_title(char* buffer, size_t size);
+UV_EXTERN uv_err_t uv_set_process_title(const char* title);
+UV_EXTERN uv_err_t uv_resident_set_memory(size_t* rss);
+UV_EXTERN uv_err_t uv_uptime(double* uptime);
+
+/*
+ * This allocates cpu_infos array, and sets count.  The array
+ * is freed using uv_free_cpu_info().
+ */
+UV_EXTERN uv_err_t uv_cpu_info(uv_cpu_info_t** cpu_infos, int* count);
+UV_EXTERN void uv_free_cpu_info(uv_cpu_info_t* cpu_infos, int count);
+
+/*
+ * This allocates addresses array, and sets count.  The array
+ * is freed using uv_free_interface_addresses().
+ */
+UV_EXTERN uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
+  int* count);
+UV_EXTERN void uv_free_interface_addresses(uv_interface_address_t* addresses,
+  int count);
 
 /*
  * File System Methods.
@@ -1270,7 +1395,8 @@ UV_EXTERN uv_err_t uv_dlopen(const char* filename, uv_lib_t* library);
 UV_EXTERN uv_err_t uv_dlclose(uv_lib_t library);
 
 /*
- * Retrieves a data pointer from a dynamic library.
+ * Retrieves a data pointer from a dynamic library. It is legal for a symbol to
+ * map to NULL.
  */
 UV_EXTERN uv_err_t uv_dlsym(uv_lib_t library, const char* name, void** ptr);
 
@@ -1295,6 +1421,12 @@ UV_EXTERN void uv_rwlock_rdunlock(uv_rwlock_t* rwlock);
 UV_EXTERN void uv_rwlock_wrlock(uv_rwlock_t* rwlock);
 UV_EXTERN int uv_rwlock_trywrlock(uv_rwlock_t* rwlock);
 UV_EXTERN void uv_rwlock_wrunlock(uv_rwlock_t* rwlock);
+
+/* Runs a function once and only once. Concurrent calls to uv_once() with the
+ * same guard will block all callers except one (it's unspecified which one).
+ * The guard should be initialized statically with the UV_ONCE_INIT macro.
+ */
+UV_EXTERN void uv_once(uv_once_t* guard, void (*callback)(void));
 
 UV_EXTERN int uv_thread_create(uv_thread_t *tid,
     void (*entry)(void *arg), void *arg);

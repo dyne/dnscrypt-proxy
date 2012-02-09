@@ -20,50 +20,71 @@
  */
 
 #include "uv.h"
-#include "internal.h"
-
-#include <dlfcn.h>
-#include <errno.h>
-
-/* The dl family of functions don't set errno. We need a good way to communicate
- * errors to the caller but there is only dlerror() and that returns a string -
- * a string that may or may not be safe to keep a reference to...
- */
-static const uv_err_t uv_inval_ = { UV_EINVAL, EINVAL };
+#include "task.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
-uv_err_t uv_dlopen(const char* filename, uv_lib_t* library) {
-  void* handle = dlopen(filename, RTLD_LAZY);
-  if (handle == NULL) {
-    return uv_inval_;
-  }
+static uv_idle_t idle;
 
-  *library = handle;
-  return uv_ok_;
+static const int max_opened = 10000;
+static const int max_delta = 4000;
+
+static int opened = 0;
+static int closed = 0;
+
+
+void work_cb(uv_work_t* work) {
+  /* continue as fast as possible */
 }
 
 
-uv_err_t uv_dlclose(uv_lib_t library) {
-  if (dlclose(library) != 0) {
-    return uv_inval_;
-  }
-
-  return uv_ok_;
+void after_work_cb(uv_work_t* work) {
+  free(work);
+  closed++;
 }
 
 
-uv_err_t uv_dlsym(uv_lib_t library, const char* name, void** ptr) {
-  void* address;
+void make_eio_req(void) {
+  uv_work_t* w;
 
-  /* Reset error status. */
-  dlerror();
+  opened++;
 
-  address = dlsym(library, name);
+  w = (uv_work_t*) malloc(sizeof(*w));
+  ASSERT(w != NULL);
 
-  if (dlerror()) {
-    return uv_inval_;
+  uv_queue_work(uv_default_loop(), w, work_cb, after_work_cb);
+}
+
+
+void idle_cb(uv_idle_t* idle, int status) {
+  ASSERT(opened - closed < max_delta);
+  if (opened <= max_opened) {
+    int i;
+    for (i = 0; i < 30; i++) {
+      make_eio_req();
+    }
+  } else {
+    int r;
+
+    r = uv_idle_stop(idle);
+    uv_unref(uv_default_loop());
+    ASSERT(r == 0);
   }
+}
 
-  *ptr = (void*) address;
-  return uv_ok_;
+
+TEST_IMPL(eio_overflow) {
+  int r;
+
+  r = uv_idle_init(uv_default_loop(), &idle);
+  ASSERT(r == 0);
+
+  r = uv_idle_start(&idle, idle_cb);
+  ASSERT(r == 0);
+
+  r = uv_run(uv_default_loop());
+  ASSERT(r == 0);
+
+  return 0;
 }
