@@ -160,6 +160,7 @@ main(int argc, char *argv[])
     udp_listener_stop(&proxy_context);
     uv_loop_delete(event_loop);
     proxy_context_free(&proxy_context);
+    app_context.proxy_context = NULL;
     salsa20_random_close();
 
     return 0;
