@@ -293,6 +293,11 @@ uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
     (*count)++;
   }
 
+  if (*count == 0) {
+    freeifaddrs(addrs);
+    *addresses = NULL;
+    return uv_ok_;
+  }
   *addresses = (uv_interface_address_t*)
     malloc(*count * sizeof(uv_interface_address_t));
   if (!(*addresses)) {
