@@ -301,6 +301,7 @@ uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
   *addresses = (uv_interface_address_t*)
     malloc(*count * sizeof(uv_interface_address_t));
   if (!(*addresses)) {
+    freeifaddrs(addrs);      
     return uv__new_artificial_error(UV_ENOMEM);
   }
 
