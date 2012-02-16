@@ -5,11 +5,11 @@ ONLY_FOR_ARCHS=	i386 amd64
 
 COMMENT=	secure communications between a client and a DNS resolver
 
-DISTNAME=	dnscrypt-proxy-0.8
+DISTNAME=	dnscrypt-proxy-0.9
 CATEGORIES=	net
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 
-HOMEPAGE=	http://www.opendns.com/technology/dnscrypt/
+HOMEPAGE=	https://github.com/opendns/dnscrypt-proxy/
 
 MAINTAINER=	OpenDNS Inc. <dnscrypt@opendns.com>
 
