@@ -1,3 +1,139 @@
+Date:   2012-02-09
+
+    Explicitly NULLify app_context.proxy_context
+
+Date:   2012-02-09
+
+    libuv: plug memleak on error path
+
+Date:   2012-02-09
+
+    Don't malloc(0). If we don't have any interfaces, return OK / null.
+
+Date:   2012-02-09
+
+    Rewrite uv_hrtime() for Darwin in a portable way.
+
+Date:   2012-02-09
+
+    rename() requires <stdio.h> on OSX. Don't ask why.
+
+Date:   2012-02-09
+
+    Resync libuv
+
+Date:   2012-01-25
+
+    Next version will be 0.11.
+    (yeah, people are having a hard time figuring out that the OSX GUI is a
+    different product, so let's try to keep version numbers more or less in sync)
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: set SO_REUSEADDR before binding
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: don't close kqueue fd in kqueue_fork()
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: clean up udp read/write watchers
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: clean up udp shutdown sequence
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: don't retry close() on EINTR
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: fix segfault in uv_guess_handle()
+
+Date:   2012-01-25
+
+    libuv cherrypick: unix: fix udp recv_start refcount
+
+Date:   2012-01-25
+
+    libuv cherrypick: remove unused #define
+
+Date:   2012-01-25
+
+    libuv cherrypick: docs: add c-ares license note
+
+Date:   2011-12-31
+
+    2012
+
+Date:   2011-12-21
+
+    Cherry-pick 6a9cb902ae25efa6f853dc10b20cd657b8a1f809
+
+Date:   2011-12-21
+
+    Cherrypick libuv 3cbe7c3f7952aa249450438b21cf4f346bb88e22
+
+Date:   2011-12-21
+
+    Revert "Update libuv" - libuv is still b0rk3d on OpenBSD, DragonflyBSD and NetBSD.
+    
+
+Date:   2011-12-21
+
+    Revert "Unbreak libuv on Dragonfly BSD."
+    
+
+Date:   2011-12-21
+
+    Unbreak libuv on Dragonfly BSD.
+
+Date:   2011-12-21
+
+    Update libuv
+
+Date:   2011-12-15
+
+    Set TZ even if strftime() fails.
+
+Date:   2011-12-14
+
+    Update libuv - Except the obviously untested patch provided by Microsoft that totally breaks libuv on BSD.
+
+Date:   2011-12-14
+
+    Revert - libuv is now totally b0rk3d on FreeBSD/DragonflyBSD.
+
+Date:   2011-12-14
+
+    Big and scary update to libuv
+
+Date:   2011-12-14
+
+    Add --disable-dependency-tracking to the Homebrew formula.
+
+Date:   2011-12-13
+
+    Update Dragonfly BSD / NetBSD package.
+
+Date:   2011-12-13
+
+    Update Homebrew package
+
+Date:   2011-12-13
+
+    Update FreeBSD package.
+
+Date:   2011-12-13
+
+    Update OpenBSD package.
+
+Date:   2011-12-13
+
+    Update ChangeLog.
+
 Date:   2011-12-13
 
     We can detect accept4() while SOCK_CLOEXEC and SOCK_NONBLOCK are unavailable.
