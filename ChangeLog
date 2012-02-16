@@ -1,5 +1,19 @@
 Date:   2012-02-16
 
+    Set version to 0.9
+    Trying to keep the version number in sync with the Mac GUI doesn't make any
+    sense, especially with a Windows GUI on the way.
+
+Date:   2012-02-16
+
+    2012 & regen man page
+
+Date:   2012-02-16
+
+    Remove test-ipc-threads.c and regen uv/dist-files.
+
+Date:   2012-02-16
+
     Resync libuv
 
 Date:   2012-02-09
