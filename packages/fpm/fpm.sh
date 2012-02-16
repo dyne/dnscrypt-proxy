@@ -1,6 +1,6 @@
 #! /bin/sh
 
-VERSION="0.8"
+VERSION="0.9"
 TMPDIR=${TMPDIR:-/tmp}
 BASE_DIR=$(mktemp -d "$TMPDIR"/dnscrypt.XXXXXX)
 INSTALL_DIR="$BASE_DIR/usr"
