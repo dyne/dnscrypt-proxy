@@ -18,7 +18,7 @@ PERMIT_PACKAGE_FTP=	No
 PERMIT_DISTFILES_CDROM=	No
 PERMIT_DISTFILES_FTP=	No
 
-WANTLIB=	c execinfo m pthread
+WANTLIB=	c m pthread
 
 LIB_DEPENDS=	devel/libexecinfo
 
