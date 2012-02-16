@@ -112,8 +112,10 @@
 ./src/unix/cygwin.c
 ./src/unix/darwin.c
 ./src/unix/dl.c
+./src/unix/eio/aclocal.m4
 ./src/unix/eio/autogen.sh
 ./src/unix/eio/Changes
+./src/unix/eio/config.h.in
 ./src/unix/eio/config_cygwin.h
 ./src/unix/eio/config_darwin.h
 ./src/unix/eio/config_freebsd.h
@@ -132,8 +134,12 @@
 ./src/unix/eio/Makefile.am
 ./src/unix/eio/xthread.h
 ./src/unix/error.c
+./src/unix/ev/aclocal.m4
 ./src/unix/ev/autogen.sh
 ./src/unix/ev/Changes
+./src/unix/ev/config.guess
+./src/unix/ev/config.h.in
+./src/unix/ev/config.sub
 ./src/unix/ev/config_cygwin.h
 ./src/unix/ev/config_darwin.h
 ./src/unix/ev/config_freebsd.h
@@ -141,7 +147,9 @@
 ./src/unix/ev/config_netbsd.h
 ./src/unix/ev/config_openbsd.h
 ./src/unix/ev/config_sunos.h
+./src/unix/ev/configure
 ./src/unix/ev/configure.ac
+./src/unix/ev/depcomp
 ./src/unix/ev/ev++.h
 ./src/unix/ev/ev.3
 ./src/unix/ev/ev.c
@@ -156,9 +164,13 @@
 ./src/unix/ev/ev_wrap.h
 ./src/unix/ev/event.c
 ./src/unix/ev/event.h
+./src/unix/ev/install-sh
 ./src/unix/ev/libev.m4
 ./src/unix/ev/LICENSE
+./src/unix/ev/ltmain.sh
 ./src/unix/ev/Makefile.am
+./src/unix/ev/Makefile.in
+./src/unix/ev/missing
 ./src/unix/ev/mkinstalldirs
 ./src/unix/ev/README
 ./src/unix/freebsd.c
@@ -236,6 +248,7 @@
 ./test/test-counters-init.c
 ./test/test-cwd-and-chdir.c
 ./test/test-delayed-accept.c
+./test/test-eio-overflow.c
 ./test/test-error.c
 ./test/test-fail-always.c
 ./test/test-fs-event.c
@@ -257,6 +270,8 @@
 ./test/test-ping-pong.c
 ./test/test-pipe-bind-error.c
 ./test/test-pipe-connect-error.c
+./test/test-platform-output.c
+./test/test-process-title.c
 ./test/test-ref.c
 ./test/test-run-once.c
 ./test/test-shutdown-eof.c
@@ -279,6 +294,8 @@
 ./test/test-udp-dgram-too-big.c
 ./test/test-udp-ipv6.c
 ./test/test-udp-multicast-join.c
+./test/test-udp-multicast-ttl.c
+./test/test-udp-options.c
 ./test/test-udp-send-and-recv.c
 ./test/test-util.c
 ./uv.gyp

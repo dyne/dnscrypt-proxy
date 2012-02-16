@@ -1,3 +1,7 @@
+Date:   2012-02-16
+
+    Resync libuv
+
 Date:   2012-02-09
 
     Explicitly NULLify app_context.proxy_context
