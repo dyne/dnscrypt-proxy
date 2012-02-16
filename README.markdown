@@ -35,12 +35,19 @@ Installation
 The daemon is known to work on recent versions of OSX, OpenBSD,
 NetBSD, Dragonfly BSD, FreeBSD, Linux and Cygwin/Win32.
 
+Download the
+[latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
+and extract it:
+
+    $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
+    $ cd dnscrypt-proxy-*
+
 Compile and install it using the standard procedure:
 
     $ ./configure && make -j2
     # make install
 
-Replace `-j2` with whatever CPU cores you want to use for the
+Replace `-j2` with whatever number of CPU cores you want to use for the
 compilation process.
 
 Running `make -j2 test` in the `src/libnacl` directory is also highly
