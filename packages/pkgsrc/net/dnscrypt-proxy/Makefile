@@ -1,10 +1,10 @@
 
-DISTNAME=	dnscrypt-proxy-0.8
+DISTNAME=	dnscrypt-proxy-0.9
 CATEGORIES=	net
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 
 MAINTAINER=	dnscrypt@opendns.com
-HOMEPAGE=	http://www.opendns.com/technology/dnscrypt/
+HOMEPAGE=	http://github.com/opendns/dnscrypt-proxy/
 COMMENT=	secure communications between a client and a DNS resolver
 LICENSE=	modified-bsd
 
