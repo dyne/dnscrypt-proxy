@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 0.9, bugs at opendns dot com)
+AC_INIT(dnscrypt-proxy, 0.9.1, bugs at opendns dot com)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
@@ -46,14 +46,14 @@ AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
       AX_CHECK_COMPILE_FLAG([-fstack-protector], [
         AX_CHECK_LINK_FLAG([-fstack-protector],
           [CFLAGS="$CFLAGS -fstack-protector"]
-	)
+        )
       ])
     ],
     [
       AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
         AX_CHECK_LINK_FLAG([-fstack-protector-all],
           [CFLAGS="$CFLAGS -fstack-protector-all"]
-	)
+        )
       ])
     ]
   )
