@@ -1,11 +1,8 @@
 # $OpenBSD$
 
-# NaCl needs porting to work on other arch; tested: sparc64 arm powerpc
-ONLY_FOR_ARCHS=	i386 amd64
-
 COMMENT=	secure communications between a client and a DNS resolver
 
-DISTNAME=	dnscrypt-proxy-0.9
+DISTNAME=	dnscrypt-proxy-0.9.1
 CATEGORIES=	net
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 
