@@ -1,6 +1,9 @@
 #! /bin/sh
 
-VERSION="0.9"
+VERSION="0.9.1"
+MAINTAINER="OpenDNS Inc <dnscrypt@opendns.com>"
+CATEGORY="net"
+URL="https://github.com/opendns/dnscrypt-proxy"
 TMPDIR=${TMPDIR:-/tmp}
 BASE_DIR=$(mktemp -d "$TMPDIR"/dnscrypt.XXXXXX)
 INSTALL_DIR="$BASE_DIR/usr"
@@ -11,5 +14,6 @@ sudo chown -R 0:0 $BASE_DIR
 find $BASE_DIR -type d -exec chmod 755 {} \;
 
 for t in deb rpm; do
-  fpm -s dir -t "$t" -n dnscrypt-proxy -v "$VERSION" -C "$BASE_DIR"
+  fpm -s dir -t "$t" -n dnscrypt-proxy -v "$VERSION" -C "$BASE_DIR" \
+    -m "$MAINTAINER" --category "$CATEGORY" --url "$URL"
 done
