@@ -1,6 +1,7 @@
 
 * Version 0.9:
  - libuv has been updated.
+ - Enhanced compatibility with non-Intel architectures.
 
 * Version 0.8:
  - Support for Windows (through Cygwin, for now) has been improved.
