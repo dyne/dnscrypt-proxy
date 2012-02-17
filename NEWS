@@ -1,4 +1,8 @@
 
+* Version 0.9.1:
+ - DNSCrypt should compile out of the box on DD-WRT and other
+   uclibc-based systems.
+
 * Version 0.9:
  - libuv has been updated.
  - Enhanced compatibility with non-Intel architectures.

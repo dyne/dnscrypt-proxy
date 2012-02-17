@@ -1,3 +1,74 @@
+Date:   2012-02-17
+
+    untab
+
+Date:   2012-02-17
+
+    Both the compiler and the linker have to accept -fstack-protector
+
+Date:   2012-02-17
+
+    Try to compile something that performs some stack allocation in order to
+    make the AX_CHECK_COMPILE_FLAG work with -fstack-protector
+
+Date:   2012-02-17
+
+    We actually need uclibc 0.9.32 to use ifaddrs.h
+
+Date:   2012-02-16
+
+    Thanks, Lance Fredrickson.
+
+Date:   2012-02-16
+
+    uClibc < 0.9.30 didn't have ifaddrs.h
+
+Date:   2012-02-16
+
+    Regen OpenBSD distinfo.
+
+Date:   2012-02-16
+
+    Update NEWS
+
+Date:   2012-02-16
+
+    Replace cpucycles with a no-op.
+    We're favoring portability for now, and we're not benchmarking functions.
+    And cpucycles seems to be causing a lot of trouble on some architectures.
+
+Date:   2012-02-16
+
+    Update Dragonfly BSD / NetBSD package.
+
+Date:   2012-02-16
+
+    Update Homebrew formula.
+
+Date:   2012-02-16
+
+    execinfo is *not* required on OpenBSD.
+
+Date:   2012-02-16
+
+    Update OpenBSD packages
+
+Date:   2012-02-16
+
+    Bump FreeBSD package to 0.9
+
+Date:   2012-02-16
+
+    Update the documentation to mention where the tarballs can be downloaded from.
+
+Date:   2012-02-16
+
+    Update Linux packages to 0.9
+
+Date:   2012-02-16
+
+    Regen ChangeLog
+
 Date:   2012-02-16
 
     Set version to 0.9
