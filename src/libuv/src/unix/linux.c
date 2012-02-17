@@ -28,7 +28,15 @@
 #include <assert.h>
 #include <errno.h>
 
-#include <ifaddrs.h>
+#define HAVE_IFADDRS_H 1
+#ifdef __UCLIBC__
+# if __UCLIBC_MAJOR__ < 0 || __UCLIBC_MINOR__ < 9 || __UCLIBC_SUBLEVEL__ < 30
+#  undef HAVE_IFADDRS_H
+# endif
+#endif
+#ifdef HAVE_IFADDRS_H
+# include <ifaddrs.h>
+#endif
 #include <net/if.h>
 #include <sys/param.h>
 #include <sys/sysinfo.h>
@@ -457,6 +465,9 @@ void uv_free_cpu_info(uv_cpu_info_t* cpu_infos, int count) {
 
 uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
   int* count) {
+#ifndef HAVE_IFADDRS_H
+  return uv__new_artificial_error(UV_ENOSYS);
+#else
   struct ifaddrs *addrs, *ent;
   char ip[INET6_ADDRSTRLEN];
   uv_interface_address_t* address;
@@ -520,6 +531,7 @@ uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
   freeifaddrs(addrs);
 
   return uv_ok_;
+#endif
 }
 
 
