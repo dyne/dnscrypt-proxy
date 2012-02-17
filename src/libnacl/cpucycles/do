@@ -7,66 +7,6 @@ okabi | (
     rm -f cpucycles.o cpucycles.h
 
     (
-      case "$abi" in
-        ppc*)
-          echo powerpccpuinfo
-          echo powerpcmacos
-	  ;;
-        amd64*)
-          echo amd64tscfreq
-          echo amd64cpuinfo
-          echo amd64cpuspeed
-	  ;;
-        x86*)
-          echo x86tscfreq
-          echo x86cpuinfo
-          echo x86cpuspeed
-          echo x86estimate
-	  ;;
-	cell*)
-          echo celllinux
-	  ;;
-	sparc*)
-          echo sparccpuinfo
-          echo sparc32cpuinfo
-	  ;;
-	mips*)
-          echo mips
-	  ;;
-	hppa*)
-          echo hppapstat
-	  ;;
-	alpha*)
-          echo alpha
-	  ;;
-	sgi*)
-          echo sgi
-	  ;;
-	arm*)
-	  echo cortex
-          echo dev4ns
-	  ;;
-      esac
-
-      echo amd64tscfreq
-      echo amd64cpuinfo
-      echo amd64cpuspeed
-      echo x86tscfreq
-      echo x86cpuinfo
-      echo x86cpuspeed
-      echo x86estimate
-      echo ia64cpuinfo
-      echo powerpccpuinfo
-      echo powerpcmacos
-      echo celllinux
-      echo sparccpuinfo
-      echo sparc32cpuinfo
-      echo mips
-      echo hppapstat
-      echo alpha
-      echo sgi
-      echo cortex
-      echo dev4ns
       echo monotoniccpuinfo
       echo monotonic
       echo gettimeofday
