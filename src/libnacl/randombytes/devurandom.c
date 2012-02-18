@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 /* it's really stupid that there isn't a syscall for this */
+/* -> Y U NO USE OPENBSD? */
 
 static int fd = -1;
 
