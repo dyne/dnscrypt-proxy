@@ -30,9 +30,14 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#ifdef __APPLE__
-# include <crt_externs.h>
-# define environ (*_NSGetEnviron())
+#if defined(__APPLE__)
+# include <TargetConditionals.h>
+# if TARGET_OS_IPHONE
+extern char **environ;
+# else
+#  include <crt_externs.h>
+#  define environ (*_NSGetEnviron())
+# endif
 #else
 extern char **environ;
 #endif
