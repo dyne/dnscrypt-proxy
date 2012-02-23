@@ -9,7 +9,6 @@ exec < c
 echo '#!/bin/sh' > bin/okc-local
 while read compiler; do
   $compiler lib.c main.c -o test-c || continue
-  ./test-c || continue
   echo "echo $compiler" >> bin/okc-local
 done
  
