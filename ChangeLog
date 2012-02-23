@@ -1,3 +1,70 @@
+Date:   2012-02-23
+
+    Mention iOS support, bump version to 0.9.2
+
+Date:   2012-02-23
+
+    Some distributions don't provide a "hostname" command.
+    Always use the same name for a compilation directory.
+
+Date:   2012-02-23
+
+    Improve detection of -fPIE support.
+
+Date:   2012-02-23
+
+    Unbreak libuv on iPhone.
+
+Date:   2012-02-23
+
+    Don't benchmark functions at compile-time.
+    That should be done at run-time.
+
+Date:   2012-02-23
+
+    Test /dev/urandom with -r, not -f
+
+Date:   2012-02-23
+
+    Run less executables at compile-time in order to make cross-compilation for iPhone & Android possible.
+
+Date:   2012-02-23
+
+    Don't run test-c - It breaks cross-compilation.
+
+Date:   2012-02-22
+
+    Add some extra info to the Debian packages so that lintian stops whining.
+
+Date:   2012-02-21
+
+    libuv - linux: fix signedness issue in uv_exepath()
+
+Date:   2012-02-17
+
+    Yup
+
+Date:   2012-02-17
+
+    Add URL / maintainer / category to the Linux packages.
+
+Date:   2012-02-17
+
+    Update NetBSD and Dragonfly BSD packages.
+
+Date:   2012-02-17
+
+    Update FreeBSD & Homebrew packages
+
+Date:   2012-02-17
+
+    Update the dnscrypt package for OpenBSD to 0.9.1
+    It should now work on non-Intel architectures.
+
+Date:   2012-02-17
+
+    Bump version to 0.9.1
+
 Date:   2012-02-17
 
     untab
