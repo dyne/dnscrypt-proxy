@@ -32,7 +32,16 @@ CPPFLAGS="$CPPFLAGS -D_XPG4_2=1 -D_GNU_SOURCE=1"
 
 AX_PTHREAD
 
-AX_CHECK_COMPILE_FLAG([-fPIE], [CFLAGS="$CFLAGS -fPIE"])
+AS_IF([test "$cross_compiling" != no],
+  AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
+)
+
+AX_CHECK_COMPILE_FLAG([-fPIE], [
+  AX_CHECK_LINK_FLAG([-fPIE],
+    [CFLAGS="$CFLAGS -fPIE"]
+  )
+])
+
 AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior], [CFLAGS="$CFLAGS -fcatch-undefined-c99-behavior"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"])
