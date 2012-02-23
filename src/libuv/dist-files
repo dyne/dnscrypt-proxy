@@ -177,7 +177,8 @@
 ./src/unix/fs.c
 ./src/unix/internal.h
 ./src/unix/kqueue.c
-./src/unix/linux.c
+./src/unix/linux/core.c
+./src/unix/linux/inotify.c
 ./src/unix/netbsd.c
 ./src/unix/openbsd.c
 ./src/unix/pipe.c

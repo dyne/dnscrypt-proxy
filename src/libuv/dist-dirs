@@ -15,6 +15,7 @@
 ./src/unix
 ./src/unix/eio
 ./src/unix/ev
+./src/unix/linux
 ./src/win
 ./test
 ./test/fixtures
