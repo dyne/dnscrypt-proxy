@@ -1,4 +1,8 @@
 
+* Version 0.9.2:
+ - Support for cross-compilation. In particular, the proxy can now
+   compile and work on iOS.
+
 * Version 0.9.1:
  - DNSCrypt should compile out of the box on DD-WRT and other
    uclibc-based systems.
