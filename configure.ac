@@ -274,7 +274,7 @@ AC_ARG_WITH(safecode,
   ])
 ])
 
-NACL_HOSTNAME=`hostname | sed 's/\..*//' | tr -cd '[a-z][A-Z][0-9]'`
+NACL_HOSTNAME="localhost"
 NACL_PATH=libnacl/build/${NACL_HOSTNAME}
 
 AC_SUBST([MAINT])

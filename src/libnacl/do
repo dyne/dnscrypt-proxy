@@ -6,7 +6,7 @@
 
 version=`cat version`
 project=nacl
-shorthostname=`hostname | sed 's/\..*//' | tr -cd '[a-z][A-Z][0-9]'`
+shorthostname="localhost"
 
 top="`pwd`/build/$shorthostname"
 bin="$top/bin"
