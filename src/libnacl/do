@@ -182,7 +182,6 @@ do
 	cp -pr "$implementationdir"/* "$work/compile"
 
 	cp -p "try-anything.c" "$work/compile/try-anything.c"
-	cp -p "measure-anything.c" "$work/compile/measure-anything.c"
 
 	cp -p MACROS "$work/compile/MACROS"
 	cp -p PROTOTYPES.c "$work/compile/PROTOTYPES.c"
@@ -279,52 +278,13 @@ do
 	    done
 	    [ "$ok" = 1 ] || continue
 
-	    if sh -c './try || exit $?' >../outputs 2>../errors
-	    then
-	      checksum=`awk '{print $1}' < ../outputs`
-	      cycles=`awk '{print $2}' < ../outputs`
-	      checksumcycles=`awk '{print $3}' < ../outputs`
-	      cyclespersecond=`awk '{print $4}' < ../outputs`
-	      impl=`awk '{print $5}' < ../outputs`
-	    else
-	      echo "$version $shorthostname $abi $startdate $o $p tryfails $implementationdir $compilerword error $?" >&5
-	      cat ../outputs ../errors \
-	      | while read err
-	      do
-	        echo "$version $shorthostname $abi $startdate $o $p tryfails $implementationdir $compilerword $err" >&5
-	      done
-	      continue
-	    fi
-
-	    checksumok=fails
-	    [ "x$expectedchecksum" = "x$checksum" ] && checksumok=ok
-	    [ "x$expectedchecksum" = "x" ] && checksumok=unknown
-	    echo "$version $shorthostname $abi $startdate $o $p try $checksum $checksumok $cycles $checksumcycles $cyclespersecond $impl $compilerword" >&5
-	    [ "$checksumok" = fails ] && continue
-
-	    [ -s ../bestmedian ] && [ `cat ../bestmedian` -le $cycles ] && continue
-	    echo "$cycles" > ../bestmedian
-
-	    $compiler -D'COMPILER="'"$compiler"'"' \
-	      -DLOOPS=1 \
-	      -I. -I"$include" -I"$include/$abi" \
-	      -o measure measure.c measure-anything.c \
-	      "$op.a" $libs >../errors 2>&1 || ok=0
-	    cat ../errors \
-	    | while read err
-	    do
-	      echo "$version $shorthostname $abi $startdate $o $p fromcompiler $implementationdir $compilerword measure.c $err" >&5
-	    done
-	    [ "$ok" = 1 ] || continue
-
-	    rm -f ../best/*.o ../best/measure || continue
+	    rm -f ../best/*.o || continue
 	    for f in *.o
 	    do
 	      cp -p "$f" "../best/${opi}-$f"
 	    done
 	    cp -p "$op.h" "../$op.h"
 	    cp -p "$o.h" "../$o.h"
-	    cp -p measure ../best/measure
 	  done
 	)
       done
