@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -16,7 +17,7 @@
 #endif
 #include "cpucycles.h"
 
-typedef int uint32;
+typedef uint32_t uint32;
 
 static uint32 seed[32] = { 3,1,4,1,5,9,2,6,5,3,5,8,9,7,9,3,2,3,8,4,6,2,6,4,3,3,8,3,2,7,9,5 } ;
 static uint32 in[12];
@@ -44,6 +45,18 @@ static void surf(void)
     for (i = 0;i < 8;++i) out[i] ^= t[i + 4];
   }
 }
+
+#ifdef __MINGW32__
+static long random(void)
+{
+    return (long) rand();
+}
+
+static void srandom(unsigned int seed)
+{
+    srand(seed);
+}
+#endif
 
 void randombytes(unsigned char *x,unsigned long long xlen)
 {
