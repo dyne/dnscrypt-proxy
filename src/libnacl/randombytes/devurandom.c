@@ -2,6 +2,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#ifdef __MINGW32__
+# include <windows.h>
+#endif
 
 /* it's really stupid that there isn't a syscall for this */
 /* -> Y U NO USE OPENBSD? */
