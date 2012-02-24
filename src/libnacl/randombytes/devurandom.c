@@ -16,7 +16,11 @@ void randombytes(unsigned char *x,unsigned long long xlen)
     for (;;) {
       fd = open("/dev/urandom",O_RDONLY);
       if (fd != -1) break;
+#ifdef __MINGW32__
+      Sleep(1000);
+#else
       sleep(1);
+#endif
     }
   }
 
@@ -25,7 +29,11 @@ void randombytes(unsigned char *x,unsigned long long xlen)
 
     i = read(fd,x,i);
     if (i < 1) {
+#ifdef __MINGW32__
+      Sleep(1000);
+#else
       sleep(1);
+#endif
       continue;
     }
 
