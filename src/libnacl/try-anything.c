@@ -46,18 +46,6 @@ static void surf(void)
   }
 }
 
-#ifdef __MINGW32__
-static long random(void)
-{
-    return (long) rand();
-}
-
-static void srandom(unsigned int seed)
-{
-    srand(seed);
-}
-#endif
-
 void randombytes(unsigned char *x,unsigned long long xlen)
 {
   while (xlen > 0) {
