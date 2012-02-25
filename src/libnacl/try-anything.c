@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include "windows/windows-quirks.h"
 #ifndef __MINGW32__
 # include <sys/resource.h>
 #endif

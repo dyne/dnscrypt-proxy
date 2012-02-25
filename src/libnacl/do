@@ -80,6 +80,10 @@ cp -pr okcompilers/* "$work"
 ( cd "$work" && sh do )
 cp -p "$work"/bin/* "$bin"
 
+echo "=== `date` === copying windows headers"
+mkdir -p "${include}/windows"
+cp -pr windows/include/* "${include}/windows/"
+
 echo "=== `date` === building cpuid"
 rm -rf "$work"
 mkdir -p "$work"
