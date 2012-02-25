@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "crypto_onetimeauth_poly1305.h"
 #include "randombytes.h"
+#include "windows/windows-quirks.h"
 
 unsigned char key[32];
 unsigned char c[10000];

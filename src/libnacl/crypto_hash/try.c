@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include "crypto_hash.h"
+#include "windows/windows-quirks.h"
 
 extern unsigned char *alignedcalloc(unsigned long long);
 

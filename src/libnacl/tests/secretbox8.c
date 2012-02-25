@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "crypto_secretbox.h"
 #include "randombytes.h"
+#include "windows/windows-quirks.h"
 
 unsigned char k[crypto_secretbox_KEYBYTES];
 unsigned char n[crypto_secretbox_NONCEBYTES];

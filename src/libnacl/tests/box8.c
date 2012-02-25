@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "crypto_box.h"
 #include "randombytes.h"
+#include "windows/windows-quirks.h"
 
 unsigned char alicesk[crypto_box_SECRETKEYBYTES];
 unsigned char alicepk[crypto_box_PUBLICKEYBYTES];

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "randombytes.h"
 #include "crypto_sign.h"
+#include "windows/windows-quirks.h"
 
 #define MAXTEST_BYTES 10000
 #define TUNE_BYTES 1536

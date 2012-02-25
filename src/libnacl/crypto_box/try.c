@@ -5,6 +5,7 @@
  */
 
 #include "crypto_box.h"
+#include "windows/windows-quirks.h"
 
 extern unsigned char *alignedcalloc(unsigned long long);
 
