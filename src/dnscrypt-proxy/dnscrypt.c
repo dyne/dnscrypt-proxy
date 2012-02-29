@@ -129,7 +129,6 @@ _dnscrypt_parse_char(uint8_t key[crypto_box_PUBLICKEYBYTES],
     return 1;
 }
 
-
 int
 dnscrypt_fingerprint_to_key(const char * const fingerprint,
                             uint8_t key[crypto_box_PUBLICKEYBYTES])

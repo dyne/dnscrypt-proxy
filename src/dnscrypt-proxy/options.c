@@ -59,7 +59,7 @@ static void
 options_version(void)
 {
     puts(PACKAGE_STRING "\n"
-        "Copyright (C) 2011 OpenDNS, Inc.");
+        "Copyright (C) 2011-2012 OpenDNS, Inc.");
 }
 
 static void
