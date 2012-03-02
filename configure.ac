@@ -238,6 +238,8 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl ws2_32])
 AC_SEARCH_LIBS(recvfrom, [socket ws2_32])
 AC_SEARCH_LIBS(kvm_open, [kvm])
+AC_SEARCH_LIBS(GetProcessMemoryInfo, [psapi])
+AC_SEARCH_LIBS(GetAdaptersAddresses, [iphlpapi])
 
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
