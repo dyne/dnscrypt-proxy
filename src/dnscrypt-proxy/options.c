@@ -1,13 +1,19 @@
 
 #include <config.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+#endif
 
 #include <assert.h>
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
-#include <pwd.h>
+#ifndef __MINGW32__
+# include <pwd.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +23,6 @@
 #include "options.h"
 #include "logger.h"
 #include "pid_file.h"
-#include "safe_rw.h"
 #include "utils.h"
 
 static struct option getopt_long_options[] = {
@@ -95,8 +100,10 @@ void options_init_with_default(AppContext * const app_context,
         .provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY,
         .resolver_ip = DEFAULT_RESOLVER_IP,
         .resolver_port = DNS_DEFAULT_PORT,
+#ifndef __MINGW32__
         .user_id = (uid_t) 0,
         .user_group = (uid_t) 0,
+#endif
         .user_dir = NULL,
         .daemonize = 0,
         .tcp_only = 0
@@ -127,11 +134,13 @@ options_apply(ProxyContext * const proxy_context)
     if (proxy_context->daemonize) {
         do_daemonize();
     }
+#ifndef __MINGW32__
     if (proxy_context->pid_file != NULL &&
         pid_file_create(proxy_context->pid_file,
                         proxy_context->user_id != (uid_t) 0) != 0) {
         logger_error(proxy_context, "Unable to create pid file");
     }
+#endif
     if (proxy_context->log_file != NULL &&
         (proxy_context->log_fd = open(proxy_context->log_file,
                                       O_WRONLY | O_APPEND | O_CREAT,
@@ -224,6 +233,7 @@ options_parse(AppContext * const app_context,
             proxy_context->tcp_only = 1;
             break;
         }
+#ifndef __MINGW32__
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
             if (pw == NULL) {
@@ -235,6 +245,7 @@ options_parse(AppContext * const app_context,
             proxy_context->user_dir = strdup(pw->pw_dir);
             break;
         }
+#endif
         case 'N':
             proxy_context->provider_name = optarg;
             break;

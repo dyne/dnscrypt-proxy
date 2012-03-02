@@ -3,7 +3,11 @@
 #define __UDP_REQUEST_H_P__ 1
 
 #include <sys/types.h>
-#include <sys/socket.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+#endif
 
 #include <stdint.h>
 

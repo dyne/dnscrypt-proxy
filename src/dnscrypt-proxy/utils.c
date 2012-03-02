@@ -9,6 +9,7 @@
 #include "pathnames.h"
 #include "utils.h"
 
+#ifndef __MINGW32__
 static unsigned int
 open_max(void)
 {
@@ -76,3 +77,20 @@ do_daemonize(void)
     }        
     return 0;
 }
+
+#else /* __MINGW32__ */
+
+int
+closedesc_all(const int closestdin)
+{
+    (void) closestdin;
+    return 0;
+}
+
+int
+do_daemonize(void)
+{
+    return 0;
+}
+
+#endif

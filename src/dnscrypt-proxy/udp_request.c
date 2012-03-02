@@ -1,8 +1,12 @@
 
 #include <config.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+# include <arpa/inet.h>
+#endif
 
 #include <assert.h>
 #include <stdlib.h>

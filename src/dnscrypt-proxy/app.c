@@ -1,7 +1,11 @@
 
 #include <config.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+#endif
 
 #include <errno.h>
 #include <signal.h>
@@ -81,12 +85,12 @@ int init_tz(void)
 static void
 revoke_privileges(ProxyContext * const proxy_context)
 {
-#ifdef DEBUG
     (void) proxy_context;
-#else
+#ifndef DEBUG
     salsa20_random_stir();
     init_tz();
     (void) strerror(ENOENT);
+# ifndef __MINGW32__
     if (proxy_context->user_dir != NULL) {
         if (chdir(proxy_context->user_dir) != 0 ||
             chroot(proxy_context->user_dir) != 0 || chdir("/") != 0) {
@@ -105,6 +109,7 @@ revoke_privileges(ProxyContext * const proxy_context)
             exit(1);
         }
     }
+# endif
 #endif
 }
 
@@ -145,8 +150,9 @@ main(int argc, char *argv[])
         udp_listener_bind(&proxy_context) != 0) {
         exit(1);
     }
-
+#ifdef SIGPIPE
     signal(SIGPIPE, SIG_IGN);
+#endif
     revoke_privileges(&proxy_context);
 
     if (cert_updater_start(&proxy_context) != 0) {

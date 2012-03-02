@@ -3,7 +3,11 @@
 #define __DNSCRYPT_PROXY_H__ 1
 
 #include <sys/types.h>
-#include <sys/socket.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+#endif
 
 #include <stdint.h>
 
@@ -13,6 +17,10 @@
 #include "crypto_sign_ed25519.h"
 #include "dnscrypt_client.h"
 #include "uv.h"
+
+#ifdef __MINGW32__
+# include "uv-private/ngx-queue.h"
+#endif
 
 #ifndef DNS_QUERY_TIMEOUT
 # define DNS_QUERY_TIMEOUT (10 * 1000)
@@ -77,8 +85,10 @@ typedef struct ProxyContext_ {
     void                    *uv_alloc_buffer;
     size_t                   uv_alloc_buffer_size;
     size_t                   edns_payload_size;
+#ifndef __MINGW32__
     uid_t                    user_id;
     gid_t                    user_group;
+#endif
     unsigned int             connections_count;
     unsigned int             connections_count_max;
     int                      log_fd;

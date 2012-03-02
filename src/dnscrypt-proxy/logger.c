@@ -6,7 +6,9 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <syslog.h>
+#ifndef __MINGW32__
+# include <syslog.h>
+#endif
 #include <stdarg.h>
 #include <time.h>
 #include <unistd.h>
@@ -15,6 +17,7 @@
 #include "logger.h"
 #include "safe_rw.h"
 
+#ifndef __MINGW32__
 int
 logger_open_syslog(struct ProxyContext_ * const context)
 {
@@ -26,7 +29,7 @@ logger_open_syslog(struct ProxyContext_ * const context)
 
 int
 logger(struct ProxyContext_ * const context,
-        const int crit, const char * const format, ...)
+       const int crit, const char * const format, ...)
 {
     static char         previous_line[MAX_LOG_LINE];
     static time_t       last_log_ts = (time_t) 0;
@@ -127,3 +130,50 @@ logger_close(struct ProxyContext_ * const context)
     }
     return 0;
 }
+
+#else /* __MINGW32__ */
+
+int
+logger_open_syslog(struct ProxyContext_ * const context)
+{
+    (void) context;
+    return 0;
+}
+
+int
+logger(struct ProxyContext_ * const context,
+       const int crit, const char * const format, ...)
+{
+    (void) context;
+    (void) crit;
+    (void) format;
+    return 0;
+}
+
+int
+logger_noformat(struct ProxyContext_ * const context,
+		const int crit, const char * const msg)
+{
+    (void) context;
+    (void) crit;
+    (void) msg;
+    return 0;
+}
+
+int
+logger_error(struct ProxyContext_ * const context,
+	     const char * const msg)
+{
+    (void) context;
+    (void) msg;
+    return 0;
+}
+
+int
+logger_close(struct ProxyContext_ * const context)
+{
+    (void) context;
+    return 0;
+}
+
+#endif
