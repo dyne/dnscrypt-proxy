@@ -138,6 +138,7 @@ main(int argc, char *argv[])
     ProxyContext  proxy_context;
     uv_loop_t    *event_loop = uv_loop_new();
 
+    setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
     proxy_context_init(&proxy_context, event_loop, argc, argv);
     app_context.proxy_context = &proxy_context;
