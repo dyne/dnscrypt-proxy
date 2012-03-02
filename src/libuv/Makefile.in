@@ -27,8 +27,8 @@ LDFLAGS=@LDFLAGS@
 LIBS=@LIBS@
 
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
-cc_mingw := $(shell sh -c '@CC@ --version 2> /dev/null | @GREP@ GCC | @GREP@ mingw- 2> /dev/null || echo unknown')
-ifneq (,$(findstring mingw,$(uname_S)))
+cc_mingw := $(shell sh -c '@CC@ --version 2> /dev/null | @GREP@ GCC | @GREP@ mingw 2> /dev/null || echo unknown')
+ifneq (,$(findstring mingw,$(cc_mingw)))
 uname_S := MINGW
 endif
 ifdef MSVC
