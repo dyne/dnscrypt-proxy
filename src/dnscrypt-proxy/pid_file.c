@@ -17,6 +17,8 @@
 #include "safe_rw.h"
 #include "utils.h"
 
+#ifndef _WIN32
+
 static volatile sig_atomic_t  exit_requested;
 static pid_t                  _child = (pid_t) -1;
 static const char            *_pid_file;
@@ -29,8 +31,6 @@ pid_file_remove_pid_file(void)
         _pid_file = NULL;
     }
 }
-
-#ifndef _WIN32
 
 static void
 pid_file_wait_for_app(void)
@@ -162,6 +162,9 @@ pid_file_create(const char * const pid_file, const _Bool will_chroot)
 int
 pid_file_create(const char * const pid_file, const _Bool will_chroot)
 {
+    (void) pid_file;
+    (void) will_chroot;
+
     return 0;
 }
 
