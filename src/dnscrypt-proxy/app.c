@@ -1,7 +1,7 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <winsock2.h>
 #else
 # include <sys/socket.h>
@@ -90,7 +90,7 @@ revoke_privileges(ProxyContext * const proxy_context)
     salsa20_random_stir();
     init_tz();
     (void) strerror(ENOENT);
-# ifndef __MINGW32__
+# ifndef _WIN32
     if (proxy_context->user_dir != NULL) {
         if (chdir(proxy_context->user_dir) != 0 ||
             chroot(proxy_context->user_dir) != 0 || chdir("/") != 0) {

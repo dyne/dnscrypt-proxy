@@ -3,14 +3,14 @@
 #include <sys/types.h>
 
 #include <errno.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <poll.h>
 #endif
 #include <unistd.h>
 
 #include "safe_rw.h"
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 ssize_t
 safe_write(const int fd, const void * const buf_, size_t count,
            const int timeout)
@@ -74,7 +74,7 @@ safe_read_partial(const int fd, void * const buf_, const size_t max_count)
     return readnb;
 }
 
-#else /* __MINGW32__ */
+#else /* _WIN32 */
 
 ssize_t
 safe_write(const int fd, const void * const buf_, size_t count,

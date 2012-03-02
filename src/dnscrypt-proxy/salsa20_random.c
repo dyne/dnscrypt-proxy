@@ -17,7 +17,7 @@
 #include "utils.h"
 #include "uv.h"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <Wincrypt.h>
 #endif
 
@@ -29,7 +29,7 @@ typedef struct Salsa20Random_ {
     uint64_t      nonce;
     size_t        rnd32_outleft;
     pid_t         pid;
-#ifdef __MINGW32__
+#ifdef _WIN32
     HCRYPTPROV    hcrypt_prov;
 #endif
     int           random_data_source_fd;
@@ -66,12 +66,12 @@ salsa20_random_init(void)
     stream.nonce = (uint64_t) uv_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if ((stream.random_data_source_fd =
          salsa20_random_random_dev_open()) == -1) {
         abort();
     }
-#else /* __MINGW32__ */
+#else /* _WIN32 */
     if (! CryptAcquireContext(&stream.hcrypt_prov, NULL, NULL,
                               PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
         abort();
@@ -90,12 +90,12 @@ salsa20_random_stir(void)
         salsa20_random_init();
         stream.initialized = 1;
     }
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (safe_read(stream.random_data_source_fd, key0,
                   sizeof key0) != (ssize_t) sizeof key0) {
         abort();
     }
-#else /* __MINGW32__ */
+#else /* _WIN32 */
     if (! CryptGenRandom(stream.hcrypt_prov, sizeof key0, key0)) {
         abort();
     }
@@ -144,14 +144,14 @@ salsa20_random_close(void)
 {
     int ret = -1;
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (stream.random_data_source_fd != -1 &&
         close(stream.random_data_source_fd) == 0) {
         stream.random_data_source_fd = -1;
         stream.initialized = 0;
         ret = 0;
     }
-#else /* __MINGW32__ */
+#else /* _WIN32 */
     if (stream.initialized != 0 &&
         CryptReleaseContext(stream.hcrypt_prov, 0)) {
         stream.initialized = 0;

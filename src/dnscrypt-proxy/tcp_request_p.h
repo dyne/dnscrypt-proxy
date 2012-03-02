@@ -3,7 +3,7 @@
 #define __TCP_REQUEST_H_P__ 1
 
 #include <sys/types.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <winsock2.h>
 #else
 # include <sys/socket.h>

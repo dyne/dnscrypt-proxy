@@ -2,7 +2,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <windows.h>
 #endif
 
@@ -19,7 +19,7 @@ void randombytes(unsigned char *x,unsigned long long xlen)
     for (;;) {
       fd = open("/dev/urandom",O_RDONLY);
       if (fd != -1) break;
-#ifdef __MINGW32__
+#ifdef _WIN32
       Sleep(1000);
 #else
       sleep(1);
@@ -32,7 +32,7 @@ void randombytes(unsigned char *x,unsigned long long xlen)
 
     i = read(fd,x,i);
     if (i < 1) {
-#ifdef __MINGW32__
+#ifdef _WIN32
       Sleep(1000);
 #else
       sleep(1);

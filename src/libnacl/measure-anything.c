@@ -10,7 +10,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <sys/resource.h>
 #endif
 #include "cpucycles.h"

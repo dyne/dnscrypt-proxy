@@ -1,7 +1,7 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <winsock2.h>
 #else
 # include <sys/socket.h>
@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <pwd.h>
 #endif
 #include <stdio.h>
@@ -27,17 +27,17 @@
 
 static struct option getopt_long_options[] = {
     { "local-address", 1, NULL, 'a' },
-#ifndef __MINGW32__
+#ifndef _WIN32
     { "daemonize", 0, NULL, 'd' },
 #endif
     { "edns-payload-size", 1, NULL, 'e' },
     { "help", 0, NULL, 'h' },
     { "provider-key", 1, NULL, 'k' },
-#ifndef __MINGW32__
+#ifndef _WIN32
     { "logfile", 1, NULL, 'l' },
 #endif
     { "max-active-requests", 1, NULL, 'n' },
-#ifndef __MINGW32__
+#ifndef _WIN32
     { "pidfile", 1, NULL, 'p' },
 #endif
     { "resolver-address", 1, NULL, 'r' },
@@ -106,7 +106,7 @@ void options_init_with_default(AppContext * const app_context,
         .provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY,
         .resolver_ip = DEFAULT_RESOLVER_IP,
         .resolver_port = DNS_DEFAULT_PORT,
-#ifndef __MINGW32__
+#ifndef _WIN32
         .user_id = (uid_t) 0,
         .user_group = (uid_t) 0,
 #endif
@@ -140,7 +140,7 @@ options_apply(ProxyContext * const proxy_context)
     if (proxy_context->daemonize) {
         do_daemonize();
     }
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (proxy_context->pid_file != NULL &&
         pid_file_create(proxy_context->pid_file,
                         proxy_context->user_id != (uid_t) 0) != 0) {
@@ -239,7 +239,7 @@ options_parse(AppContext * const app_context,
             proxy_context->tcp_only = 1;
             break;
         }
-#ifndef __MINGW32__
+#ifndef _WIN32
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
             if (pw == NULL) {

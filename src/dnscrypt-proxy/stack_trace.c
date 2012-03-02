@@ -20,7 +20,7 @@
 # include <sys/types.h>
 #endif
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <dlfcn.h>
 #endif
 #ifdef HAVE_EXECINFO_H

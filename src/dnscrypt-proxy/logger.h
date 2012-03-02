@@ -2,7 +2,7 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__ 1
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <syslog.h>
 #endif
 
@@ -26,7 +26,7 @@
 # define XDEBUG(X)
 #endif
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 # define LOG_INFO    1
 # define LOG_WARNING 2
 # define LOG_ERR     3

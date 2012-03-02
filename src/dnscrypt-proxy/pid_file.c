@@ -1,7 +1,7 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <sys/wait.h>
 #endif
 
@@ -30,7 +30,7 @@ pid_file_remove_pid_file(void)
     }
 }
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 
 static void
 pid_file_wait_for_app(void)
@@ -157,7 +157,7 @@ pid_file_create(const char * const pid_file, const _Bool will_chroot)
     return 0;
 }
 
-#else /* __MINGW32__ */
+#else /* _WIN32 */
 
 int
 pid_file_create(const char * const pid_file, const _Bool will_chroot)

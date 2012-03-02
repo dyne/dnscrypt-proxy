@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 # include <syslog.h>
 #endif
 #include <stdarg.h>
@@ -21,7 +21,7 @@ int
 logger_open_syslog(struct ProxyContext_ * const context)
 {
     assert(context->daemonize != 0);
-#ifndef __MINGW32__
+#ifndef _WIN32
     openlog(PACKAGE_TARNAME, LOG_NDELAY | LOG_PID, LOG_DAEMON);
 #endif
     return 0;
@@ -74,7 +74,7 @@ logger(struct ProxyContext_ * const context,
         len = sizeof line - (size_t) 1U;
     }
     line[len++] = 0;
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (context != NULL && context->log_fd == -1 && context->daemonize) {
         syslog(crit, "%s", line);
         return 0;
@@ -97,7 +97,7 @@ logger(struct ProxyContext_ * const context,
     } else {
         log_fd = context->log_fd;
     }
-#ifndef __MINGW32__
+#ifndef _WIN32
     safe_write(log_fd, urgency, strlen(urgency), LOG_WRITE_TIMEOUT);
     safe_write(log_fd, line, strlen(line), LOG_WRITE_TIMEOUT);
     safe_write(log_fd, "\n", (size_t) 1U, LOG_WRITE_TIMEOUT);
@@ -128,7 +128,7 @@ logger_error(struct ProxyContext_ * const context,
 int
 logger_close(struct ProxyContext_ * const context)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     (void) context;
 #else
     if (context->daemonize) {

@@ -3,7 +3,7 @@
 #define __DNSCRYPT_PROXY_H__ 1
 
 #include <sys/types.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include <winsock2.h>
 #else
 # include <sys/socket.h>
@@ -18,7 +18,7 @@
 #include "dnscrypt_client.h"
 #include "uv.h"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 # include "uv-private/ngx-queue.h"
 #endif
 
@@ -85,7 +85,7 @@ typedef struct ProxyContext_ {
     void                    *uv_alloc_buffer;
     size_t                   uv_alloc_buffer_size;
     size_t                   edns_payload_size;
-#ifndef __MINGW32__
+#ifndef _WIN32
     uid_t                    user_id;
     gid_t                    user_group;
 #endif
