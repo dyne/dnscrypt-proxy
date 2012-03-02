@@ -33,8 +33,8 @@ Installation
 ------------
 
 The daemon is known to work on recent versions of OSX, OpenBSD,
-NetBSD, Dragonfly BSD, FreeBSD, Linux, Cygwin/Win32 and iOS (on a
-jailbroken device).
+NetBSD, Dragonfly BSD, FreeBSD, Linux, Windows (MingW or Cygwin), and iOS
+(requires a jailbroken device).
 
 Download the
 [latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
