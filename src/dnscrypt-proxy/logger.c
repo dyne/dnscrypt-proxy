@@ -128,7 +128,7 @@ logger_error(struct ProxyContext_ * const context,
 int
 logger_close(struct ProxyContext_ * const context)
 {
-#ifdef __WIN32__
+#ifdef __MINGW32__
     (void) context;
 #else
     if (context->daemonize) {
