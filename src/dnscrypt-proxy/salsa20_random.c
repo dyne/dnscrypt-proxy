@@ -73,7 +73,7 @@ salsa20_random_init(void)
     }
 #else /* __MINGW32__ */
     if (! CryptAcquireContext(&stream.hcrypt_prov, NULL, NULL,
-                              PROV_RSA_FULL, 0)) {
+                              PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
         abort();
     }
 #endif
