@@ -2,6 +2,7 @@
 #include <config.h>
 #include <sys/types.h>
 
+#include <assert.h>
 #include <errno.h>
 #ifndef _WIN32
 # include <poll.h>
@@ -80,18 +81,31 @@ ssize_t
 safe_write(const int fd, const void * const buf_, size_t count,
            const int timeout)
 {
+    assert(fd != -1);
+    assert(buf_ != NULL);
+    assert(count > (size_t) 0U);
+    (void) timeout;
+
     return -1;
 }
 
 ssize_t
 safe_read(const int fd, void * const buf_, size_t count)
 {
+    assert(fd != -1);
+    assert(buf_ != NULL);
+    assert(count > (size_t) 0U);
+
     return -1;
 }
 
 ssize_t
 safe_read_partial(const int fd, void * const buf_, const size_t max_count)
 {
+    assert(fd != -1);
+    assert(buf_ != NULL);
+    assert(max_count > (size_t) 0U);
+
     return -1;
 }
 

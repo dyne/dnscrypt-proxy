@@ -42,6 +42,7 @@ static Salsa20Random stream = {
     .initialized = 0
 };
 
+#ifndef _WIN32
 static int
 salsa20_random_random_dev_open(void)
 {
@@ -66,18 +67,26 @@ salsa20_random_init(void)
     stream.nonce = (uint64_t) uv_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
-#ifndef _WIN32
     if ((stream.random_data_source_fd =
          salsa20_random_random_dev_open()) == -1) {
         abort();
     }
+}
+
 #else /* _WIN32 */
+
+static void
+salsa20_random_init(void)
+{
+    stream.nonce = (uint64_t) uv_hrtime();
+    assert(stream.nonce != (uint64_t) 0U);
+
     if (! CryptAcquireContext(&stream.hcrypt_prov, NULL, NULL,
                               PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
         abort();
     }
-#endif
 }
+#endif
 
 void
 salsa20_random_stir(void)
