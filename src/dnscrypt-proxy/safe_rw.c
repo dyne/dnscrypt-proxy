@@ -78,7 +78,7 @@ safe_read_partial(const int fd, void * const buf_, const size_t max_count)
 
 ssize_t
 safe_write(const int fd, const void * const buf_, size_t count,
-	   const int timeout)
+           const int timeout)
 {
     return -1;
 }
@@ -90,8 +90,7 @@ safe_read(const int fd, void * const buf_, size_t count)
 }
 
 ssize_t
-safe_read_partial(const int fd, void * const buf_,
-		  const size_t max_count)
+safe_read_partial(const int fd, void * const buf_, const size_t max_count)
 {
     return -1;
 }

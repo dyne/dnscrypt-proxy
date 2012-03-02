@@ -14,7 +14,7 @@ static unsigned int
 open_max(void)
 {
     long z;
-    
+
     if ((z = (long) sysconf(_SC_OPEN_MAX)) < 0L) {
         logger_error(NULL, "_SC_OPEN_MAX");
         return 2U;
@@ -26,7 +26,7 @@ int
 closedesc_all(const int closestdin)
 {
     int fodder;
-    
+
     if (closestdin != 0) {
         (void) close(0);
         if ((fodder = open(_PATH_DEVNULL, O_RDONLY)) == -1) {
@@ -45,7 +45,7 @@ closedesc_all(const int closestdin)
     if (fodder > 2) {
         (void) close(fodder);
     }
-    
+
     return 0;
 }
 
@@ -54,7 +54,7 @@ do_daemonize(void)
 {
     pid_t        child;
     unsigned int i;
-    
+
     if ((child = fork()) == (pid_t) -1) {
         logger_error(NULL, "Unable to fork() in order to daemonize");
         return -1;
@@ -74,7 +74,7 @@ do_daemonize(void)
     if (closedesc_all(1) != 0) {
         logger_error(NULL, _PATH_DEVNULL " duplication");
         return -1;
-    }        
+    }
     return 0;
 }
 

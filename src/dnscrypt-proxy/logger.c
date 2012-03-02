@@ -152,7 +152,7 @@ logger(struct ProxyContext_ * const context,
 
 int
 logger_noformat(struct ProxyContext_ * const context,
-		const int crit, const char * const msg)
+                const int crit, const char * const msg)
 {
     (void) context;
     (void) crit;
@@ -162,7 +162,7 @@ logger_noformat(struct ProxyContext_ * const context,
 
 int
 logger_error(struct ProxyContext_ * const context,
-	     const char * const msg)
+             const char * const msg)
 {
     (void) context;
     (void) msg;
