@@ -58,10 +58,13 @@ salsa20_random_init(void)
 {
     stream.nonce = (uint64_t) uv_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
+
+#ifndef __MINGW32__
     if ((stream.random_data_source_fd =
          salsa20_random_random_dev_open()) == -1) {
         abort();
     }
+#endif
 }
 
 void
