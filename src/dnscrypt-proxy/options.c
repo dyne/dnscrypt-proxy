@@ -27,13 +27,19 @@
 
 static struct option getopt_long_options[] = {
     { "local-address", 1, NULL, 'a' },
+#ifndef __MINGW32__
     { "daemonize", 0, NULL, 'd' },
+#endif
     { "edns-payload-size", 1, NULL, 'e' },
     { "help", 0, NULL, 'h' },
     { "provider-key", 1, NULL, 'k' },
+#ifndef __MINGW32__
     { "logfile", 1, NULL, 'l' },
+#endif
     { "max-active-requests", 1, NULL, 'n' },
+#ifndef __MINGW32__
     { "pidfile", 1, NULL, 'p' },
+#endif
     { "resolver-address", 1, NULL, 'r' },
     { "tcp-port", 1, NULL, 't' },
     { "user", 1, NULL, 'u' },

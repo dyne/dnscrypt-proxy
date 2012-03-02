@@ -17,13 +17,13 @@
 #include "logger.h"
 #include "safe_rw.h"
 
-#ifndef __MINGW32__
 int
 logger_open_syslog(struct ProxyContext_ * const context)
 {
     assert(context->daemonize != 0);
+#ifndef __MINGW32__
     openlog(PACKAGE_TARNAME, LOG_NDELAY | LOG_PID, LOG_DAEMON);
-
+#endif
     return 0;
 }
 
@@ -74,10 +74,12 @@ logger(struct ProxyContext_ * const context,
         len = sizeof line - (size_t) 1U;
     }
     line[len++] = 0;
+#ifndef __MINGW32__
     if (context != NULL && context->log_fd == -1 && context->daemonize) {
         syslog(crit, "%s", line);
         return 0;
     }
+#endif
     if (memcmp(previous_line, line, len) == 0) {
         burst_counter++;
         if (burst_counter > LOGGER_ALLOWED_BURST_FOR_IDENTICAL_LOG_ENTRIES &&
@@ -95,9 +97,14 @@ logger(struct ProxyContext_ * const context,
     } else {
         log_fd = context->log_fd;
     }
+#ifndef __MINGW32__
     safe_write(log_fd, urgency, strlen(urgency), LOG_WRITE_TIMEOUT);
     safe_write(log_fd, line, strlen(line), LOG_WRITE_TIMEOUT);
     safe_write(log_fd, "\n", (size_t) 1U, LOG_WRITE_TIMEOUT);
+#else
+    printf("%s%s\n", urgency, line);
+    fflush(stdout);
+#endif
 
     return 0;
 }
@@ -121,6 +128,9 @@ logger_error(struct ProxyContext_ * const context,
 int
 logger_close(struct ProxyContext_ * const context)
 {
+#ifdef __WIN32__
+    (void) context;
+#else
     if (context->daemonize) {
         closelog();
     }
@@ -128,52 +138,6 @@ logger_close(struct ProxyContext_ * const context)
         fsync(context->log_fd);
         return close(context->log_fd);
     }
-    return 0;
-}
-
-#else /* __MINGW32__ */
-
-int
-logger_open_syslog(struct ProxyContext_ * const context)
-{
-    (void) context;
-    return 0;
-}
-
-int
-logger(struct ProxyContext_ * const context,
-       const int crit, const char * const format, ...)
-{
-    (void) context;
-    (void) crit;
-    (void) format;
-    return 0;
-}
-
-int
-logger_noformat(struct ProxyContext_ * const context,
-                const int crit, const char * const msg)
-{
-    (void) context;
-    (void) crit;
-    (void) msg;
-    return 0;
-}
-
-int
-logger_error(struct ProxyContext_ * const context,
-             const char * const msg)
-{
-    (void) context;
-    (void) msg;
-    return 0;
-}
-
-int
-logger_close(struct ProxyContext_ * const context)
-{
-    (void) context;
-    return 0;
-}
-
 #endif
+    return 0;
+}
