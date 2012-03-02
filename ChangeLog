@@ -1,3 +1,119 @@
+Date:   2012-03-02
+
+    Native Windows builds are now supported.
+    Sigh.
+
+Date:   2012-03-02
+
+    Provide some logging on Windows, and disable unsupported options.
+
+Date:   2012-03-02
+
+    Pass CRYPT_VERIFYCONTEXT to CryptAcquireContext().
+
+Date:   2012-03-02
+
+    Use the CryptoAPI on Win32.
+
+Date:   2012-03-01
+
+    Fascinating whitespace changes.
+
+Date:   2012-03-01
+
+    Sync libuv.
+    test: make pipe_connect_to_file succeed with ECONNREFUSED
+    windows: return UV_ENOTSOCK when doing uv_pipe_connect to a file
+
+Date:   2012-03-01
+
+    Windows: we need to zero the loop structure when we initialize it
+    or else the ares list of handles is uninitialized and bad things can happen
+    when we try to perform async lookups.
+
+Date:   2012-03-01
+
+    Oh course, there will be no /dev/*random on zindoz.
+
+Date:   2012-03-01
+
+    Force line buffering for stdout, for zindoz
+
+Date:   2012-03-01
+
+    Yes, it now natively compiles on Win32.
+    Fortunately, it crashes.
+
+Date:   2012-03-01
+
+    Shit Win32 needs.
+
+Date:   2012-03-01
+
+    Link with Winsock2 on Windows.
+
+Date:   2012-03-01
+
+    Unfuck MingW detection.
+
+Date:   2012-02-29
+
+    libuv - unix: fix fs_event refcount bug on darwin
+
+Date:   2012-02-29
+
+    libuv - unix: don't rely on libev to track timer state
+
+Date:   2012-02-28
+
+    Bump year & remove empty line.
+    (wow, awesome and useful commit)
+
+Date:   2012-02-24
+
+    The beginning of the end.
+
+Date:   2012-02-24
+
+    *sigh*
+
+Date:   2012-02-23
+
+    There are so many random() calls that having just one hack for Win32 will never fit the bill.
+
+Date:   2012-02-23
+
+    More disgusting changes Windows requires. Not having random()/srandom() is going to be a PITA.
+
+Date:   2012-02-23
+
+    setrlimit() on Win32? LOL.
+
+Date:   2012-02-23
+
+    <windows.h> is needed, even for Sleep().
+
+Date:   2012-02-23
+
+    Jeez, Win32 doesn't even provide sleep().
+
+Date:   2012-02-23
+
+    Fix memory leak in uv_exepath() on OSX.
+
+Date:   2012-02-23
+
+    Sync libuv
+    Share inotify fd across event loop.
+
+Date:   2012-02-23
+
+    chmod +x do
+
+Date:   2012-02-23
+
+    Update ChangeLog for version 0.9.2
+
 Date:   2012-02-23
 
     Mention iOS support, bump version to 0.9.2
