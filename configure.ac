@@ -235,11 +235,15 @@ AC_SEARCH_LIBS(clock_gettime, [rt],
 AC_SEARCH_LIBS(backtrace, [execinfo],
   [AC_DEFINE(HAVE_BACKTRACE,,[define if you have backtrace()])])
 
-AC_SEARCH_LIBS(gethostbyname, [resolv nsl ws2_32])
-AC_SEARCH_LIBS(recvfrom, [socket ws2_32])
+AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
+AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
-AC_SEARCH_LIBS(GetProcessMemoryInfo, [psapi])
-AC_SEARCH_LIBS(GetAdaptersAddresses, [iphlpapi])
+
+AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
+  AC_CHECK_LIB([ws2_32], [printf])
+  AC_CHECK_LIB([psapi], [printf])
+  AC_CHECK_LIB([iphlpapi], [printf])
+], [ ])
 
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
