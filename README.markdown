@@ -180,3 +180,20 @@ are usually safe.
 
 A value below or equal to 512 will disable this mechanism, unless a
 client sends a packet with an OPT section providing a payload size.
+
+GUIs for dnscrypt-proxy
+-----------------------
+
+If you need a simple graphical user interface in order to start/stop
+the proxy and change your DNS settings, check out the following
+projects:
+
+- [DNSCrypt OSX Client](https://github.com/opendns/dnscrypt-osx-client):
+a preferences pane, a menu bar indicator and a service to change the
+DNS settings. OSX only, written in Objective C. 64-bit CPU required.
+Experimental.
+
+- [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
+Easily enable/disable DNSCrypt on multiple adapters. Windows only,
+written in .NET.
+
