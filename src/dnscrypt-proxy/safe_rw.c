@@ -7,6 +7,7 @@
 #ifndef _WIN32
 # include <poll.h>
 #endif
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "safe_rw.h"
