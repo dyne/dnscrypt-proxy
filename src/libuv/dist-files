@@ -234,6 +234,7 @@
 ./test/dns-server.c
 ./test/echo-server.c
 ./test/fixtures/empty_file
+./test/fixtures/load_error.node
 ./test/run-benchmarks.c
 ./test/run-tests.c
 ./test/runner-unix.c
@@ -249,6 +250,7 @@
 ./test/test-counters-init.c
 ./test/test-cwd-and-chdir.c
 ./test/test-delayed-accept.c
+./test/test-dlerror.c
 ./test/test-eio-overflow.c
 ./test/test-error.c
 ./test/test-fail-always.c
