@@ -121,6 +121,7 @@ _dnscrypt_parse_char(uint8_t key[crypto_box_PUBLICKEYBYTES],
             }
             *state_p = 0;
         }
+        break;
     case 2:
         if (c == '\n') {
             *state_p = 0;
