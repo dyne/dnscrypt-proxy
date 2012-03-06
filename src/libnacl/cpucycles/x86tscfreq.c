@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <sys/param.h>
 #include <sys/sysctl.h>
 
 long long cpucycles_x86tscfreq(void)
