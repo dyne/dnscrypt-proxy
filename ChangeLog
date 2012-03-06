@@ -1,3 +1,52 @@
+Date:   2012-03-06
+
+    Remove command-line switches that are unsupported on Win32.
+
+Date:   2012-03-05
+
+    Add missing break so that comments in fingerprints work.
+
+Date:   2012-03-05
+
+    Check for an actual library symbol in order to link Win32-specific libs.
+
+Date:   2012-03-05
+
+    Update libuv to 5505f2e9063aaf9b52d47315ae4324efbb5834be
+
+Date:   2012-03-03
+
+    Mention Noxwizard's dnscrypt-winclient
+
+Date:   2012-03-03
+
+    <stdlib.h> is required for NULL to be defined in safe_rw.c
+
+Date:   2012-03-02
+
+    Now, that's a super ugly way of linking ws2_32, psapi and iphlpapi.
+
+Date:   2012-03-02
+
+    Mark some unused variables on Win32.
+
+Date:   2012-03-02
+
+    Compile out more pid_file.c code on Win32.
+
+Date:   2012-03-02
+
+    Use _WIN32 instead of __MINGW32__ just in case we want to support Visual Studio.
+
+Date:   2012-03-02
+
+    Unfuck daemonization on Cygwin builds.
+
+Date:   2012-03-02
+
+    Bump version to 0.9.3, featuring native support for Windows.
+    Now, back to serious work.
+
 Date:   2012-03-02
 
     Native Windows builds are now supported.
