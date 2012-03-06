@@ -419,3 +419,4 @@
 ./tests/stream8.out
 ./try-anything.c
 ./version
+./windows/include/windows-quirks.h
