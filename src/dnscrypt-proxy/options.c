@@ -48,7 +48,11 @@ static struct option getopt_long_options[] = {
     { "version", 0, NULL, 'V' },
     { NULL, 0, NULL, 0 }
 };
+#ifndef _WIN32
 static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:V";
+#else
+static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:V";
+#endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
 # define DEFAULT_CONNECTIONS_COUNT_MAX 250U
