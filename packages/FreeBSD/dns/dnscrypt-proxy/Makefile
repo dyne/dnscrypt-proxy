@@ -4,7 +4,7 @@
 #
 
 PORTNAME=	dnscrypt-proxy
-PORTVERSION=	0.9.1
+PORTVERSION=	0.9.3
 CATEGORIES=	dns
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 LICENSE=	BSD
