@@ -1,5 +1,17 @@
 Date:   2012-03-07
 
+    --daemonize has been fixed.
+
+Date:   2012-03-07
+
+    Update packages
+
+Date:   2012-03-07
+
+    Update ChangeLog
+
+Date:   2012-03-07
+
     Initialize the event loop after having parse the options
     so that the event loop works fine after a possible fork() when the proxy
     is started with the --daemonize switch.
