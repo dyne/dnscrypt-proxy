@@ -30,16 +30,15 @@
 static AppContext app_context;
 
 static int
-proxy_context_init(ProxyContext * const proxy_context,
-                   uv_loop_t * const event_loop, int argc, char *argv[])
+proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
 {
     struct sockaddr_in resolver_addr;
 
     memset(proxy_context, 0, sizeof *proxy_context);
     options_parse(&app_context, proxy_context, argc, argv);
+    proxy_context->event_loop = uv_loop_new();
     resolver_addr = uv_ip4_addr(proxy_context->resolver_ip,
                                 proxy_context->resolver_port);
-    proxy_context->event_loop = event_loop;
     proxy_context->resolver_addr_len = sizeof(struct sockaddr_in);
     memcpy(&proxy_context->resolver_addr, &resolver_addr,
            proxy_context->resolver_addr_len);
@@ -136,11 +135,10 @@ int
 main(int argc, char *argv[])
 {
     ProxyContext  proxy_context;
-    uv_loop_t    *event_loop = uv_loop_new();
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-    proxy_context_init(&proxy_context, event_loop, argc, argv);
+    proxy_context_init(&proxy_context, argc, argv);
     app_context.proxy_context = &proxy_context;
     logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
     dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
@@ -159,13 +157,13 @@ main(int argc, char *argv[])
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
-    uv_run(event_loop);
+    uv_run(proxy_context.event_loop);
 
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
     cert_updater_stop(&proxy_context);
     tcp_listener_stop(&proxy_context);
     udp_listener_stop(&proxy_context);
-    uv_loop_delete(event_loop);
+    uv_loop_delete(proxy_context.event_loop);
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     salsa20_random_close();
