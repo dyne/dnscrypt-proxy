@@ -1,3 +1,53 @@
+Date:   2012-03-07
+
+    Initialize the event loop after having parse the options
+    so that the event loop works fine after a possible fork() when the proxy
+    is started with the --daemonize switch.
+
+Date:   2012-03-07
+
+    sync libuv to d07f2466d0a10ab02db588374dd97c2edd54c7fc
+
+Date:   2012-03-06
+
+    Update Dragonfly BSD & NetBSD package.
+
+Date:   2012-03-06
+
+    Fix FreeBSD distinfo.
+
+Date:   2012-03-06
+
+    Update FreeBSD package.
+
+Date:   2012-03-06
+
+    Update OpenBSD package to 0.9.3
+
+Date:   2012-03-06
+
+    Update Homebrew formula.
+
+Date:   2012-03-06
+
+    Bump Linux package version to 0.9.3
+
+Date:   2012-03-06
+
+    cygwin: we need to include uv-common.h for uv__set_sys_error()
+
+Date:   2012-03-06
+
+    Add windows quirks to the distribution.
+
+Date:   2012-03-06
+
+    Don't include sys/sysctl.h without sys/param.h first.
+
+Date:   2012-03-06
+
+    Update ChangeLog
+
 Date:   2012-03-06
 
     Remove command-line switches that are unsupported on Win32.
