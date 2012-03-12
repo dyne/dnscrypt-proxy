@@ -35,11 +35,6 @@ Event-notification library
 
 - Bundled with dnscrypt, for now, because it's still a moving target.
 
-- It currently uses static per-OS config.h definitions, which makes
-  compilation faster, but breaks on operating systems with older libc, like
-  Openwall Linux. The bundled version has minor local changes in order
-  to support Openwall Linux.
-
 Certificates
 ------------
 
