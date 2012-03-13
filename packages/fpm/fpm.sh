@@ -55,5 +55,6 @@ sudo chown -R 0:0 "$BASE_DIR" || exit 1
 for t in deb rpm; do
   fpm -s dir -t "$t" -n "$PKG_NAME" -v "$VERSION" -C "$BASE_DIR" \
     -m "$MAINTAINER" --category "$CATEGORY" --url "$URL" --license "$LICENSE" \
-    --vendor "$VENDOR" --description "$DESCRIPTION" --depends "$DEPENDS"
+    --vendor "$VENDOR" --description "$DESCRIPTION" --depends "$DEPENDS" \
+    .
 done
