@@ -132,8 +132,7 @@ static int compare_watchers(const uv_fs_event_t* a, const uv_fs_event_t* b) {
 }
 
 
-RB_GENERATE_INTERNAL(uv__inotify_watchers, uv_fs_event_s, node, compare_watchers,
-  inline static __attribute__((unused)))
+RB_GENERATE_STATIC(uv__inotify_watchers, uv_fs_event_s, node, compare_watchers)
 
 
 void uv__inotify_loop_init(uv_loop_t* loop) {
@@ -156,10 +155,15 @@ static void uv__inotify_read(EV_P_ ev_io* w, int revents);
 
 
 static int new_inotify_fd(void) {
-#if HAVE_INOTIFY_INIT1
-  return inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
-#else
   int fd;
+
+#if HAVE_INOTIFY_INIT1
+  fd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
+  if (fd != -1)
+    return fd;
+  if (errno != ENOSYS)
+    return -1;
+#endif
 
   if ((fd = inotify_init()) == -1)
     return -1;
@@ -170,7 +174,6 @@ static int new_inotify_fd(void) {
   }
 
   return fd;
-#endif
 }
 
 
