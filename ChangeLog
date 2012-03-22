@@ -1,3 +1,24 @@
+Date:   2012-03-19
+
+    Sync libuv up to 49d4e1884ba5ea135f68c8b17fdf2c5d5bf0f91e
+
+Date:   2012-03-13
+
+    Give fpm a list of directories to package.
+
+Date:   2012-03-12
+
+    libuv does support Openwall Linux by default, now.
+    The libuv guys are very reactive when it comes to merging patches.
+
+Date:   2012-03-12
+
+    Sync libuv up to db413f3806356a632774b8a589546fc6788debd6
+
+Date:   2012-03-07
+
+    Update ChangeLog
+
 Date:   2012-03-07
 
     --daemonize has been fixed.
