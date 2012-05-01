@@ -48,13 +48,10 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
     }
     assert(padded_len >= len);
     padding_len = padded_len - len;
-
-#ifdef DNSCRYPT_USE_ONLY_ONE_BYTE_FROM_PRNG_FOR_PADDING
-    memset(buf_padding_area, (int) salsa20_random(), padding_len);
-#else
-    salsa20_random_buf(buf_padding_area, padding_len);
+    memset(buf_padding_area, 0, padding_len);
+    *buf_padding_area = 0x80;
     assert(max_len >= padded_len);
-#endif
+
     return padded_len;
 }
 
