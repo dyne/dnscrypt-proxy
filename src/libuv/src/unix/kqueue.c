@@ -26,8 +26,6 @@
 #include <string.h>
 #include <errno.h>
 
-#if HAVE_KQUEUE
-
 #include <sys/sysctl.h>
 #include <sys/types.h>
 #include <sys/event.h>
@@ -99,11 +97,6 @@ int uv_fs_event_init(uv_loop_t* loop,
   /* We don't support any flags yet. */
   assert(!flags);
 
-  if (cb == NULL) {
-    uv__set_sys_error(loop, EINVAL);
-    return -1;
-  }
-
   /* TODO open asynchronously - but how do we report back errors? */
   if ((fd = open(filename, O_RDONLY)) == -1) {
     uv__set_sys_error(loop, errno);
@@ -121,34 +114,9 @@ int uv_fs_event_init(uv_loop_t* loop,
 }
 
 
-void uv__fs_event_destroy(uv_fs_event_t* handle) {
+void uv__fs_event_close(uv_fs_event_t* handle) {
   uv__fs_event_stop(handle);
   free(handle->filename);
   close(handle->fd);
   handle->fd = -1;
 }
-
-#else /* !HAVE_KQUEUE */
-
-int uv_fs_event_init(uv_loop_t* loop,
-                     uv_fs_event_t* handle,
-                     const char* filename,
-                     uv_fs_event_cb cb,
-                     int flags) {
-  loop->counters.fs_event_init++;
-  uv__set_sys_error(loop, ENOSYS);
-  return -1;
-}
-
-
-void uv__fs_event_destroy(uv_fs_event_t* handle) {
-  UNREACHABLE();
-}
-
-
-/* Called by libev, don't touch. */
-void uv__kqueue_hack(EV_P_ int fflags, ev_io *w) {
-  UNREACHABLE();
-}
-
-#endif /* HAVE_KQUEUE */

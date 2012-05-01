@@ -56,7 +56,7 @@ uv_handle_type uv_guess_handle(uv_file file) {
 }
 
 
-int uv_is_active(uv_handle_t* handle) {
+int uv_is_active(const uv_handle_t* handle) {
   switch (handle->type) {
     case UV_TIMER:
     case UV_IDLE:
@@ -71,7 +71,6 @@ int uv_is_active(uv_handle_t* handle) {
 
 
 void uv_close(uv_handle_t* handle, uv_close_cb cb) {
-  uv_tcp_t* tcp;
   uv_pipe_t* pipe;
   uv_udp_t* udp;
   uv_process_t* process;
@@ -88,19 +87,7 @@ void uv_close(uv_handle_t* handle, uv_close_cb cb) {
   /* Handle-specific close actions */
   switch (handle->type) {
     case UV_TCP:
-      tcp = (uv_tcp_t*)handle;
-      /* If we don't shutdown before calling closesocket, windows will */
-      /* silently discard the kernel send buffer and reset the connection. */
-      if ((tcp->flags & UV_HANDLE_CONNECTION) &&
-          !(tcp->flags & UV_HANDLE_SHUT)) {
-        shutdown(tcp->socket, SD_SEND);
-        tcp->flags |= UV_HANDLE_SHUTTING | UV_HANDLE_SHUT;
-      }
-      tcp->flags &= ~(UV_HANDLE_READING | UV_HANDLE_LISTENING);
-      closesocket(tcp->socket);
-      if (tcp->reqs_pending == 0) {
-        uv_want_endgame(loop, handle);
-      }
+      uv_tcp_close((uv_tcp_t*)handle);
       return;
 
     case UV_NAMED_PIPE:
@@ -164,6 +151,11 @@ void uv_close(uv_handle_t* handle, uv_close_cb cb) {
       /* Not supported */
       abort();
   }
+}
+
+
+int uv_is_closing(const uv_handle_t* handle) {
+  return handle->flags & (UV_HANDLE_CLOSING | UV_HANDLE_CLOSED);
 }
 
 
