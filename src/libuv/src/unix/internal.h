@@ -84,17 +84,17 @@
 
 /* flags */
 enum {
-  UV_CLOSING       = 0x01,   /* uv_close() called but not finished. */
-  UV_CLOSED        = 0x02,   /* close(2) finished. */
-  UV_READING       = 0x04,   /* uv_read_start() called. */
-  UV_SHUTTING      = 0x08,   /* uv_shutdown() called but not complete. */
-  UV_SHUT          = 0x10,   /* Write side closed. */
-  UV_READABLE      = 0x20,   /* The stream is readable */
-  UV_WRITABLE      = 0x40,   /* The stream is writable */
-  UV_TCP_NODELAY   = 0x080,  /* Disable Nagle. */
-  UV_TCP_KEEPALIVE = 0x100,  /* Turn on keep-alive. */
-  UV_TIMER_ACTIVE  = 0x080,
-  UV_TIMER_REPEAT  = 0x100
+  UV_CLOSING          = 0x01,   /* uv_close() called but not finished. */
+  UV_CLOSED           = 0x02,   /* close(2) finished. */
+  UV_STREAM_READING   = 0x04,   /* uv_read_start() called. */
+  UV_STREAM_SHUTTING  = 0x08,   /* uv_shutdown() called but not complete. */
+  UV_STREAM_SHUT      = 0x10,   /* Write side closed. */
+  UV_STREAM_READABLE  = 0x20,   /* The stream is readable */
+  UV_STREAM_WRITABLE  = 0x40,   /* The stream is writable */
+  UV_TCP_NODELAY      = 0x080,  /* Disable Nagle. */
+  UV_TCP_KEEPALIVE    = 0x100,  /* Turn on keep-alive. */
+  UV_TIMER_ACTIVE     = 0x080,
+  UV_TIMER_REPEAT     = 0x100
 };
 
 inline static void uv__req_init(uv_loop_t* loop,
@@ -140,6 +140,10 @@ int uv__tcp_keepalive(uv_tcp_t* handle, int enable, unsigned int delay);
 /* pipe */
 int uv_pipe_listen(uv_pipe_t* handle, int backlog, uv_connection_cb cb);
 void uv__pipe_accept(EV_P_ ev_io* watcher, int revents);
+
+/* poll */
+void uv__poll_close(uv_poll_t* handle);
+int uv__poll_active(const uv_poll_t* handle);
 
 /* various */
 int uv__check_active(const uv_check_t* handle);

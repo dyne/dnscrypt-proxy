@@ -128,6 +128,26 @@ typedef int (WSAAPI* LPFN_WSARECVFROM)
              LPWSAOVERLAPPED overlapped,
              LPWSAOVERLAPPED_COMPLETION_ROUTINE completion_routine);
 
+#ifndef _NTDEF_
+  typedef LONG NTSTATUS;
+  typedef NTSTATUS *PNTSTATUS;
+#endif
+
+typedef struct _AFD_POLL_HANDLE_INFO {
+  HANDLE Handle;
+  ULONG Events;
+  NTSTATUS Status;
+} AFD_POLL_HANDLE_INFO, *PAFD_POLL_HANDLE_INFO;
+
+typedef struct _AFD_POLL_INFO {
+  LARGE_INTEGER Timeout;
+  ULONG NumberOfHandles;
+  ULONG Exclusive;
+  AFD_POLL_HANDLE_INFO Handles[1];
+} AFD_POLL_INFO, *PAFD_POLL_INFO;
+
+#define UV_MSAFD_PROVIDER_COUNT 3
+
 
 /**
  * It should be possible to cast uv_buf_t[] to WSABUF[]
@@ -139,6 +159,8 @@ typedef struct uv_buf_t {
 } uv_buf_t;
 
 typedef int uv_file;
+
+typedef SOCKET uv_os_sock_t;
 
 typedef HANDLE uv_thread_t;
 
@@ -170,8 +192,11 @@ typedef unsigned char uv_uid_t;
 typedef unsigned char uv_gid_t;
 
 /* Platform-specific definitions for uv_dlopen support. */
-typedef HMODULE uv_lib_t;
 #define UV_DYNAMIC FAR WINAPI
+typedef struct {
+  HMODULE handle;
+  char* errmsg;
+} uv_lib_t;
 
 RB_HEAD(uv_timer_tree_s, uv_timer_s);
 
@@ -201,6 +226,9 @@ RB_HEAD(uv_timer_tree_s, uv_timer_s);
   uv_prepare_t* next_prepare_handle;                                          \
   uv_check_t* next_check_handle;                                              \
   uv_idle_t* next_idle_handle;                                                \
+  /* This handle holds the peer sockets for the fast variant of uv_poll_t */  \
+  SOCKET poll_peer_sockets[UV_MSAFD_PROVIDER_COUNT];                          \
+  /* State used by uv_ares. */                                                \
   ares_channel ares_chan;                                                     \
   int ares_active_sockets;                                                    \
   uv_timer_t ares_polling_timer;                                              \
@@ -219,6 +247,7 @@ RB_HEAD(uv_timer_tree_s, uv_timer_s);
   UV_ARES_CLEANUP_REQ,                    \
   UV_FS_EVENT_REQ,                        \
   UV_GETADDRINFO_REQ,                     \
+  UV_POLL_REQ,                            \
   UV_PROCESS_EXIT,                        \
   UV_PROCESS_CLOSE,                       \
   UV_READ,                                \
@@ -367,6 +396,21 @@ RB_HEAD(uv_timer_tree_s, uv_timer_s);
   unsigned short ansi_csi_argv[4];        \
   COORD saved_position;                   \
   WORD saved_attributes;
+
+#define UV_POLL_PRIVATE_FIELDS            \
+  SOCKET socket;                          \
+  /* Used in fast mode */                 \
+  SOCKET peer_socket;                     \
+  AFD_POLL_INFO afd_poll_info_1;          \
+  AFD_POLL_INFO afd_poll_info_2;          \
+  /* Used in fast and slow mode. */       \
+  uv_req_t poll_req_1;                    \
+  uv_req_t poll_req_2;                    \
+  unsigned char submitted_events_1;       \
+  unsigned char submitted_events_2;       \
+  unsigned char mask_events_1;            \
+  unsigned char mask_events_2;            \
+  unsigned char events;
 
 #define UV_TIMER_PRIVATE_FIELDS           \
   RB_ENTRY(uv_timer_s) tree_entry;        \
