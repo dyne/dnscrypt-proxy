@@ -1,3 +1,44 @@
+Date:   2012-05-05
+
+    Move all checks for linker flags to the same place, and	always use -Wl.
+
+Date:   2012-05-05
+
+    Add pass -z,noexecstack to the linker if it accepts it.
+
+Merge: 00af2e8 7c77d94
+Date:   2012-05-05
+
+    Merge remote-tracking branch 'lebel/lebel'
+    
+    * lebel/lebel:
+      Add gentoo's portage files.
+
+Date:   2012-05-05
+
+    Sync libuv to 985b961d4eab778857101b17b62f9e521d43a157
+
+Date:   2012-05-01
+
+    Switch the iOS SDK to 5.1
+
+Date:   2012-05-01
+
+    Update libuv to 6367da25b38274c31b42097056b2995c2696caef.
+    Pretty sure it breaks non-Linux & OSX platforms as usual.
+
+Date:   2012-05-01
+
+    Pad with 0x80...0
+
+Date:   2012-04-20
+
+    Add gentoo's portage files.
+
+Date:   2012-03-21
+
+    Sync libuv up to c9c9d805dae321a7bdf0077547c2da2dbe70f2a2
+
 Date:   2012-03-19
 
     Sync libuv up to 49d4e1884ba5ea135f68c8b17fdf2c5d5bf0f91e
