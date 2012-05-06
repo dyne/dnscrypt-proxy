@@ -64,7 +64,6 @@ AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
           [CFLAGS="$CFLAGS -fstack-protector-all"]
         )
       ])
-      AX_CHECK_LINK_FLAG([-Wl,-z,noexecstack], [LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"])
     ]
   )
   AS_IF([test "x$ac_compiler_gnu" = "xyes"],[
@@ -104,8 +103,9 @@ AX_CHECK_COMPILE_FLAG([-Wswitch-enum], [CWFLAGS="$CWFLAGS -Wswitch-enum"])
 AX_CHECK_COMPILE_FLAG([-Wvariable-decl], [CWFLAGS="$CWFLAGS -Wvariable-decl"])
 
 AX_CHECK_LINK_FLAG([-pie], [LDFLAGS="$LDFLAGS -pie"])
-AX_CHECK_LINK_FLAG([-z relro], [LDFLAGS="$LDFLAGS -z relro"])
-AX_CHECK_LINK_FLAG([-z now], [LDFLAGS="$LDFLAGS -z now"])
+AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="$LDFLAGS -Wl,-z,relro"])
+AX_CHECK_LINK_FLAG([-Wl,-z,now], [LDFLAGS="$LDFLAGS -Wl,-z,now"])
+AX_CHECK_LINK_FLAG([-Wl,-z,noexecstack], [LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"])
 
 AC_ARG_VAR([RONN], [path to the ronn text processor])
 AC_PATH_PROG([RONN], [ronn], [#])
