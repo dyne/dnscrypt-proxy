@@ -197,3 +197,5 @@ Experimental.
 Easily enable/disable DNSCrypt on multiple adapters. Windows only,
 written in .NET.
 
+- [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
+Official GUI for Windows, by OpenDNS.
