@@ -462,7 +462,7 @@ int uv__accept(int sockfd) {
 
 
 int uv__nonblock(int fd, int set) {
-#if FIONBIO
+#ifdef FIONBIO
   return ioctl(fd, FIONBIO, &set);
 #else
   int flags;
