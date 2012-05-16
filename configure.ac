@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 0.9.3, bugs at opendns dot com)
+AC_INIT(dnscrypt-proxy, 0.9.3, https://github.com/opendns/dnscrypt-proxy/issues)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
