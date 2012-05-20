@@ -33,13 +33,24 @@ int uv__loop_init(uv_loop_t* loop, int default_loop) {
 #else
   int flags = EVFLAG_AUTO;
 #endif
+
   memset(loop, 0, sizeof(*loop));
+
+#ifndef UV_LEAN_AND_MEAN
+  ngx_queue_init(&loop->active_handles);
+  ngx_queue_init(&loop->active_reqs);
+#endif
+
   RB_INIT(&loop->uv_ares_handles_);
-  loop->endgame_handles = NULL;
+  ngx_queue_init(&loop->idle_handles);
+  ngx_queue_init(&loop->check_handles);
+  ngx_queue_init(&loop->prepare_handles);
+  loop->pending_handles = NULL;
   loop->channel = NULL;
   loop->ev = (default_loop ? ev_default_loop : ev_loop_new)(flags);
   ev_set_userdata(loop->ev, loop);
   eio_channel_init(&loop->uv_eio_channel, loop);
+
 #if __linux__
   RB_INIT(&loop->inotify_watchers);
   loop->inotify_fd = -1;
@@ -64,4 +75,81 @@ void uv__loop_delete(uv_loop_t* loop) {
   if (loop->fs_fd != -1)
     close(loop->fs_fd);
 #endif
+}
+
+
+#define X(name, type) \
+  int uv_##name##_init(uv_loop_t* loop, uv_##name##_t* handle) {              \
+    uv__handle_init(loop, (uv_handle_t*)handle, type);                        \
+    loop->counters.name##_init++;                                             \
+    handle->name##_cb = NULL;                                                 \
+    return 0;                                                                 \
+  }                                                                           \
+  int uv_##name##_start(uv_##name##_t* handle, uv_##name##_cb cb) {           \
+    if (uv__is_active(handle)) return 0;                                      \
+    ngx_queue_insert_head(&handle->loop->name##_handles, &handle->queue);     \
+    handle->name##_cb = cb;                                                   \
+    uv__handle_start(handle);                                                 \
+    return 0;                                                                 \
+  }                                                                           \
+  int uv_##name##_stop(uv_##name##_t* handle) {                               \
+    if (!uv__is_active(handle)) return 0;                                     \
+    ngx_queue_remove(&handle->queue);                                         \
+    uv__handle_stop(handle);                                                  \
+    return 0;                                                                 \
+  }                                                                           \
+  void uv__run_##name(uv_loop_t* loop) {                                      \
+    uv_##name##_t* h;                                                         \
+    ngx_queue_t* q;                                                           \
+    ngx_queue_foreach(q, &loop->name##_handles) {                             \
+      h = ngx_queue_data(q, uv_##name##_t, queue);                            \
+      if (h->name##_cb) h->name##_cb(h, 0);                                   \
+    }                                                                         \
+  }                                                                           \
+  void uv__##name##_close(uv_##name##_t* handle) {                            \
+    uv_##name##_stop(handle);                                                 \
+  }
+/*X(idle, UV_IDLE)*/
+X(check, UV_CHECK)
+X(prepare, UV_PREPARE)
+#undef X
+
+
+static void uv__idle(EV_P_ ev_idle* w, int revents) {
+  uv_idle_t* handle = container_of(w, uv_idle_t, idle_watcher);
+  handle->idle_cb(handle, 0);
+}
+
+
+int uv_idle_init(uv_loop_t* loop, uv_idle_t* handle) {
+  uv__handle_init(loop, (uv_handle_t*)handle, UV_IDLE);
+  ev_idle_init(&handle->idle_watcher, uv__idle);
+  loop->counters.idle_init++;
+  handle->idle_cb = NULL;
+  return 0;
+}
+
+
+int uv_idle_start(uv_idle_t* handle, uv_idle_cb cb) {
+  if (uv__is_active(handle)) return 0;
+  ngx_queue_insert_head(&handle->loop->idle_handles, &handle->queue);
+  ev_idle_start(handle->loop->ev, &handle->idle_watcher);
+  uv__handle_start(handle);
+  handle->idle_cb = cb;
+  return 0;
+}
+
+
+int uv_idle_stop(uv_idle_t* handle) {
+  if (!uv__is_active(handle)) return 0;
+  ngx_queue_remove(&handle->queue);
+  ev_idle_stop(handle->loop->ev, &handle->idle_watcher);
+  uv__handle_stop(handle);
+  handle->idle_cb = NULL;
+  return 0;
+}
+
+
+void uv__idle_close(uv_idle_t* handle) {
+  uv_idle_stop(handle);
 }

@@ -109,7 +109,6 @@
 ./src/ares/windows_port.c
 ./src/unix/async.c
 ./src/unix/cares.c
-./src/unix/check.c
 ./src/unix/core.c
 ./src/unix/cygwin.c
 ./src/unix/darwin.c
@@ -177,7 +176,6 @@
 ./src/unix/ev/README
 ./src/unix/freebsd.c
 ./src/unix/fs.c
-./src/unix/idle.c
 ./src/unix/internal.h
 ./src/unix/kqueue.c
 ./src/unix/linux/core.c
@@ -189,7 +187,6 @@
 ./src/unix/openbsd.c
 ./src/unix/pipe.c
 ./src/unix/poll.c
-./src/unix/prepare.c
 ./src/unix/process.c
 ./src/unix/stream.c
 ./src/unix/sunos.c
@@ -297,6 +294,7 @@
 ./test/test-tcp-bind6-error.c
 ./test/test-tcp-close.c
 ./test/test-tcp-connect-error.c
+./test/test-tcp-connect-timeout.c
 ./test/test-tcp-connect6-error.c
 ./test/test-tcp-flags.c
 ./test/test-tcp-write-error.c
