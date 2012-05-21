@@ -1,5 +1,13 @@
 Date:   2012-05-20
 
+    Mention the new Gentoo packages and credit David Lebel.
+
+Date:   2012-05-20
+
+    Doc update
+
+Date:   2012-05-20
+
     This libuv code is scary and we don't use it, but check at least the strdup() output.
 
 Date:   2012-05-20
