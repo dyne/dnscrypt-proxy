@@ -41,17 +41,18 @@ static struct option getopt_long_options[] = {
     { "pidfile", 1, NULL, 'p' },
 #endif
     { "resolver-address", 1, NULL, 'r' },
-    { "tcp-port", 1, NULL, 't' },
+    { "resolver-port", 1, NULL, 't' },
     { "user", 1, NULL, 'u' },
     { "provider-name", 1, NULL, 'N' },
     { "local-port", 1, NULL, 'P' },
+    { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:V";
+static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TV";
 #else
-static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:V";
+static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:TV";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -235,12 +236,11 @@ options_parse(AppContext * const app_context,
             const unsigned long port = strtoul(optarg, &endptr, 10);
 
             if (*optarg == 0 || *endptr != 0 || port <= 0UL || port > 65535UL) {
-                logger(proxy_context, LOG_ERR, "Invalid TCP port: [%s]",
+                logger(proxy_context, LOG_ERR, "Invalid resolver port: [%s]",
                         optarg);
                 exit(1);
             }
             proxy_context->resolver_port = (uint16_t) port;
-            proxy_context->tcp_only = 1;
             break;
         }
 #ifndef _WIN32
@@ -271,6 +271,9 @@ options_parse(AppContext * const app_context,
             proxy_context->local_port = (uint16_t) port;
             break;
         }
+        case 'T':
+            proxy_context->tcp_only = 1;
+            break;
         case 'V':
             options_version();
             exit(0);

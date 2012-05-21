@@ -57,8 +57,8 @@ ports.
   * `-r`, `--resolver-address=<ip>`: a DNSCrypt-capable resolver IP
     address.
 
-  * `-t`, `--tcp-port=<port>`: connect to the resolver on port <port>
-    over TCP, as a workaround if UDP over port 53 is filtered.
+  * `-t`, `--resolver-port=<port>`: connect to the resolver on port <port>,
+    as a workaround if UDP over port 53 is filtered.
 
   * `-u`, `--user=<user name>`: chroot(2) to this user's home directory
     and drop privileges.
@@ -67,6 +67,10 @@ ports.
     dnscrypt certificate provider.
 
   * `-P`, `--local-port=<port>`: local port to listen to.
+
+  * `-T`, `--tcp-only`: always use TCP. A connection made using UDP
+    will get a truncated response, so that the (stub) resolver retries using
+    TCP.
 
   * `-V`, `--version`: show version number.
 

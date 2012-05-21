@@ -1,3 +1,40 @@
+Date:   2012-05-20
+
+    Update libuv to e82d46452e3db141d3875286cf90be0de6d724e0
+
+Date:   2012-05-17
+
+    Use Xcode4.4-DP5
+
+Date:   2012-05-16
+
+    Provide a link to github for bug reports.
+
+Date:   2012-05-16
+
+    Credit Sebastian Sjoholm.
+
+Date:   2012-05-16
+
+    Change #if FIONBIO to #ifdef FIONBIO. Fixes compilation on Debian/ppc 6.0.4.
+    Reported by Sebastian Sjoholm.
+
+Date:   2012-05-16
+
+    libuv - test: prevent accidental division by zero
+
+Date:   2012-05-09
+
+    Mention the official GUI for Windows, now that it's officially out.
+
+Date:   2012-05-06
+
+    Update Xcode Path to 4.4DP4, and mention that iOS binaries have to be signed.
+
+Date:   2012-05-05
+
+    Sync ChangeLog
+
 Date:   2012-05-05
 
     Move all checks for linker flags to the same place, and	always use -Wl.

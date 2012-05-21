@@ -140,11 +140,15 @@ Some routers and firewalls can block outgoing DNS queries or
 transparently redirect them to their own resolver. This especially
 happens on public Wifi hotspots, such as coffee shops.
 
-As a workaround, the DNSCrypt proxy can force outgoing queries to be
+As a workaround, the port number can be changed using
+the `--resolver-port=<port>` option. For example, OpenDNS servers
+reply to queries sent to ports 53, 443 and 5353.
+
+In addition, the DNSCrypt proxy can force outgoing queries to be
 sent over TCP. For example, TCP port 443, which is commonly used for
 communication over HTTPS, may not be filtered.
 
-The `tcp-port=<port>` command-line switch forces this behavior. When
+The `--tcp-only` command-line switch forces this behavior. When
 an incoming query is received, the daemon immediately replies with a
 "response truncated" message, forcing the client to retry over TCP.
 The daemon then encrypts and signs the query and forwards it over TCP
