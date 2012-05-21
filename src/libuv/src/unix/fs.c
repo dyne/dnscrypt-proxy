@@ -366,7 +366,10 @@ int uv_fs_stat(uv_loop_t* loop, uv_fs_t* req, const char* path, uv_fs_cb cb) {
 
   /* TODO do this without duplicating the string. */
   /* TODO security */
-  pathdup = strdup(path);
+  if ((pathdup = strdup(path)) == NULL) {
+    uv__set_sys_error(loop, ENOMEM);
+    return -1;
+  }
   pathlen = strlen(path);
 
   if (pathlen > 0 && path[pathlen - 1] == '\\') {
