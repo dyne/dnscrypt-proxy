@@ -133,8 +133,8 @@ this example):
 
     # dnscrypt-proxy --local-port=40 --daemonize
 
-Queries over TCP
-----------------
+Queries using nonstandard ports / over TCP
+------------------------------------------
 
 Some routers and firewalls can block outgoing DNS queries or
 transparently redirect them to their own resolver. This especially
