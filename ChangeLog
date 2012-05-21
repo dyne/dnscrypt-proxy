@@ -1,5 +1,31 @@
 Date:   2012-05-20
 
+    This libuv code is scary and we don't use it, but check at least the strdup() output.
+
+Date:   2012-05-20
+
+    Use --enable-debug instead of --with-debug
+
+Date:   2012-05-20
+
+    Provide --use-nonblocking-random if you really need to use /dev/urandom
+    but use /dev/random by default.
+    /dev/arandom has been removed from OpenBSD a long time ago, but I'm attached to it.
+
+Date:   2012-05-20
+
+    Don't recommend DNS caches that are unable to perform DNSSec validation.
+
+Date:   2012-05-20
+
+    Rename section title.
+
+Date:   2012-05-20
+
+    Drop the --tcp-port= switch, and introduce --resolver-port= and --tcp-only switches instead.
+
+Date:   2012-05-20
+
     Update libuv to e82d46452e3db141d3875286cf90be0de6d724e0
 
 Date:   2012-05-17
