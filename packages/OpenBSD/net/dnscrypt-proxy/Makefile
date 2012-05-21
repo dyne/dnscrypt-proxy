@@ -2,7 +2,7 @@
 
 COMMENT=	secure communications between a client and a DNS resolver
 
-DISTNAME=	dnscrypt-proxy-0.9.3
+DISTNAME=	dnscrypt-proxy-0.9.4
 CATEGORIES=	net
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 
