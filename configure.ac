@@ -252,6 +252,10 @@ AC_CHECK_HEADER([CoreServices/CoreServices.h],
 # Switches
 AC_HEADER_ASSERT
 
+AC_ARG_ENABLE(nonblocking-random,
+[AS_HELP_STRING(--enable-nonblocking-random,Use /dev/urandom instead of /dev/random)],
+[AC_DEFINE([USE_NONBLOCKING_RANDOM], [], [Use non-blocking random])])
+
 AC_ARG_WITH(debug,
 [AS_HELP_STRING(--with-debug,For maintainers only - please do not use)],
 [ AS_IF([test "x$withval" = "xyes"], [
