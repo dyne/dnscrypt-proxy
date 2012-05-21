@@ -1,9 +1,10 @@
 
 * Version 0.9.4:
- - Libuv has been updated.
  - The --tcp-port option is gone. The resolver port can now be set
-  with --resolver-port= and forcing use of TCP can be achieved with
-  --tcp-only.
+   with --resolver-port= and forcing use of TCP can be achieved with
+   --tcp-only.
+ - portage files for Gentoo have been added.
+ - Libuv has been updated.
 
 * Version 0.9.3:
  - Support for native Windows builds.
