@@ -107,8 +107,8 @@
 ./src/ares/setup_once.h
 ./src/ares/TODO
 ./src/ares/windows_port.c
+./src/cares.c
 ./src/unix/async.c
-./src/unix/cares.c
 ./src/unix/core.c
 ./src/unix/cygwin.c
 ./src/unix/darwin.c
@@ -188,7 +188,6 @@
 ./src/uv-common.c
 ./src/uv-common.h
 ./src/win/async.c
-./src/win/cares.c
 ./src/win/core.c
 ./src/win/dl.c
 ./src/win/error.c
@@ -240,6 +239,7 @@
 ./test/runner.h
 ./test/task.h
 ./test/test-async.c
+./test/test-callback-order.c
 ./test/test-callback-stack.c
 ./test/test-connection-fail.c
 ./test/test-counters-init.c

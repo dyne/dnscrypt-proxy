@@ -203,19 +203,24 @@ static void uv__poll(uv_loop_t* loop, int block) {
 }
 
 
+static int uv__should_block(uv_loop_t* loop) {
+  return ngx_queue_empty(&loop->idle_handles)
+      && !ngx_queue_empty(&loop->active_handles);
+}
+
+
 static int uv__run(uv_loop_t* loop) {
-  /*
-  if (!uv__has_pending_handles(loop) && !uv__has_active_reqs(loop))
-    uv__run_idle(loop);
-  */
-
+  uv__run_idle(loop);
   uv__run_pending(loop);
-  uv__run_prepare(loop);
 
-  if (uv__has_active_handles(loop) || uv__has_active_reqs(loop))
-    uv__poll(loop, 1);
-
-  uv__run_check(loop);
+  if (uv__has_active_handles(loop) || uv__has_active_reqs(loop)) {
+    uv__run_prepare(loop);
+    /* Need to poll even if there are no active handles left, otherwise
+     * uv_work_t reqs won't complete...
+     */
+    uv__poll(loop, uv__should_block(loop));
+    uv__run_check(loop);
+  }
 
   return uv__has_pending_handles(loop)
       || uv__has_active_handles(loop)
