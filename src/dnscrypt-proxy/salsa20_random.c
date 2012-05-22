@@ -47,7 +47,7 @@ static int
 salsa20_random_random_dev_open(void)
 {
     static const char * const devices[] = {
-# ifdef USE_NONBLOCKING_RANDOM
+# ifndef USE_BLOCKING_RANDOM
         "/dev/arandom", "/dev/urandom",
 # endif
         "/dev/random", NULL

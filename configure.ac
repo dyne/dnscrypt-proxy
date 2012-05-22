@@ -252,9 +252,9 @@ AC_CHECK_HEADER([CoreServices/CoreServices.h],
 # Switches
 AC_HEADER_ASSERT
 
-AC_ARG_ENABLE(nonblocking-random,
-[AS_HELP_STRING(--enable-nonblocking-random,Use /dev/urandom instead of /dev/random)],
-[AC_DEFINE([USE_NONBLOCKING_RANDOM], [], [Use non-blocking random])])
+AC_ARG_ENABLE(blocking-random,
+[AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
+[AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
 
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
