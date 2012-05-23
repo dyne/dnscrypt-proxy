@@ -17,7 +17,7 @@ pkg_setup() {
 
 src_configure() {
 	append-ldflags -Wl,-z,noexecstack || die
-	econf || die
+	econf --enable-nonblocking-random || die
 }
 
 src_install() {
