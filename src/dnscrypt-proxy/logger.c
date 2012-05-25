@@ -102,6 +102,7 @@ logger(struct ProxyContext_ * const context,
     safe_write(log_fd, line, strlen(line), LOG_WRITE_TIMEOUT);
     safe_write(log_fd, "\n", (size_t) 1U, LOG_WRITE_TIMEOUT);
 #else
+    (void) log_fd;
     printf("%s%s\n", urgency, line);
     fflush(stdout);
 #endif
