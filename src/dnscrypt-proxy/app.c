@@ -26,23 +26,30 @@
 #include "udp_request.h"
 #include "uv.h"
 #include "uv_alloc.h"
+#include "uv_helpers.h"
 
 static AppContext app_context;
 
 static int
 proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    struct sockaddr_in resolver_addr;
+    struct sockaddr_storage resolver_addr;
 
     memset(proxy_context, 0, sizeof *proxy_context);
-    options_parse(&app_context, proxy_context, argc, argv);
-    proxy_context->event_loop = uv_loop_new();
-    resolver_addr = uv_ip4_addr(proxy_context->resolver_ip,
-                                proxy_context->resolver_port);
-    proxy_context->resolver_addr_len = sizeof(struct sockaddr_in);
+    if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
+        return -1;
+    }
+    if (uv_addr_any(&resolver_addr, proxy_context->resolver_ip,
+                    proxy_context->resolver_port,
+                    SOCK_DGRAM, IPPROTO_UDP, 0) != 0) {
+        logger(NULL, LOG_ERR, "Unsupported socket address: [%s (%s)]",
+               proxy_context->resolver_ip, proxy_context->resolver_port);
+        return -1;
+    }
     memcpy(&proxy_context->resolver_addr, &resolver_addr,
-           proxy_context->resolver_addr_len);
+           STORAGE_LEN(resolver_addr));
     uv_alloc_init(proxy_context);
+    proxy_context->event_loop = uv_loop_new();
 
     return 0;
 }
@@ -122,9 +129,9 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
         udp_listener_start(proxy_context) != 0) {
         exit(1);
     }
-    logger(proxy_context, LOG_INFO,
-           PACKAGE " is ready: proxying from [%s] to [%s]",
-           proxy_context->listen_ip, proxy_context->resolver_ip);
+    logger(proxy_context, LOG_INFO, "Proxying from [%s (%s)] to [%s (%s)]",
+           proxy_context->local_ip, proxy_context->local_port,
+           proxy_context->resolver_ip, proxy_context->resolver_port);
 
     proxy_context->listeners_started = 1;
 
@@ -138,7 +145,10 @@ main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-    proxy_context_init(&proxy_context, argc, argv);
+    if (proxy_context_init(&proxy_context, argc, argv) != 0) {
+        logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
+        exit(1);
+    }
     app_context.proxy_context = &proxy_context;
     logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
     dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);

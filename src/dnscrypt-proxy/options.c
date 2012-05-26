@@ -102,7 +102,7 @@ void options_init_with_default(AppContext * const app_context,
         .connections_count = 0U,
         .connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX,
         .edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE,
-        .listen_ip = "127.0.0.1",
+        .local_ip = "127.0.0.1",
         .local_port = DNS_DEFAULT_PORT,
         .log_fd = -1,
         .log_file = NULL,
@@ -178,7 +178,7 @@ options_parse(AppContext * const app_context,
                                    &option_index)) != -1) {
         switch (opt_flag) {
         case 'a':
-            proxy_context->listen_ip = optarg;
+            proxy_context->local_ip = optarg;
             break;
         case 'd':
             proxy_context->daemonize = 1;
@@ -231,18 +231,9 @@ options_parse(AppContext * const app_context,
         case 'r':
             proxy_context->resolver_ip = optarg;
             break;
-        case 't': {
-            char *endptr;
-            const unsigned long port = strtoul(optarg, &endptr, 10);
-
-            if (*optarg == 0 || *endptr != 0 || port <= 0UL || port > 65535UL) {
-                logger(proxy_context, LOG_ERR, "Invalid resolver port: [%s]",
-                        optarg);
-                exit(1);
-            }
-            proxy_context->resolver_port = (uint16_t) port;
+        case 't':
+            proxy_context->resolver_port = optarg;
             break;
-        }
 #ifndef _WIN32
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
@@ -259,18 +250,9 @@ options_parse(AppContext * const app_context,
         case 'N':
             proxy_context->provider_name = optarg;
             break;
-        case 'P': {
-            char *endptr;
-            const unsigned long port = strtoul(optarg, &endptr, 10);
-
-            if (*optarg == 0 || *endptr != 0 || port <= 0UL || port > 65535UL) {
-                logger(proxy_context, LOG_ERR, "Invalid local port: [%s]",
-                        optarg);
-                exit(1);
-            }
-            proxy_context->local_port = (uint16_t) port;
+        case 'P':
+            proxy_context->local_port = optarg;
             break;
-        }
         case 'T':
             proxy_context->tcp_only = 1;
             break;

@@ -36,7 +36,7 @@
 #endif
 
 #ifndef DNS_DEFAULT_PORT
-# define DNS_DEFAULT_PORT 53U
+# define DNS_DEFAULT_PORT "53"
 #endif
 
 #define DNS_HEADER_SIZE  12U
@@ -61,6 +61,11 @@
 
 #define DNS_DEFAULT_EDNS_PAYLOAD_SIZE 1280U
 
+typedef struct SockAddr_ {
+    struct sockaddr_storage  ss;
+    const char              *str;
+} SockAddr;
+
 typedef struct ProxyContext_ {
     uint8_t                  dnscrypt_magic_query[DNSCRYPT_MAGIC_QUERY_LEN];
     uint8_t                  provider_publickey[crypto_sign_ed25519_PUBLICKEYBYTES];
@@ -68,19 +73,20 @@ typedef struct ProxyContext_ {
     DNSCryptClient           dnscrypt_client;
     CertUpdater              cert_updater;
     struct sockaddr_storage  resolver_addr;
-    socklen_t                resolver_addr_len;
     uv_tcp_t                 tcp_listener_handle;
     uv_udp_t                 udp_listener_handle;
     ngx_queue_t              tcp_request_queue;
     ngx_queue_t              udp_request_queue;
     AppContext              *app_context;
     uv_loop_t               *event_loop;
-    const char              *listen_ip;
+    const char              *local_ip;
+    const char              *local_port;
     const char              *log_file;
     const char              *pid_file;
     const char              *provider_name;
     const char              *provider_publickey_s;
     const char              *resolver_ip;
+    const char              *resolver_port;
     char                    *user_dir;
     void                    *uv_alloc_buffer;
     size_t                   uv_alloc_buffer_size;
@@ -92,8 +98,6 @@ typedef struct ProxyContext_ {
     unsigned int             connections_count;
     unsigned int             connections_count_max;
     int                      log_fd;
-    uint16_t                 local_port;
-    uint16_t                 resolver_port;
     _Bool                    daemonize;
     _Bool                    listeners_started;
     _Bool                    tcp_only;

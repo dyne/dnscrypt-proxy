@@ -39,7 +39,9 @@ dnscrypt_proxy_SOURCES = \
 	utils.c \
 	utils.h \
 	uv_alloc.c \
-	uv_alloc.h
+	uv_alloc.h \
+	uv_helpers.c \
+	uv_helpers.h
 
 AM_CFLAGS = @CWFLAGS@
 

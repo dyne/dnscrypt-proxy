@@ -146,6 +146,17 @@ AC_CHECK_HEADERS([execinfo.h paths.h sys/cdefs.h sys/feature_tests.h])
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_RESTRICT
 
+AC_CHECK_TYPE([in_port_t], , [AC_DEFINE(in_port_t, uint16_t,
+[in_port_t type])],
+[
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+])
+
 AC_MSG_CHECKING([whether sin_len is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stdio.h>

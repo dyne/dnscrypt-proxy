@@ -22,6 +22,7 @@
 #include "tcp_request_p.h"
 #include "uv.h"
 #include "uv_alloc.h"
+#include "uv_helpers.h"
 
 static uv_buf_t
 tcp_alloc_cb(uv_handle_t *handle, size_t size)
@@ -376,7 +377,7 @@ client_to_proxy_cb(uv_stream_t *handle, ssize_t nread, uv_buf_t buf)
 
     struct sockaddr_in resolver_addr;
     assert(sizeof resolver_addr
-           == tcp_request->proxy_context->resolver_addr_len);
+           == STORAGE_LEN(tcp_request->proxy_context->resolver_addr));
     memcpy(&resolver_addr, &tcp_request->proxy_context->resolver_addr,
            sizeof resolver_addr);
 
@@ -464,15 +465,23 @@ listener_close_cb(uv_handle_t *handle)
 int
 tcp_listener_bind(ProxyContext * const proxy_context)
 {
-    struct sockaddr_in addr = uv_ip4_addr(proxy_context->listen_ip,
-                                          proxy_context->local_port);
+    struct sockaddr_storage addr;
+
+    if (uv_addr_any(&addr, proxy_context->local_ip,
+                    proxy_context->local_port,
+                    SOCK_STREAM, IPPROTO_TCP, 1) != 0) {
+        logger(proxy_context, LOG_ERR,
+               "Unsupported local address: [%s (%s)] (TCP)",
+               proxy_context->local_ip, proxy_context->local_port);
+        return -1;
+    }
     uv_tcp_init(proxy_context->event_loop,
                 &proxy_context->tcp_listener_handle);
     proxy_context->tcp_listener_handle.data = proxy_context;
     ngx_queue_init(&proxy_context->tcp_request_queue);
-    if (uv_tcp_bind(&proxy_context->tcp_listener_handle, addr) != 0) {
-        logger(proxy_context, LOG_ERR, "Unable to bind [%s] (TCP)",
-               proxy_context->listen_ip);
+    if (uv_tcp_bind_any(&proxy_context->tcp_listener_handle, addr) != 0) {
+        logger(proxy_context, LOG_ERR, "Unable to bind [%s (%s)] (TCP)",
+               proxy_context->local_ip, proxy_context->local_port);
         return -1;
     }
     return 0;

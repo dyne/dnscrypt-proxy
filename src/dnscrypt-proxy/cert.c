@@ -20,6 +20,7 @@
 #include "logger.h"
 #include "probes.h"
 #include "utils.h"
+#include "uv_helpers.h"
 
 static int
 cert_parse_version(ProxyContext * const proxy_context,
@@ -292,7 +293,7 @@ cert_updater_init(ProxyContext * const proxy_context)
         ar_options_mask |= ARES_OPT_FLAGS | ARES_OPT_TCP_PORT;
         cert_updater->ar_options.flags = ARES_FLAG_USEVC;
         cert_updater->ar_options.tcp_port =
-            htons(proxy_context->resolver_port);
+            htons(STORAGE_PORT_ANY(proxy_context->resolver_addr));
     }
     if (uv_ares_init_options(proxy_context->event_loop,
                              &cert_updater->ar_channel,

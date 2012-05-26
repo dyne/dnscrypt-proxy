@@ -22,6 +22,7 @@
 #include "utils.h"
 #include "uv.h"
 #include "uv_alloc.h"
+#include "uv_helpers.h"
 
 static uv_buf_t
 udp_listener_alloc_cb(uv_handle_t *handle, size_t size)
@@ -344,8 +345,10 @@ client_to_proxy_cb(uv_udp_t *udp_listener_handle, ssize_t nread, uv_buf_t buf,
     udp_request->status.has_proxy_resolver_handle = 1;
 
     struct sockaddr_in resolver_addr;
+    assert(sizeof resolver_addr
+           == STORAGE_LEN(udp_request->proxy_context->resolver_addr));
     memcpy(&resolver_addr, &udp_request->proxy_context->resolver_addr,
-           udp_request->proxy_context->resolver_addr_len);
+           sizeof resolver_addr);
 
     udp_request->proxy_resolver_handle.data = udp_request;
 
@@ -377,15 +380,23 @@ listener_close_cb(uv_handle_t *handle)
 int
 udp_listener_bind(ProxyContext * const proxy_context)
 {
-    struct sockaddr_in addr = uv_ip4_addr(proxy_context->listen_ip,
-                                          proxy_context->local_port);
+    struct sockaddr_storage addr;
+
+    if (uv_addr_any(&addr, proxy_context->local_ip,
+                    proxy_context->local_port,
+                    SOCK_DGRAM, IPPROTO_UDP, 1) != 0) {
+        logger(proxy_context, LOG_ERR,
+               "Unsupported local address: [%s (%s)] (UDP)",
+               proxy_context->local_ip, proxy_context->local_port);
+        return -1;
+    }
     uv_udp_init(proxy_context->event_loop,
                 &proxy_context->udp_listener_handle);
     proxy_context->udp_listener_handle.data = proxy_context;
     ngx_queue_init(&proxy_context->udp_request_queue);
-    if (uv_udp_bind(&proxy_context->udp_listener_handle, addr, 0) != 0) {
-        logger(proxy_context, LOG_ERR, "Unable to bind [%s] (UDP)",
-               proxy_context->listen_ip);
+    if (uv_udp_bind_any(&proxy_context->udp_listener_handle, addr, 0) != 0) {
+        logger(proxy_context, LOG_ERR, "Unable to bind [%s (%s)] (UDP)",
+               proxy_context->local_ip, proxy_context->local_port);
         return -1;
     }
     udp_tune(&proxy_context->udp_listener_handle);
