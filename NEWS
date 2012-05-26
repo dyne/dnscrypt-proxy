@@ -1,4 +1,7 @@
 
+* Version 0.9.5:
+ - Full IPv6 support.
+
 * Version 0.9.4:
  - The --tcp-port option is gone. The resolver port can now be set
    with --resolver-port= and forcing use of TCP can be achieved with
