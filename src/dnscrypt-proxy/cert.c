@@ -276,27 +276,11 @@ static int
 cert_set_servers(ProxyContext * const proxy_context,
                  CertUpdater * const cert_updater)
 {
-    struct ares_addr_node ar_node = {
-        .next = NULL, .family = STORAGE_FAMILY(proxy_context->resolver_addr)
-    };
-
-    switch (ar_node.family) {
-    case AF_INET:
-        ar_node.addr.addr4 =
-            ((struct sockaddr_in *) &proxy_context->resolver_addr)->sin_addr;
-        break;
-    case AF_INET6:
-        memcpy(&ar_node.addr.addr6,
-               &((struct sockaddr_in6 *) &proxy_context->resolver_addr)
-               ->sin6_addr, sizeof ar_node.addr.addr6);
-        break;
-    default:
-        return -1;
-    }
-    if (ares_set_servers(cert_updater->ar_channel, &ar_node) != ARES_SUCCESS) {
-        return -1;
-    }
-    return 0;
+    return ares_set_servers_any(cert_updater->ar_channel,
+                                & (const ares_ss_node) {
+                                    .next = NULL,
+                                    .ss = &proxy_context->resolver_addr
+                                });
 }
 
 int
@@ -323,7 +307,7 @@ cert_updater_init(ProxyContext * const proxy_context)
                              &cert_updater->ar_channel,
                              &cert_updater->ar_options,
                              ar_options_mask) != ARES_SUCCESS ||
-        cert_set_servers(proxy_context, cert_updater) != 0) {
+        cert_set_servers(proxy_context, cert_updater) != ARES_SUCCESS) {
         return -1;
     }
     return 0;

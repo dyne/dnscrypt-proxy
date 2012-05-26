@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <netdb.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "utils.h"
@@ -50,14 +51,6 @@ uv_addr_any(struct sockaddr_storage * const ss, const char * const host,
     freeaddrinfo(ai);
 
     return ret;
-}
-
-in_port_t *
-storage_port6(struct sockaddr_storage * const ss)
-{
-    struct sockaddr_in6 * const si = (struct sockaddr_in6 *) ss;
-
-    return &si->sin6_port;
 }
 
 in_port_t *
@@ -148,4 +141,62 @@ uv_tcp_connect_any(uv_connect_t *req, uv_tcp_t *handle,
     errno = EINVAL;
 
     return -1;
+}
+
+static void
+ares_addr_nodes_free(struct ares_addr_node * const addr_nodes)
+{
+    struct ares_addr_node *addr_node = addr_nodes;
+    struct ares_addr_node *addr_node_tmp;
+
+    while (addr_node != NULL) {
+        addr_node_tmp = addr_node->next;
+        free(addr_node);
+        addr_node = addr_node_tmp;
+    }
+}
+
+int
+ares_set_servers_any(ares_channel channel, const ares_ss_node * const ss_nodes)
+{
+    struct ares_addr_node *addr_node;
+    struct ares_addr_node *addr_nodes = NULL;
+    struct ares_addr_node *addr_nodes_last = NULL;
+    const ares_ss_node    *ss_node = ss_nodes;
+    int                    ares_ret;
+
+    while (ss_node != NULL) {
+        if ((addr_node = calloc((size_t) 1U, sizeof *addr_node)) == NULL) {
+            ares_addr_nodes_free(addr_nodes);
+            return ARES_ENOMEM;
+        }
+        addr_node->family = STORAGE_FAMILY(*(ss_node->ss));
+        switch (addr_node->family) {
+        case AF_INET:
+            addr_node->addr.addr4 =
+                ((const struct sockaddr_in *) ss_node->ss)->sin_addr;
+            break;
+        case AF_INET6:
+            memcpy(&addr_node->addr.addr6,
+                   &((const struct sockaddr_in6 *) ss_node->ss)->sin6_addr,
+                   sizeof addr_node->addr.addr6);
+            break;
+        default:
+            ares_addr_nodes_free(addr_nodes);
+            return ARES_EBADFAMILY;
+        }
+        addr_node->next = NULL;
+        if (addr_nodes == NULL) {
+            addr_nodes = addr_node;
+        }
+        if (addr_nodes_last != NULL) {
+            addr_nodes_last->next = addr_node;
+        }
+        addr_nodes_last = addr_node;
+        ss_node = ss_node->next;
+    }
+    ares_ret = ares_set_servers(channel, addr_nodes);
+    ares_addr_nodes_free(addr_nodes);
+
+    return ares_ret;
 }

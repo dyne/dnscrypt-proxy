@@ -14,6 +14,11 @@
 
 #include "uv.h"
 
+typedef struct ares_ss_node_ {
+    struct ares_ss_node_    *next;
+    struct sockaddr_storage *ss;
+} ares_ss_node;
+
 #ifdef HAVE_SS_LEN
 # define STORAGE_LEN(X) ((X).ss_len)
 #elif defined(HAVE___SS_LEN)
@@ -32,6 +37,8 @@
 
 #define STORAGE_PORT_ANY(X) (*storage_port_any(&(X)))
 
+in_port_t *storage_port_any(struct sockaddr_storage * const ss);
+
 int uv_addr_any(struct sockaddr_storage * const ss, const char * const host,
                 const char * const port, const int socktype,
                 const int protocol, const _Bool passive);
@@ -48,6 +55,7 @@ int uv_udp_send_any(uv_udp_send_t *req, uv_udp_t *handle, uv_buf_t bufs[],
 int uv_tcp_connect_any(uv_connect_t *req, uv_tcp_t *handle,
                        struct sockaddr_storage * const ss, uv_connect_cb cb);
 
-in_port_t *storage_port_any(struct sockaddr_storage * const ss);
+int ares_set_servers_any(ares_channel channel,
+                         const ares_ss_node * const ss_nodes);
 
 #endif
