@@ -272,6 +272,33 @@ cert_query_cb(void *arg, int status, int timeouts, unsigned char *abuf,
                                      proxy_context->resolver_publickey);
 }
 
+static int
+cert_set_servers(ProxyContext * const proxy_context,
+                 CertUpdater * const cert_updater)
+{
+    struct ares_addr_node ar_node = {
+        .next = NULL, .family = STORAGE_FAMILY(proxy_context->resolver_addr)
+    };
+
+    switch (ar_node.family) {
+    case AF_INET:
+        ar_node.addr.addr4 =
+            ((struct sockaddr_in *) &proxy_context->resolver_addr)->sin_addr;
+        break;
+    case AF_INET6:
+        memcpy(&ar_node.addr.addr6,
+               &((struct sockaddr_in6 *) &proxy_context->resolver_addr)
+               ->sin6_addr, sizeof ar_node.addr.addr6);
+        break;
+    default:
+        return -1;
+    }
+    if (ares_set_servers(cert_updater->ar_channel, &ar_node) != ARES_SUCCESS) {
+        return -1;
+    }
+    return 0;
+}
+
 int
 cert_updater_init(ProxyContext * const proxy_context)
 {
@@ -285,20 +312,18 @@ cert_updater_init(ProxyContext * const proxy_context)
     assert(proxy_context->event_loop != NULL);
     cert_updater->has_cert_timer = 0;
     cert_updater->query_retry_step = 0U;
-    ar_options_mask = ARES_OPT_SERVERS;
-    cert_updater->ar_options.nservers = 1;
-    cert_updater->ar_options.servers =
-        &((struct sockaddr_in *) &proxy_context->resolver_addr)->sin_addr;
-    if (proxy_context->tcp_only) {
-        ar_options_mask |= ARES_OPT_FLAGS | ARES_OPT_TCP_PORT;
+    ar_options_mask = 0;
+    if (proxy_context->tcp_only != 0) {
+        ar_options_mask = ARES_OPT_FLAGS | ARES_OPT_TCP_PORT;
         cert_updater->ar_options.flags = ARES_FLAG_USEVC;
         cert_updater->ar_options.tcp_port =
-            htons(STORAGE_PORT_ANY(proxy_context->resolver_addr));
+            STORAGE_PORT_ANY(proxy_context->resolver_addr);
     }
     if (uv_ares_init_options(proxy_context->event_loop,
                              &cert_updater->ar_channel,
                              &cert_updater->ar_options,
-                             ar_options_mask) != ARES_SUCCESS) {
+                             ar_options_mask) != ARES_SUCCESS ||
+        cert_set_servers(proxy_context, cert_updater) != 0) {
         return -1;
     }
     return 0;
