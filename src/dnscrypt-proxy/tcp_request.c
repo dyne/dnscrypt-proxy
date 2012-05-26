@@ -375,20 +375,15 @@ client_to_proxy_cb(uv_stream_t *handle, ssize_t nread, uv_buf_t buf)
         goto bye;
     }
 
-    struct sockaddr_in resolver_addr;
-    assert(sizeof resolver_addr
-           == STORAGE_LEN(tcp_request->proxy_context->resolver_addr));
-    memcpy(&resolver_addr, &tcp_request->proxy_context->resolver_addr,
-           sizeof resolver_addr);
-
     uv_tcp_init(tcp_request->proxy_context->event_loop,
                 &tcp_request->proxy_resolver_handle);
     tcp_request->status.has_proxy_resolver_handle = 1;
     tcp_request->proxy_resolver_handle.data = tcp_request;
     uv_tcp_nodelay(&tcp_request->proxy_resolver_handle, 1);
-    uv_tcp_connect(&tcp_request->proxy_to_resolver_connect_query,
-                   &tcp_request->proxy_resolver_handle,
-                   resolver_addr, proxy_to_resolver_connect_cb);
+    uv_tcp_connect_any(&tcp_request->proxy_to_resolver_connect_query,
+                       &tcp_request->proxy_resolver_handle,
+                       &tcp_request->proxy_context->resolver_addr,
+                       proxy_to_resolver_connect_cb);
     tcp_request->proxy_to_resolver_connect_query.data = tcp_request;
     tcp_tune(&tcp_request->proxy_resolver_handle);
 
@@ -479,7 +474,7 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                 &proxy_context->tcp_listener_handle);
     proxy_context->tcp_listener_handle.data = proxy_context;
     ngx_queue_init(&proxy_context->tcp_request_queue);
-    if (uv_tcp_bind_any(&proxy_context->tcp_listener_handle, addr) != 0) {
+    if (uv_tcp_bind_any(&proxy_context->tcp_listener_handle, &addr) != 0) {
         logger(proxy_context, LOG_ERR, "Unable to bind [%s (%s)] (TCP)",
                proxy_context->local_ip, proxy_context->local_port);
         return -1;

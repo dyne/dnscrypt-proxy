@@ -26,7 +26,6 @@ typedef struct UDPRequest_ {
     uint8_t                  dns_packet[DNS_MAX_PACKET_SIZE];
     uint8_t                  client_nonce[crypto_box_HALF_NONCEBYTES];
     struct sockaddr_storage  client_addr;
-    socklen_t                client_addr_len;
     uv_udp_t                 proxy_resolver_handle;
     uv_udp_send_t            proxy_to_resolver_send_query;
     uv_udp_send_t            proxy_to_client_send_query;

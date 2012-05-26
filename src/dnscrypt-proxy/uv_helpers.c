@@ -18,7 +18,7 @@
 #include "uv_helpers.h"
 
 int
-uv_addr_any(struct sockaddr_storage * const sa, const char * const host,
+uv_addr_any(struct sockaddr_storage * const ss, const char * const host,
             const char * const port, const int socktype, const int protocol,
             const _Bool passive)
 {
@@ -39,9 +39,9 @@ uv_addr_any(struct sockaddr_storage * const sa, const char * const host,
     }
     ai_cur = ai;
     while (ai_cur != NULL) {
-        if (ai->ai_addrlen <= (socklen_t) sizeof *sa &&
+        if (ai->ai_addrlen <= (socklen_t) sizeof *ss &&
             (ai->ai_family == AF_INET || ai->ai_family == AF_INET6)) {
-            memcpy(sa, ai->ai_addr, ai->ai_addrlen);
+            memcpy(ss, ai->ai_addr, ai->ai_addrlen);
             ret = 0;
             break;
         }
@@ -83,20 +83,17 @@ storage_port_any(struct sockaddr_storage * const ss)
 }
 
 int
-uv_udp_bind_any(uv_udp_t *handle, struct sockaddr_storage ss, unsigned flags)
+uv_udp_bind_any(uv_udp_t *handle, struct sockaddr_storage * const ss,
+                unsigned flags)
 {
-    switch (STORAGE_FAMILY(ss)) {
+    switch (STORAGE_FAMILY(*ss)) {
     case AF_INET: {
-        struct sockaddr_in si;
-        COMPILER_ASSERT(sizeof ss >= sizeof si);
-        memcpy(&si, &ss, sizeof si);
-        return uv_udp_bind(handle, si, flags);
+        return uv_udp_bind(handle,
+                           * (struct sockaddr_in *) (void *) ss, flags);
     }
     case AF_INET6: {
-        struct sockaddr_in6 si6;
-        COMPILER_ASSERT(sizeof ss >= sizeof si6);
-        memcpy(&si6, &ss, sizeof si6);
-        return uv_udp_bind6(handle, si6, flags);
+        return uv_udp_bind6(handle,
+                            * (struct sockaddr_in6 *) (void *) ss, flags);
     }
     }
     errno = EINVAL;
@@ -105,20 +102,55 @@ uv_udp_bind_any(uv_udp_t *handle, struct sockaddr_storage ss, unsigned flags)
 }
 
 int
-uv_tcp_bind_any(uv_tcp_t *handle, struct sockaddr_storage ss)
+uv_tcp_bind_any(uv_tcp_t *handle, struct sockaddr_storage * const ss)
 {
-    switch (STORAGE_FAMILY(ss)) {
+    switch (STORAGE_FAMILY(*ss)) {
     case AF_INET: {
-        struct sockaddr_in si;
-        COMPILER_ASSERT(sizeof ss >= sizeof si);
-        memcpy(&si, &ss, sizeof si);
-        return uv_tcp_bind(handle, si);
+        return uv_tcp_bind(handle,
+                          * (struct sockaddr_in *) (void *) ss);
     }
     case AF_INET6: {
-        struct sockaddr_in6 si6;
-        COMPILER_ASSERT(sizeof ss >= sizeof si6);
-        memcpy(&si6, &ss, sizeof si6);
-        return uv_tcp_bind6(handle, si6);
+        return uv_tcp_bind6(handle,
+                           * (struct sockaddr_in6 *) (void *) ss);
+    }
+    }
+    errno = EINVAL;
+
+    return -1;
+}
+
+int
+uv_udp_send_any(uv_udp_send_t *req, uv_udp_t *handle, uv_buf_t bufs[],
+                int bufcnt, struct sockaddr_storage * const ss,
+                uv_udp_send_cb send_cb)
+{
+    switch (STORAGE_FAMILY(*ss)) {
+    case AF_INET: {
+        return uv_udp_send(req, handle, bufs, bufcnt,
+                           * (struct sockaddr_in *) (void *) ss, send_cb);
+    }
+    case AF_INET6: {
+        return uv_udp_send6(req, handle, bufs, bufcnt,
+                            * (struct sockaddr_in6 *) (void *) ss, send_cb);
+    }
+    }
+    errno = EINVAL;
+
+    return -1;
+}
+
+int
+uv_tcp_connect_any(uv_connect_t *req, uv_tcp_t *handle,
+                   struct sockaddr_storage * const ss, uv_connect_cb cb)
+{
+    switch (STORAGE_FAMILY(*ss)) {
+    case AF_INET: {
+        return uv_tcp_connect(req, handle,
+                              * (struct sockaddr_in *) (void *) ss, cb);
+    }
+    case AF_INET6: {
+        return uv_tcp_connect6(req, handle,
+                               * (struct sockaddr_in6 *) (void *) ss, cb);
     }
     }
     errno = EINVAL;

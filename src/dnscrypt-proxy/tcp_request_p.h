@@ -31,7 +31,6 @@ typedef struct TCPRequest_ {
     uint8_t                  dns_packet[TCP_MAX_PACKET_SIZE];
     uint8_t                  client_nonce[crypto_box_HALF_NONCEBYTES];
     struct sockaddr_storage  client_addr;
-    socklen_t                client_addr_len;
     uv_tcp_t                 client_proxy_handle;
     uv_tcp_t                 proxy_resolver_handle;
     uv_connect_t             proxy_to_resolver_connect_query;

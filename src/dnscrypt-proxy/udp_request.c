@@ -151,15 +151,11 @@ resolver_to_proxy_cb(uv_udp_t *handle, ssize_t nread, uv_buf_t buf,
     assert(uncurved_len <= udp_request->dns_packet_len);
     udp_request->dns_packet_len = uncurved_len;
 
-    struct sockaddr_in client_addr;
-    assert(sizeof client_addr == udp_request->client_addr_len);
-    memcpy(&client_addr, &udp_request->client_addr, sizeof client_addr);
-
-    uv_udp_send(&udp_request->proxy_to_client_send_query,
-                udp_request->client_proxy_handle_p,
-                & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
-                               .len  = udp_request->dns_packet_len }, 1,
-                client_addr, proxy_to_client_cb);
+    uv_udp_send_any(&udp_request->proxy_to_client_send_query,
+                    udp_request->client_proxy_handle_p,
+                    & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
+                            .len  = udp_request->dns_packet_len }, 1,
+                    &udp_request->client_addr, proxy_to_client_cb);
     udp_request->proxy_to_client_send_query.data = udp_request;
 
     udp_request->status.has_proxy_resolver_handle = 0;
@@ -190,14 +186,11 @@ proxy_client_send_truncated(UDPRequest * const udp_request)
     udp_request->dns_packet[DNS_OFFSET_FLAGS] |= DNS_FLAGS_TC | DNS_FLAGS_QR;
     udp_request->dns_packet[DNS_OFFSET_FLAGS2] |= DNS_FLAGS2_RA;
 
-    struct sockaddr_in client_addr;
-    assert(sizeof client_addr == udp_request->client_addr_len);
-    memcpy(&client_addr, &udp_request->client_addr, sizeof client_addr);
-    uv_udp_send(&udp_request->proxy_to_client_send_query,
-                udp_request->client_proxy_handle_p,
-                & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
-                               .len  = udp_request->dns_packet_len }, 1,
-                client_addr, proxy_to_client_cb);
+    uv_udp_send_any(&udp_request->proxy_to_client_send_query,
+                    udp_request->client_proxy_handle_p,
+                    & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
+                            .len  = udp_request->dns_packet_len }, 1,
+                    &udp_request->client_addr, proxy_to_client_cb);
     udp_request->proxy_to_client_send_query.data = udp_request;
 }
 
@@ -300,9 +293,10 @@ client_to_proxy_cb(uv_udp_t *udp_listener_handle, ssize_t nread, uv_buf_t buf,
                      sizeof udp_request->dns_packet,
                      &request_edns_payload_size);
 
-    udp_request->client_addr_len = sizeof(struct sockaddr_in);
+    assert(STORAGE_LEN(* (struct sockaddr_storage *) (void *) client_addr)
+           <= sizeof udp_request->client_addr);
     memcpy(&udp_request->client_addr, client_addr,
-           udp_request->client_addr_len);
+           STORAGE_LEN(* (struct sockaddr_storage *) (void *) client_addr));
 
     if (request_edns_payload_size < DNS_MAX_PACKET_SIZE_UDP_SEND) {
         max_packet_size = DNS_MAX_PACKET_SIZE_UDP_SEND;
@@ -343,13 +337,6 @@ client_to_proxy_cb(uv_udp_t *udp_listener_handle, ssize_t nread, uv_buf_t buf,
     uv_udp_init(udp_request->proxy_context->event_loop,
                 &udp_request->proxy_resolver_handle);
     udp_request->status.has_proxy_resolver_handle = 1;
-
-    struct sockaddr_in resolver_addr;
-    assert(sizeof resolver_addr
-           == STORAGE_LEN(udp_request->proxy_context->resolver_addr));
-    memcpy(&resolver_addr, &udp_request->proxy_context->resolver_addr,
-           sizeof resolver_addr);
-
     udp_request->proxy_resolver_handle.data = udp_request;
 
     uv_timer_init(udp_request->proxy_context->event_loop,
@@ -359,11 +346,12 @@ client_to_proxy_cb(uv_udp_t *udp_listener_handle, ssize_t nread, uv_buf_t buf,
     uv_timer_start(&udp_request->timeout_timer, timeout_timer_cb,
                    (int64_t) DNS_QUERY_TIMEOUT, (int64_t) 0);
 
-    uv_udp_send(&udp_request->proxy_to_resolver_send_query,
-                &udp_request->proxy_resolver_handle,
-                & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
-                               .len  = udp_request->dns_packet_len }, 1,
-                resolver_addr, proxy_to_resolver_cb);
+    uv_udp_send_any(&udp_request->proxy_to_resolver_send_query,
+                    &udp_request->proxy_resolver_handle,
+                    & (uv_buf_t) { .base = (void *) udp_request->dns_packet,
+                            .len  = udp_request->dns_packet_len }, 1,
+                    &udp_request->proxy_context->resolver_addr,
+                    proxy_to_resolver_cb);
     udp_request->proxy_to_resolver_send_query.data = udp_request;
     udp_tune(&udp_request->proxy_resolver_handle);
 
@@ -394,7 +382,7 @@ udp_listener_bind(ProxyContext * const proxy_context)
                 &proxy_context->udp_listener_handle);
     proxy_context->udp_listener_handle.data = proxy_context;
     ngx_queue_init(&proxy_context->udp_request_queue);
-    if (uv_udp_bind_any(&proxy_context->udp_listener_handle, addr, 0) != 0) {
+    if (uv_udp_bind_any(&proxy_context->udp_listener_handle, &addr, 0) != 0) {
         logger(proxy_context, LOG_ERR, "Unable to bind [%s (%s)] (UDP)",
                proxy_context->local_ip, proxy_context->local_port);
         return -1;
