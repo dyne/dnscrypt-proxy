@@ -53,14 +53,6 @@ uv_addr_any(struct sockaddr_storage * const ss, const char * const host,
 }
 
 in_port_t *
-storage_port4(struct sockaddr_storage * const ss)
-{
-    struct sockaddr_in * const si = (struct sockaddr_in *) ss;
-
-    return &si->sin_port;
-}
-
-in_port_t *
 storage_port6(struct sockaddr_storage * const ss)
 {
     struct sockaddr_in6 * const si = (struct sockaddr_in6 *) ss;
@@ -73,9 +65,9 @@ storage_port_any(struct sockaddr_storage * const ss)
 {
     switch (STORAGE_FAMILY(*ss)) {
     case AF_INET:
-        return storage_port4(ss);
+        return & (((struct sockaddr_in *) (void *) ss)->sin_port);
     case AF_INET6:
-        return storage_port6(ss);
+        return & (((struct sockaddr_in6 *) (void *) ss)->sin6_port);
     }
     errno = EINVAL;
 
