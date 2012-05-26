@@ -1,3 +1,99 @@
+Date:   2012-05-26
+
+    Introduce ares_set_servers_any()
+
+Date:   2012-05-26
+
+    Remove useless prototype.
+
+Date:   2012-05-26
+
+    Remove STORAGE_PORT4 and STORAGE_PORT6. All we want is STORAGE_PORT_ANY.
+
+Date:   2012-05-26
+
+    Complete IPv6 support.
+
+Date:   2012-05-26
+
+    Support IPv6 for retrieving a certificate.
+
+Date:   2012-05-26
+
+    Wrap some libuv functions to work both with IPv4 and IPv6.
+
+Date:   2012-05-25
+
+    Don't use proxy_context->(ud|tc)p_listener_handle in a function where a handle
+    is explicitly given.
+
+Date:   2012-05-25
+
+    Trim padding from replies.
+    Not supported by OpenDNS yet, so #ifdef'd.
+
+Date:   2012-05-25
+
+    libuv update to 3f0833eec07b5fbea2057c47e1c9014d3b347d35
+
+Date:   2012-05-25
+
+    Ignore log_fd on Windows.
+
+Date:   2012-05-23
+
+    Gentoo ebuiild for dnscrypt-proxy 0.9.4.
+
+Date:   2012-05-22
+
+    libuv update to d1665792ca22d30b60319199662a0399be9f1352
+
+Date:   2012-05-22
+
+    Revert USE_NONBLOCKING_RANDOM since gathering enough entropy can be way too slow on Linux.
+    Turn this switch on if your OS doesn't correctly seed /dev/urandom at boot and
+    at install time, or use a better operating system.
+
+Date:   2012-05-20
+
+    Update the Linux fpm package
+
+Date:   2012-05-20
+
+    Update the FreeBSD package
+
+Date:   2012-05-20
+
+    Update the NetBSD/Dragonfly BSD package.
+
+Date:   2012-05-20
+
+    Update Homebrew formula.
+
+Date:   2012-05-20
+
+    Update OpenBSD port.
+
+Date:   2012-05-20
+
+    Unfuck libuv on Dragonfly... Again...
+
+Date:   2012-05-20
+
+    Unbreak libuv compilation with mingw32.
+
+Date:   2012-05-20
+
+    Update the OpenBSD port
+
+Date:   2012-05-20
+
+    Update dist-files, dist-dirs
+
+Date:   2012-05-20
+
+    Update ChangeLog
+
 Date:   2012-05-20
 
     Mention the new Gentoo packages and credit David Lebel.
