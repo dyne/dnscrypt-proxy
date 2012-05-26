@@ -48,7 +48,6 @@ int uv_udp_send_any(uv_udp_send_t *req, uv_udp_t *handle, uv_buf_t bufs[],
 int uv_tcp_connect_any(uv_connect_t *req, uv_tcp_t *handle,
                        struct sockaddr_storage * const ss, uv_connect_cb cb);
 
-in_port_t *storage_port6(struct sockaddr_storage * const ss);
 in_port_t *storage_port_any(struct sockaddr_storage * const ss);
 
 #endif
