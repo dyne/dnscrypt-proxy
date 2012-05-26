@@ -29,6 +29,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+static void uv__pipe_accept(uv_loop_t* loop, uv__io_t* w, int events);
+
 
 int uv_pipe_init(uv_loop_t* loop, uv_pipe_t* handle, int ipc) {
   uv__stream_init(loop, (uv_stream_t*)handle, UV_NAMED_PIPE);
@@ -79,22 +81,10 @@ int uv_pipe_bind(uv_pipe_t* handle, const char* name) {
   uv_strlcpy(saddr.sun_path, pipe_fname, sizeof(saddr.sun_path));
   saddr.sun_family = AF_UNIX;
 
-  if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr) == -1) {
-    /* On EADDRINUSE:
-     *
-     * We hold the file lock so there is no other process listening
-     * on the socket. Ergo, it's stale - remove it.
-     *
-     * This assumes that the other process uses locking too
-     * but that's a good enough assumption for now.
-     */
-    if (errno != EADDRINUSE
-        || unlink(pipe_fname) == -1
-        || bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr) == -1) {
-      /* Convert ENOENT to EACCES for compatibility with Windows. */
-      uv__set_sys_error(handle->loop, (errno == ENOENT) ? EACCES : errno);
-      goto out;
-    }
+  if (bind(sockfd, (struct sockaddr*)&saddr, sizeof saddr)) {
+    /* Convert ENOENT to EACCES for compatibility with Windows. */
+    uv__set_sys_error(handle->loop, (errno == ENOENT) ? EACCES : errno);
+    goto out;
   }
   bound = 1;
 
@@ -138,8 +128,11 @@ int uv_pipe_listen(uv_pipe_t* handle, int backlog, uv_connection_cb cb) {
     uv__set_sys_error(handle->loop, errno);
   } else {
     handle->connection_cb = cb;
-    ev_io_init(&handle->read_watcher, uv__pipe_accept, handle->fd, EV_READ);
-    ev_io_start(handle->loop->ev, &handle->read_watcher);
+    uv__io_init(&handle->read_watcher,
+                uv__pipe_accept,
+                handle->fd,
+                UV__IO_READ);
+    uv__io_start(handle->loop, &handle->read_watcher);
   }
 
 out:
@@ -211,8 +204,8 @@ void uv_pipe_connect(uv_connect_t* req,
   uv__stream_open((uv_stream_t*)handle,
                   sockfd,
                   UV_STREAM_READABLE | UV_STREAM_WRITABLE);
-  ev_io_start(handle->loop->ev, &handle->read_watcher);
-  ev_io_start(handle->loop->ev, &handle->write_watcher);
+  uv__io_start(handle->loop, &handle->read_watcher);
+  uv__io_start(handle->loop, &handle->write_watcher);
   status = 0;
 
 out:
@@ -235,18 +228,17 @@ out:
 
 
 /* TODO merge with uv__server_io()? */
-void uv__pipe_accept(EV_P_ ev_io* watcher, int revents) {
-  struct sockaddr_un saddr;
+static void uv__pipe_accept(uv_loop_t* loop, uv__io_t* w, int events) {
   uv_pipe_t* pipe;
   int saved_errno;
   int sockfd;
 
   saved_errno = errno;
-  pipe = watcher->data;
+  pipe = container_of(w, uv_pipe_t, read_watcher);
 
   assert(pipe->type == UV_NAMED_PIPE);
 
-  sockfd = uv__accept(pipe->fd, (struct sockaddr *)&saddr, sizeof saddr);
+  sockfd = uv__accept(pipe->fd);
   if (sockfd == -1) {
     if (errno != EAGAIN && errno != EWOULDBLOCK) {
       uv__set_sys_error(pipe->loop, errno);
@@ -257,7 +249,7 @@ void uv__pipe_accept(EV_P_ ev_io* watcher, int revents) {
     pipe->connection_cb((uv_stream_t*)pipe, 0);
     if (pipe->accepted_fd == sockfd) {
       /* The user hasn't called uv_accept() yet */
-      ev_io_stop(pipe->loop->ev, &pipe->read_watcher);
+      uv__io_stop(pipe->loop, &pipe->read_watcher);
     }
   }
 

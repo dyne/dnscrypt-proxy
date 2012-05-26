@@ -66,50 +66,14 @@ void uv__loop_delete(uv_loop_t* loop) {
   uv_ares_destroy(loop, loop->channel);
   ev_loop_destroy(loop->ev);
 #if __linux__
-  if (loop->inotify_fd == -1) return;
-  ev_io_stop(loop->ev, &loop->inotify_read_watcher);
-  close(loop->inotify_fd);
-  loop->inotify_fd = -1;
+  if (loop->inotify_fd != -1) {
+    uv__io_stop(loop, &loop->inotify_read_watcher);
+    close(loop->inotify_fd);
+    loop->inotify_fd = -1;
+  }
 #endif
 #if HAVE_PORTS_FS
   if (loop->fs_fd != -1)
     close(loop->fs_fd);
 #endif
 }
-
-
-#define X(name, type) \
-  int uv_##name##_init(uv_loop_t* loop, uv_##name##_t* handle) {              \
-    uv__handle_init(loop, (uv_handle_t*)handle, type);                        \
-    loop->counters.name##_init++;                                             \
-    handle->name##_cb = NULL;                                                 \
-    return 0;                                                                 \
-  }                                                                           \
-  int uv_##name##_start(uv_##name##_t* handle, uv_##name##_cb cb) {           \
-    if (uv__is_active(handle)) return 0;                                      \
-    ngx_queue_insert_head(&handle->loop->name##_handles, &handle->queue);     \
-    handle->name##_cb = cb;                                                   \
-    uv__handle_start(handle);                                                 \
-    return 0;                                                                 \
-  }                                                                           \
-  int uv_##name##_stop(uv_##name##_t* handle) {                               \
-    if (!uv__is_active(handle)) return 0;                                     \
-    ngx_queue_remove(&handle->queue);                                         \
-    uv__handle_stop(handle);                                                  \
-    return 0;                                                                 \
-  }                                                                           \
-  void uv__run_##name(uv_loop_t* loop) {                                      \
-    uv_##name##_t* h;                                                         \
-    ngx_queue_t* q;                                                           \
-    ngx_queue_foreach(q, &loop->name##_handles) {                             \
-      h = ngx_queue_data(q, uv_##name##_t, queue);                            \
-      if (h->name##_cb) h->name##_cb(h, 0);                                   \
-    }                                                                         \
-  }                                                                           \
-  void uv__##name##_close(uv_##name##_t* handle) {                            \
-    uv_##name##_stop(handle);                                                 \
-  }
-X(idle, UV_IDLE)
-X(check, UV_CHECK)
-X(prepare, UV_PREPARE)
-#undef X

@@ -170,6 +170,7 @@
 ./src/unix/linux/inotify.c
 ./src/unix/linux/syscalls.c
 ./src/unix/linux/syscalls.h
+./src/unix/loop-watcher.c
 ./src/unix/loop.c
 ./src/unix/netbsd.c
 ./src/unix/openbsd.c
@@ -216,6 +217,7 @@
 ./test/benchmark-ares.c
 ./test/benchmark-getaddrinfo.c
 ./test/benchmark-list.h
+./test/benchmark-loop-count.c
 ./test/benchmark-ping-pongs.c
 ./test/benchmark-pound.c
 ./test/benchmark-pump.c
@@ -246,7 +248,6 @@
 ./test/test-cwd-and-chdir.c
 ./test/test-delayed-accept.c
 ./test/test-dlerror.c
-./test/test-eio-overflow.c
 ./test/test-error.c
 ./test/test-fail-always.c
 ./test/test-fs-event.c

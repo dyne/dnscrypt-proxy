@@ -21,6 +21,7 @@
 
 TEST_DECLARE   (platform_output)
 TEST_DECLARE   (callback_order)
+TEST_DECLARE   (run_once)
 TEST_DECLARE   (tty)
 TEST_DECLARE   (stdio_over_pipes)
 TEST_DECLARE   (ipc_listen_before_write)
@@ -76,6 +77,7 @@ TEST_DECLARE   (callback_stack)
 TEST_DECLARE   (error_message)
 TEST_DECLARE   (timer)
 TEST_DECLARE   (timer_again)
+TEST_DECLARE   (timer_start_twice)
 TEST_DECLARE   (idle_starvation)
 TEST_DECLARE   (loop_handles)
 TEST_DECLARE   (get_loadavg)
@@ -153,7 +155,6 @@ TEST_DECLARE   (fs_open_dir)
 TEST_DECLARE   (fs_rename_to_existing_file)
 TEST_DECLARE   (threadpool_queue_work_simple)
 TEST_DECLARE   (threadpool_multiple_event_loops)
-TEST_DECLARE   (eio_overflow)
 TEST_DECLARE   (thread_mutex)
 TEST_DECLARE   (thread_rwlock)
 TEST_DECLARE   (thread_create)
@@ -182,7 +183,11 @@ HELPER_DECLARE (pipe_echo_server)
 TASK_LIST_START
   TEST_OUTPUT_ENTRY  (platform_output)
 
+#if 0
   TEST_ENTRY  (callback_order)
+#endif
+  TEST_ENTRY  (run_once)
+
   TEST_ENTRY  (pipe_connect_bad_name)
   TEST_ENTRY  (pipe_connect_to_file)
 
@@ -262,6 +267,7 @@ TASK_LIST_START
 
   TEST_ENTRY  (timer)
   TEST_ENTRY  (timer_again)
+  TEST_ENTRY  (timer_start_twice)
 
   TEST_ENTRY  (idle_starvation)
 
@@ -370,7 +376,6 @@ TASK_LIST_START
   TEST_ENTRY  (fs_rename_to_existing_file)
   TEST_ENTRY  (threadpool_queue_work_simple)
   TEST_ENTRY  (threadpool_multiple_event_loops)
-  TEST_ENTRY  (eio_overflow)
   TEST_ENTRY  (thread_mutex)
   TEST_ENTRY  (thread_rwlock)
   TEST_ENTRY  (thread_create)
