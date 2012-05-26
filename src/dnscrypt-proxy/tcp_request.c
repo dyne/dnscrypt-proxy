@@ -398,12 +398,13 @@ bye:
 }
 
 static void
-tcp_connection_cb(uv_stream_t *handle, int status)
+tcp_connection_cb(uv_stream_t *tcp_listener_handle, int status)
 {
-    ProxyContext *proxy_context = handle->data;
+    ProxyContext *proxy_context = tcp_listener_handle->data;
     TCPRequest   *tcp_request;
 
-    assert((uv_tcp_t *) handle == &proxy_context->tcp_listener_handle);
+    assert((uv_tcp_t *) tcp_listener_handle
+           == &proxy_context->tcp_listener_handle);
     if (status < 0) {
         return;
     }
@@ -425,7 +426,7 @@ tcp_connection_cb(uv_stream_t *handle, int status)
     tcp_request->dns_packet_expected_len = (size_t) 0U;
     uv_tcp_init(tcp_request->proxy_context->event_loop,
                 &tcp_request->client_proxy_handle);
-    if (uv_accept((uv_stream_t *) &proxy_context->tcp_listener_handle,
+    if (uv_accept((uv_stream_t *) tcp_listener_handle,
                   (uv_stream_t *) &tcp_request->client_proxy_handle) != 0) {
         DNSCRYPT_PROXY_REQUEST_TCP_OVERLOADED();
         free(tcp_request);

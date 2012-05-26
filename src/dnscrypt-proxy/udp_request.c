@@ -244,17 +244,17 @@ udp_tune(uv_udp_t * const handle)
 }
 
 static void
-client_to_proxy_cb(uv_udp_t *handle, ssize_t nread, uv_buf_t buf,
+client_to_proxy_cb(uv_udp_t *udp_listener_handle, ssize_t nread, uv_buf_t buf,
                    struct sockaddr *client_addr, unsigned flags)
 {
-    ProxyContext *proxy_context = handle->data;
+    ProxyContext *proxy_context = udp_listener_handle->data;
     UDPRequest   *udp_request;
     ssize_t       curve_ret;
     size_t        max_packet_size;
     size_t        request_edns_payload_size;
 
     (void) flags;
-    assert(handle == &proxy_context->udp_listener_handle);
+    assert(udp_listener_handle == &proxy_context->udp_listener_handle);
     if (nread == (ssize_t) 0) {
         uv_alloc_release_buffer(proxy_context, &buf);
         return;
@@ -285,7 +285,7 @@ client_to_proxy_cb(uv_udp_t *handle, ssize_t nread, uv_buf_t buf,
     ngx_queue_insert_head(&proxy_context->udp_request_queue,
                           (ngx_queue_t *) udp_request);
     udp_request->proxy_context = proxy_context;
-    udp_request->client_proxy_handle_p = &proxy_context->udp_listener_handle;
+    udp_request->client_proxy_handle_p = udp_listener_handle;
     udp_request->proxy_resolver_handle.data = NULL;
     memset(&udp_request->status, 0, sizeof udp_request->status);
 
