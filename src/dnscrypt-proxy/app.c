@@ -36,6 +36,7 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     struct sockaddr_storage resolver_addr;
 
     memset(proxy_context, 0, sizeof *proxy_context);
+    proxy_context->event_loop = uv_loop_new();
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
@@ -49,7 +50,6 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     memcpy(&proxy_context->resolver_addr, &resolver_addr,
            STORAGE_LEN(resolver_addr));
     uv_alloc_init(proxy_context);
-    proxy_context->event_loop = uv_loop_new();
 
     return 0;
 }
