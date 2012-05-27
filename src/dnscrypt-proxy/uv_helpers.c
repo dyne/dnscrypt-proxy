@@ -2,14 +2,19 @@
 #include <config.h>
 #include <sys/types.h>
 #ifdef _WIN32
+# if !defined(WINVER) || WINVER < 0x0501
+#  undef WINVER
+#  define WINVER 0x0501
+# endif
 # include <winsock2.h>
+# include <ws2tcpip.h>
 #else
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <netdb.h>
 #endif
 
 #include <errno.h>
-#include <netdb.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
