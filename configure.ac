@@ -255,7 +255,7 @@ AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
   AC_CHECK_LIB([ws2_32], [_head_libws2_32_a])
   AC_CHECK_LIB([psapi], [_head_libpsapi_a])
   AC_CHECK_LIB([iphlpapi], [_head_libiphlpapi_a])
-], [ ])
+])
 
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
