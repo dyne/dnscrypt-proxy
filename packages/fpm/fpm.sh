@@ -1,6 +1,6 @@
 #! /bin/sh
 
-VERSION="0.9.4"
+VERSION="0.9.5"
 MAINTAINER="OpenDNS Inc <dnscrypt@opendns.com>"
 CATEGORY="net"
 URL="https://github.com/opendns/dnscrypt-proxy"
@@ -23,7 +23,6 @@ PKG_NAME="dnscrypt-proxy"
 COPYRIGHT_FILE="COPYING"
 DEBIAN_COPYRIGHT_FILE="${INSTALL_DIR}/share/doc/${PKG_NAME}/copyright"
 DEBIAN_CHANGELOG_FILE="${INSTALL_DIR}/share/doc/${PKG_NAME}/changelog.gz"
-DEPENDS="libc6"
 LICENSE="bsd"
 
 export TZ=""
@@ -55,6 +54,6 @@ sudo chown -R 0:0 "$BASE_DIR" || exit 1
 for t in deb rpm; do
   fpm -s dir -t "$t" -n "$PKG_NAME" -v "$VERSION" -C "$BASE_DIR" \
     -m "$MAINTAINER" --category "$CATEGORY" --url "$URL" --license "$LICENSE" \
-    --vendor "$VENDOR" --description "$DESCRIPTION" --depends "$DEPENDS" \
+    --vendor "$VENDOR" --description "$DESCRIPTION" \
     .
 done
