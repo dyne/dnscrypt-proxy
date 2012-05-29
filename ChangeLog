@@ -1,3 +1,44 @@
+Date:   2012-05-28
+
+    Make sure that the event loop is always NULL before parsing options.
+
+Date:   2012-05-28
+
+    Don't call anything from libuv before fork()ing.
+    Since libuv will never be fork()-safe.
+
+Date:   2012-05-28
+
+    Initialize options one by one. Fixes dnscrypt on iOS.
+
+Date:   2012-05-28
+
+    Log when uv_loop_new() fails.
+
+Date:   2012-05-27
+
+    Remove libc6 dependency for RPMs because Fedora apparently doesn't like it.
+
+Date:   2012-05-27
+
+    We need to somehow call WSAStartup before trying to perform any lookups on Win32.
+
+Date:   2012-05-27
+
+    Unfuck Win32 build
+
+Date:   2012-05-26
+
+    Fix Cygwin test
+
+Date:   2012-05-26
+
+    Update NEWS
+
+Date:   2012-05-26
+
+    Bump version to 0.9.5, but don't tag yet.
+
 Date:   2012-05-26
 
     Introduce ares_set_servers_any()

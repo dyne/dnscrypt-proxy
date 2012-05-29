@@ -204,8 +204,7 @@ static void uv__poll(uv_loop_t* loop, int block) {
 
 
 static int uv__should_block(uv_loop_t* loop) {
-  return ngx_queue_empty(&loop->idle_handles)
-      && !ngx_queue_empty(&loop->active_handles);
+  return loop->active_handles && ngx_queue_empty(&loop->idle_handles);
 }
 
 
@@ -317,8 +316,7 @@ static int uv_getaddrinfo_done(eio_req* req_) {
   uv_getaddrinfo_t* req = req_->data;
   struct addrinfo *res = req->res;
 #if __sun
-  uv_getaddrinfo_t* handle = req->data;
-  size_t hostlen = strlen(handle->hostname);
+  size_t hostlen = strlen(req->hostname);
 #endif
 
   req->res = NULL;
