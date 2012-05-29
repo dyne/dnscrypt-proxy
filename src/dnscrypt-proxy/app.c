@@ -36,11 +36,11 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     struct sockaddr_storage resolver_addr;
 
     memset(proxy_context, 0, sizeof *proxy_context);
-    if ((proxy_context->event_loop = uv_loop_new()) == NULL) {
-        logger(NULL, LOG_ERR, "Unable to initialize the UV event loop");
+    if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
-    if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
+    if ((proxy_context->event_loop = uv_loop_new()) == NULL) {
+        logger(NULL, LOG_ERR, "Unable to initialize the UV event loop");
         return -1;
     }
     if (uv_addr_any(&resolver_addr, proxy_context->resolver_ip,
