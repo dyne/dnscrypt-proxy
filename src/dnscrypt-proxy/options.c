@@ -97,28 +97,26 @@ static
 void options_init_with_default(AppContext * const app_context,
                                ProxyContext * const proxy_context)
 {
-    *proxy_context = (ProxyContext) {
-        .app_context = app_context,
-        .connections_count = 0U,
-        .connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX,
-        .edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE,
-        .local_ip = "127.0.0.1",
-        .local_port = DNS_DEFAULT_PORT,
-        .log_fd = -1,
-        .log_file = NULL,
-        .pid_file = NULL,
-        .provider_name = DEFAULT_PROVIDER_NAME,
-        .provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY,
-        .resolver_ip = DEFAULT_RESOLVER_IP,
-        .resolver_port = DNS_DEFAULT_PORT,
+    proxy_context->app_context = app_context;
+    proxy_context->connections_count = 0U;
+    proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
+    proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
+    proxy_context->local_ip = "127.0.0.1";
+    proxy_context->local_port = DNS_DEFAULT_PORT;
+    proxy_context->log_fd = -1;
+    proxy_context->log_file = NULL;
+    proxy_context->pid_file = NULL;
+    proxy_context->provider_name = DEFAULT_PROVIDER_NAME;
+    proxy_context->provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY;
+    proxy_context->resolver_ip = DEFAULT_RESOLVER_IP;
+    proxy_context->resolver_port = DNS_DEFAULT_PORT;
 #ifndef _WIN32
-        .user_id = (uid_t) 0,
-        .user_group = (uid_t) 0,
+    proxy_context->user_id = (uid_t) 0;
+    proxy_context->user_group = (uid_t) 0;
 #endif
-        .user_dir = NULL,
-        .daemonize = 0,
-        .tcp_only = 0
-    };
+    proxy_context->user_dir = NULL;
+    proxy_context->daemonize = 0;
+    proxy_context->tcp_only = 0;
 }
 
 static int
