@@ -97,6 +97,7 @@ static
 void options_init_with_default(AppContext * const app_context,
                                ProxyContext * const proxy_context)
 {
+    assert(proxy_context->event_loop == NULL);
     proxy_context->app_context = app_context;
     proxy_context->connections_count = 0U;
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;

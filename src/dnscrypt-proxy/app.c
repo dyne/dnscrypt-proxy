@@ -36,6 +36,7 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     struct sockaddr_storage resolver_addr;
 
     memset(proxy_context, 0, sizeof *proxy_context);
+    proxy_context->event_loop = NULL;
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
