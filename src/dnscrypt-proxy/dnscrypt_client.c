@@ -127,7 +127,7 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
          nonce, client->nmkey)) {
         return -1;
     }
-    memset(nonce, 0, sizeof nonce);
+    memset((volatile uint8_t *) nonce, 0, sizeof nonce);
     assert(len >= DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
 #ifdef TRIM_PADDING_FROM_REPLIES
     assert(buf[DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES] != 0U);
