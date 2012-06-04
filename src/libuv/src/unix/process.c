@@ -28,6 +28,7 @@
 #include <poll.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #if defined(__APPLE__)
 # include <TargetConditionals.h>
@@ -141,33 +142,39 @@ int uv__make_pipe(int fds[2], int flags) {
  */
 static int uv__process_init_stdio(uv_stdio_container_t* container, int fds[2],
                                   int writable) {
-  if (container->flags == UV_IGNORE) {
-    return 0;
-  } else if (container->flags & UV_CREATE_PIPE) {
-    assert(container->data.stream != NULL);
+  int fd = -1;
+  switch (container->flags & (UV_IGNORE | UV_CREATE_PIPE | UV_INHERIT_FD |
+                              UV_INHERIT_STREAM)) {
+    case UV_IGNORE:
+      return 0;
+    case UV_CREATE_PIPE:
+      assert(container->data.stream != NULL);
 
-    if (container->data.stream->type != UV_NAMED_PIPE) {
-      errno = EINVAL;
+      if (container->data.stream->type != UV_NAMED_PIPE) {
+        errno = EINVAL;
+        return -1;
+      }
+
+      return uv__make_socketpair(fds, 0);
+    case UV_INHERIT_FD:
+    case UV_INHERIT_STREAM:
+      if (container->flags & UV_INHERIT_FD) {
+        fd = container->data.fd;
+      } else {
+        fd = container->data.stream->fd;
+      }
+
+      if (fd == -1) {
+        errno = EINVAL;
+        return -1;
+      }
+
+      fds[writable ? 1 : 0] = fd;
+
+      return 0;
+    default:
+      assert(0 && "Unexpected flags");
       return -1;
-    }
-
-    return uv__make_socketpair(fds, 0);
-  } else if (container->flags & UV_RAW_FD) {
-    if (container->data.fd == -1) {
-      errno = EINVAL;
-      return -1;
-    }
-
-    if (writable) {
-      fds[1] = container->data.fd;
-    } else {
-      fds[0] = container->data.fd;
-    }
-
-    return 0;
-  } else {
-    assert(0 && "Unexpected flags");
-    return -1;
   }
 }
 
@@ -212,6 +219,68 @@ static void uv__process_close_stream(uv_stdio_container_t* container) {
   uv__stream_close((uv_stream_t*)container->data.stream);
 }
 
+
+static void uv__process_child_init(uv_process_options_t options,
+                                   int stdio_count,
+                                   int* pipes) {
+  int i;
+
+  if (options.flags & UV_PROCESS_DETACHED) {
+    setsid();
+  }
+
+  /* Dup fds */
+  for (i = 0; i < stdio_count; i++) {
+    /*
+     * stdin has swapped ends of pipe
+     * (it's the only one readable stream)
+     */
+    int close_fd = i == 0 ? pipes[i * 2 + 1] : pipes[i * 2];
+    int use_fd = i == 0 ? pipes[i * 2] : pipes[i * 2 + 1];
+
+    if (use_fd >= 0) {
+      close(close_fd);
+    } else if (i < 3) {
+      /* `/dev/null` stdin, stdout, stderr even if they've flag UV_IGNORE */
+      use_fd = open("/dev/null", i == 0 ? O_RDONLY : O_RDWR);
+
+      if (use_fd < 0) {
+        perror("failed to open stdio");
+        _exit(127);
+      }
+    } else {
+      continue;
+    }
+
+    if (i != use_fd) {
+      dup2(use_fd, i);
+      close(use_fd);
+    }
+  }
+
+  if (options.cwd && chdir(options.cwd)) {
+    perror("chdir()");
+    _exit(127);
+  }
+
+  if ((options.flags & UV_PROCESS_SETGID) && setgid(options.gid)) {
+    perror("setgid()");
+    _exit(127);
+  }
+
+  if ((options.flags & UV_PROCESS_SETUID) && setuid(options.uid)) {
+    perror("setuid()");
+    _exit(127);
+  }
+
+  environ = options.env;
+
+  execvp(options.file, options.args);
+  perror("execvp()");
+  _exit(127);
+}
+
+
 #ifndef SPAWN_WAIT_EXEC
 # define SPAWN_WAIT_EXEC 1
 #endif
@@ -224,7 +293,8 @@ int uv_spawn(uv_loop_t* loop, uv_process_t* process,
    */
   char** save_our_env = environ;
 
-  int* pipes = malloc(2 * options.stdio_count * sizeof(int));
+  int stdio_count = options.stdio_count < 3 ? 3 : options.stdio_count;
+  int* pipes = malloc(2 * stdio_count * sizeof(int));
 
 #if SPAWN_WAIT_EXEC
   int signal_pipe[2] = { -1, -1 };
@@ -241,6 +311,7 @@ int uv_spawn(uv_loop_t* loop, uv_process_t* process,
 
   assert(options.file != NULL);
   assert(!(options.flags & ~(UV_PROCESS_WINDOWS_VERBATIM_ARGUMENTS |
+                             UV_PROCESS_DETACHED |
                              UV_PROCESS_SETGID |
                              UV_PROCESS_SETUID)));
 
@@ -252,7 +323,7 @@ int uv_spawn(uv_loop_t* loop, uv_process_t* process,
   process->exit_cb = options.exit_cb;
 
   /* Init pipe pairs */
-  for (i = 0; i < options.stdio_count; i++) {
+  for (i = 0; i < stdio_count; i++) {
     pipes[i * 2] = -1;
     pipes[i * 2 + 1] = -1;
   }
@@ -302,46 +373,8 @@ int uv_spawn(uv_loop_t* loop, uv_process_t* process,
 
   if (pid == 0) {
     /* Child */
+    uv__process_child_init(options, stdio_count, pipes);
 
-    /* Dup fds */
-    for (i = 0; i < options.stdio_count; i++) {
-      /*
-       * stdin has swapped ends of pipe
-       * (it's the only one readable stream)
-       */
-      int close_fd = i == 0 ? pipes[i * 2 + 1] : pipes[i * 2];
-      int use_fd = i == 0 ? pipes[i * 2] : pipes[i * 2 + 1];
-
-      if (use_fd >= 0) {
-        close(close_fd);
-        dup2(use_fd, i);
-      } else {
-        /* Reset flags that might be set by Node */
-        uv__cloexec(i, 0);
-        uv__nonblock(i, 0);
-      }
-    }
-
-    if (options.cwd && chdir(options.cwd)) {
-      perror("chdir()");
-      _exit(127);
-    }
-
-    if ((options.flags & UV_PROCESS_SETGID) && setgid(options.gid)) {
-      perror("setgid()");
-      _exit(127);
-    }
-
-    if ((options.flags & UV_PROCESS_SETUID) && setuid(options.uid)) {
-      perror("setuid()");
-      _exit(127);
-    }
-
-    environ = options.env;
-
-    execvp(options.file, options.args);
-    perror("execvp()");
-    _exit(127);
     /* Execution never reaches here. */
   }
 
@@ -390,7 +423,7 @@ int uv_spawn(uv_loop_t* loop, uv_process_t* process,
 error:
   uv__set_sys_error(process->loop, errno);
 
-  for (i = 0; i < options.stdio_count; i++) {
+  for (i = 0; i < stdio_count; i++) {
     close(pipes[i * 2]);
     close(pipes[i * 2 + 1]);
   }

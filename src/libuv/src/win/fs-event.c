@@ -19,14 +19,16 @@
  * IN THE SOFTWARE.
  */
 
-#include "uv.h"
-#include "internal.h"
-
 #include <assert.h>
 #include <malloc.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "uv.h"
+#include "internal.h"
+#include "handle-inl.h"
+#include "req-inl.h"
 
 
 const unsigned int uv_directory_watcher_buffer_size = 4096;
@@ -479,7 +481,6 @@ void uv_fs_event_endgame(uv_loop_t* loop, uv_fs_event_t* handle) {
   if (handle->flags & UV_HANDLE_CLOSING &&
       !handle->req_pending) {
     assert(!(handle->flags & UV_HANDLE_CLOSED));
-    handle->flags |= UV_HANDLE_CLOSED;
     uv__handle_stop(handle);
 
     if (handle->buffer) {
@@ -507,8 +508,6 @@ void uv_fs_event_endgame(uv_loop_t* loop, uv_fs_event_t* handle) {
       handle->dirw = NULL;
     }
 
-    if (handle->close_cb) {
-      handle->close_cb((uv_handle_t*)handle);
-    }
+    uv__handle_close(handle);
   }
 }

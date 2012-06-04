@@ -87,7 +87,7 @@ size_t uv_strlcat(char* dst, const char* src, size_t size) {
 }
 
 
-uv_buf_t uv_buf_init(char* base, size_t len) {
+uv_buf_t uv_buf_init(char* base, unsigned int len) {
   uv_buf_t buf;
   buf.base = base;
   buf.len = len;
@@ -314,6 +314,18 @@ int uv_thread_create(uv_thread_t *tid, void (*entry)(void *arg), void *arg) {
   }
 
   return 0;
+}
+
+
+void uv_walk(uv_loop_t* loop, uv_walk_cb walk_cb, void* arg) {
+  ngx_queue_t* q;
+  uv_handle_t* h;
+
+  ngx_queue_foreach(q, &loop->handle_queue) {
+    h = ngx_queue_data(q, uv_handle_t, handle_queue);
+    if (h->flags & UV__HANDLE_INTERNAL) continue;
+    walk_cb(h, arg);
+  }
 }
 
 
