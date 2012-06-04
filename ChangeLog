@@ -1,3 +1,20 @@
+Date:   2012-06-04
+
+    Update libuv to 0dff0e7d47453fafb72a287c0acdddd6e3f2d9de
+    A big and scary update.
+
+Date:   2012-05-29
+
+    Avoid compiler optimizations.
+
+Date:   2012-05-28
+
+    Update the plist file to use port 443 by default.
+
+Date:   2012-05-28
+
+    libuv update to 75565907073055dd717fb6a6074518cafdd9355d
+
 Date:   2012-05-28
 
     Make sure that the event loop is always NULL before parsing options.
