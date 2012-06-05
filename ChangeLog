@@ -1,3 +1,12 @@
+Date:   2012-06-05
+
+    Send the initial query through ares to whatever port has been specified
+    using --resolver-port even using UDP.
+
+Date:   2012-06-05
+
+    More libuv cherrypicks
+
 Date:   2012-06-04
 
     libuv cherrypicks
