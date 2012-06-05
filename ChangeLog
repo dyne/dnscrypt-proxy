@@ -1,5 +1,13 @@
 Date:   2012-06-05
 
+    Implement dnscrypt_memzero() instead of using a volatile cast.
+
+Date:   2012-06-05
+
+    Update ChangeLog
+
+Date:   2012-06-05
+
     Send the initial query through ares to whatever port has been specified
     using --resolver-port even using UDP.
 
