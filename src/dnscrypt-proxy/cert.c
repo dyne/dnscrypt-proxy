@@ -296,12 +296,12 @@ cert_updater_init(ProxyContext * const proxy_context)
     assert(proxy_context->event_loop != NULL);
     cert_updater->has_cert_timer = 0;
     cert_updater->query_retry_step = 0U;
-    ar_options_mask = 0;
+    ar_options_mask = ARES_OPT_UDP_PORT | ARES_OPT_TCP_PORT;
+    cert_updater->ar_options.udp_port = cert_updater->ar_options.tcp_port =
+        STORAGE_PORT_ANY(proxy_context->resolver_addr);
     if (proxy_context->tcp_only != 0) {
-        ar_options_mask = ARES_OPT_FLAGS | ARES_OPT_TCP_PORT;
+        ar_options_mask |= ARES_OPT_FLAGS;
         cert_updater->ar_options.flags = ARES_FLAG_USEVC;
-        cert_updater->ar_options.tcp_port =
-            STORAGE_PORT_ANY(proxy_context->resolver_addr);
     }
     if (uv_ares_init_options(proxy_context->event_loop,
                              &cert_updater->ar_channel,
