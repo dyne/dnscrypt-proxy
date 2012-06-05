@@ -1,3 +1,75 @@
+Date:   2012-06-04
+
+    Revert libuv to 3f0833eec07b5fbea2057c47e1c9014d3b347d35
+    Something looks broken on Linux between this revision and 75565907073055dd717fb6a6074518cafdd9355d.
+
+Date:   2012-06-04
+
+    libuv update to 7d2ea316183ba29a8ab5883593d1f6ee6f8f8ae3
+    unix: fix event loop stall
+
+Date:   2012-06-04
+
+    ChangeLog update.
+
+Date:   2012-06-04
+
+    Update libuv to 0dff0e7d47453fafb72a287c0acdddd6e3f2d9de
+    A big and scary update.
+
+Date:   2012-05-29
+
+    Avoid compiler optimizations.
+
+Date:   2012-05-28
+
+    Update the plist file to use port 443 by default.
+
+Date:   2012-05-28
+
+    libuv update to 75565907073055dd717fb6a6074518cafdd9355d
+
+Date:   2012-05-28
+
+    Make sure that the event loop is always NULL before parsing options.
+
+Date:   2012-05-28
+
+    Don't call anything from libuv before fork()ing.
+    Since libuv will never be fork()-safe.
+
+Date:   2012-05-28
+
+    Initialize options one by one. Fixes dnscrypt on iOS.
+
+Date:   2012-05-28
+
+    Log when uv_loop_new() fails.
+
+Date:   2012-05-27
+
+    Remove libc6 dependency for RPMs because Fedora apparently doesn't like it.
+
+Date:   2012-05-27
+
+    We need to somehow call WSAStartup before trying to perform any lookups on Win32.
+
+Date:   2012-05-27
+
+    Unfuck Win32 build
+
+Date:   2012-05-26
+
+    Fix Cygwin test
+
+Date:   2012-05-26
+
+    Update NEWS
+
+Date:   2012-05-26
+
+    Bump version to 0.9.5, but don't tag yet.
+
 Date:   2012-05-26
 
     Introduce ares_set_servers_any()
