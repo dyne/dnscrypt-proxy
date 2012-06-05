@@ -218,7 +218,7 @@ out:
   ngx_queue_init(&req->queue);
 
   /* Run callback on next tick. */
-  uv__io_feed(handle->loop, &handle->write_watcher, UV__IO_WRITE);
+  uv__make_pending(handle);
 
   /* Mimic the Windows pipe implementation, always
    * return 0 and let the callback handle errors.

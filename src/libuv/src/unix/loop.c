@@ -36,16 +36,17 @@ int uv__loop_init(uv_loop_t* loop, int default_loop) {
 
   memset(loop, 0, sizeof(*loop));
 
-  RB_INIT(&loop->ares_handles);
-  RB_INIT(&loop->timer_handles);
+#ifndef UV_LEAN_AND_MEAN
+  ngx_queue_init(&loop->active_handles);
   ngx_queue_init(&loop->active_reqs);
+#endif
+
+  RB_INIT(&loop->ares_handles);
   ngx_queue_init(&loop->idle_handles);
   ngx_queue_init(&loop->check_handles);
   ngx_queue_init(&loop->prepare_handles);
-  ngx_queue_init(&loop->handle_queue);
-  loop->closing_handles = NULL;
+  loop->pending_handles = NULL;
   loop->channel = NULL;
-  loop->time = uv_hrtime() / 1000000;
   loop->ev = (default_loop ? ev_default_loop : ev_loop_new)(flags);
   ev_set_userdata(loop->ev, loop);
   eio_channel_init(&loop->uv_eio_channel, loop);

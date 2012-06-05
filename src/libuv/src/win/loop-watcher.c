@@ -23,7 +23,6 @@
 
 #include "uv.h"
 #include "internal.h"
-#include "handle-inl.h"
 
 
 void uv_loop_watcher_endgame(uv_loop_t* loop, uv_handle_t* handle) {
@@ -31,7 +30,10 @@ void uv_loop_watcher_endgame(uv_loop_t* loop, uv_handle_t* handle) {
     assert(!(handle->flags & UV_HANDLE_CLOSED));
     handle->flags |= UV_HANDLE_CLOSED;
     uv__handle_stop(handle);
-    uv__handle_close(handle);
+
+    if (handle->close_cb) {
+      handle->close_cb(handle);
+    }
   }
 }
 

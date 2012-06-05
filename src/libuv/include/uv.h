@@ -301,7 +301,6 @@ typedef void (*uv_exit_cb)(uv_process_t*, int exit_status, int term_signal);
 typedef void (*uv_fs_cb)(uv_fs_t* req);
 typedef void (*uv_work_cb)(uv_work_t* req);
 typedef void (*uv_after_work_cb)(uv_work_t* req);
-typedef void (*uv_walk_cb)(uv_handle_t* handle, void* arg);
 
 /*
 * This will be called repeatedly after the uv_fs_event_t is initialized.
@@ -335,12 +334,17 @@ UV_EXTERN uv_err_t uv_last_error(uv_loop_t*);
 UV_EXTERN const char* uv_strerror(uv_err_t err);
 UV_EXTERN const char* uv_err_name(uv_err_t err);
 
+#ifndef UV_LEAN_AND_MEAN
+# define UV_REQ_EXTRA_FIELDS ngx_queue_t active_queue;
+#else
+# define UV_REQ_EXTRA_FIELDS
+#endif
 
 #define UV_REQ_FIELDS \
   /* public */ \
   void* data; \
+  UV_REQ_EXTRA_FIELDS \
   /* private */ \
-  ngx_queue_t active_queue; \
   UV_REQ_PRIVATE_FIELDS \
   /* read-only */ \
   uv_req_type type; \
@@ -374,6 +378,12 @@ struct uv_shutdown_s {
 };
 
 
+#ifndef UV_LEAN_AND_MEAN
+# define UV_HANDLE_EXTRA_FIELDS ngx_queue_t active_queue;
+#else
+# define UV_HANDLE_EXTRA_FIELDS
+#endif
+
 #define UV_HANDLE_FIELDS                                                      \
   /* read-only */                                                             \
   uv_loop_t* loop;                                                            \
@@ -383,8 +393,8 @@ struct uv_shutdown_s {
   /* read-only */                                                             \
   uv_handle_type type;                                                        \
   /* private */                                                               \
-  ngx_queue_t handle_queue;                                                   \
   UV_HANDLE_PRIVATE_FIELDS                                                    \
+  UV_HANDLE_EXTRA_FIELDS                                                      \
 
 /* The abstract base class of all handles.  */
 struct uv_handle_s {
@@ -410,12 +420,6 @@ UV_EXTERN size_t uv_req_size(uv_req_type type);
 UV_EXTERN int uv_is_active(const uv_handle_t* handle);
 
 /*
- * Walk the list of open handles.
- */
-UV_EXTERN void uv_walk(uv_loop_t* loop, uv_walk_cb walk_cb, void* arg);
-
-
-/*
  * Request handle to be closed. close_cb will be called asynchronously after
  * this call. This MUST be called on each handle before memory is released.
  *
@@ -432,7 +436,7 @@ UV_EXTERN void uv_close(uv_handle_t* handle, uv_close_cb close_cb);
  * base and len members of the uv_buf_t struct. The user is responsible for
  * freeing base after the uv_buf_t is done. Return struct passed by value.
  */
-UV_EXTERN uv_buf_t uv_buf_init(char* base, unsigned int len);
+UV_EXTERN uv_buf_t uv_buf_init(char* base, size_t len);
 
 
 /*
@@ -1164,29 +1168,6 @@ UV_EXTERN int uv_getaddrinfo(uv_loop_t*, uv_getaddrinfo_t* handle,
 UV_EXTERN void uv_freeaddrinfo(struct addrinfo* ai);
 
 /* uv_spawn() options */
-typedef enum {
-  UV_IGNORE         = 0x00,
-  UV_CREATE_PIPE    = 0x01,
-  UV_INHERIT_FD     = 0x02,
-  UV_INHERIT_STREAM = 0x04,
-
-  /* When UV_CREATE_PIPE is specified, UV_READABLE_PIPE and UV_WRITABLE_PIPE
-   * determine the direction of flow, from the child process' perspective. Both
-   * flags may be specified to create a duplex data stream.
-   */
-  UV_READABLE_PIPE  = 0x10,
-  UV_WRITABLE_PIPE  = 0x20
-} uv_stdio_flags;
-
-typedef struct uv_stdio_container_s {
-  uv_stdio_flags flags;
-
-  union {
-    uv_stream_t* stream;
-    int fd;
-  } data;
-} uv_stdio_container_t;
-
 typedef struct uv_process_options_s {
   uv_exit_cb exit_cb; /* Called after the process exits. */
   const char* file; /* Path to program to execute. */
@@ -1219,18 +1200,14 @@ typedef struct uv_process_options_s {
    */
   uv_uid_t uid;
   uv_gid_t gid;
-
   /*
-   * The `stdio` field points to an array of uv_stdio_container_t structs that
-   * describe the file descriptors that will be made available to the child
-   * process. The convention is that stdio[0] points to stdin, fd 1 is used for
-   * stdout, and fd 2 is stderr.
-   *
-   * Note that on windows file descriptors greater than 2 are available to the
-   * child process only if the child processes uses the MSVCRT runtime.
+   * The user should supply pointers to initialized uv_pipe_t structs for
+   * stdio. This is used to to send or receive input from the subprocess.
+   * The user is responsible for calling uv_close on them.
    */
-  int stdio_count;
-  uv_stdio_container_t* stdio;
+  uv_pipe_t* stdin_stream;
+  uv_pipe_t* stdout_stream;
+  uv_pipe_t* stderr_stream;
 } uv_process_options_t;
 
 /*
@@ -1254,15 +1231,7 @@ enum uv_process_flags {
    * converting the argument list into a command line string. This option is
    * only meaningful on Windows systems. On unix it is silently ignored.
    */
-  UV_PROCESS_WINDOWS_VERBATIM_ARGUMENTS = (1 << 2),
-  /*
-   * Spawn the child process in a detached state - this will make it a process
-   * group leader, and will effectively enable the child to keep running after
-   * the parent exits.  Note that the child process will still keep the
-   * parent's event loop alive unless the parent process calls uv_unref() on
-   * the child's process handle.
-   */
-  UV_PROCESS_DETACHED = (1 << 3)
+  UV_PROCESS_WINDOWS_VERBATIM_ARGUMENTS = (1 << 2)
 };
 
 /*
@@ -1624,15 +1593,6 @@ UV_EXTERN void uv_rwlock_wrlock(uv_rwlock_t* rwlock);
 UV_EXTERN int uv_rwlock_trywrlock(uv_rwlock_t* rwlock);
 UV_EXTERN void uv_rwlock_wrunlock(uv_rwlock_t* rwlock);
 
-/*
- * Same goes for the semaphore functions.
- */
-UV_EXTERN int uv_sem_init(uv_sem_t* sem, unsigned int value);
-UV_EXTERN void uv_sem_destroy(uv_sem_t* sem);
-UV_EXTERN void uv_sem_post(uv_sem_t* sem);
-UV_EXTERN void uv_sem_wait(uv_sem_t* sem);
-UV_EXTERN int uv_sem_trywait(uv_sem_t* sem);
-
 /* Runs a function once and only once. Concurrent calls to uv_once() with the
  * same guard will block all callers except one (it's unspecified which one).
  * The guard should be initialized statically with the UV_ONCE_INIT macro.
@@ -1699,12 +1659,15 @@ struct uv_loop_s {
   uv_counters_t counters;
   /* The last error */
   uv_err_t last_err;
-  /* Loop reference counting */
-  unsigned int active_handles;
-  ngx_queue_t handle_queue;
-  ngx_queue_t active_reqs;
   /* User data - use this for whatever. */
   void* data;
+#ifndef UV_LEAN_AND_MEAN
+  ngx_queue_t active_reqs;
+  ngx_queue_t active_handles;
+#else
+  unsigned int active_reqs;
+  unsigned int active_handles;
+#endif
 };
 
 

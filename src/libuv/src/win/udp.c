@@ -23,9 +23,6 @@
 
 #include "uv.h"
 #include "internal.h"
-#include "handle-inl.h"
-#include "stream-inl.h"
-#include "req-inl.h"
 
 
 /*
@@ -158,8 +155,12 @@ void uv_udp_endgame(uv_loop_t* loop, uv_udp_t* handle) {
   if (handle->flags & UV_HANDLE_CLOSING &&
       handle->reqs_pending == 0) {
     assert(!(handle->flags & UV_HANDLE_CLOSED));
+    handle->flags |= UV_HANDLE_CLOSED;
     uv__handle_stop(handle);
-    uv__handle_close(handle);
+
+    if (handle->close_cb) {
+      handle->close_cb((uv_handle_t*)handle);
+    }
   }
 }
 
