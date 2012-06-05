@@ -9,6 +9,17 @@
 #include "pathnames.h"
 #include "utils.h"
 
+void
+dnscrypt_memzero(void * const pnt, const size_t size)
+{
+    volatile unsigned char *pnt_ = (volatile unsigned char *) pnt;
+    size_t                     i = (size_t) 0U;
+
+    while (i < size) {
+        pnt_[i++] = 0U;
+    }
+}
+
 #ifndef _WIN32
 static unsigned int
 open_max(void)

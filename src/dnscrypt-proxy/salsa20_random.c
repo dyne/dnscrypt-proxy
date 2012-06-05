@@ -115,7 +115,7 @@ salsa20_random_stir(void)
     COMPILER_ASSERT(sizeof stream.key == (size_t) 32U);
     COMPILER_ASSERT(sizeof stream.key <= sizeof key0);
     crypto_hash_sha256(stream.key, key0, sizeof key0);
-    memset((volatile unsigned char *) key0, 0, sizeof key0);
+    dnscrypt_memzero(key0, sizeof key0);
 }
 
 static void
