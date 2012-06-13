@@ -142,7 +142,7 @@ resolver_to_proxy_cb(uv_udp_t *handle, ssize_t nread, uv_buf_t buf,
         DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(udp_request, uncurved_len);
         DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_GOT_INVALID_REPLY(udp_request);
         logger_noformat(udp_request->proxy_context, LOG_WARNING,
-                        "Received a suscpicious reply from the resolver");
+                        "Received a suspicious reply from the resolver");
         udp_request_kill(udp_request);
         return;
     }
