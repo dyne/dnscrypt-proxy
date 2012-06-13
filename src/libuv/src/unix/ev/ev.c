@@ -2538,6 +2538,14 @@ ev_run (EV_P_ int flags)
 #endif
 }
 
+/* libuv special */
+void
+ev__run (EV_P_ ev_tstamp waittime)
+{
+  fd_reify (EV_A);
+  backend_poll (EV_A_ waittime);
+}
+
 void
 ev_break (EV_P_ int how)
 {

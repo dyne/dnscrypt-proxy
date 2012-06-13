@@ -134,7 +134,6 @@ typedef int (WSAAPI* LPFN_WSARECVFROM)
              LPWSAOVERLAPPED_COMPLETION_ROUTINE completion_routine);
 
 #ifndef _NTDEF_
-#define _NTDEF_ 1
   typedef LONG NTSTATUS;
   typedef NTSTATUS *PNTSTATUS;
 #endif
@@ -169,6 +168,8 @@ typedef int uv_file;
 typedef SOCKET uv_os_sock_t;
 
 typedef HANDLE uv_thread_t;
+
+typedef HANDLE uv_sem_t;
 
 typedef CRITICAL_SECTION uv_mutex_t;
 
@@ -455,7 +456,7 @@ RB_HEAD(uv_timer_tree_s, uv_timer_s);
   struct uv_process_close_s {             \
     UV_REQ_FIELDS                         \
   } close_req;                            \
-  HANDLE child_stdio[3];                  \
+  BYTE* child_stdio_buffer;               \
   int exit_signal;                        \
   DWORD spawn_errno;                      \
   HANDLE wait_handle;                     \

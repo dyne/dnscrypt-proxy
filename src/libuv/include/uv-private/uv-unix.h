@@ -35,7 +35,10 @@
 #include <netdb.h>
 #include <pwd.h>
 #include <termios.h>
+
+#include <semaphore.h>
 #include <pthread.h>
+#include <signal.h>
 
 #if __sun
 # include <sys/port.h>
@@ -58,6 +61,7 @@ typedef pthread_once_t uv_once_t;
 typedef pthread_t uv_thread_t;
 typedef pthread_mutex_t uv_mutex_t;
 typedef pthread_rwlock_t uv_rwlock_t;
+typedef sem_t uv_sem_t;
 
 /* Platform-specific definitions for uv_spawn support. */
 typedef gid_t uv_gid_t;
@@ -98,18 +102,24 @@ struct uv__io_s {
 # define UV_LOOP_PRIVATE_PLATFORM_FIELDS
 #endif
 
-#define UV_LOOP_PRIVATE_FIELDS \
-  /* Poll result queue */ \
-  eio_channel uv_eio_channel; \
-  struct ev_loop* ev; \
-  /* Various thing for libeio. */ \
-  uv_async_t uv_eio_want_poll_notifier; \
-  uv_async_t uv_eio_done_poll_notifier; \
-  uv_idle_t uv_eio_poller; \
-  uv_handle_t* pending_handles; \
-  ngx_queue_t prepare_handles; \
-  ngx_queue_t check_handles; \
-  ngx_queue_t idle_handles; \
+#define UV_LOOP_PRIVATE_FIELDS                                                \
+  /* Poll result queue */                                                     \
+  eio_channel uv_eio_channel;                                                 \
+  struct ev_loop* ev;                                                         \
+  /* Various thing for libeio. */                                             \
+  uv_async_t uv_eio_want_poll_notifier;                                       \
+  uv_async_t uv_eio_done_poll_notifier;                                       \
+  uv_idle_t uv_eio_poller;                                                    \
+  uv_handle_t* closing_handles;                                               \
+  ngx_queue_t prepare_handles;                                                \
+  ngx_queue_t check_handles;                                                  \
+  ngx_queue_t idle_handles;                                                   \
+  ngx_queue_t async_handles;                                                  \
+  uv__io_t async_watcher;                                                     \
+  int async_pipefd[2];                                                        \
+  /* RB_HEAD(uv__timers, uv_timer_s) */                                       \
+  struct uv__timers { struct uv_timer_s* rbh_root; } timer_handles;           \
+  uint64_t time;                                                              \
   UV_LOOP_PRIVATE_PLATFORM_FIELDS
 
 #define UV_REQ_BUFSML_SIZE (4)
@@ -144,7 +154,7 @@ struct uv__io_s {
 /* TODO: union or classes please! */
 #define UV_HANDLE_PRIVATE_FIELDS \
   int flags; \
-  uv_handle_t* next_pending; \
+  uv_handle_t* next_closing; \
 
 
 #define UV_STREAM_PRIVATE_FIELDS \
@@ -186,7 +196,7 @@ struct uv__io_s {
   uv__io_t io_watcher;
 
 
-/* UV_PREPARE */ \
+/* UV_PREPARE */
 #define UV_PREPARE_PRIVATE_FIELDS \
   uv_prepare_cb prepare_cb; \
   ngx_queue_t queue;
@@ -205,15 +215,24 @@ struct uv__io_s {
 
 
 /* UV_ASYNC */
-#define UV_ASYNC_PRIVATE_FIELDS \
-  ev_async async_watcher; \
-  uv_async_cb async_cb;
+#define UV_ASYNC_PRIVATE_FIELDS                                               \
+  volatile sig_atomic_t pending;                                              \
+  uv_async_cb async_cb;                                                       \
+  ngx_queue_t queue;
 
 
 /* UV_TIMER */
-#define UV_TIMER_PRIVATE_FIELDS \
-  ev_timer timer_watcher; \
-  uv_timer_cb timer_cb;
+#define UV_TIMER_PRIVATE_FIELDS                                               \
+  /* RB_ENTRY(uv_timer_s) node; */                                            \
+  struct {                                                                    \
+    struct uv_timer_s* rbe_left;                                              \
+    struct uv_timer_s* rbe_right;                                             \
+    struct uv_timer_s* rbe_parent;                                            \
+    int rbe_color;                                                            \
+  } tree_entry;                                                               \
+  uv_timer_cb timer_cb;                                                       \
+  uint64_t timeout;                                                           \
+  uint64_t repeat;
 
 #define UV_GETADDRINFO_PRIVATE_FIELDS \
   uv_getaddrinfo_cb cb; \

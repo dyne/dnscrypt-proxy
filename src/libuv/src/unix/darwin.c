@@ -45,7 +45,7 @@ static char *process_title;
 
 #if TARGET_OS_IPHONE
 /* see: http://developer.apple.com/library/mac/#qa/qa1398/_index.html */
-uint64_t uv_hrtime(void) {
+uint64_t uv_hrtime() {
     uint64_t time;
     uint64_t enano;
     static mach_timebase_info_data_t sTimebaseInfo;
@@ -61,21 +61,12 @@ uint64_t uv_hrtime(void) {
     return enano;
 }
 #else
-uint64_t uv_hrtime(void) {
-  uint64_t now;
+uint64_t uv_hrtime() {
+  uint64_t time;
   Nanoseconds enano;
-  uint64_t enano64;
-  now = mach_absolute_time();
-  AbsoluteTime at;
-  if (sizeof at < sizeof now) {
-    memset(&at, 0, sizeof at);
-  }
-  (void) sizeof(char[sizeof at <= sizeof now ? 1 : -1]);
-  memcpy(&at, &now, sizeof at);
-  enano = AbsoluteToNanoseconds(at);
-  (void) sizeof(char[sizeof enano <= sizeof enano64 ? 1 : -1]);
-  memcpy(&enano64, &enano, sizeof enano);
-  return enano64;
+  time = mach_absolute_time(); 
+  enano = AbsoluteToNanoseconds(*(AbsoluteTime *)&time);
+  return (*(uint64_t *)&enano);
 }
 #endif
 
@@ -293,15 +284,9 @@ uv_err_t uv_interface_addresses(uv_interface_address_t** addresses,
     (*count)++;
   }
 
-  if (*count == 0) {
-    freeifaddrs(addrs);
-    *addresses = NULL;
-    return uv_ok_;
-  }
   *addresses = (uv_interface_address_t*)
     malloc(*count * sizeof(uv_interface_address_t));
   if (!(*addresses)) {
-    freeifaddrs(addrs);      
     return uv__new_artificial_error(UV_ENOMEM);
   }
 

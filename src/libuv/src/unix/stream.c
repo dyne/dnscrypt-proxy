@@ -708,7 +708,7 @@ int uv_shutdown(uv_shutdown_t* req, uv_stream_t* stream, uv_shutdown_cb cb) {
       stream->flags & UV_STREAM_SHUT ||
       stream->flags & UV_CLOSED ||
       stream->flags & UV_CLOSING) {
-    uv__set_sys_error(stream->loop, EINVAL);
+    uv__set_artificial_error(stream->loop, UV_ENOTCONN);
     return -1;
   }
 
@@ -722,11 +722,6 @@ int uv_shutdown(uv_shutdown_t* req, uv_stream_t* stream, uv_shutdown_cb cb) {
   uv__io_start(stream->loop, &stream->write_watcher);
 
   return 0;
-}
-
-
-void uv__stream_pending(uv_stream_t* handle) {
-  uv__stream_io(handle->loop, &handle->write_watcher, UV__IO_WRITE);
 }
 
 
@@ -866,7 +861,7 @@ int uv__connect(uv_connect_t* req, uv_stream_t* stream, struct sockaddr* addr,
   uv__io_start(stream->loop, &stream->write_watcher);
 
   if (stream->delayed_error)
-    uv__make_pending(stream);
+    uv__io_feed(stream->loop, &stream->write_watcher, UV__IO_WRITE);
 
   return 0;
 }
