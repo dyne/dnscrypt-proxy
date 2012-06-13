@@ -22,6 +22,8 @@
 #define crypto_box_MACBYTES (crypto_box_ZEROBYTES - crypto_box_BOXZEROBYTES)
 #define crypto_box_HALF_NONCEBYTES (crypto_box_NONCEBYTES / 2U)
 
+#define TRIM_PADDING_FROM_REPLIES 1
+
 size_t dnscrypt_response_header_size(void);
 size_t dnscrypt_query_header_size(void);
 size_t dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len);
