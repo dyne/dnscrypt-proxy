@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export XCODEDIR="/Applications/Xcode44-DP5.app/Contents/Developer"
+export XCODEDIR="/Applications/Xcode45-DP1.app/Contents/Developer"
 export BASEDIR="${XCODEDIR}/Platforms/iPhoneOS.platform/Developer"
 export PATH="${BASEDIR}/usr/bin:$BASEDIR/usr/sbin:$PATH"
 export SDK="${BASEDIR}/SDKs/iPhoneOS5.1.sdk"
