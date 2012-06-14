@@ -7,12 +7,14 @@ dnscrypt-proxy(8) -- A DNSCrypt forwarder
 
 ## DESCRIPTION
 
-**dnscrypt-proxy** accepts DNS requests, encrypts and signs them using
-dnscrypt and forwards them to a remote dnscrypt-enabled resolver.
+**dnscrypt-proxy** accepts DNS requests, authenticates and encrypts
+them using dnscrypt and forwards them to a remote dnscrypt-enabled
+resolver.
 
-Replies from the resolver are expected also to be encrypted and signed.
+Replies from the resolver are expected to be authenticated and
+encrypted or else they will be discarded.
 
-The proxy verifies the signature of replies, decrypts them, and transparently
+The proxy verifies the replies, decrypts them, and transparently
 forwards them to the local stub resolver.
 
 `dnscrypt-proxy` listens to `127.0.0.1` / port `53` by default.
@@ -58,7 +60,7 @@ ports.
     address.
 
   * `-t`, `--resolver-port=<port>`: connect to the resolver on port <port>,
-    as a workaround if UDP over port 53 is filtered.
+    as a workaround if UDP over port 53 is filtered. The default port is 443.
 
   * `-u`, `--user=<user name>`: chroot(2) to this user's home directory
     and drop privileges.

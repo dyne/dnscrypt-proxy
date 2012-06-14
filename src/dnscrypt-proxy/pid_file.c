@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <event2/util.h>
+
 #include "logger.h"
 #include "pid_file.h"
 #include "safe_rw.h"
@@ -92,8 +94,8 @@ pid_file_write(const int fd, const pid_t child)
     char pid_buf[50U];
     int  pid_buf_len;
 
-    pid_buf_len = snprintf(pid_buf, sizeof pid_buf, "%llu",
-                           (unsigned long long) child);
+    pid_buf_len = evutil_snprintf(pid_buf, sizeof pid_buf, "%llu",
+                                  (unsigned long long) child);
     assert((size_t) pid_buf_len < sizeof pid_buf);
     if (safe_write(fd, pid_buf, pid_buf_len, -1) != pid_buf_len) {
         (void) ftruncate(fd, (off_t) 0);

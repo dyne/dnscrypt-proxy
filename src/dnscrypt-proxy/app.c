@@ -1,11 +1,6 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef _WIN32
-# include <winsock2.h>
-#else
-# include <sys/socket.h>
-#endif
 
 #include <errno.h>
 #include <signal.h>
@@ -14,6 +9,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+
+#include <event2/event.h>
+#include <event2/util.h>
 
 #include "app.h"
 #include "dnscrypt_client.h"
@@ -24,36 +22,48 @@
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
-#include "uv.h"
-#include "uv_alloc.h"
-#include "uv_helpers.h"
 
 static AppContext app_context;
 
 static int
 proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    struct sockaddr_storage resolver_addr;
+    char sockaddr_port[256U];
+    int  sockaddr_len_int;
 
     memset(proxy_context, 0, sizeof *proxy_context);
     proxy_context->event_loop = NULL;
+    proxy_context->tcp_accept_timer = NULL;
+    proxy_context->tcp_conn_listener = NULL;
+    proxy_context->udp_listener_event = NULL;
+    proxy_context->udp_proxy_resolver_event = NULL;
+    proxy_context->udp_proxy_resolver_handle = -1;
+    proxy_context->udp_listener_handle = -1;
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
-    if ((proxy_context->event_loop = uv_loop_new()) == NULL) {
-        logger(NULL, LOG_ERR, "Unable to initialize the UV event loop");
+    if ((proxy_context->event_loop = event_base_new()) == NULL) {
+        logger(NULL, LOG_ERR, "Unable to initialize the event loop");
         return -1;
     }
-    if (uv_addr_any(&resolver_addr, proxy_context->resolver_ip,
-                    proxy_context->resolver_port,
-                    SOCK_DGRAM, IPPROTO_UDP, 0) != 0) {
-        logger(NULL, LOG_ERR, "Unsupported socket address: [%s (%s)]",
-               proxy_context->resolver_ip, proxy_context->resolver_port);
+    if (strchr(proxy_context->resolver_ip, ':') != NULL &&
+        *proxy_context->resolver_ip != '[') {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
+                        proxy_context->resolver_ip, proxy_context->resolver_port);
+    } else {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
+                        proxy_context->resolver_ip, proxy_context->resolver_port);
+    }
+    sockaddr_len_int = (int) sizeof proxy_context->resolver_sockaddr;
+    if (evutil_parse_sockaddr_port(sockaddr_port,
+                                   (struct sockaddr *)
+                                   &proxy_context->resolver_sockaddr,
+                                   &sockaddr_len_int) != 0) {
+        logger(NULL, LOG_ERR, "Unsupported resolver address: %s",
+               sockaddr_port);
         return -1;
     }
-    memcpy(&proxy_context->resolver_addr, &resolver_addr,
-           STORAGE_LEN(resolver_addr));
-    uv_alloc_init(proxy_context);
+    proxy_context->resolver_sockaddr_len = (ev_socklen_t) sockaddr_len_int;
 
     return 0;
 }
@@ -64,7 +74,6 @@ proxy_context_free(ProxyContext * const proxy_context)
     if (proxy_context == NULL) {
         return;
     }
-    uv_alloc_free(proxy_context);
     options_free(proxy_context);
     logger_close(proxy_context);
 }
@@ -81,9 +90,9 @@ int init_tz(void)
     time(&now);
     if ((tm = localtime(&now)) != NULL &&
         strftime(stbuf, sizeof stbuf, "%z", tm) == (size_t) 5U) {
-        snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
-                 "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
-                 stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
+        evutil_snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
+                        "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
+                        stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
     }
     putenv(default_tz_for_putenv);
     (void) localtime(&now);
@@ -171,13 +180,13 @@ main(int argc, char *argv[])
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
-    uv_run(proxy_context.event_loop);
+    event_base_dispatch(proxy_context.event_loop);
 
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
-    cert_updater_stop(&proxy_context);
+    cert_updater_free(&proxy_context);
     tcp_listener_stop(&proxy_context);
     udp_listener_stop(&proxy_context);
-    uv_loop_delete(proxy_context.event_loop);
+    event_base_free(proxy_context.event_loop);
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     salsa20_random_close();

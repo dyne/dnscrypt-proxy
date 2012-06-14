@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <event2/util.h>
+
 #include "dnscrypt.h"
 #include "salsa20_random.h"
 #include "randombytes.h"
@@ -29,6 +31,37 @@ dnscrypt_query_header_size(void)
     return DNSCRYPT_MAGIC_QUERY_LEN
         + crypto_box_PUBLICKEYBYTES + crypto_box_HALF_NONCEBYTES
         + crypto_box_MACBYTES;
+}
+
+static int
+dnscrypt_memcmp(const void * const b1_, const void * const b2_,
+                const size_t size)
+{
+    const uint8_t *b1 = b1_;
+    const uint8_t *b2 = b2_;
+    size_t         i = (size_t) 0U;
+    uint8_t        d = (uint8_t) 0U;
+
+    assert(size > (size_t) 0U);
+    do {
+        d |= b1[i] ^ b2[i];
+    } while (++i < size);
+
+    return (int) d;
+}
+
+int
+dnscrypt_cmp_client_nonce(const uint8_t client_nonce[crypto_box_HALF_NONCEBYTES],
+                          const uint8_t * const buf, const size_t len)
+{
+    const size_t client_nonce_offset = sizeof DNSCRYPT_MAGIC_RESPONSE - 1U;
+
+    if (len < client_nonce_offset + crypto_box_HALF_NONCEBYTES ||
+        dnscrypt_memcmp(client_nonce, buf + client_nonce_offset,
+                        crypto_box_HALF_NONCEBYTES) != 0) {
+        return -1;
+    }
+    return 0;
 }
 
 size_t
@@ -73,9 +106,9 @@ dnscrypt_key_to_fingerprint(char fingerprint[80U], const uint8_t * const key)
     COMPILER_ASSERT(crypto_box_SECRETKEYBYTES == 32U);
     for (;;) {
         assert(fingerprint_size > fingerprint_pos);
-        snprintf(&fingerprint[fingerprint_pos],
-                 fingerprint_size - fingerprint_pos, "%02X%02X",
-                 key[key_pos], key[key_pos + 1U]);
+        evutil_snprintf(&fingerprint[fingerprint_pos],
+                        fingerprint_size - fingerprint_pos, "%02X%02X",
+                        key[key_pos], key[key_pos + 1U]);
         key_pos += 2U;
         if (key_pos >= crypto_box_PUBLICKEYBYTES) {
             break;

@@ -1,5 +1,6 @@
 
 #include <config.h>
+#include <sys/time.h>
 #include <sys/types.h>
 
 #include <assert.h>
@@ -8,10 +9,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <event2/event.h>
+
+#include "dnscrypt.h"
 #include "dnscrypt_client.h"
 #include "salsa20_random.h"
 #include "utils.h"
-#include "uv.h"
 
 static void
 dnscrypt_make_client_nonce(DNSCryptClient * const client,
@@ -20,9 +23,9 @@ dnscrypt_make_client_nonce(DNSCryptClient * const client,
     uint64_t ts;
     uint32_t suffix;
 
-    ts = uv_hrtime();
+    ts = dnscrypt_hrtime();
     if (ts <= client->nonce_ts_last) {
-        ts = client->nonce_ts_last + 1U;
+        ts = client->nonce_ts_last + (uint64_t) 1U;
     }
     client->nonce_ts_last = ts;
 
@@ -76,22 +79,6 @@ dnscrypt_client_curve(DNSCryptClient * const client,
     return (ssize_t) (len + dnscrypt_query_header_size());
 }
 
-static int
-dnscrypt_memcmp(const void * const b1_, const void * const b2_,
-                const size_t size)
-{
-    const uint8_t *b1 = b1_;
-    const uint8_t *b2 = b2_;
-    size_t         i = (size_t) 0U;
-    uint8_t        d = (uint8_t) 0U;
-
-    do {
-        d |= b1[i] ^ b2[i];
-    } while (++i < size);
-
-    return (int) d;
-}
-
 //  8 bytes: the string r6fnvWJ8 (DNSCRYPT_MAGIC_RESPONSE)
 // 12 bytes: the client's nonce (crypto_box_NONCEBYTES / 2)
 // 12 bytes: a server-selected nonce extension (crypto_box_NONCEBYTES / 2)
@@ -113,11 +100,11 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
                sizeof DNSCRYPT_MAGIC_RESPONSE - 1U)) {
         return 1;
     }
-    memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
-           crypto_box_NONCEBYTES);
-    if (dnscrypt_memcmp(client_nonce, nonce, crypto_box_HALF_NONCEBYTES)) {
+    if (dnscrypt_cmp_client_nonce(client_nonce, buf, len) != 0) {
         return -1;
     }
+    memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
+           crypto_box_NONCEBYTES);
     memset(buf + DNSCRYPT_SERVER_BOX_OFFSET - crypto_box_BOXZEROBYTES, 0,
            crypto_box_BOXZEROBYTES);
     if (crypto_box_open_afternm

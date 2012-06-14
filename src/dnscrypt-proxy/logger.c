@@ -13,6 +13,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <event2/util.h>
+
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "safe_rw.h"
@@ -66,7 +68,7 @@ logger(struct ProxyContext_ * const context,
         urgency = "";
     }
     va_start(va, format);
-    len = (size_t) vsnprintf(line, sizeof line, format, va);
+    len = (size_t) evutil_vsnprintf(line, sizeof line, format, va);
     va_end(va);
 
     if (len >= sizeof line) {

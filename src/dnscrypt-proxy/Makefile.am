@@ -37,24 +37,19 @@ dnscrypt_proxy_SOURCES = \
 	udp_request.h \
 	udp_request_p.h \
 	utils.c \
-	utils.h \
-	uv_alloc.c \
-	uv_alloc.h \
-	uv_helpers.c \
-	uv_helpers.h
+	utils.h
 
 AM_CFLAGS = @CWFLAGS@
 
 AM_CPPFLAGS = \
-	-I../libuv/include \
+	-I../ext \
+	-I../libevent/include \
 	-I../@NACL_PATH@/include/local
 
 dnscrypt_proxy_LDADD = \
-	../libuv/uv.a \
+	../libevent/libevent_core.la \
+	../libevent/libevent_extra.la \
 	../@NACL_PATH@/lib/local/libnacl.a
-
-dnscrypt_proxy_DEPENDENCIES = \
-	../libuv/.done
 
 BUILT_SOURCES = \
 	../libnacl/.done \
@@ -62,9 +57,6 @@ BUILT_SOURCES = \
 
 ../libnacl/.done:
 	cd ../libnacl && $(MAKE) $(AM_MAKEFLAGS)
-
-../libuv/.done:
-	cd ../libuv && $(MAKE) $(AM_MAKEFLAGS)
 
 probes.h: @PROBES_SOURCE@
 	cat @PROBES_SOURCE@ > $@

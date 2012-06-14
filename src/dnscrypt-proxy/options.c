@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
-#ifndef _WIN32
+#ifdef HAVE_PWD_H
 # include <pwd.h>
 #endif
 #include <stdio.h>
@@ -103,14 +103,14 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
     proxy_context->local_ip = "127.0.0.1";
-    proxy_context->local_port = DNS_DEFAULT_PORT;
+    proxy_context->local_port = DNS_DEFAULT_LOCAL_PORT;
     proxy_context->log_fd = -1;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
     proxy_context->provider_name = DEFAULT_PROVIDER_NAME;
     proxy_context->provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY;
     proxy_context->resolver_ip = DEFAULT_RESOLVER_IP;
-    proxy_context->resolver_port = DNS_DEFAULT_PORT;
+    proxy_context->resolver_port = DNS_DEFAULT_RESOLVER_PORT;
 #ifndef _WIN32
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
@@ -233,7 +233,7 @@ options_parse(AppContext * const app_context,
         case 't':
             proxy_context->resolver_port = optarg;
             break;
-#ifndef _WIN32
+#ifdef HAVE_PWD_H
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
             if (pw == NULL) {

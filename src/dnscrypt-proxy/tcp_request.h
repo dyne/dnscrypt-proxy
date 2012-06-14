@@ -4,7 +4,7 @@
 
 #include "dnscrypt_proxy.h"
 
-#define TCP_BUFFER_SIZE     65536
+#define DNS_MAX_PACKET_SIZE_TCP_RECV (65535U + 2U)
 
 #ifndef TCP_REQUEST_BACKLOG
 # define TCP_REQUEST_BACKLOG 128

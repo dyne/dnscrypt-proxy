@@ -12,6 +12,7 @@ provider dnscrypt_proxy {
   probe request__udp__replied(void *);
   probe request__udp__truncated(void *);
   probe request__udp__overloaded();
+  probe request__udp__network_error(void *);
   probe request__udp__done(void *);
 
   probe request__udp__proxy_resolver__start(void *);
@@ -24,6 +25,7 @@ provider dnscrypt_proxy {
   probe request__tcp__start(void *);
   probe request__tcp__replied(void *);
   probe request__tcp__overloaded();
+  probe request__tcp__network_error(void *);
   probe request__tcp__done(void *);
 
   probe request__tcp__proxy_resolver__start(void *);

@@ -1,4 +1,7 @@
 
+* Version 0.10:
+ - Almost a complete rewrite, with libuv being replaced by libevent.
+
 * Version 0.9.5:
  - Full IPv6 support.
 

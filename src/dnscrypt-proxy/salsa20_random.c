@@ -15,7 +15,6 @@
 #include "salsa20_random.h"
 #include "safe_rw.h"
 #include "utils.h"
-#include "uv.h"
 
 #ifdef _WIN32
 # include <Wincrypt.h>
@@ -67,7 +66,7 @@ salsa20_random_random_dev_open(void)
 static void
 salsa20_random_init(void)
 {
-    stream.nonce = (uint64_t) uv_hrtime();
+    stream.nonce = dnscrypt_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
     if ((stream.random_data_source_fd =
@@ -81,7 +80,7 @@ salsa20_random_init(void)
 static void
 salsa20_random_init(void)
 {
-    stream.nonce = (uint64_t) uv_hrtime();
+    stream.nonce = dnscrypt_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
     if (! CryptAcquireContext(&stream.hcrypt_prov, NULL, NULL,
