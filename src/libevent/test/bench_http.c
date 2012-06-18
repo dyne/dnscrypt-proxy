@@ -136,11 +136,13 @@ main(int argc, char **argv)
 			}
 			break;
 #ifdef WIN32
+# ifndef _EVENT_DISABLE_THREAD_SUPPORT
 		case 'i':
 			use_iocp = 1;
 			evthread_use_windows_threads();
 			event_config_set_flag(cfg,EVENT_BASE_FLAG_STARTUP_IOCP);
 			break;
+# endif
 #endif
 		default:
 			fprintf(stderr, "Illegal argument \"%c\"\n", c);

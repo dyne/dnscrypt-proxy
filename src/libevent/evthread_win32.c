@@ -25,6 +25,8 @@
  */
 #include "event2/event-config.h"
 
+#ifndef _EVENT_DISABLE_THREAD_SUPPORT
+
 #ifdef WIN32
 #ifndef _WIN32_WINNT
 /* Minimum required for InitializeCriticalSectionAndSpinCount */
@@ -337,3 +339,4 @@ evthread_use_windows_threads(void)
 	return 0;
 }
 
+#endif
