@@ -249,7 +249,6 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     if ((ssize_t) evbuffer_remove(tcp_request->proxy_resolver_query_evbuf,
                                   dns_query, tcp_request->dns_query_len)
         != (ssize_t) tcp_request->dns_query_len) {
-        free(dns_query);
         tcp_request_kill(tcp_request);
         return;
     }
