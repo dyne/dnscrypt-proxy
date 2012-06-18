@@ -1,5 +1,25 @@
 Date:   2012-06-18
 
+    Only resolve local_sockaddr once.
+
+Date:   2012-06-18
+
+    Unfuck libevent on Win32 when threading support has been disabled.
+
+Date:   2012-06-18
+
+    Run libevent's autogen.sh along with the top-level one.
+
+Date:   2012-06-18
+
+    Unfuck compilation on Linux.
+
+Date:   2012-06-18
+
+    Update ChangeLog
+
+Date:   2012-06-18
+
     Remove free() leftover.
 
 Date:   2012-06-18
