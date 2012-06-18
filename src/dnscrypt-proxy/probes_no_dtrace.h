@@ -135,6 +135,4 @@ do { \
         } while (0)
 #define DNSCRYPT_PROXY_STATUS_REQUESTS_ACTIVE_ENABLED() (0)
 
-#endif /* !defined(DTRACE_PROBES_DISABLED) || !DTRACE_PROBES_DISABLED */
-
 #endif

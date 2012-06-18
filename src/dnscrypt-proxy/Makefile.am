@@ -47,8 +47,8 @@ AM_CPPFLAGS = \
 	-I../@NACL_PATH@/include/local
 
 dnscrypt_proxy_LDADD = \
-	../libevent/libevent_core.la \
 	../libevent/libevent_extra.la \
+	../libevent/libevent_core.la \
 	../@NACL_PATH@/lib/local/libnacl.a
 
 BUILT_SOURCES = \
