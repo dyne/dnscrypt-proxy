@@ -327,40 +327,20 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
 int
 udp_listener_bind(ProxyContext * const proxy_context)
 {
-    char                    sockaddr_port[256U];
-    struct sockaddr_storage sockaddr;
-    int                     sockaddr_len_int;
-
-    if (strchr(proxy_context->local_ip, ':') != NULL &&
-        *proxy_context->local_ip != '[') {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    } else {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    }
-    sockaddr_len_int = (int) sizeof sockaddr;
-    if (evutil_parse_sockaddr_port(sockaddr_port,
-                                   (struct sockaddr *) &sockaddr,
-                                   &sockaddr_len_int) != 0) {
-        logger(NULL, LOG_ERR, "Unsupported local address: %s (UDP)",
-               sockaddr_port);
-        return -1;
-    }
     assert(proxy_context->udp_listener_handle == -1);
     if ((proxy_context->udp_listener_handle = socket
-         (sockaddr.ss_family, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
-        logger(NULL, LOG_ERR, "Unable to create a socket for: %s (UDP) %d",
-               sockaddr_port, sockaddr.ss_family);
+         (proxy_context->local_sockaddr.ss_family,
+             SOCK_DGRAM, IPPROTO_UDP)) == -1) {
+        logger(NULL, LOG_ERR, "Unable to create a socket (UDP)");
         return -1;
     }
     evutil_make_socket_closeonexec(proxy_context->udp_listener_handle);
     evutil_make_socket_nonblocking(proxy_context->udp_listener_handle);
     if (bind(proxy_context->udp_listener_handle,
-             (struct sockaddr *) &sockaddr,
-             (ev_socklen_t) sockaddr_len_int) != 0) {
-        logger(NULL, LOG_ERR, "Unable to bind: %s (UDP) [%s]",
-               sockaddr_port, evutil_socket_error_to_string
+             (struct sockaddr *) &proxy_context->local_sockaddr,
+             proxy_context->local_sockaddr_len) != 0) {
+        logger(NULL, LOG_ERR, "Unable to bind (UDP) [%s]",
+               evutil_socket_error_to_string
                (evutil_socket_geterror(proxy_context->udp_listener_handle)));
         evutil_closesocket(proxy_context->udp_listener_handle);
         proxy_context->udp_listener_handle = -1;

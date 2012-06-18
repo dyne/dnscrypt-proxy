@@ -398,26 +398,6 @@ tcp_accept_error_cb(struct evconnlistener * const tcp_conn_listener,
 int
 tcp_listener_bind(ProxyContext * const proxy_context)
 {
-    char                    sockaddr_port[256U];
-    struct sockaddr_storage sockaddr;
-    int                     sockaddr_len_int;
-
-    if (strchr(proxy_context->local_ip, ':') != NULL &&
-        *proxy_context->local_ip != '[') {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    } else {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    }
-    sockaddr_len_int = (int) sizeof sockaddr;
-    if (evutil_parse_sockaddr_port(sockaddr_port,
-                                   (struct sockaddr *) &sockaddr,
-                                   &sockaddr_len_int) != 0) {
-        logger(NULL, LOG_ERR, "Unsupported local address: %s (TCP)",
-               sockaddr_port);
-        return -1;
-    }
     assert(proxy_context->tcp_conn_listener == NULL);
 #ifndef LEV_OPT_DEFERRED_ACCEPT
 # define LEV_OPT_DEFERRED_ACCEPT 0
@@ -430,10 +410,11 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                                 LEV_OPT_REUSEABLE |
                                 LEV_OPT_DEFERRED_ACCEPT,
                                 TCP_REQUEST_BACKLOG,
-                                (struct sockaddr *) &sockaddr,
-                                sockaddr_len_int);
+                                (struct sockaddr *)
+                                &proxy_context->local_sockaddr,
+                                (int) proxy_context->local_sockaddr_len);
     if (proxy_context->tcp_conn_listener == NULL) {
-        logger(NULL, LOG_ERR, "Unable to bind: %s (TCP)", sockaddr_port);
+        logger(NULL, LOG_ERR, "Unable to bind (TCP)");
         return -1;
     }
     if (evconnlistener_disable(proxy_context->tcp_conn_listener) != 0) {

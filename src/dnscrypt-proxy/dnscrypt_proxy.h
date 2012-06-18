@@ -70,6 +70,7 @@ typedef struct ProxyContext_ {
     uint8_t                  resolver_publickey[crypto_box_PUBLICKEYBYTES];
     DNSCryptClient           dnscrypt_client;
     CertUpdater              cert_updater;
+    struct sockaddr_storage  local_sockaddr;
     struct sockaddr_storage  resolver_sockaddr;
     TCPRequestQueue          tcp_request_queue;
     UDPRequestQueue          udp_request_queue;
@@ -88,6 +89,7 @@ typedef struct ProxyContext_ {
     struct event            *udp_listener_event;
     struct event            *udp_proxy_resolver_event;
     char                    *user_dir;
+    ev_socklen_t             local_sockaddr_len;
     ev_socklen_t             resolver_sockaddr_len;
     size_t                   uv_alloc_buffer_size;
     size_t                   edns_payload_size;

@@ -49,10 +49,12 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     if (strchr(proxy_context->resolver_ip, ':') != NULL &&
         *proxy_context->resolver_ip != '[') {
         evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
-                        proxy_context->resolver_ip, proxy_context->resolver_port);
+                        proxy_context->resolver_ip,
+                        proxy_context->resolver_port);
     } else {
         evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
-                        proxy_context->resolver_ip, proxy_context->resolver_port);
+                        proxy_context->resolver_ip,
+                        proxy_context->resolver_port);
     }
     sockaddr_len_int = (int) sizeof proxy_context->resolver_sockaddr;
     if (evutil_parse_sockaddr_port(sockaddr_port,
@@ -64,6 +66,25 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
         return -1;
     }
     proxy_context->resolver_sockaddr_len = (ev_socklen_t) sockaddr_len_int;
+
+    if (strchr(proxy_context->local_ip, ':') != NULL &&
+        *proxy_context->local_ip != '[') {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
+                        proxy_context->local_ip, proxy_context->local_port);
+    } else {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
+                        proxy_context->local_ip, proxy_context->local_port);
+    }
+    sockaddr_len_int = (int) sizeof proxy_context->local_sockaddr;
+    if (evutil_parse_sockaddr_port(sockaddr_port,
+                                   (struct sockaddr *)
+                                   &proxy_context->local_sockaddr,
+                                   &sockaddr_len_int) != 0) {
+        logger(NULL, LOG_ERR, "Unsupported local address: %s",
+               sockaddr_port);
+        return -1;
+    }
+    proxy_context->local_sockaddr_len = (ev_socklen_t) sockaddr_len_int;
 
     return 0;
 }
