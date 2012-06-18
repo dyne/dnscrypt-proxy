@@ -1,3 +1,76 @@
+Date:   2012-06-18
+
+    Remove free() leftover.
+
+Date:   2012-06-18
+
+    Use -Oz for the iOS build.
+
+Date:   2012-06-14
+
+    Rewrite using libevent instead of libuv.
+
+Date:   2012-06-13
+
+    libuv update
+
+Date:   2012-06-13
+
+    Update Xcode
+
+Date:   2012-05-20
+
+    Unbreak libuv compilation with mingw32.
+
+Date:   2012-05-20
+
+    This libuv code is scary and we don't use it, but check at least the strdup() output.
+
+Date:   2012-05-16
+
+    Change #if FIONBIO to #ifdef FIONBIO. Fixes compilation on Debian/ppc 6.0.4.
+    Reported by Sebastian Sjoholm.
+
+Date:   2012-02-09
+
+    Don't malloc(0). If we don't have any interfaces, return OK / null.
+
+Date:   2012-02-09
+
+    Rewrite uv_hrtime() for Darwin in a portable way.
+
+Date:   2012-02-09
+
+    rename() requires <stdio.h> on OSX. Don't ask why.
+
+Date:   2012-06-13
+
+    Resync libuv
+
+Date:   2012-06-13
+
+    Remove overzealous assertion.
+
+Date:   2012-06-13
+
+    Typo
+
+Date:   2012-06-13
+
+    OpenDNS finally sends zero-padded replies. Define TRIM_PADDING_FROM_REPLIES.
+
+Date:   2012-06-05
+
+    Update Homebrew formula.
+
+Date:   2012-06-05
+
+    Update the OpenBSD package to 0.9.5
+
+Date:   2012-06-05
+
+    Update ChangeLog
+
 Date:   2012-06-05
 
     Implement dnscrypt_memzero() instead of using a volatile cast.
