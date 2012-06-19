@@ -118,7 +118,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     if (dnscrypt_client_uncurve
         (&udp_request->proxy_context->dnscrypt_client,
             udp_request->client_nonce, dns_packet, &uncurved_len) != 0) {
-        DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(udp_request, uncurved_len);
+        DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR(udp_request);
         DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_GOT_INVALID_REPLY(udp_request);
         logger_noformat(udp_request->proxy_context, LOG_WARNING,
                         "Received a suspicious reply from the resolver");
@@ -294,6 +294,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                               udp_request->client_nonce, dns_packet,
                               dns_packet_len, max_len);
     if (curve_ret <= (ssize_t) 0) {
+        DNSCRYPT_PROXY_REQUEST_CURVE_ERROR(udp_request);
         return;
     }
     dns_packet_len = (size_t) curve_ret;

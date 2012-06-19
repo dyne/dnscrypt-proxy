@@ -34,6 +34,10 @@ do { \
 do { \
 	} while (0)
 #define	DNSCRYPT_PROXY_REQUEST_CURVE_DONE_ENABLED() (0)
+#define	DNSCRYPT_PROXY_REQUEST_CURVE_ERROR(arg0) \
+do { \
+	} while (0)
+#define	DNSCRYPT_PROXY_REQUEST_CURVE_ERROR_ENABLED() (0)
 #define	DNSCRYPT_PROXY_REQUEST_CURVE_START(arg0, arg1) \
 do { \
 	} while (0)
@@ -134,6 +138,10 @@ do { \
 do { \
 	} while (0)
 #define	DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE_ENABLED() (0)
+#define	DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR(arg0) \
+do { \
+	} while (0)
+#define	DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR_ENABLED() (0)
 #define	DNSCRYPT_PROXY_REQUEST_UNCURVE_START(arg0, arg1) \
 do { \
 	} while (0)

@@ -38,9 +38,11 @@ provider dnscrypt_proxy {
   probe request__tcp__timeout(void *);
 
   probe request__curve_start(void *, size_t);
+  probe request__curve_error(void *);
   probe request__curve_done(void *, size_t);
 
   probe request__uncurve_start(void *, size_t);
+  probe request__uncurve_error(void *);
   probe request__uncurve_done(void *, size_t);
 
   probe status__requests__active(unsigned int, unsigned int);
