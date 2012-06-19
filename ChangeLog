@@ -1,3 +1,37 @@
+Date:   2012-06-19
+
+    IPPROTO_TCP is defined in netinet/in.h on Dragonfly BSD
+
+Date:   2012-06-19
+
+    More gwurglz zindoz needz
+
+Date:   2012-06-19
+
+    Shit Windows needs.
+
+Date:   2012-06-19
+
+    Some fixes for Windows...
+
+Date:   2012-06-18
+
+    Allow 64K packets on TCP, use a different definition for UDP.
+
+Date:   2012-06-18
+
+    Spacing, blank lines, etc.
+
+Date:   2012-06-18
+
+    Test for big endianness in configure.ac
+    Change the first part of the client nonce to little endian on a big endian
+    system. Add 10 extra bits of randomness by the way.
+
+Date:   2012-06-18
+
+    Update ChangeLog
+
 Date:   2012-06-18
 
     Disable the Nagle algorithm when sending a query to a resolver.

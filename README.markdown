@@ -202,3 +202,7 @@ can act as a gateway service. Windows only, written in .NET.
 
 - [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
 Official GUI for Windows, by OpenDNS.
+
+- dnscrypt-proxy is also available on Cydia, and it can be easily
+enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
+

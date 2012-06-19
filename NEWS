@@ -1,6 +1,11 @@
 
 * Version 0.10:
  - Almost a complete rewrite, with libuv being replaced by libevent.
+ - The max number of simultaneous queries is now global, not
+   per-protocol.
+ - As an insame amount of routers and ISPs are hijacking port 53, the default
+   server port is now 443.
+ - iOS binaries are now smaller.
 
 * Version 0.9.5:
  - Full IPv6 support.
