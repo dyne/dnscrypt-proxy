@@ -1,7 +1,12 @@
 
 #include <config.h>
-
 #include <sys/types.h>
+#ifdef _WIN32
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+# include <netinet/tcp.h>
+#endif
 
 #include <assert.h>
 #include <limits.h>
@@ -69,6 +74,16 @@ tcp_request_kill(TCPRequest * const tcp_request)
 }
 
 static void
+tcp_tune(evutil_socket_t handle)
+{
+    if (handle == -1) {
+        return;
+    }
+    setsockopt(handle, IPPROTO_TCP, TCP_NODELAY,
+               (int []) { 1 }, sizeof (int));
+}
+
+static void
 timeout_timer_cb(evutil_socket_t timeout_timer_handle, short ev_flags,
                  void * const tcp_request_)
 {
@@ -94,6 +109,7 @@ proxy_resolver_event_cb(struct bufferevent * const proxy_resolver_bev,
         return;
     }
     if ((events & BEV_EVENT_CONNECTED) == 0) {
+        tcp_tune(bufferevent_getfd(proxy_resolver_bev));
         return;
     }
 }
