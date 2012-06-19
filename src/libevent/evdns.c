@@ -1166,7 +1166,7 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
                 goto err;
             }
             memcpy(reply.data.txt.records[0].txt, &packet[j + 1], txtlen);
-            reply.data.txt.records[0].len = txtlen;
+            reply.data.txt.records[0].len = (size_t) txtlen;
             reply.data.txt.recordscount = (u32) 1U;
             ttl_r = MIN(ttl_r, ttl);
             reply.have_answer = 1;
