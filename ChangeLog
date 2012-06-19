@@ -1,5 +1,23 @@
 Date:   2012-06-18
 
+    Disable the Nagle algorithm when sending a query to a resolver.
+
+Date:   2012-06-18
+
+    If we need a free slot and there's none for the current protocol, steal one from the other protocol.
+    Having distinct knobs for UDP and TCP makes sense now, but it will not make
+    sense once OpenDNS will properly support TCP persistent connections.
+
+Date:   2012-06-18
+
+    Factorize.
+
+Date:   2012-06-18
+
+    Update ChangeLog
+
+Date:   2012-06-18
+
     Only resolve local_sockaddr once.
 
 Date:   2012-06-18
