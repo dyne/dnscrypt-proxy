@@ -296,12 +296,15 @@ LT_INIT([disable-shared])
 
 dnl Subconfig.
 
+case $host_os in
+  mingw* | pw32* | cegcc*) ;;
+  *) ac_configure_args="$ac_configure_args --disable-thread-support" ;;
+esac
+
 ac_configure_args="$ac_configure_args --disable-dependency-tracking"
 ac_configure_args="$ac_configure_args --disable-openssl"
 ac_configure_args="$ac_configure_args --disable-shared"
-ac_configure_args="$ac_configure_args --disable-thread-support"
 ac_configure_args="$ac_configure_args --enable-function-sections"
-ac_configure_args="$ac_configure_args --with-pic"
 export CC
 export CFLAGS
 export CPP
