@@ -41,10 +41,12 @@ tcp_request_free(TCPRequest * const tcp_request)
         tcp_request->timeout_timer = NULL;
     }
     if (tcp_request->client_proxy_bev != NULL) {
+        DNSCRYPT_PROXY_REQUEST_TCP_DONE(tcp_request);
         bufferevent_free(tcp_request->client_proxy_bev);
         tcp_request->client_proxy_bev = NULL;
     }
     if (tcp_request->proxy_resolver_bev != NULL) {
+        DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_DONE(tcp_request);
         bufferevent_free(tcp_request->proxy_resolver_bev);
         tcp_request->proxy_resolver_bev = NULL;
     }
@@ -52,7 +54,6 @@ tcp_request_free(TCPRequest * const tcp_request)
         evbuffer_free(tcp_request->proxy_resolver_query_evbuf);
         tcp_request->proxy_resolver_query_evbuf = NULL;
     }
-    DNSCRYPT_PROXY_REQUEST_TCP_DONE(tcp_request);
     proxy_context = tcp_request->proxy_context;
     assert(! TAILQ_EMPTY(&proxy_context->tcp_request_queue));
     TAILQ_REMOVE(&proxy_context->tcp_request_queue, tcp_request, queue);
@@ -106,10 +107,12 @@ proxy_resolver_event_cb(struct bufferevent * const proxy_resolver_bev,
 
     (void) proxy_resolver_bev;
     if ((events & BEV_EVENT_ERROR) != 0) {
+        DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_NETWORK_ERROR(tcp_request);
         tcp_request_kill(tcp_request);
         return;
     }
     if ((events & BEV_EVENT_CONNECTED) == 0) {
+        DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_CONNECTED(tcp_request);
         tcp_tune(bufferevent_getfd(proxy_resolver_bev));
         return;
     }
@@ -139,6 +142,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
     if (tcp_request->dns_reply_len <
         (size_t) DNS_HEADER_SIZE + dnscrypt_response_header_size()) {
         logger_noformat(proxy_context, LOG_WARNING, "Short reply received");
+        DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_GOT_INVALID_REPLY(tcp_request);
         tcp_request_kill(tcp_request);
         return;
     }
@@ -149,6 +153,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
                                  tcp_request->dns_reply_len);
         return;
     }
+    DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_GOT_INVALID_REPLY(tcp_request);
     assert(available_size >= tcp_request->dns_reply_len);
     uncurved_len = tcp_request->dns_reply_len;
     dns_reply = evbuffer_pullup(input, uncurved_len);
@@ -179,6 +184,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         return;
     }
     bufferevent_enable(tcp_request->client_proxy_bev, EV_WRITE);
+    DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_DONE(tcp_request);
     bufferevent_free(tcp_request->proxy_resolver_bev);
     tcp_request->proxy_resolver_bev = NULL;
 }
@@ -373,6 +379,7 @@ tcp_connection_cb(struct evconnlistener * const tcp_conn_listener,
     bufferevent_setcb(tcp_request->proxy_resolver_bev,
                       resolver_proxy_read_cb, NULL, proxy_resolver_event_cb,
                       tcp_request);
+    DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_START(tcp_request);
     bufferevent_enable(tcp_request->client_proxy_bev, EV_READ);
 }
 

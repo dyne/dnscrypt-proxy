@@ -29,8 +29,10 @@ provider dnscrypt_proxy {
   probe request__tcp__done(void *);
 
   probe request__tcp__proxy_resolver__start(void *);
+  probe request__tcp__proxy_resolver__connected(void *);
   probe request__tcp__proxy_resolver__replied(void *);
   probe request__tcp__proxy_resolver__got_invalid_reply(void *);
+  probe request__tcp__proxy_resolver__network_error(void *);
   probe request__tcp__proxy_resolver__done(void *);
 
   probe request__tcp__timeout(void *);
