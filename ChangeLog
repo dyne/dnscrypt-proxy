@@ -1,5 +1,21 @@
 Date:   2012-06-19
 
+    Update libevent to be7a95c62995a679ee24146b0d641b7392cbab51
+
+Date:   2012-06-19
+
+    Cast txtlen to size_t
+
+Date:   2012-06-19
+
+    Fix txt size check
+
+Date:   2012-06-19
+
+    Update date & changelog.
+
+Date:   2012-06-19
+
     IPPROTO_TCP is defined in netinet/in.h on Dragonfly BSD
 
 Date:   2012-06-19
