@@ -208,7 +208,7 @@ static void
 client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
                      void * const tcp_request_)
 {
-    uint8_t          dns_query[DNS_MAX_PACKET_SIZE];
+    uint8_t          dns_query[DNS_MAX_PACKET_SIZE_TCP - 2U];
     uint8_t          dns_query_len_buf[2];
     uint8_t          dns_curved_query_len_buf[2];
     TCPRequest      *tcp_request = tcp_request_;
@@ -245,7 +245,7 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     if (max_len > sizeof dns_query) {
         max_len = sizeof dns_query;
     }
-    assert(max_len <= DNS_MAX_PACKET_SIZE);
+    assert(max_len <= DNS_MAX_PACKET_SIZE_TCP - 2U);
     if (tcp_request->dns_query_len + dnscrypt_query_header_size() > max_len) {
         tcp_request_kill(tcp_request);
         return;
@@ -355,7 +355,7 @@ tcp_connection_cb(struct evconnlistener * const tcp_conn_listener,
     evtimer_add(tcp_request->timeout_timer, &tv);
     bufferevent_setwatermark(tcp_request->client_proxy_bev,
                              EV_READ, (size_t) 2U,
-                             (size_t) DNS_MAX_PACKET_SIZE_TCP_RECV);
+                             (size_t) DNS_MAX_PACKET_SIZE_TCP);
     bufferevent_setcb(tcp_request->client_proxy_bev,
                       client_proxy_read_cb, client_proxy_write_cb,
                       client_proxy_event_cb, tcp_request);
@@ -368,7 +368,7 @@ tcp_connection_cb(struct evconnlistener * const tcp_conn_listener,
     }
     bufferevent_setwatermark(tcp_request->proxy_resolver_bev,
                              EV_READ, (size_t) 2U,
-                             (size_t) DNS_MAX_PACKET_SIZE_TCP_RECV);
+                             (size_t) DNS_MAX_PACKET_SIZE_TCP);
     bufferevent_setcb(tcp_request->proxy_resolver_bev,
                       resolver_proxy_read_cb, NULL, proxy_resolver_event_cb,
                       tcp_request);

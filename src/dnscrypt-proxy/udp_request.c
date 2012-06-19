@@ -63,7 +63,7 @@ static void
 resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
                      void * const proxy_context_)
 {
-    uint8_t                  dns_packet[DNS_MAX_PACKET_SIZE];
+    uint8_t                  dns_packet[DNS_MAX_PACKET_SIZE_UDP];
     ProxyContext            *proxy_context = proxy_context_;
     UDPRequest              *scanned_udp_request;
     UDPRequest              *udp_request = NULL;
@@ -145,7 +145,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
 
 static void
 proxy_client_send_truncated(UDPRequest * const udp_request,
-                            uint8_t dns_packet[DNS_MAX_PACKET_SIZE],
+                            uint8_t dns_packet[DNS_MAX_PACKET_SIZE_UDP],
                             size_t dns_packet_len)
 {
     DNSCRYPT_PROXY_REQUEST_UDP_TRUNCATED(udp_request);
@@ -209,7 +209,7 @@ static void
 client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                    void * const proxy_context_)
 {
-    uint8_t       dns_packet[DNS_MAX_PACKET_SIZE];
+    uint8_t       dns_packet[DNS_MAX_PACKET_SIZE_UDP];
     ProxyContext *proxy_context = proxy_context_;
     UDPRequest   *udp_request;
     ssize_t       curve_ret;
