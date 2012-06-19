@@ -1,6 +1,5 @@
 
 #include <config.h>
-
 #ifdef HAVE_SYS_CDEFS_H
 # include <sys/cdefs.h>
 #elif defined(HAVE_SYS_FEATURE_TESTS_H)
