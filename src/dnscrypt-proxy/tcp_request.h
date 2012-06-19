@@ -13,5 +13,6 @@
 int tcp_listener_bind(ProxyContext * const proxy_context);
 int tcp_listener_start(ProxyContext * const proxy_context);
 void tcp_listener_stop(ProxyContext * const proxy_context);
+int tcp_listener_kill_oldest_request(ProxyContext * const proxy_context);
 
 #endif

@@ -23,6 +23,7 @@
 #include "logger.h"
 #include "probes.h"
 #include "queue.h"
+#include "tcp_request.h"
 #include "udp_request.h"
 #include "udp_request_p.h"
 #include "utils.h"
@@ -245,10 +246,10 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     }
     if (proxy_context->connections_count >=
         proxy_context->connections_count_max) {
-        if (! TAILQ_EMPTY(&proxy_context->udp_request_queue)) {
-            udp_request_kill(TAILQ_FIRST(&proxy_context->udp_request_queue));
-        }
         DNSCRYPT_PROXY_REQUEST_UDP_OVERLOADED();
+        if (udp_listener_kill_oldest_request(proxy_context) != 0) {
+            tcp_listener_kill_oldest_request(proxy_context);
+        }
     }
     proxy_context->connections_count++;
     assert(proxy_context->connections_count
@@ -322,6 +323,17 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         return;
     }
     DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_START(udp_request);
+}
+
+int
+udp_listener_kill_oldest_request(ProxyContext * const proxy_context)
+{
+    if (TAILQ_EMPTY(&proxy_context->udp_request_queue)) {
+        return -1;
+    }
+    udp_request_kill(TAILQ_FIRST(&proxy_context->udp_request_queue));
+
+    return 0;
 }
 
 int
@@ -401,5 +413,6 @@ udp_listener_stop(ProxyContext * const proxy_context)
 {
     event_free(proxy_context->udp_proxy_resolver_event);
     proxy_context->udp_proxy_resolver_event = NULL;
+    while (udp_listener_kill_oldest_request(proxy_context) != 0) { }
     logger_noformat(proxy_context, LOG_INFO, "UDP listener shut down");
 }
