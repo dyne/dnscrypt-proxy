@@ -72,6 +72,10 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
+#ifdef _WIN32
+    WSADATA wsa_data;
+    WSAStartup(MAKEWORD(2, 2), &wsa_data);
+#endif
     if ((proxy_context->event_loop = event_base_new()) == NULL) {
         logger(NULL, LOG_ERR, "Unable to initialize the event loop");
         return -1;
