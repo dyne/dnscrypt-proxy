@@ -128,6 +128,7 @@ AC_CHECK_HEADERS([execinfo.h paths.h pwd.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 
+AC_C_BIGENDIAN
 AC_C_RESTRICT
 
 AC_CHECK_TYPE([in_port_t], , [AC_DEFINE(in_port_t, uint16_t,

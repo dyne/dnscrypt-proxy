@@ -1,7 +1,9 @@
 
 #include <config.h>
-#include <sys/time.h>
+
 #include <sys/types.h>
+#include <sys/time.h>
+#include <arpa/inet.h>
 
 #include <assert.h>
 #include <stdint.h>
@@ -21,6 +23,7 @@ dnscrypt_make_client_nonce(DNSCryptClient * const client,
                            uint8_t client_nonce[crypto_box_HALF_NONCEBYTES])
 {
     uint64_t ts;
+    uint64_t tsn;
     uint32_t suffix;
 
     ts = dnscrypt_hrtime();
@@ -29,8 +32,13 @@ dnscrypt_make_client_nonce(DNSCryptClient * const client,
     }
     client->nonce_ts_last = ts;
 
+    tsn = (ts << 10) | (salsa20_random() & 0x3ff);
+#ifdef WORDS_BIGENDIAN
+    tsn = (((uint64_t) htonl((uint32_t) tsn)) << 32) |
+        htonl((uint32_t) (tsn >> 32));
+#endif
     COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES == 12U);
-    memcpy(client_nonce, &ts, 8U);
+    memcpy(client_nonce, &tsn, 8U);
     suffix = salsa20_random();
     memcpy(client_nonce + 8U, &suffix, 4U);
 }
