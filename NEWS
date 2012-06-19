@@ -6,6 +6,7 @@
  - As an insame amount of routers and ISPs are hijacking port 53, the default
    server port is now 443.
  - iOS binaries are now smaller.
+ - More dtrace probes.
 
 * Version 0.9.5:
  - Full IPv6 support.

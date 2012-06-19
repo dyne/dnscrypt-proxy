@@ -1,5 +1,17 @@
 Date:   2012-06-19
 
+    More dtrace probes.
+
+Date:   2012-06-19
+
+    Update TCP dtrace probes
+
+Date:   2012-06-19
+
+    Bump Linux packages to 0.10
+
+Date:   2012-06-19
+
     Update libevent to be7a95c62995a679ee24146b0d641b7392cbab51
 
 Date:   2012-06-19
