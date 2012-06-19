@@ -23,6 +23,10 @@
 #include "tcp_request.h"
 #include "udp_request.h"
 
+#ifndef INET6_ADDRSTRLEN
+# define INET6_ADDRSTRLEN 46U
+#endif
+
 static AppContext app_context;
 
 static int

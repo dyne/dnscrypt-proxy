@@ -78,7 +78,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
                      (struct sockaddr *) &resolver_sockaddr,
                      &resolver_sockaddr_len);
     if (nread < (ssize_t) 0) {
-        const int err = evutil_socket_geterror(udp_listener_handle);
+        const int err = evutil_socket_geterror(proxy_resolver_handle);
         logger(proxy_context, LOG_WARNING,
                "recvfrom(resolver): [%s]", evutil_socket_error_to_string(err));
         DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(NULL);
@@ -231,7 +231,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                      (struct sockaddr *) &udp_request->client_sockaddr,
                      &udp_request->client_sockaddr_len);
     if (nread < (ssize_t) 0) {
-        const int err = evutil_socket_geterror(udp_listener_handle);
+        const int err = evutil_socket_geterror(client_proxy_handle);
         logger(proxy_context, LOG_WARNING,
                "recvfrom(client): [%s]", evutil_socket_error_to_string(err));
         DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);

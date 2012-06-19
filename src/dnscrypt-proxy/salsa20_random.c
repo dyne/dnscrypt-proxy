@@ -18,6 +18,7 @@
 #include "utils.h"
 
 #ifdef _WIN32
+# include <Windows.h>
 # include <Wincrypt.h>
 #endif
 

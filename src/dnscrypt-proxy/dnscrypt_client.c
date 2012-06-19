@@ -2,7 +2,11 @@
 #include <config.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include <arpa/inet.h>
+#ifdef _WIN32
+# include <winsock2.h>
+#else
+# include <arpa/inet.h>
+#endif
 
 #include <assert.h>
 #include <stdint.h>
