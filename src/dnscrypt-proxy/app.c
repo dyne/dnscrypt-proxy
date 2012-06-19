@@ -26,11 +26,37 @@
 static AppContext app_context;
 
 static int
-proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
+sockaddr_from_ip_and_port(struct sockaddr_storage * const sockaddr,
+                          ev_socklen_t * const sockaddr_len_p,
+                          const char * const ip, const char * const port,
+                          const char * const error_msg)
 {
-    char sockaddr_port[256U];
+    char sockaddr_port[INET6_ADDRSTRLEN + sizeof "[]:65535"];
     int  sockaddr_len_int;
 
+    if (strchr(ip, ':') != NULL && *ip != '[') {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
+                        ip, port);
+    } else {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
+                        ip, port);
+    }
+    sockaddr_len_int = (int) sizeof *sockaddr;
+    if (evutil_parse_sockaddr_port(sockaddr_port, (struct sockaddr *) sockaddr,
+                                   &sockaddr_len_int) != 0) {
+        logger(NULL, LOG_ERR, "%s: %s", error_msg, sockaddr_port);
+        *sockaddr_len_p = (ev_socklen_t) 0U;
+
+        return -1;
+    }
+    *sockaddr_len_p = (ev_socklen_t) sockaddr_len_int;
+
+    return 0;
+}
+
+static int
+proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
+{
     memset(proxy_context, 0, sizeof *proxy_context);
     proxy_context->event_loop = NULL;
     proxy_context->tcp_accept_timer = NULL;
@@ -46,46 +72,20 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
         logger(NULL, LOG_ERR, "Unable to initialize the event loop");
         return -1;
     }
-    if (strchr(proxy_context->resolver_ip, ':') != NULL &&
-        *proxy_context->resolver_ip != '[') {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
-                        proxy_context->resolver_ip,
-                        proxy_context->resolver_port);
-    } else {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
-                        proxy_context->resolver_ip,
-                        proxy_context->resolver_port);
-    }
-    sockaddr_len_int = (int) sizeof proxy_context->resolver_sockaddr;
-    if (evutil_parse_sockaddr_port(sockaddr_port,
-                                   (struct sockaddr *)
-                                   &proxy_context->resolver_sockaddr,
-                                   &sockaddr_len_int) != 0) {
-        logger(NULL, LOG_ERR, "Unsupported resolver address: %s",
-               sockaddr_port);
+    if (sockaddr_from_ip_and_port(&proxy_context->resolver_sockaddr,
+                                  &proxy_context->resolver_sockaddr_len,
+                                  proxy_context->resolver_ip,
+                                  proxy_context->resolver_port,
+                                  "Unsupported resolver address") != 0) {
         return -1;
     }
-    proxy_context->resolver_sockaddr_len = (ev_socklen_t) sockaddr_len_int;
-
-    if (strchr(proxy_context->local_ip, ':') != NULL &&
-        *proxy_context->local_ip != '[') {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    } else {
-        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
-                        proxy_context->local_ip, proxy_context->local_port);
-    }
-    sockaddr_len_int = (int) sizeof proxy_context->local_sockaddr;
-    if (evutil_parse_sockaddr_port(sockaddr_port,
-                                   (struct sockaddr *)
-                                   &proxy_context->local_sockaddr,
-                                   &sockaddr_len_int) != 0) {
-        logger(NULL, LOG_ERR, "Unsupported local address: %s",
-               sockaddr_port);
+    if (sockaddr_from_ip_and_port(&proxy_context->local_sockaddr,
+                                  &proxy_context->local_sockaddr_len,
+                                  proxy_context->local_ip,
+                                  proxy_context->local_port,
+                                  "Unsupported local address") != 0) {
         return -1;
     }
-    proxy_context->local_sockaddr_len = (ev_socklen_t) sockaddr_len_int;
-
     return 0;
 }
 
@@ -175,7 +175,7 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 int
 main(int argc, char *argv[])
 {
-    ProxyContext  proxy_context;
+    ProxyContext proxy_context;
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
