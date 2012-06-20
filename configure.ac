@@ -297,7 +297,7 @@ LT_INIT([disable-shared])
 dnl Subconfig.
 
 case $host_os in
-  mingw* | pw32* | cegcc*) ;;
+  cygwin* | mingw* | pw32* | cegcc*) ;;
   *) ac_configure_args="$ac_configure_args --disable-thread-support" ;;
 esac
 
