@@ -7,10 +7,9 @@
 #else
 # include <sys/types.h>
 #endif
-#ifndef _XOPEN_SOURCE
-# if _XOPEN_SOURCE < 500
-#  define _XOPEN_SOURCE 500
-# endif
+#if !defined(_XOPEN_SOURCE) || _XOPEN_SOURCE < 500
+# undef _XOPEN_SOURCE
+# define _XOPEN_SOURCE 500
 #endif
 #ifndef _GNU_SOURCE
 # define _GNU_SOURCE   1

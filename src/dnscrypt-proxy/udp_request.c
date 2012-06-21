@@ -94,7 +94,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     TAILQ_FOREACH(scanned_udp_request,
                   &proxy_context->udp_request_queue, queue) {
         if (dnscrypt_cmp_client_nonce(scanned_udp_request->client_nonce,
-                                      dns_packet, nread) == 0) {
+                                      dns_packet, (size_t) nread) == 0) {
             udp_request = scanned_udp_request;
             break;
         }

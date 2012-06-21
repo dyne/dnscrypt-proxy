@@ -156,7 +156,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
     DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_REPLIED(tcp_request);
     assert(available_size >= tcp_request->dns_reply_len);
     uncurved_len = tcp_request->dns_reply_len;
-    dns_reply = evbuffer_pullup(input, uncurved_len);
+    dns_reply = evbuffer_pullup(input, (ssize_t) uncurved_len);
     if (dns_reply == NULL) {
         tcp_request_kill(tcp_request);
         return;

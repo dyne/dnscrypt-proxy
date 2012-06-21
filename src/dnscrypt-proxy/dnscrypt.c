@@ -73,8 +73,8 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
     if (max_len < len + DNSCRYPT_MIN_PAD_LEN) {
         return len;
     }
-    padded_len = len + DNSCRYPT_MIN_PAD_LEN +
-        salsa20_random_uniform(max_len - len - DNSCRYPT_MIN_PAD_LEN + 1U);
+    padded_len = len + DNSCRYPT_MIN_PAD_LEN + salsa20_random_uniform
+        ((uint32_t) (max_len - len - DNSCRYPT_MIN_PAD_LEN + 1U));
     padded_len += DNSCRYPT_BLOCK_SIZE - padded_len % DNSCRYPT_BLOCK_SIZE;
     if (padded_len > max_len) {
         padded_len = max_len;
@@ -138,7 +138,7 @@ _dnscrypt_parse_char(uint8_t key[crypto_box_PUBLICKEYBYTES],
         if (!isxdigit(c)) {
             return -1;
         }
-        c_val = (c >= '0' && c <= '9') ? c - '0' : c - 'a' + 10;
+        c_val = (uint8_t) ((c >= '0' && c <= '9') ? c - '0' : c - 'a' + 10);
         assert(c_val < 16U);
         if (*state_p == 0) {
             *val_p = c_val * 16U;
