@@ -21,6 +21,11 @@ AS_IF([test "$cross_compiling" != no],
   AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
 )
 
+AX_CHECK_COMPILE_FLAG([-fPIC], [
+  AX_CHECK_LINK_FLAG([-fPIC],
+    [CFLAGS="$CFLAGS -fPIC"]
+  )
+])
 AX_CHECK_COMPILE_FLAG([-fPIE], [
   AX_CHECK_LINK_FLAG([-fPIE],
     [CFLAGS="$CFLAGS -fPIE"]
