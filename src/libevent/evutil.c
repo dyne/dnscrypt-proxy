@@ -1697,7 +1697,7 @@ evutil_inet_pton(int af, const char *src, void *dst)
 		if (b < 0 || b > 255) return 0;
 		if (c < 0 || c > 255) return 0;
 		if (d < 0 || d > 255) return 0;
-		addr->s_addr = htonl((a<<24) | (b<<16) | (c<<8) | d);
+		addr->s_addr = htonl((((ev_uint32_t) a)<<24) | (b<<16) | (c<<8) | d);
 		return 1;
 #ifdef AF_INET6
 	} else if (af == AF_INET6) {
