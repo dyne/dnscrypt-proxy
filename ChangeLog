@@ -1,3 +1,47 @@
+Date:   2012-06-21
+
+    Don't install libevent.
+
+Date:   2012-06-21
+
+    Compile with -fPIC if possible.
+
+Date:   2012-06-21
+
+    Make some type conversions explicit.
+
+Date:   2012-06-21
+
+    Typo
+
+Date:   2012-06-20
+
+    Fix IOC diagnostic with a left shift.
+
+Date:   2012-06-20
+
+    mingw defines cygwin32 as a host OS.
+
+Date:   2012-06-19
+
+    Update NetBSD / Dragonfly BSD package.
+
+Date:   2012-06-19
+
+    Update Homebrew formula
+
+Date:   2012-06-19
+
+    Update OpenBSD package
+
+Date:   2012-06-19
+
+    Update the FreeBSD port
+
+Date:   2012-06-19
+
+    We officially support Bitrig.
+
 Date:   2012-06-19
 
     Update ChangeLog
