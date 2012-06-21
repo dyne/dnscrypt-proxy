@@ -11,5 +11,6 @@
 int udp_listener_bind(ProxyContext * const proxy_context);
 int udp_listener_start(ProxyContext * const proxy_context);
 void udp_listener_stop(ProxyContext * const proxy_context);
+int udp_listener_kill_oldest_request(ProxyContext * const proxy_context);
 
 #endif

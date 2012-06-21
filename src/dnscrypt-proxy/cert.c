@@ -1,17 +1,15 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef _WIN32
-# include <winsock2.h>
-#else
-# include <sys/socket.h>
-# include <arpa/inet.h>
-#endif
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#include <event2/dns.h>
+#include <event2/event.h>
 
 #include "cert.h"
 #include "cert_p.h"
@@ -19,7 +17,10 @@
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "probes.h"
+#include "salsa20_random.h"
 #include "utils.h"
+
+static int cert_updater_update(ProxyContext * const proxy_context);
 
 static int
 cert_parse_version(ProxyContext * const proxy_context,
@@ -91,6 +92,7 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     logger(proxy_context, LOG_INFO,
            "This certificates supersedes certificate #%lu",
            (unsigned long) previous_serial);
+
     return 0;
 }
 
@@ -156,46 +158,43 @@ cert_print_server_key(ProxyContext * const proxy_context)
 }
 
 static void
-cert_timer_cb(uv_timer_t *handle, int status)
+cert_timer_cb(evutil_socket_t handle, const short event,
+              void * const proxy_context_)
 {
-    ProxyContext * const proxy_context = handle->data;
-    CertUpdater  * const cert_updater = &proxy_context->cert_updater;
+    ProxyContext * const proxy_context = proxy_context_;
 
-    (void) status;
-    cert_updater->has_cert_timer = 0;
+    (void) handle;
+    (void) event;
     logger_noformat(proxy_context, LOG_INFO,
                     "Refetching server certificates");
-    cert_updater_start(proxy_context);
+    cert_updater_update(proxy_context);
 }
 
 static void
 cert_reschedule_query(ProxyContext * const proxy_context,
-                      const int64_t query_retry_delay)
+                      const time_t query_retry_delay)
 {
     CertUpdater *cert_updater = &proxy_context->cert_updater;
 
-    if (cert_updater->has_cert_timer != 0) {
+    if (evtimer_pending(cert_updater->cert_timer, NULL)) {
         return;
     }
-    uv_timer_init(proxy_context->event_loop, &cert_updater->cert_timer);
-    cert_updater->has_cert_timer = 1;
-    cert_updater->cert_timer.data = proxy_context;
-    uv_timer_start(&cert_updater->cert_timer, cert_timer_cb,
-                   query_retry_delay, (int64_t) 0);
+    const struct timeval tv = { .tv_sec = query_retry_delay, .tv_usec = 0 };
+    evtimer_add(cert_updater->cert_timer, &tv);
 }
 
 static void
 cert_reschedule_query_after_failure(ProxyContext * const proxy_context)
 {
     CertUpdater *cert_updater = &proxy_context->cert_updater;
-    int64_t      query_retry_delay;
+    time_t       query_retry_delay;
 
-    if (cert_updater->has_cert_timer != 0) {
+    if (evtimer_pending(cert_updater->cert_timer, NULL)) {
         return;
     }
-    query_retry_delay = (int64_t)
+    query_retry_delay = (time_t)
         (CERT_QUERY_RETRY_MIN_DELAY +
-            (int64_t) cert_updater->query_retry_step *
+            (time_t) cert_updater->query_retry_step *
             (CERT_QUERY_RETRY_MAX_DELAY - CERT_QUERY_RETRY_MIN_DELAY) /
             CERT_QUERY_RETRY_STEPS);
     if (cert_updater->query_retry_step < CERT_QUERY_RETRY_STEPS) {
@@ -208,40 +207,43 @@ cert_reschedule_query_after_failure(ProxyContext * const proxy_context)
 static void
 cert_reschedule_query_after_success(ProxyContext * const proxy_context)
 {
-    if (proxy_context->cert_updater.has_cert_timer != 0) {
+    if (evtimer_pending(proxy_context->cert_updater.cert_timer, NULL)) {
         return;
     }
-    cert_reschedule_query(proxy_context,
-                          (int64_t) CERT_QUERY_RETRY_DELAY_AFTER_SUCCESS);
+    cert_reschedule_query(proxy_context, (time_t)
+                          CERT_QUERY_RETRY_DELAY_AFTER_SUCCESS_MIN_DELAY
+                          + (time_t) salsa20_random_uniform
+                          (CERT_QUERY_RETRY_DELAY_AFTER_SUCCESS_JITTER));
 }
 
 static void
-cert_query_cb(void *arg, int status, int timeouts, unsigned char *abuf,
-              int alen)
+cert_query_cb(int result, char type, int count, int ttl,
+              void * const txt_records_, void * const arg)
 {
-    Bincert               *bincert = NULL;
-    ProxyContext          *proxy_context = arg;
-    struct ares_txt_reply *txt_out;
-    struct ares_txt_reply *txt_out_current;
+    Bincert                 *bincert = NULL;
+    ProxyContext            *proxy_context = arg;
+    const struct txt_record *txt_records = txt_records_;
+    int                      i = 0;
 
-    (void) timeouts;
+    (void) type;
+    (void) ttl;
     DNSCRYPT_PROXY_CERTS_UPDATE_RECEIVED();
-    if (status != ARES_SUCCESS ||
-        ares_parse_txt_reply(abuf, alen, &txt_out) != ARES_SUCCESS) {
+    evdns_base_free(proxy_context->cert_updater.evdns_base, 0);
+    proxy_context->cert_updater.evdns_base = NULL;
+    if (result != DNS_ERR_NONE) {
         logger_noformat(proxy_context, LOG_ERR,
                         "Unable to retrieve server certificates");
         cert_reschedule_query_after_failure(proxy_context);
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_COMMUNICATION();
         return;
     }
-    txt_out_current = txt_out;
-    while (txt_out_current != NULL) {
+    assert(count == 0 || count == 1);
+    while (i < count) {
         cert_open_bincert(proxy_context,
-                          (const SignedBincert *) txt_out_current->txt,
-                          txt_out_current->length, &bincert);
-        txt_out_current = txt_out_current->next;
+                          (const SignedBincert *) txt_records[i].txt,
+                          txt_records[i].len, &bincert);
+        i++;
     }
-    ares_free_data(txt_out);
     if (bincert == NULL) {
         logger_noformat(proxy_context, LOG_ERR,
                         "No useable certificates found");
@@ -275,29 +277,52 @@ int
 cert_updater_init(ProxyContext * const proxy_context)
 {
     CertUpdater *cert_updater = &proxy_context->cert_updater;
-    int          ar_options_mask;
 
     memset(cert_updater, 0, sizeof *cert_updater);
-    if (ares_library_init(ARES_LIB_INIT_ALL) != ARES_SUCCESS) {
+    assert(proxy_context->event_loop != NULL);
+    assert(cert_updater->cert_timer == NULL);
+    if ((cert_updater->cert_timer =
+         evtimer_new(proxy_context->event_loop,
+                     cert_timer_cb, proxy_context)) == NULL) {
         return -1;
     }
-    assert(proxy_context->event_loop != NULL);
-    cert_updater->has_cert_timer = 0;
     cert_updater->query_retry_step = 0U;
-    ar_options_mask = ARES_OPT_SERVERS;
-    cert_updater->ar_options.nservers = 1;
-    cert_updater->ar_options.servers =
-        &((struct sockaddr_in *) &proxy_context->resolver_addr)->sin_addr;
-    if (proxy_context->tcp_only) {
-        ar_options_mask |= ARES_OPT_FLAGS | ARES_OPT_TCP_PORT;
-        cert_updater->ar_options.flags = ARES_FLAG_USEVC;
-        cert_updater->ar_options.tcp_port =
-            htons(proxy_context->resolver_port);
+    cert_updater->evdns_base = NULL;
+
+    return 0;
+}
+
+static int
+cert_updater_update(ProxyContext * const proxy_context)
+{
+    CertUpdater *cert_updater = &proxy_context->cert_updater;
+
+    DNSCRYPT_PROXY_CERTS_UPDATE_START();
+    if (cert_updater->evdns_base != NULL) {
+        evdns_base_free(cert_updater->evdns_base, 0);
     }
-    if (uv_ares_init_options(proxy_context->event_loop,
-                             &cert_updater->ar_channel,
-                             &cert_updater->ar_options,
-                             ar_options_mask) != ARES_SUCCESS) {
+    if ((cert_updater->evdns_base =
+         evdns_base_new(proxy_context->event_loop, 0)) == NULL) {
+        return -1;
+    }
+    if (evdns_base_nameserver_sockaddr_add(cert_updater->evdns_base,
+                                           (struct sockaddr *)
+                                           &proxy_context->resolver_sockaddr,
+                                           proxy_context->resolver_sockaddr_len,
+                                           DNS_QUERY_NO_SEARCH) != 0) {
+        return -1;
+    }
+    if (proxy_context->tcp_only != 0 &&
+        strcmp(proxy_context->resolver_port,
+               DNS_DEFAULT_STANDARD_DNS_PORT) != 0) {
+        (void) evdns_base_nameserver_ip_add(cert_updater->evdns_base,
+                                            proxy_context->resolver_ip);
+    }
+    if (evdns_base_resolve_txt(cert_updater->evdns_base,
+                               proxy_context->provider_name,
+                               DNS_QUERY_NO_SEARCH,
+                               cert_query_cb,
+                               proxy_context) == NULL) {
         return -1;
     }
     return 0;
@@ -306,11 +331,8 @@ cert_updater_init(ProxyContext * const proxy_context)
 int
 cert_updater_start(ProxyContext * const proxy_context)
 {
-    CertUpdater *cert_updater = &proxy_context->cert_updater;
+    cert_updater_update(proxy_context);
 
-    DNSCRYPT_PROXY_CERTS_UPDATE_START();
-    ares_query(cert_updater->ar_channel, proxy_context->provider_name,
-               DNS_CLASS_IN, DNS_TYPE_TXT, cert_query_cb, proxy_context);
     return 0;
 }
 
@@ -319,10 +341,19 @@ cert_updater_stop(ProxyContext * const proxy_context)
 {
     CertUpdater * const cert_updater = &proxy_context->cert_updater;
 
-    if (cert_updater->has_cert_timer) {
-        cert_updater->has_cert_timer = 0;
-        uv_timer_stop(&cert_updater->cert_timer);
+    assert(cert_updater->cert_timer != NULL);
+    evtimer_del(cert_updater->cert_timer);
+}
+
+void
+cert_updater_free(ProxyContext * const proxy_context)
+{
+    CertUpdater * const cert_updater = &proxy_context->cert_updater;
+
+    event_free(cert_updater->cert_timer);
+    cert_updater->cert_timer = NULL;
+    if (cert_updater->evdns_base != NULL) {
+        evdns_base_free(cert_updater->evdns_base, 0);
+        cert_updater->evdns_base = NULL;
     }
-    uv_ares_destroy(proxy_context->event_loop, cert_updater->ar_channel);
-    ares_destroy_options(&cert_updater->ar_options);
 }

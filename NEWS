@@ -1,4 +1,23 @@
 
+* Version 0.10:
+ - Almost a complete rewrite, with libuv being replaced by libevent.
+ - The max number of simultaneous queries is now global, not
+   per-protocol.
+ - As an insame amount of routers and ISPs are hijacking port 53, the default
+   server port is now 443.
+ - iOS binaries are now smaller.
+ - More dtrace probes.
+
+* Version 0.9.5:
+ - Full IPv6 support.
+
+* Version 0.9.4:
+ - The --tcp-port option is gone. The resolver port can now be set
+   with --resolver-port= and forcing use of TCP can be achieved with
+   --tcp-only.
+ - portage files for Gentoo have been added.
+ - Libuv has been updated.
+
 * Version 0.9.3:
  - Support for native Windows builds.
  - --daemonize has been fixed.

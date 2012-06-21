@@ -1,6 +1,12 @@
 
 #include <config.h>
 #include <sys/types.h>
+#include <sys/time.h>
+#ifdef _WIN32
+# include <winsock2.h>
+#else
+# include <arpa/inet.h>
+#endif
 
 #include <assert.h>
 #include <stdint.h>
@@ -8,26 +14,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <event2/event.h>
+
+#include "dnscrypt.h"
 #include "dnscrypt_client.h"
 #include "salsa20_random.h"
 #include "utils.h"
-#include "uv.h"
 
 static void
 dnscrypt_make_client_nonce(DNSCryptClient * const client,
                            uint8_t client_nonce[crypto_box_HALF_NONCEBYTES])
 {
     uint64_t ts;
+    uint64_t tsn;
     uint32_t suffix;
 
-    ts = uv_hrtime();
+    ts = dnscrypt_hrtime();
     if (ts <= client->nonce_ts_last) {
-        ts = client->nonce_ts_last + 1U;
+        ts = client->nonce_ts_last + (uint64_t) 1U;
     }
     client->nonce_ts_last = ts;
 
+    tsn = (ts << 10) | (salsa20_random() & 0x3ff);
+#ifdef WORDS_BIGENDIAN
+    tsn = (((uint64_t) htonl((uint32_t) tsn)) << 32) |
+        htonl((uint32_t) (tsn >> 32));
+#endif
     COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES == 12U);
-    memcpy(client_nonce, &ts, 8U);
+    memcpy(client_nonce, &tsn, 8U);
     suffix = salsa20_random();
     memcpy(client_nonce + 8U, &suffix, 4U);
 }
@@ -76,22 +90,6 @@ dnscrypt_client_curve(DNSCryptClient * const client,
     return (ssize_t) (len + dnscrypt_query_header_size());
 }
 
-static int
-dnscrypt_memcmp(const void * const b1_, const void * const b2_,
-                const size_t size)
-{
-    const uint8_t *b1 = b1_;
-    const uint8_t *b2 = b2_;
-    size_t         i = (size_t) 0U;
-    uint8_t        d = (uint8_t) 0U;
-
-    do {
-        d |= b1[i] ^ b2[i];
-    } while (++i < size);
-
-    return (int) d;
-}
-
 //  8 bytes: the string r6fnvWJ8 (DNSCRYPT_MAGIC_RESPONSE)
 // 12 bytes: the client's nonce (crypto_box_NONCEBYTES / 2)
 // 12 bytes: a server-selected nonce extension (crypto_box_NONCEBYTES / 2)
@@ -113,11 +111,11 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
                sizeof DNSCRYPT_MAGIC_RESPONSE - 1U)) {
         return 1;
     }
-    memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
-           crypto_box_NONCEBYTES);
-    if (dnscrypt_memcmp(client_nonce, nonce, crypto_box_HALF_NONCEBYTES)) {
+    if (dnscrypt_cmp_client_nonce(client_nonce, buf, len) != 0) {
         return -1;
     }
+    memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
+           crypto_box_NONCEBYTES);
     memset(buf + DNSCRYPT_SERVER_BOX_OFFSET - crypto_box_BOXZEROBYTES, 0,
            crypto_box_BOXZEROBYTES);
     if (crypto_box_open_afternm
@@ -127,7 +125,14 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
          nonce, client->nmkey)) {
         return -1;
     }
-    memset(nonce, 0, sizeof nonce);
+    dnscrypt_memzero(nonce, sizeof nonce);
+    assert(len >= DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
+#ifdef TRIM_PADDING_FROM_REPLIES
+    while (buf[--len] == 0U) { }
+    if (buf[len] != 0x80) {
+        return -1;
+    }
+#endif
     *lenp = len - (DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
     memmove(buf,
             buf + DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES, *lenp);

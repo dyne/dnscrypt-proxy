@@ -1,11 +1,6 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef _WIN32
-# include <winsock2.h>
-#else
-# include <sys/socket.h>
-#endif
 
 #include <errno.h>
 #include <signal.h>
@@ -14,6 +9,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+
+#include <event2/event.h>
+#include <event2/util.h>
 
 #include "app.h"
 #include "dnscrypt_client.h"
@@ -24,26 +22,78 @@
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
-#include "uv.h"
-#include "uv_alloc.h"
+
+#ifndef INET6_ADDRSTRLEN
+# define INET6_ADDRSTRLEN 46U
+#endif
 
 static AppContext app_context;
 
 static int
+sockaddr_from_ip_and_port(struct sockaddr_storage * const sockaddr,
+                          ev_socklen_t * const sockaddr_len_p,
+                          const char * const ip, const char * const port,
+                          const char * const error_msg)
+{
+    char sockaddr_port[INET6_ADDRSTRLEN + sizeof "[]:65535"];
+    int  sockaddr_len_int;
+
+    if (strchr(ip, ':') != NULL && *ip != '[') {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
+                        ip, port);
+    } else {
+        evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "%s:%s",
+                        ip, port);
+    }
+    sockaddr_len_int = (int) sizeof *sockaddr;
+    if (evutil_parse_sockaddr_port(sockaddr_port, (struct sockaddr *) sockaddr,
+                                   &sockaddr_len_int) != 0) {
+        logger(NULL, LOG_ERR, "%s: %s", error_msg, sockaddr_port);
+        *sockaddr_len_p = (ev_socklen_t) 0U;
+
+        return -1;
+    }
+    *sockaddr_len_p = (ev_socklen_t) sockaddr_len_int;
+
+    return 0;
+}
+
+static int
 proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    struct sockaddr_in resolver_addr;
-
     memset(proxy_context, 0, sizeof *proxy_context);
-    options_parse(&app_context, proxy_context, argc, argv);
-    proxy_context->event_loop = uv_loop_new();
-    resolver_addr = uv_ip4_addr(proxy_context->resolver_ip,
-                                proxy_context->resolver_port);
-    proxy_context->resolver_addr_len = sizeof(struct sockaddr_in);
-    memcpy(&proxy_context->resolver_addr, &resolver_addr,
-           proxy_context->resolver_addr_len);
-    uv_alloc_init(proxy_context);
-
+    proxy_context->event_loop = NULL;
+    proxy_context->tcp_accept_timer = NULL;
+    proxy_context->tcp_conn_listener = NULL;
+    proxy_context->udp_listener_event = NULL;
+    proxy_context->udp_proxy_resolver_event = NULL;
+    proxy_context->udp_proxy_resolver_handle = -1;
+    proxy_context->udp_listener_handle = -1;
+    if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
+        return -1;
+    }
+#ifdef _WIN32
+    WSADATA wsa_data;
+    WSAStartup(MAKEWORD(2, 2), &wsa_data);
+#endif
+    if ((proxy_context->event_loop = event_base_new()) == NULL) {
+        logger(NULL, LOG_ERR, "Unable to initialize the event loop");
+        return -1;
+    }
+    if (sockaddr_from_ip_and_port(&proxy_context->resolver_sockaddr,
+                                  &proxy_context->resolver_sockaddr_len,
+                                  proxy_context->resolver_ip,
+                                  proxy_context->resolver_port,
+                                  "Unsupported resolver address") != 0) {
+        return -1;
+    }
+    if (sockaddr_from_ip_and_port(&proxy_context->local_sockaddr,
+                                  &proxy_context->local_sockaddr_len,
+                                  proxy_context->local_ip,
+                                  proxy_context->local_port,
+                                  "Unsupported local address") != 0) {
+        return -1;
+    }
     return 0;
 }
 
@@ -53,7 +103,6 @@ proxy_context_free(ProxyContext * const proxy_context)
     if (proxy_context == NULL) {
         return;
     }
-    uv_alloc_free(proxy_context);
     options_free(proxy_context);
     logger_close(proxy_context);
 }
@@ -70,9 +119,9 @@ int init_tz(void)
     time(&now);
     if ((tm = localtime(&now)) != NULL &&
         strftime(stbuf, sizeof stbuf, "%z", tm) == (size_t) 5U) {
-        snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
-                 "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
-                 stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
+        evutil_snprintf(default_tz_for_putenv, sizeof default_tz_for_putenv,
+                        "TZ=UTC%c%c%c:%c%c", (*stbuf == '-' ? '+' : '-'),
+                        stbuf[1], stbuf[2], stbuf[3], stbuf[4]);
     }
     putenv(default_tz_for_putenv);
     (void) localtime(&now);
@@ -122,9 +171,9 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
         udp_listener_start(proxy_context) != 0) {
         exit(1);
     }
-    logger(proxy_context, LOG_INFO,
-           PACKAGE " is ready: proxying from [%s] to [%s]",
-           proxy_context->listen_ip, proxy_context->resolver_ip);
+    logger(proxy_context, LOG_INFO, "Proxying from [%s (%s)] to [%s (%s)]",
+           proxy_context->local_ip, proxy_context->local_port,
+           proxy_context->resolver_ip, proxy_context->resolver_port);
 
     proxy_context->listeners_started = 1;
 
@@ -134,11 +183,14 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 int
 main(int argc, char *argv[])
 {
-    ProxyContext  proxy_context;
+    ProxyContext proxy_context;
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-    proxy_context_init(&proxy_context, argc, argv);
+    if (proxy_context_init(&proxy_context, argc, argv) != 0) {
+        logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
+        exit(1);
+    }
     app_context.proxy_context = &proxy_context;
     logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
     dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
@@ -157,13 +209,13 @@ main(int argc, char *argv[])
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
-    uv_run(proxy_context.event_loop);
+    event_base_dispatch(proxy_context.event_loop);
 
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
-    cert_updater_stop(&proxy_context);
+    cert_updater_free(&proxy_context);
     tcp_listener_stop(&proxy_context);
     udp_listener_stop(&proxy_context);
-    uv_loop_delete(proxy_context.event_loop);
+    event_base_free(proxy_context.event_loop);
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     salsa20_random_close();

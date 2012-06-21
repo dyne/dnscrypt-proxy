@@ -36,7 +36,7 @@ safe_write(const int fd, const void * const buf_, size_t count,
             }
         }
         buf += written;
-        count -= written;
+        count -= (size_t) written;
     }
 ret:
     return (ssize_t) (buf - (const char *) buf_);
@@ -57,7 +57,7 @@ safe_read(const int fd, void * const buf_, size_t count)
         if (readnb == (ssize_t) 0) {
             break;
         }
-        count -= readnb;
+        count -= (size_t) readnb;
         buf += readnb;
     } while (count > (ssize_t) 0);
 

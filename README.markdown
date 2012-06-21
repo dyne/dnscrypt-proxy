@@ -32,9 +32,9 @@ resolver, like OpenDNS.
 Installation
 ------------
 
-The daemon is known to work on recent versions of OSX, OpenBSD,
-NetBSD, Dragonfly BSD, FreeBSD, Linux, Windows (MingW or Cygwin), and iOS
-(requires a jailbroken device).
+The daemon is known to work on recent versions of OSX, OpenBSD, Bitrig,
+NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a jailbroken
+device), and Windows (requires MingW).
 
 Download the
 [latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
@@ -54,9 +54,6 @@ compilation process.
 Running `make -j2 test` in the `src/libnacl` directory is also highly
 recommended.
 
-On BSD systems, _GNU Make_ should be installed prior to running the
-`./configure` script.
-
 The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
 Command-line switches are documented in the `dnscrypt-proxy(8)` man page.
@@ -73,8 +70,9 @@ The easiest way to start the daemon is:
 
     # dnscrypt-proxy --daemonize
 
-The proxy will accept incoming requests on 127.0.0.1 and
-encrypt/decrypt them from/to OpenDNS resolvers.
+The proxy will accept incoming requests on 127.0.0.1, tag them with an
+authentication code, forward them to OpenDNS resolvers, and validate
+each answer before passing it to the client.
 
 Given such a setup, in order to actually start using DNSCrypt, you
 need to update your `/etc/resolv.conf` file and replace your current
@@ -109,8 +107,7 @@ queries will **not** be cached and every single query will require a
 round-trip to the upstream resolver.
 
 For optimal performance, the recommended way of running DNSCrypt is to
-run it as a forwarder for a local DNS cache, like `unbound`, `pdns` or
-`dnscache`.
+run it as a forwarder for a local DNS cache, like `unbound`.
 
 Both can safely run on the same machine as long as they are listening
 to different IP addresses (preferred) or different ports.
@@ -133,21 +130,27 @@ this example):
 
     # dnscrypt-proxy --local-port=40 --daemonize
 
-Queries over TCP
-----------------
+Queries using nonstandard ports / over TCP
+------------------------------------------
 
 Some routers and firewalls can block outgoing DNS queries or
 transparently redirect them to their own resolver. This especially
 happens on public Wifi hotspots, such as coffee shops.
 
-As a workaround, the DNSCrypt proxy can force outgoing queries to be
+As a workaround, the port number can be changed using
+the `--resolver-port=<port>` option. For example, OpenDNS servers
+reply to queries sent to ports 53, 443 and 5353.
+
+By default, dnscrypt-proxy sends outgoing queries to UDP port 443.
+
+In addition, the DNSCrypt proxy can force outgoing queries to be
 sent over TCP. For example, TCP port 443, which is commonly used for
 communication over HTTPS, may not be filtered.
 
-The `tcp-port=<port>` command-line switch forces this behavior. When
+The `--tcp-only` command-line switch forces this behavior. When
 an incoming query is received, the daemon immediately replies with a
 "response truncated" message, forcing the client to retry over TCP.
-The daemon then encrypts and signs the query and forwards it over TCP
+The daemon then authenticates the query and forwards it over TCP
 to the resolver.
 
 TCP is slower than UDP, and this workaround should never be used
@@ -171,7 +174,7 @@ adding `options edns0` to the `/etc/resolv.conf` file on most
 Unix-like operating systems.
 
 `dnscrypt-proxy` can transparently rewrite outgoing packets before
-signing and encrypting them, in order to add the EDNS0 mechanism. By
+authenticating them, in order to add the EDNS0 mechanism. By
 default, a conservative payload size of 1280 bytes is advertised.
 
 This size can be made larger by starting the proxy with the
@@ -194,8 +197,13 @@ DNS settings. OSX only, written in Objective C. 64-bit CPU required.
 Experimental.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
-Easily enable/disable DNSCrypt on multiple adapters. Windows only,
-written in .NET.
+Easily enable/disable DNSCrypt on multiple adapters. Supports
+different ports and protocols, IPv6, parental controls and the proxy
+can act as a gateway service. Windows only, written in .NET.
 
 - [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
 Official GUI for Windows, by OpenDNS.
+
+- dnscrypt-proxy is also available on Cydia, and it can be easily
+enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
+

@@ -1,3 +1,4 @@
+
 #include <config.h>
 #include <sys/types.h>
 
@@ -15,9 +16,9 @@
 #include "salsa20_random.h"
 #include "safe_rw.h"
 #include "utils.h"
-#include "uv.h"
 
 #ifdef _WIN32
+# include <Windows.h>
 # include <Wincrypt.h>
 #endif
 
@@ -47,7 +48,10 @@ static int
 salsa20_random_random_dev_open(void)
 {
     static const char * const devices[] = {
-        "/dev/arandom", "/dev/urandom", "/dev/random", NULL
+# ifndef USE_BLOCKING_RANDOM
+        "/dev/arandom", "/dev/urandom",
+# endif
+        "/dev/random", NULL
     };
     const char * const *device = devices;
 
@@ -64,7 +68,7 @@ salsa20_random_random_dev_open(void)
 static void
 salsa20_random_init(void)
 {
-    stream.nonce = (uint64_t) uv_hrtime();
+    stream.nonce = dnscrypt_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
     if ((stream.random_data_source_fd =
@@ -78,7 +82,7 @@ salsa20_random_init(void)
 static void
 salsa20_random_init(void)
 {
-    stream.nonce = (uint64_t) uv_hrtime();
+    stream.nonce = dnscrypt_hrtime();
     assert(stream.nonce != (uint64_t) 0U);
 
     if (! CryptAcquireContext(&stream.hcrypt_prov, NULL, NULL,
@@ -112,7 +116,7 @@ salsa20_random_stir(void)
     COMPILER_ASSERT(sizeof stream.key == (size_t) 32U);
     COMPILER_ASSERT(sizeof stream.key <= sizeof key0);
     crypto_hash_sha256(stream.key, key0, sizeof key0);
-    memset(key0, 0, sizeof key0);
+    dnscrypt_memzero(key0, sizeof key0);
 }
 
 static void

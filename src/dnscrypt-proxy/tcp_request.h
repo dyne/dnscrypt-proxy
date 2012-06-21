@@ -4,7 +4,7 @@
 
 #include "dnscrypt_proxy.h"
 
-#define TCP_BUFFER_SIZE     65536
+#define DNS_MAX_PACKET_SIZE_TCP (65535U + 2U)
 
 #ifndef TCP_REQUEST_BACKLOG
 # define TCP_REQUEST_BACKLOG 128
@@ -13,5 +13,6 @@
 int tcp_listener_bind(ProxyContext * const proxy_context);
 int tcp_listener_start(ProxyContext * const proxy_context);
 void tcp_listener_stop(ProxyContext * const proxy_context);
+int tcp_listener_kill_oldest_request(ProxyContext * const proxy_context);
 
 #endif

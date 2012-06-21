@@ -1,8 +1,9 @@
 AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 0.9.3, bugs at opendns dot com)
+AC_INIT(dnscrypt-proxy, 0.10, https://github.com/opendns/dnscrypt-proxy/issues)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
+AC_CONFIG_SUBDIRS([src/libevent])
 AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 AM_MAINTAINER_MODE
 AM_DEP_TRACK
@@ -11,31 +12,20 @@ AC_SUBST(VERSION)
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
-# Checks for programs.
-AX_CHECK_GNU_MAKE
-AS_IF([test -n "${ifGNUmake}"],[
-  AC_MSG_ERROR([
-Found: ${MAKE}
-GNU make is required and was not found. If GNU make is not installed,
-please install it. www.gnu.org. If GNU make is installed, please adjust
-your PATH to make sure that GNU make is found before any other version
-of make that is installed on your system. rm config.cache and then
-re-run configure again.])
-],[
-  AC_SUBST(MAKE, $_cv_gnu_make_command)
-])
-
 LX_CFLAGS=${CFLAGS-NONE}
 AC_PROG_CC_C99
 AC_USE_SYSTEM_EXTENSIONS
 CPPFLAGS="$CPPFLAGS -D_XPG4_2=1 -D_GNU_SOURCE=1"
 
-AX_PTHREAD
-
 AS_IF([test "$cross_compiling" != no],
   AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
 )
 
+AX_CHECK_COMPILE_FLAG([-fPIC], [
+  AX_CHECK_LINK_FLAG([-fPIC],
+    [CFLAGS="$CFLAGS -fPIC"]
+  )
+])
 AX_CHECK_COMPILE_FLAG([-fPIE], [
   AX_CHECK_LINK_FLAG([-fPIE],
     [CFLAGS="$CFLAGS -fPIE"]
@@ -80,6 +70,7 @@ AX_CHECK_COMPILE_FLAG([-Wwrite-strings], [CFLAGS="$CFLAGS -Wwrite-strings"])
 AX_CHECK_COMPILE_FLAG([-Wdiv-by-zero], [CFLAGS="$CFLAGS -Wdiv-by-zero"])
 
 AC_ARG_VAR([CWFLAGS], [define to compilation flags for generating extra warnings])
+AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option], [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])
 AX_CHECK_COMPILE_FLAG([-Wall], [CWFLAGS="$CWFLAGS -Wall"])
 AX_CHECK_COMPILE_FLAG([-Wbad-function-cast], [CWFLAGS="$CWFLAGS -Wbad-function-cast"])
 AX_CHECK_COMPILE_FLAG([-Wcast-align], [CWFLAGS="$CWFLAGS -Wcast-align"])
@@ -91,7 +82,6 @@ AX_CHECK_COMPILE_FLAG([-Wfloat-equal], [CWFLAGS="$CWFLAGS -Wfloat-equal"])
 AX_CHECK_COMPILE_FLAG([-Wformat=2], [CWFLAGS="$CWFLAGS -Wformat=2"])
 AX_CHECK_COMPILE_FLAG([-Wimplicit], [CWFLAGS="$CWFLAGS -Wimplicit"])
 AX_CHECK_COMPILE_FLAG([-Wmissing-declarations], [CWFLAGS="$CWFLAGS -Wmissing-declarations"])
-AX_CHECK_COMPILE_FLAG([-Wmissing-noreturn], [CWFLAGS="$CWFLAGS -Wmissing-noreturn"])
 AX_CHECK_COMPILE_FLAG([-Wmissing-prototypes], [CWFLAGS="$CWFLAGS -Wmissing-prototypes"])
 AX_CHECK_COMPILE_FLAG([-Wnormalized=id], [CWFLAGS="$CWFLAGS -Wnormalized=id"])
 AX_CHECK_COMPILE_FLAG([-Woverride-init], [CWFLAGS="$CWFLAGS -Woverride-init"])
@@ -135,16 +125,27 @@ AS_IF([test -d /usr/local/lib], [
   LDFLAGS="$LDFLAGS -L/usr/local/lib"
 ])
 
-LIBS="$PTHREAD_LIBS $LIBS"
-CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-CC="$PTHREAD_CC"
+dnl Checks for header files.
 
-# Checks for header files.
 AC_SYS_LARGEFILE
-AC_CHECK_HEADERS([execinfo.h paths.h sys/cdefs.h sys/feature_tests.h])
+AC_CHECK_HEADERS([sys/cdefs.h sys/feature_tests.h])
+AC_CHECK_HEADERS([execinfo.h paths.h pwd.h])
 
-# Checks for typedefs, structures, and compiler characteristics.
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+AC_C_BIGENDIAN
 AC_C_RESTRICT
+
+AC_CHECK_TYPE([in_port_t], , [AC_DEFINE(in_port_t, uint16_t,
+[in_port_t type])],
+[
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+])
 
 AC_MSG_CHECKING([whether sin_len is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
@@ -227,7 +228,8 @@ do {
   AC_MSG_RESULT(no)
 ])
 
-# Checks for library functions.
+dnl Checks for library functions.
+
 AC_SEARCH_LIBS(pow, [m])
 AC_SEARCH_LIBS(dlopen, [dl])
 AC_SEARCH_LIBS(clock_gettime, [rt],
@@ -244,16 +246,21 @@ AS_IF([echo `(uname -s) 2>/dev/null` | $GREP "CYGWIN" > /dev/null], [
   AC_CHECK_LIB([ws2_32], [_head_libws2_32_a])
   AC_CHECK_LIB([psapi], [_head_libpsapi_a])
   AC_CHECK_LIB([iphlpapi], [_head_libiphlpapi_a])
-], [ ])
+])
 
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
 
-# Switches
+dnl Switches.
+
 AC_HEADER_ASSERT
 
-AC_ARG_WITH(debug,
-[AS_HELP_STRING(--with-debug,For maintainers only - please do not use)],
+AC_ARG_ENABLE(blocking-random,
+[AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
+[AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
+
+AC_ARG_ENABLE(debug,
+[AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
 [ AS_IF([test "x$withval" = "xyes"], [
     AS_IF([test "x$LX_CFLAGS" = "xNONE"], [
       nxflags=""
@@ -288,15 +295,40 @@ AC_SUBST([MAINT])
 AC_SUBST([NACL_PATH])
 AC_SUBST([PROBES_SOURCE])
 
+dnl Libtool.
+
+LT_INIT([disable-shared])
+
+dnl Subconfig.
+
+case $host_os in
+  cygwin* | mingw* | pw32* | cegcc*) ;;
+  *) ac_configure_args="$ac_configure_args --disable-thread-support" ;;
+esac
+
+ac_configure_args="$ac_configure_args --disable-dependency-tracking"
+ac_configure_args="$ac_configure_args --disable-libevent-install"
+ac_configure_args="$ac_configure_args --disable-openssl"
+ac_configure_args="$ac_configure_args --disable-shared"
+ac_configure_args="$ac_configure_args --enable-function-sections"
+export CC
+export CFLAGS
+export CPP
+export CPPFLAGS
+export LDFLAGS
+export LIBS
+
+dnl Output.
+
 AC_CONFIG_FILES([Makefile
                  man/Makefile
                  src/Makefile
                  src/dnscrypt-proxy/Makefile
+                 src/ext/Makefile
                  src/libnacl/Makefile
                  src/libnacl/tests/Makefile
                  src/libnacl/okcompilers/c
                  src/libnacl/okcompilers/do
-                 src/libuv/Makefile
                  test/Makefile])
 
 AC_OUTPUT

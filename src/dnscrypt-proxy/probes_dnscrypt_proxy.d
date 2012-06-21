@@ -12,6 +12,7 @@ provider dnscrypt_proxy {
   probe request__udp__replied(void *);
   probe request__udp__truncated(void *);
   probe request__udp__overloaded();
+  probe request__udp__network_error(void *);
   probe request__udp__done(void *);
 
   probe request__udp__proxy_resolver__start(void *);
@@ -24,19 +25,24 @@ provider dnscrypt_proxy {
   probe request__tcp__start(void *);
   probe request__tcp__replied(void *);
   probe request__tcp__overloaded();
+  probe request__tcp__network_error(void *);
   probe request__tcp__done(void *);
 
   probe request__tcp__proxy_resolver__start(void *);
+  probe request__tcp__proxy_resolver__connected(void *);
   probe request__tcp__proxy_resolver__replied(void *);
   probe request__tcp__proxy_resolver__got_invalid_reply(void *);
+  probe request__tcp__proxy_resolver__network_error(void *);
   probe request__tcp__proxy_resolver__done(void *);
 
   probe request__tcp__timeout(void *);
 
   probe request__curve_start(void *, size_t);
+  probe request__curve_error(void *);
   probe request__curve_done(void *, size_t);
 
   probe request__uncurve_start(void *, size_t);
+  probe request__uncurve_error(void *);
   probe request__uncurve_done(void *, size_t);
 
   probe status__requests__active(unsigned int, unsigned int);
