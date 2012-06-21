@@ -307,6 +307,7 @@ case $host_os in
 esac
 
 ac_configure_args="$ac_configure_args --disable-dependency-tracking"
+ac_configure_args="$ac_configure_args --disable-libevent-install"
 ac_configure_args="$ac_configure_args --disable-openssl"
 ac_configure_args="$ac_configure_args --disable-shared"
 ac_configure_args="$ac_configure_args --enable-function-sections"
