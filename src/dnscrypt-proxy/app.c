@@ -204,11 +204,11 @@ main(int argc, char *argv[])
 #ifdef SIGPIPE
     signal(SIGPIPE, SIG_IGN);
 #endif
-    revoke_privileges(&proxy_context);
 
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
+    revoke_privileges(&proxy_context);
     event_base_dispatch(proxy_context.event_loop);
 
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
