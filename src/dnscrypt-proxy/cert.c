@@ -331,6 +331,8 @@ cert_updater_update(ProxyContext * const proxy_context)
 int
 cert_updater_start(ProxyContext * const proxy_context)
 {
+    evdns_set_random_init_fn(NULL);
+    evdns_set_random_bytes_fn(salsa20_random_buf);
     cert_updater_update(proxy_context);
 
     return 0;
