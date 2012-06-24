@@ -255,16 +255,16 @@ arc4_seed_proc_sys_kernel_random_uuid(void)
 	 * but not /dev/urandom.  Let's try /proc/sys/kernel/random/uuid.
 	 * Its format is stupid, so we need to decode it from hex.
 	 */
-	int fd;
+	static int fd = -1;
 	char buf[128];
 	unsigned char entropy[64];
 	int bytes, n, i, nybbles;
 	for (bytes = 0; bytes<ADD_ENTROPY; ) {
-		fd = evutil_open_closeonexec("/proc/sys/kernel/random/uuid", O_RDONLY, 0);
-		if (fd < 0)
+		if (fd == -1)
+			fd = evutil_open_closeonexec("/proc/sys/kernel/random/uuid", O_RDONLY, 0);
+		if (fd == -1)
 			return -1;
 		n = read(fd, buf, sizeof(buf));
-		close(fd);
 		if (n<=0)
 			return -1;
 		memset(entropy, 0, sizeof(entropy));
@@ -300,15 +300,16 @@ arc4_seed_urandom(void)
 		"/dev/srandom", "/dev/urandom", "/dev/random", NULL
 	};
 	unsigned char buf[ADD_ENTROPY];
-	int fd, i;
+	static int fd = -1;
+	int i;
 	size_t n;
 
 	for (i = 0; filenames[i]; ++i) {
-		fd = evutil_open_closeonexec(filenames[i], O_RDONLY, 0);
-		if (fd<0)
+		if (fd == -1)
+			fd = evutil_open_closeonexec(filenames[i], O_RDONLY, 0);
+		if (fd == -1)
 			continue;
 		n = read_all(fd, buf, sizeof(buf));
-		close(fd);
 		if (n != sizeof(buf))
 			return -1;
 		arc4_addrandom(buf, sizeof(buf));
