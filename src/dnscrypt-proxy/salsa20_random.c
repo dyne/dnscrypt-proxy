@@ -210,15 +210,7 @@ salsa20_random_uniform(const uint32_t upper_bound)
     if (upper_bound < 2) {
         return 0;
     }
-#if (ULONG_MAX > 0xffffffffUL)
-    min = (uint32_t) (0x100000000UL % upper_bound);
-#else
-    if (upper_bound > 0x80000000)
-        min = 1 + ~upper_bound;
-    else {
-        min = ((0xffffffff - (upper_bound * 2)) + 1) % upper_bound;
-    }
-#endif
+    min = (uint32_t) (-upper_bound % upper_bound);
     for (;;) {
         r = salsa20_random();
         if (r >= min) {
