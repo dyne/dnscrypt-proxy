@@ -1,3 +1,56 @@
+Date:   2012-06-24
+
+    chroot() as soon as we can again. Drop libevent2's evdns arc4random() to use
+    our chroot()-proof salsa20_random() function instead.
+
+Date:   2012-06-24
+
+    libevent: resurrect evdns_set_random_bytes_fn() and add evdns_set_random_init_fn().
+    Using the provided RC4 generator is nice, but we maybe want to use something
+    else, in particular if we need something that is guaranteed to work in a
+    chroot jail, without a /dev/*random device.
+
+Date:   2012-06-24
+
+    libevent: don't use memset(<something on the stack>) to securely wipe a buffer,
+    because it's prone to compiler optimization.
+
+Date:   2012-06-24
+
+    libevent: do not close /dev/*random and /proc/**/uuid descriptors, in order to
+    keep them accessible after chroot(), when reseeding is needed.
+
+Date:   2012-06-24
+
+    Revoke privileges after cert_updater_start() for systems without arc4random().
+    Pointed out by Ben Kibbey.
+
+Date:   2012-06-24
+
+    Change arc4random_uniform() to calculate ``2**32 % upper_bound'' as
+    ``-upper_bound % upper_bound''.
+    From OpenBSD.
+
+Date:   2012-06-21
+
+    Update pkgsrc packages.
+
+Date:   2012-06-21
+
+    Update FreeBSD package.
+
+Date:   2012-06-21
+
+    Update Homebrew formula.
+
+Date:   2012-06-21
+
+    Update OpenBSD port.
+
+Date:   2012-06-21
+
+    Update ChangeLog
+
 Date:   2012-06-21
 
     Don't install libevent.
