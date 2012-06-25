@@ -1,4 +1,10 @@
 
+* Version 0.10.1:
+ - The daemon didn't start on some Linux distributions lacking the
+   RANDOM_UUID sysctl. This has been fixed.
+ - The config.guess files have been patched in order to run out of the
+   box on Bitrig.
+
 * Version 0.10:
  - Almost a complete rewrite, with libuv being replaced by libevent.
  - The max number of simultaneous queries is now global, not
