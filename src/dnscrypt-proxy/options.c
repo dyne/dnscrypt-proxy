@@ -11,15 +11,13 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
-#ifdef HAVE_PWD_H
-# include <pwd.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "dnscrypt_proxy.h"
+#include "getpwnam.h"
 #include "options.h"
 #include "logger.h"
 #include "pid_file.h"
@@ -233,7 +231,7 @@ options_parse(AppContext * const app_context,
         case 't':
             proxy_context->resolver_port = optarg;
             break;
-#ifdef HAVE_PWD_H
+#ifdef HAVE_GETPWNAM
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
             if (pw == NULL) {

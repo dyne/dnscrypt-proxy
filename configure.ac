@@ -129,7 +129,9 @@ dnl Checks for header files.
 
 AC_SYS_LARGEFILE
 AC_CHECK_HEADERS([sys/cdefs.h sys/feature_tests.h])
-AC_CHECK_HEADERS([execinfo.h paths.h pwd.h])
+AC_CHECK_HEADERS([execinfo.h paths.h pwd.h uuid/uuid.h])
+
+AC_CHECK_FUNCS([getpwnam])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 

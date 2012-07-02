@@ -15,13 +15,14 @@ dnscrypt_proxy_SOURCES = \
 	dnscrypt_proxy.h \
 	edns.c \
 	edns.h \
+	getpwnam.h \
 	logger.c \
 	logger.h \
 	options.c \
 	options.h \
+	pathnames.h \
 	pid_file.c \
 	pid_file.h \
-	pathnames.h \
 	probes_dnscrypt_proxy.d \
 	probes_no_dtrace.h \
 	safe_rw.c \
