@@ -38,7 +38,7 @@ options_usage(void)
          "  -h, --help: show usage\n"
          "  -r, --resolver-address=<ip>: the resolver IP address (default: OpenDNS)\n"
          "  -V, --version: show version number\n"
-        "\n"
+         "\n"
          "Example: hostip -r 208.67.222.222 www.example.com\n");
 }
 
