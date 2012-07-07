@@ -73,7 +73,7 @@ static void
 options_version(void)
 {
     puts(PACKAGE_STRING "\n"
-        "Copyright (C) 2011-2012 OpenDNS, Inc.");
+         "Copyright (C) 2011-2012 OpenDNS, Inc.");
 }
 
 static void
@@ -166,8 +166,8 @@ int
 options_parse(AppContext * const app_context,
               ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    int   opt_flag;
-    int   option_index = 0;
+    int opt_flag;
+    int option_index = 0;
 
     options_init_with_default(app_context, proxy_context);
     while ((opt_flag = getopt_long(argc, argv,
