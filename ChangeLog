@@ -1,5 +1,12 @@
 Date:   2012-07-06
 
+    Introduce hostip(8), a tool for resolving a name before dnscrypt-proxy starts.
+    It should help fighting the chicken-and-egg issue seen on routers, where
+    dnscrypt-proxy requires a working NTP server, but the NTP server requires
+    a working resolver.
+
+Date:   2012-07-06
+
     Useless indentation nits.
 
 Date:   2012-07-02
