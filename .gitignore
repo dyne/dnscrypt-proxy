@@ -39,6 +39,7 @@ src/.deps
 src/Makefile.in
 src/dnscrypt-proxy/Makefile.in
 src/dnscrypt-proxy/dnscrypt-proxy
+src/hostip/hostip
 src/libevent/*.la
 src/libevent/*.lo
 src/libevent/*.pc

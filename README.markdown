@@ -184,6 +184,17 @@ are usually safe.
 A value below or equal to 512 will disable this mechanism, unless a
 client sends a packet with an OPT section providing a payload size.
 
+The `hostip` utility
+--------------------
+
+The DNSCrypt proxy ships with a simple tool named `hostip` that
+resolves a name to IPv4 or IPv6 addresses.
+
+This tool can be useful for starting some services before
+`dnscrypt-proxy`.
+
+Queries made by `hostip` are not authenticated.
+
 GUIs for dnscrypt-proxy
 -----------------------
 

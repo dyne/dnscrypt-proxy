@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 0.10.1, https://github.com/opendns/dnscrypt-proxy/issues)
+AC_INIT(dnscrypt-proxy, 0.11, https://github.com/opendns/dnscrypt-proxy/issues)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
@@ -325,6 +325,7 @@ dnl Output.
 AC_CONFIG_FILES([Makefile
                  man/Makefile
                  src/Makefile
+                 src/hostip/Makefile
                  src/dnscrypt-proxy/Makefile
                  src/ext/Makefile
                  src/libnacl/Makefile
@@ -336,4 +337,3 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 chmod +x src/libnacl/okcompilers/do
-

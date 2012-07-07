@@ -1,3 +1,31 @@
+Date:   2012-07-06
+
+    Useless indentation nits.
+
+Date:   2012-07-02
+
+    Use ioctl() instead of fnctl(fnctl()) as much as possible. Saves 1 syscall.
+
+Date:   2012-07-02
+
+    Define getpwnam() and struct passwd if getpwnam(3) exists but the headers don't.
+
+Date:   2012-06-26
+
+    Xcode 4.5 DP2
+
+Date:   2012-06-24
+
+    Bump Linux packages to 10.0.1
+
+Date:   2012-06-24
+
+    Update ChangeLog
+
+Date:   2012-06-24
+
+    Current dev version is 0.10.1
+
 Date:   2012-06-24
 
     chroot() as soon as we can again. Drop libevent2's evdns arc4random() to use
