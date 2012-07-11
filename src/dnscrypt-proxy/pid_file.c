@@ -17,6 +17,7 @@
 #include "logger.h"
 #include "pid_file.h"
 #include "safe_rw.h"
+#include "sandboxes.h"
 #include "utils.h"
 
 #ifndef _WIN32
@@ -128,6 +129,9 @@ pid_file_create_for_chroot(const int fd)
     if (child == (pid_t) 0) {
         (void) close(fd);
         return 0;
+    }
+    if (sandboxes_pidproc() != 0) {
+        _exit(1);
     }
     pid_file_install_signal_handlers(pid_file_parent_sig_exit_handler);
     pid_file_write_and_wait_for_app(fd, child);

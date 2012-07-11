@@ -19,6 +19,7 @@
 #include "salsa20_random.h"
 #include "logger.h"
 #include "options.h"
+#include "sandboxes.h"
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
@@ -146,6 +147,11 @@ revoke_privileges(ProxyContext * const proxy_context)
                    proxy_context->user_dir);
             exit(1);
         }
+    }
+    if (sandboxes_app() != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unable to sandbox the main process");
+        exit(1);
     }
     if (proxy_context->user_id != (uid_t) 0) {
         if (setgid(proxy_context->user_group) != 0 ||
