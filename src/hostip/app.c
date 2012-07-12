@@ -3,6 +3,10 @@
 #include <sys/types.h>
 #ifdef _WIN32
 # include <winsock2.h>
+# include <ws2tcpip.h>
+# ifndef _WIN32_IE
+#  define _WIN32_IE 0x400
+# endif
 #else
 # include <sys/socket.h>
 # include <netinet/in.h>
