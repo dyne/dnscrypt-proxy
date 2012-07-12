@@ -13,6 +13,7 @@
 
 typedef struct UDPRequestStatus_ {
     _Bool is_dying : 1;
+    _Bool is_in_queue : 1;
 } UDPRequestStatus;
 
 typedef struct UDPRequest_ {

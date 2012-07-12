@@ -39,14 +39,16 @@ udp_request_free(UDPRequest * const udp_request)
     }
     DNSCRYPT_PROXY_REQUEST_UDP_DONE(udp_request);
     proxy_context = udp_request->proxy_context;
-    assert(! TAILQ_EMPTY(&proxy_context->udp_request_queue));
-    TAILQ_REMOVE(&proxy_context->udp_request_queue, udp_request, queue);
+    if (udp_request->status.is_in_queue != 0) {
+        assert(! TAILQ_EMPTY(&proxy_context->udp_request_queue));
+        TAILQ_REMOVE(&proxy_context->udp_request_queue, udp_request, queue);
+        assert(proxy_context->connections_count > 0U);
+        proxy_context->connections_count--;
+        DNSCRYPT_PROXY_STATUS_REQUESTS_ACTIVE(proxy_context->connections_count,
+                                              proxy_context->connections_count_max);
+    }
     udp_request->proxy_context = NULL;
     free(udp_request);
-    assert(proxy_context->connections_count > 0U);
-    proxy_context->connections_count--;
-    DNSCRYPT_PROXY_STATUS_REQUESTS_ACTIVE(proxy_context->connections_count,
-                                          proxy_context->connections_count_max);
 }
 
 static void
@@ -260,6 +262,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     TAILQ_INSERT_TAIL(&proxy_context->udp_request_queue,
                       udp_request, queue);
     memset(&udp_request->status, 0, sizeof udp_request->status);
+    udp_request->status.is_in_queue = 1;
 
     dns_packet_len = (size_t) nread;
     assert(dns_packet_len <= sizeof dns_packet);

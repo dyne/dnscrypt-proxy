@@ -55,14 +55,16 @@ tcp_request_free(TCPRequest * const tcp_request)
         tcp_request->proxy_resolver_query_evbuf = NULL;
     }
     proxy_context = tcp_request->proxy_context;
-    assert(! TAILQ_EMPTY(&proxy_context->tcp_request_queue));
-    TAILQ_REMOVE(&proxy_context->tcp_request_queue, tcp_request, queue);
+    if (tcp_request->status.is_in_queue != 0) {
+        assert(! TAILQ_EMPTY(&proxy_context->tcp_request_queue));
+        TAILQ_REMOVE(&proxy_context->tcp_request_queue, tcp_request, queue);
+        assert(proxy_context->connections_count > 0U);
+        proxy_context->connections_count--;
+        DNSCRYPT_PROXY_STATUS_REQUESTS_ACTIVE(proxy_context->connections_count,
+                                              proxy_context->connections_count_max);
+    }
     tcp_request->proxy_context = NULL;
     free(tcp_request);
-    assert(proxy_context->connections_count > 0U);
-    proxy_context->connections_count--;
-    DNSCRYPT_PROXY_STATUS_REQUESTS_ACTIVE(proxy_context->connections_count,
-                                          proxy_context->connections_count_max);
 }
 
 static void
@@ -352,6 +354,7 @@ tcp_connection_cb(struct evconnlistener * const tcp_conn_listener,
     TAILQ_INSERT_TAIL(&proxy_context->tcp_request_queue,
                       tcp_request, queue);
     memset(&tcp_request->status, 0, sizeof tcp_request->status);
+    tcp_request->status.is_in_queue = 1;
     if ((tcp_request->timeout_timer =
          evtimer_new(tcp_request->proxy_context->event_loop,
                      timeout_timer_cb, tcp_request)) == NULL) {

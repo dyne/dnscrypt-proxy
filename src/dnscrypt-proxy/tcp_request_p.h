@@ -14,6 +14,7 @@
 typedef struct TCPRequestStatus_ {
     _Bool has_dns_query_len : 1;
     _Bool has_dns_reply_len : 1;
+    _Bool is_in_queue : 1;
     _Bool is_dying : 1;
 } TCPRequestStatus;
 
