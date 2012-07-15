@@ -33,6 +33,11 @@ udp_request_free(UDPRequest * const udp_request)
 {
     ProxyContext *proxy_context;
 
+    if (udp_request->sendto_retry_timer != NULL) {
+        free(event_get_callback_arg(udp_request->sendto_retry_timer));
+        event_free(udp_request->sendto_retry_timer);
+        udp_request->sendto_retry_timer = NULL;
+    }
     if (udp_request->timeout_timer != NULL) {
         event_free(udp_request->timeout_timer);
         udp_request->timeout_timer = NULL;
@@ -61,27 +66,70 @@ udp_request_kill(UDPRequest * const udp_request)
     udp_request_free(udp_request);
 }
 
-static int
-sendto_with_retry(UDPRequest * const udp_request,
-                  evutil_socket_t handle, const void * const buffer,
-                  size_t length, int flags,
-                  const struct sockaddr * const dest_addr, socklen_t dest_len,
-                  void (*cb)(UDPRequest * const udp_request))
+static int sendto_with_retry(SendtoWithRetryCbCtx * const ctx);
+
+static void
+sendto_with_retry_timer_cb(evutil_socket_t retry_timer_handle, short ev_flags,
+                           void * const ctx_)
 {
-    if (sendto(handle, buffer, length, flags, dest_addr, dest_len)
-        != (ssize_t) length) {
-        const int err =
-            evutil_socket_geterror(udp_request->client_proxy_handle);
-        logger(udp_request->proxy_context, LOG_WARNING,
-               "sendto: [%s]", evutil_socket_error_to_string(err));
-        DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
+    SendtoWithRetryCbCtx * const ctx = ctx_;
+
+    (void) ev_flags;
+    assert(retry_timer_handle ==
+           event_get_fd(ctx->udp_request->sendto_retry_timer));
+
+    DNSCRYPT_PROXY_REQUEST_UDP_RETRY(ctx->udp_request,
+                                     ctx->udp_request->retries);
+    sendto_with_retry(ctx);
+}
+
+static int
+sendto_with_retry(SendtoWithRetryCbCtx * const ctx)
+{
+    SendtoWithRetryCbCtx *ctx_cb;
+    UDPRequest           *udp_request = ctx->udp_request;
+    int                   err;
+
+    if (sendto(ctx->handle, ctx->buffer, ctx->length, ctx->flags,
+               ctx->dest_addr, ctx->dest_len) == (ssize_t) ctx->length) {
+        if (ctx->cb) {
+            ctx->cb(udp_request);
+        }
+        return 0;
+    }
+
+    err = evutil_socket_geterror(udp_request->client_proxy_handle);
+    logger(udp_request->proxy_context, LOG_WARNING,
+           "sendto: [%s]", evutil_socket_error_to_string(err));
+    DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
+    if (++(udp_request->retries) > 1U) {
         udp_request_kill(udp_request);
         return -1;
     }
-    if (cb) {
-        cb(udp_request);
+    if (udp_request->sendto_retry_timer != NULL) {
+        ctx_cb = event_get_callback_arg(udp_request->sendto_retry_timer);
+        assert(ctx_cb != NULL);
+    } else {
+        if ((ctx_cb = calloc((size_t) 1U, sizeof *ctx_cb)) == NULL) {
+            logger_error(udp_request->proxy_context, "malloc");
+            udp_request_kill(udp_request);
+            return -1;
+        }
+        if ((udp_request->sendto_retry_timer =
+             evtimer_new(udp_request->proxy_context->event_loop,
+                         sendto_with_retry_timer_cb, ctx_cb)) == NULL) {
+            udp_request_kill(udp_request);
+            return -1;
+        }
     }
-    return 0;
+    *ctx_cb = *ctx;
+    const struct timeval tv = {
+        .tv_sec = (time_t) DNS_QUERY_TIMEOUT / 2, .tv_usec = 0
+    };
+    evtimer_add(udp_request->sendto_retry_timer, &tv);
+    DNSCRYPT_PROXY_REQUEST_UDP_RETRY_SCHEDULED(udp_request,
+                                               udp_request->retries);
+    return -1;
 }
 
 static void
@@ -154,10 +202,16 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     memset(udp_request->client_nonce, 0, sizeof udp_request->client_nonce);
     assert(uncurved_len <= dns_packet_len);
     dns_packet_len = uncurved_len;
-    sendto_with_retry(udp_request, udp_request->client_proxy_handle,
-                      dns_packet, dns_packet_len, 0,
-                      (struct sockaddr *) &udp_request->client_sockaddr,
-                      udp_request->client_sockaddr_len, udp_request_kill);
+    sendto_with_retry(& (SendtoWithRetryCbCtx) {
+       .udp_request = udp_request,
+       .handle = udp_request->client_proxy_handle,
+       .buffer = dns_packet,
+       .length = dns_packet_len,
+       .flags = 0,
+       .dest_addr = (struct sockaddr *) &udp_request->client_sockaddr,
+       .dest_len = udp_request->client_sockaddr_len,
+       .cb = udp_request_kill
+    });
 }
 
 static void
@@ -170,10 +224,16 @@ proxy_client_send_truncated(UDPRequest * const udp_request,
     assert(dns_packet_len > DNS_OFFSET_FLAGS2);
     dns_packet[DNS_OFFSET_FLAGS] |= DNS_FLAGS_TC | DNS_FLAGS_QR;
     dns_packet[DNS_OFFSET_FLAGS2] |= DNS_FLAGS2_RA;
-    sendto_with_retry(udp_request, udp_request->client_proxy_handle,
-                      dns_packet, dns_packet_len, 0,
-                      (struct sockaddr *) &udp_request->client_sockaddr,
-                      udp_request->client_sockaddr_len, udp_request_kill);
+    sendto_with_retry(& (SendtoWithRetryCbCtx) {
+        .udp_request = udp_request,
+        .handle = udp_request->client_proxy_handle,
+        .buffer = dns_packet,
+        .length = dns_packet_len,
+        .flags = 0,
+        .dest_addr = (struct sockaddr *) &udp_request->client_sockaddr,
+        .dest_len = udp_request->client_sockaddr_len,
+        .cb = udp_request_kill
+    });
 }
 
 static void
@@ -241,6 +301,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         return;
     }
     udp_request->proxy_context = proxy_context;
+    udp_request->retries = 0U;
+    udp_request->sendto_retry_timer = NULL;
     udp_request->timeout_timer = NULL;
     udp_request->client_proxy_handle = client_proxy_handle;
     udp_request->client_sockaddr_len = sizeof udp_request->client_sockaddr;
@@ -329,11 +391,16 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         };
         evtimer_add(udp_request->timeout_timer, &tv);
     }
-    sendto_with_retry(udp_request, proxy_context->udp_proxy_resolver_handle,
-                      dns_packet, dns_packet_len, 0,
-                      (struct sockaddr *) &proxy_context->resolver_sockaddr,
-                      proxy_context->resolver_sockaddr_len,
-                      client_to_proxy_cb_sendto_cb);
+    sendto_with_retry(& (SendtoWithRetryCbCtx) {
+        .udp_request = udp_request,
+        .handle = proxy_context->udp_proxy_resolver_handle,
+        .buffer = dns_packet,
+        .length = dns_packet_len,
+        .flags = 0,
+        .dest_addr = (struct sockaddr *) &proxy_context->resolver_sockaddr,
+        .dest_len = proxy_context->resolver_sockaddr_len,
+        .cb = client_to_proxy_cb_sendto_cb
+    });
 }
 
 int

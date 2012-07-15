@@ -20,6 +20,8 @@ provider dnscrypt_proxy {
   probe request__udp__proxy_resolver__got_invalid_reply(void *);
   probe request__udp__proxy_resolver__done(void *);
 
+  probe request__udp__retry_scheduled(void *, unsigned char);
+  probe request__udp__retry(void *, unsigned char);
   probe request__udp__timeout(void *);
 
   probe request__tcp__start(void *);
