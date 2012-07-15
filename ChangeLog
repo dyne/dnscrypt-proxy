@@ -1,3 +1,68 @@
+Date:   2012-07-15
+
+    Remove pwnam comments.
+
+Date:   2012-07-15
+
+    Rename SendtoWithRetryCbCtx to SendtoWithRetryCtx
+
+Date:   2012-07-15
+
+    Retries is zero, already, thanks to calloc().
+
+Date:   2012-07-15
+
+    Support retries on Windows.
+
+Date:   2012-07-15
+
+    Retry every second. On relevant errors only. At least on !_WIN32.
+    Windows roots are the DOS, anyway.
+
+Date:   2012-07-15
+
+    Retry on UDP sendto() error.
+    We should only do that on non-fatal errors only.
+    Which means testing for different error codes on Windows. Bleh.
+
+Date:   2012-07-15
+
+    Factorize sendto() calls and pave the way for retrying on non-fatal errors.
+
+Date:   2012-07-13
+
+    Port 443 is already the default.
+
+Date:   2012-07-12
+
+    Don't assert(! TAILQ_EMPTY()) unless the request has actually been inserted in
+    the list of queued requests.
+    Should fix issue #19.
+
+Date:   2012-07-12
+
+    hostip: add things Windows needs in order to get the in6_addr structure defined
+
+Date:   2012-07-11
+
+    Check for setrlimit() existence.
+
+Date:   2012-07-11
+
+    Restrict a bit more what processes can do.
+
+Date:   2012-07-09
+
+    Build hostip last.
+
+Date:   2012-07-06
+
+    Indentation nits...
+
+Date:   2012-07-06
+
+    Update ChangeLog, bump version to 0.11
+
 Date:   2012-07-06
 
     Introduce hostip(8), a tool for resolving a name before dnscrypt-proxy starts.

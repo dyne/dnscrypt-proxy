@@ -3,6 +3,8 @@
  - A new tool, hostip, can resolve host names before dnscrypt-proxy is
    started. This should help resolving chicken-and-egg problems on
    routers, as reported by LanceThePants.
+ - Datagrams are resent after running out of memory, or if the queue
+   was full.
 
 * Version 0.10.1:
  - The daemon didn't start on some Linux distributions lacking the
