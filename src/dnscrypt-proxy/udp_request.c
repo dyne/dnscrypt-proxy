@@ -317,7 +317,6 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         return;
     }
     udp_request->proxy_context = proxy_context;
-    udp_request->retries = 0U;
     udp_request->sendto_retry_timer = NULL;
     udp_request->timeout_timer = NULL;
     udp_request->client_proxy_handle = client_proxy_handle;
