@@ -19,16 +19,16 @@
 # endif
 
 struct passwd {
-    char    *pw_name;       /* user name */
-    char    *pw_passwd;     /* encrypted password */
-    uid_t    pw_uid;        /* user uid */
-    gid_t    pw_gid;        /* user gid */
-    time_t   pw_change;     /* password change time */
-    char    *pw_class;      /* user access class */
-    char    *pw_gecos;      /* Honeywell login info */
-    char    *pw_dir;        /* home directory */
-    char    *pw_shell;      /* default shell */
-    time_t   pw_expire;     /* account expiration */
+    char   *pw_name;
+    char   *pw_passwd;
+    uid_t   pw_uid;
+    gid_t   pw_gid;
+    time_t  pw_change;
+    char   *pw_class;
+    char   *pw_gecos;
+    char   *pw_dir;
+    char   *pw_shell;
+    time_t  pw_expire;
 };
 struct passwd *getpwnam(const char *);
 
