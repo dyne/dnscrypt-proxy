@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -102,7 +103,14 @@ sendto_with_retry(SendtoWithRetryCbCtx * const ctx)
     logger(udp_request->proxy_context, LOG_WARNING,
            "sendto: [%s]", evutil_socket_error_to_string(err));
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
-    if (++(udp_request->retries) > 1U) {
+#ifndef _WIN32
+    if (err != ENOBUFS && err != ENOMEM && err != EINTR) {
+        udp_request_kill(udp_request);
+        return -1;
+    }
+#endif
+    COMPILER_ASSERT(DNS_QUERY_TIMEOUT < UCHAR_MAX);
+    if (++(udp_request->retries) > DNS_QUERY_TIMEOUT) {
         udp_request_kill(udp_request);
         return -1;
     }
@@ -118,13 +126,14 @@ sendto_with_retry(SendtoWithRetryCbCtx * const ctx)
         if ((udp_request->sendto_retry_timer =
              evtimer_new(udp_request->proxy_context->event_loop,
                          sendto_with_retry_timer_cb, ctx_cb)) == NULL) {
+            free(ctx_cb);
             udp_request_kill(udp_request);
             return -1;
         }
     }
     *ctx_cb = *ctx;
     const struct timeval tv = {
-        .tv_sec = (time_t) DNS_QUERY_TIMEOUT / 2, .tv_usec = 0
+        .tv_sec = (time_t) 1, .tv_usec = 0
     };
     evtimer_add(udp_request->sendto_retry_timer, &tv);
     DNSCRYPT_PROXY_REQUEST_UDP_RETRY_SCHEDULED(udp_request,
