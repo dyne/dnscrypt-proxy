@@ -29,7 +29,7 @@ typedef struct UDPRequest_ {
     unsigned char            retries;
 } UDPRequest;
 
-typedef struct SendtoWithRetryCbCtx_ {
+typedef struct SendtoWithRetryCtx_ {
     void (*cb)            (UDPRequest *udp_request);
     const void            *buffer;
     UDPRequest            *udp_request;
@@ -38,6 +38,6 @@ typedef struct SendtoWithRetryCbCtx_ {
     size_t                 length;
     socklen_t              dest_len;
     int                    flags;
-} SendtoWithRetryCbCtx;
+} SendtoWithRetryCtx;
 
 #endif
