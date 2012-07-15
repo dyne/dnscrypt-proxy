@@ -90,6 +90,7 @@ sendto_with_retry(SendtoWithRetryCbCtx * const ctx)
     SendtoWithRetryCbCtx *ctx_cb;
     UDPRequest           *udp_request = ctx->udp_request;
     int                   err;
+    _Bool                 retriable;
 
     if (sendto(ctx->handle, ctx->buffer, ctx->length, ctx->flags,
                ctx->dest_addr, ctx->dest_len) == (ssize_t) ctx->length) {
@@ -103,12 +104,18 @@ sendto_with_retry(SendtoWithRetryCbCtx * const ctx)
     logger(udp_request->proxy_context, LOG_WARNING,
            "sendto: [%s]", evutil_socket_error_to_string(err));
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
-#ifndef _WIN32
-    if (err != ENOBUFS && err != ENOMEM && err != EINTR) {
+
+#ifdef _WIN32
+    retriable = (err == WSAENOBUFS ||
+                 err == WSAEWOULDBLOCK || err == WSAEINTR);
+#else
+    retriable = (err == ENOBUFS || err == ENOMEM ||
+                 err == EAGAIN || err == EINTR);
+#endif
+    if (retriable == 0) {
         udp_request_kill(udp_request);
         return -1;
     }
-#endif
     COMPILER_ASSERT(DNS_QUERY_TIMEOUT < UCHAR_MAX);
     if (++(udp_request->retries) > DNS_QUERY_TIMEOUT) {
         udp_request_kill(udp_request);
