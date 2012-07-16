@@ -1,5 +1,21 @@
 Date:   2012-07-16
 
+    libevent Win32: avoid crash when waiting forever on zero fds.
+
+Date:   2012-07-16
+
+    Explicitly mention libtool in the autoconf script.
+
+Date:   2012-07-16
+
+    Run sandbox_init() only if it's not a stub.
+
+Date:   2012-07-16
+
+    Update Changelog
+
+Date:   2012-07-16
+
     Xcode 4.5DP3
 
 Date:   2012-07-16

@@ -6,8 +6,9 @@
  - Datagrams are resent after running out of memory, or if the queue
    was full.
  - The --local-port and --resolver-port options have been deprecated.
-   Please use --local-address=<ip>:<port> and
+   Please use --local-address=<ip>:<port> eand
    --resolver-address=<ip>:<port> instead.
+ - Improved stability on Win32.
 
 * Version 0.10.1:
  - The daemon didn't start on some Linux distributions lacking the
