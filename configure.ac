@@ -260,6 +260,20 @@ AC_ARG_ENABLE(blocking-random,
 [AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
 [AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
 
+AC_ARG_ENABLE(ssp,
+[AS_HELP_STRING(--disable-ssp,Don't compile with -fstack-protector)],
+[AS_IF([test "x$enableval" = "xno"], [
+    nxflags=""
+    for flag in `echo $CFLAGS`; do
+      case "$flag" in
+       -fstack-protector*) ;;
+        *) nxflags="$nxflags $flag"
+      esac
+    done
+    CFLAGS="$nxflags"
+  ])
+])
+
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
 [ AS_IF([test "x$withval" = "xyes"], [
@@ -280,7 +294,7 @@ AC_ARG_ENABLE(debug,
 
 AC_ARG_WITH(safecode,
 [AS_HELP_STRING(--with-safecode,For maintainers only - please do not use)],
-[ AS_IF([test "x$withval" = "xyes"], [
+[AS_IF([test "x$withval" = "xyes"], [
     AC_ARG_VAR([SAFECODE_HOME], [set to the safecode base directory])
     : ${SAFECODE_HOME:=/opt/safecode}
     LDFLAGS="$LDFLAGS -L${SAFECODE_HOME}/lib"
