@@ -41,6 +41,14 @@ case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)
     AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
     AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
+    AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
+      AX_CHECK_LINK_FLAG([-fstack-protector-all],
+        [AC_SEARCH_LIBS(__stpcpy_chk, [ssp],
+          [LIBS="-Wl,-Bstatic -lssp -Wl,-Bdynamic"
+           CFLAGS="$CFLAGS -fstack-protector-all"]
+        )]
+      )
+    ])
   ;;
   dragonfly*)
     AX_CHECK_COMPILE_FLAG([-fstack-protector], [
