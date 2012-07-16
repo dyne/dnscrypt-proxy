@@ -43,10 +43,7 @@ case $host_os in
     AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
     AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
       AX_CHECK_LINK_FLAG([-fstack-protector-all],
-        [AC_SEARCH_LIBS(__stpcpy_chk, [ssp],
-          [LIBS="-Wl,-Bstatic -lssp -Wl,-Bdynamic"
-           CFLAGS="$CFLAGS -fstack-protector-all"]
-        )]
+        [CFLAGS="$CFLAGS -fstack-protector-all"]
       )
     ])
   ;;
