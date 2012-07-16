@@ -37,6 +37,19 @@ AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior], [CFLAGS="$CFLAGS -fcatch
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"])
 
+AC_MSG_CHECKING(for clang)
+AC_TRY_COMPILE(,
+    [
+#ifndef __clang__
+be sad
+#endif
+    ],
+    [AC_MSG_RESULT(yes)
+     AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option],
+       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
+    [AC_MSG_RESULT(no)],
+)
+
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)
     AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
