@@ -22,19 +22,6 @@ AS_IF([test "$cross_compiling" != no],
   AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
 )
 
-AC_MSG_CHECKING(for clang)
-AC_TRY_COMPILE(,
-    [
-#ifndef __clang__
-be sad
-#endif
-    ],
-    [AC_MSG_RESULT(yes)
-     AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option],
-       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
-    [AC_MSG_RESULT(no)],
-)
-
 AX_CHECK_COMPILE_FLAG([-fPIC], [
   AX_CHECK_LINK_FLAG([-fPIC],
     [CFLAGS="$CFLAGS -fPIC"]
@@ -85,6 +72,19 @@ AC_ARG_VAR([CWFLAGS], [define to compilation flags for generating extra warnings
 
 AX_CHECK_COMPILE_FLAG([-Wall], [CWFLAGS="$CWFLAGS -Wall"])
 AX_CHECK_COMPILE_FLAG([-Wextra], [CWFLAGS="$CWFLAGS -Wextra"])
+
+AC_MSG_CHECKING(for clang)
+AC_TRY_COMPILE(,
+    [
+#ifndef __clang__
+be sad
+#endif
+    ],
+    [AC_MSG_RESULT(yes)
+     AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option],
+       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
+    [AC_MSG_RESULT(no)],
+)
 
 AX_CHECK_COMPILE_FLAG([-Wbad-function-cast], [CWFLAGS="$CWFLAGS -Wbad-function-cast"])
 AX_CHECK_COMPILE_FLAG([-Wcast-align], [CWFLAGS="$CWFLAGS -Wcast-align"])
