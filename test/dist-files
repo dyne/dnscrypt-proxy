@@ -1,6 +1,6 @@
 ./dist-dirs
 ./dist-files
-./features/step_definitions/opendnscache-proxy.rb
+./features/step_definitions/dnscrypt-proxy.rb
 ./features/step_definitions/opendnscache.rb
 ./features/support/env.rb
 ./features/test-dnscrypt-proxy/help.feature
