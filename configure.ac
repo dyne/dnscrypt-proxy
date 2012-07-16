@@ -22,6 +22,19 @@ AS_IF([test "$cross_compiling" != no],
   AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
 )
 
+AC_MSG_CHECKING(for clang)
+AC_TRY_COMPILE(,
+    [
+#ifndef __clang__
+be sad
+#endif
+    ],
+    [AC_MSG_RESULT(yes)
+     AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option],
+       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
+    [AC_MSG_RESULT(no)],
+)
+
 AX_CHECK_COMPILE_FLAG([-fPIC], [
   AX_CHECK_LINK_FLAG([-fPIC],
     [CFLAGS="$CFLAGS -fPIC"]
@@ -36,19 +49,6 @@ AX_CHECK_COMPILE_FLAG([-fPIE], [
 AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior], [CFLAGS="$CFLAGS -fcatch-undefined-c99-behavior"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"])
-
-AC_MSG_CHECKING(for clang)
-AC_TRY_COMPILE(,
-    [
-#ifndef __clang__
-be sad
-#endif
-    ],
-    [AC_MSG_RESULT(yes)
-     AX_CHECK_COMPILE_FLAG([-Wno-unknown-warning-option],
-       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
-    [AC_MSG_RESULT(no)],
-)
 
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)
