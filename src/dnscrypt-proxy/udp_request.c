@@ -108,10 +108,14 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
 
 #ifndef UDP_REQUEST_RETRY
+    (void) ctx_cb;
     (void) retriable;
     udp_request_kill(udp_request);
+
     return -1;
+
 #else
+
 # ifdef _WIN32
     retriable = (err == WSAENOBUFS ||
                  err == WSAEWOULDBLOCK || err == WSAEINTR);
