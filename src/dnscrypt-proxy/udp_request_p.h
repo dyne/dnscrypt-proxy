@@ -36,7 +36,7 @@ typedef struct SendtoWithRetryCtx_ {
     const struct sockaddr *dest_addr;
     evutil_socket_t        handle;
     size_t                 length;
-    socklen_t              dest_len;
+    ev_socklen_t           dest_len;
     int                    flags;
 } SendtoWithRetryCtx;
 
