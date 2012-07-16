@@ -24,8 +24,6 @@
 
 #define SALSA20_RANDOM_BLOCK_SIZE crypto_core_salsa20_OUTPUTBYTES
 
-#pragma GCC diagnostic ignored "-Wtype-limits"
-
 typedef struct Salsa20Random_ {
     unsigned char key[crypto_stream_salsa20_KEYBYTES];
     unsigned char rnd32[SALSA20_RANDOM_BLOCK_SIZE];
