@@ -84,7 +84,7 @@ tcp_tune(evutil_socket_t handle)
         return;
     }
     setsockopt(handle, IPPROTO_TCP, TCP_NODELAY,
-               (int []) { 1 }, sizeof (int));
+               (void *) (int []) { 1 }, sizeof (int));
 }
 
 static void
