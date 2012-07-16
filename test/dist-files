@@ -1,8 +1,10 @@
 ./dist-dirs
 ./dist-files
 ./features/step_definitions/dnscrypt-proxy.rb
+./features/step_definitions/dnscrypt-proxy.rb~
 ./features/step_definitions/opendnscache.rb
 ./features/support/env.rb
+./features/test-dnscrypt-proxy/forced_tcp.feature
 ./features/test-dnscrypt-proxy/help.feature
 ./features/test-dnscrypt-proxy/small_udp_query.feature
 ./features/test-dnscrypt-proxy/tcp_fallback.feature

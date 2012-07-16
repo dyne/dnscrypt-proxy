@@ -19,9 +19,9 @@ Around do |scenario, block|
   end
 end
 
-Given /^a running dnscrypt proxy$/ do
+Given /^a running dnscrypt proxy with options "([^"]*)"$/ do |options|
   @pipe = IO.popen("dnscrypt-proxy " +
-    "--local-address=#{PROXY_IP}:#{PROXY_PORT} --edns-payload-size=0", "r")
+    "--local-address=#{PROXY_IP}:#{PROXY_PORT} $#{options}", "r")
   sleep(1.5)
 end
 
