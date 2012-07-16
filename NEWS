@@ -3,8 +3,6 @@
  - A new tool, hostip, can resolve host names before dnscrypt-proxy is
    started. This should help resolving chicken-and-egg problems on
    routers, as reported by LanceThePants.
- - Datagrams are resent after running out of memory, or if the queue
-   was full.
  - The --local-port and --resolver-port options have been deprecated.
    Please use --local-address=<ip>:<port> eand
    --resolver-address=<ip>:<port> instead.
