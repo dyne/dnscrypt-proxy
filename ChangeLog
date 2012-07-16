@@ -1,3 +1,82 @@
+Date:   2012-07-16
+
+    Xcode 4.5DP3
+
+Date:   2012-07-16
+
+    Test --tcp-only
+
+Date:   2012-07-16
+
+    Update dist-files
+
+Date:   2012-07-16
+
+    opendnscache-proxy was the name of dnscrypt 1 year ago.
+    Rename it to dnscrypt-proxy.
+
+Date:   2012-07-16
+
+    Mention PowerDNS.
+
+Date:   2012-07-16
+
+    And Gemfile and more tests.
+
+Date:   2012-07-16
+
+    Exit with 1 when an invalid option is given in hostip, too.
+
+Date:   2012-07-16
+
+    Exit with 1 when an unknown option is given.
+
+Date:   2012-07-16
+
+    Revert to always using -fstack-protector-all on Windows.
+    If it fails outside the MingW environment, either do some magic to
+    statically link it, or use --disable-ssp if you're desperate.
+
+Date:   2012-07-15
+
+    Statically link libssp on Windows.
+
+Date:   2012-07-15
+
+    Windoz nitz
+
+Date:   2012-07-15
+
+    Add --disable-ssp option for platforms lacking libssp. (sad)
+
+Date:   2012-07-15
+
+    Ignore deprecated declarations warnings for sandbox*()
+
+Date:   2012-07-15
+
+    Reorder
+
+Date:   2012-07-15
+
+    Try to better detect Windows targets.
+
+Date:   2012-07-15
+
+    Copy with Winsock2 prototypes.
+
+Date:   2012-07-15
+
+    Use ev_socklen_t everywhere.
+
+Date:   2012-07-15
+
+    Update noops for systems without dtrace.
+
+Date:   2012-07-15
+
+    Update NEWS / ChangeLog
+
 Date:   2012-07-15
 
     Deprecate --local-port and --resolver-port
