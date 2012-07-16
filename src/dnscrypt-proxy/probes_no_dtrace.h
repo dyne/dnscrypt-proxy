@@ -122,6 +122,14 @@ do { \
 do { \
 	} while (0)
 #define	DNSCRYPT_PROXY_REQUEST_UDP_REPLIED_ENABLED() (0)
+#define	DNSCRYPT_PROXY_REQUEST_UDP_RETRY(arg0, arg1) \
+do { \
+	} while (0)
+#define	DNSCRYPT_PROXY_REQUEST_UDP_RETRY_ENABLED() (0)
+#define	DNSCRYPT_PROXY_REQUEST_UDP_RETRY_SCHEDULED(arg0, arg1) \
+do { \
+	} while (0)
+#define	DNSCRYPT_PROXY_REQUEST_UDP_RETRY_SCHEDULED_ENABLED() (0)
 #define	DNSCRYPT_PROXY_REQUEST_UDP_START(arg0) \
 do { \
 	} while (0)
