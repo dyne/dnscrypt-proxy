@@ -85,7 +85,7 @@ options_parse(AppContext * const app_context, int argc, char *argv[])
             exit(0);
         default:
             options_usage();
-            exit(0);
+            exit(1);
         }
     }
     argc -= optind;
