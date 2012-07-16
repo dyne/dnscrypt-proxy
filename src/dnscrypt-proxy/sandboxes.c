@@ -7,6 +7,7 @@
 #include <sys/time.h>
 
 #ifdef HAVE_SANDBOX_H
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 # include <sandbox.h>
 #endif
 
