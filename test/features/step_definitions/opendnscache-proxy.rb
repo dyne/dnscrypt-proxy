@@ -21,18 +21,18 @@ end
 
 Given /^a running dnscrypt proxy$/ do
   @pipe = IO.popen("dnscrypt-proxy " +
-    "--local-port=#{PROXY_PORT} --edns-payload-size=0", "r")
+    "--local-address=#{PROXY_IP}:#{PROXY_PORT} --edns-payload-size=0", "r")
   sleep(1.5)
 end
 
-When /^a client asks opendnscache\-proxy for "([^"]*)"$/ do |name|
+When /^a client asks dnscrypt\-proxy for "([^"]*)"$/ do |name|
   @answer_section = @resolver.query(name, Net::DNS::A).answer
 end
 
-Then /^opendnscache\-proxy returns "([^"]*)"$/ do |ip_for_name|
+Then /^dnscrypt\-proxy returns "([^"]*)"$/ do |ip_for_name|
   @answer_section.collect { |a| a.address.to_s }.should include(ip_for_name)
 end
 
-Then /^opendnscache\-proxy returns a NXDOMAIN answer$/ do
+Then /^dnscrypt\-proxy returns a NXDOMAIN answer$/ do
   @answer_section.should be_empty
 end

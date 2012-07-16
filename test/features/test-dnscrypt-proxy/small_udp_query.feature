@@ -6,12 +6,12 @@ Feature: Small UDP query
   
     Given a working opendnscache on 208.67.220.220
     And a running dnscrypt proxy
-    When a client asks opendnscache-proxy for "resolver1.opendns.com"
-    Then opendnscache-proxy returns "208.67.222.222"
+    When a client asks dnscrypt-proxy for "resolver1.opendns.com"
+    Then dnscrypt-proxy returns "208.67.222.222"
 
   Scenario: query a nonexistent name.
   
     Given a working opendnscache on 208.67.220.220
     And a running dnscrypt proxy
-    When a client asks opendnscache-proxy for "nonexistent.opendns.com"
-    Then opendnscache-proxy returns a NXDOMAIN answer
+    When a client asks dnscrypt-proxy for "nonexistent.opendns.com"
+    Then dnscrypt-proxy returns a NXDOMAIN answer

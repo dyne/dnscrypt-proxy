@@ -8,5 +8,5 @@ and the proxy should handle TCP just fine.
   
     Given a working opendnscache on 208.67.220.220
     And a running dnscrypt proxy
-    When a client asks opendnscache-proxy for "test-tcp.stdc.org"
-    Then opendnscache-proxy returns "127.0.0.1"
+    When a client asks dnscrypt-proxy for "test-tcp.stdc.org"
+    Then dnscrypt-proxy returns "127.0.0.1"
