@@ -4,4 +4,3 @@
 ./features/support
 ./features/test-dnscrypt-proxy
 ./features/test-hostip
-./features/tmp
