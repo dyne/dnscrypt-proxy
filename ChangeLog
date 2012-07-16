@@ -1,5 +1,25 @@
 Date:   2012-07-16
 
+    Check for -W combos, not for individual switches.
+
+Date:   2012-07-16
+
+    Add config.guess patch for bitrig to the tree.
+
+Date:   2012-07-16
+
+    Try harder to trigger the gcc warning bug.
+
+Date:   2012-07-16
+
+    Move clang detection
+
+Date:   2012-07-16
+
+    Update Changelog
+
+Date:   2012-07-16
+
     Improve ax_check_compile_flag by adding an unused variable in order to
     always trigger a non-fatal compiler warning.
 
