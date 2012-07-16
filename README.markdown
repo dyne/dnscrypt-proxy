@@ -83,9 +83,8 @@ set of resolvers with:
 Other common command-line switches include:
 
 * `--daemonize` in order to run the server as a background process.
-* `--local-address=<ip>` in order to locally bind a different IP address than
-  127.0.0.1
-* `--local-port=<port>` to change the local port to listen to.
+* `--local-address=<ip>[:port]` in order to locally bind a different IP
+address than 127.0.0.1
 * `--logfile=<file>` in order to write log data to a dedicated file. By
   default, logs are sent to stdout if the server is running in foreground,
   and to syslog if it is running in background.
@@ -95,7 +94,8 @@ Other common command-line switches include:
 * `--user=<user name>` in order to chroot()/drop privileges.
 
 DNSCrypt comes pre-configured for OpenDNS, although the
-`--resolver-address=<ip>`, `--provider-name=<certificate provider FQDN>`
+`--resolver-address=<ip>[:port]`,
+`--provider-name=<certificate provider FQDN>`
 and `--provider-key=<provider public key>` can be specified in
 order to change the default settings.
 
@@ -128,7 +128,15 @@ instead of different ports.
 Then start `dnscrypt-proxy`, telling it to use a specific port (`40`, in
 this example):
 
-    # dnscrypt-proxy --local-port=40 --daemonize
+    # dnscrypt-proxy --local-address=127.0.0.1:40 --daemonize
+
+IPv6 support
+------------
+
+IPv6 is fully supported. IPv6 addresses with a port number should be
+specified as [ip]:port
+
+    # dnscrypt-proxy --local-address='[::1]:40' --daemonize
 
 Queries using nonstandard ports / over TCP
 ------------------------------------------

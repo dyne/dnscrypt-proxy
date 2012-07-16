@@ -1,5 +1,18 @@
 Date:   2012-07-15
 
+    Use some crazy heuristics to support ip:port addresses as well as the old
+    format --x-address and --x-port.
+
+Date:   2012-07-15
+
+    Export evutil_format_sockaddr_port()
+
+Date:   2012-07-15
+
+    Update NEWS/ChangeLog
+
+Date:   2012-07-15
+
     Remove pwnam comments.
 
 Date:   2012-07-15
