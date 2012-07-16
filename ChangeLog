@@ -1,5 +1,9 @@
 Date:   2012-07-15
 
+    Deprecate --local-port and --resolver-port
+
+Date:   2012-07-15
+
     Use some crazy heuristics to support ip:port addresses as well as the old
     format --x-address and --x-port.
 
