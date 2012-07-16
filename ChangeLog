@@ -1,5 +1,18 @@
 Date:   2012-07-16
 
+    Improve ax_check_compile_flag by adding an unused variable in order to
+    always trigger a non-fatal compiler warning.
+
+Date:   2012-07-16
+
+    Ignore unknown warnings only if we are using clang.
+
+Date:   2012-07-16
+
+    Remove -Wno-unknown-warning-option because of this stupid gcc.
+
+Date:   2012-07-16
+
     libevent Win32: avoid crash when waiting forever on zero fds.
 
 Date:   2012-07-16
