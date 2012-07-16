@@ -168,7 +168,8 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     size_t                   uncurved_len;
 
     (void) ev_flags;
-    nread = recvfrom(proxy_resolver_handle, dns_packet, sizeof dns_packet, 0,
+    nread = recvfrom(proxy_resolver_handle,
+                     (void *) dns_packet, sizeof dns_packet, 0,
                      (struct sockaddr *) &resolver_sockaddr,
                      &resolver_sockaddr_len);
     if (nread < (ssize_t) 0) {
@@ -285,14 +286,15 @@ udp_tune(evutil_socket_t const handle)
         return;
     }
     setsockopt(handle, SOL_SOCKET, SO_RCVBUFFORCE,
-               (int []) { UDP_BUFFER_SIZE }, sizeof (int));
+               (void *) (int []) { UDP_BUFFER_SIZE }, sizeof (int));
     setsockopt(handle, SOL_SOCKET, SO_SNDBUFFORCE,
-               (int []) { UDP_BUFFER_SIZE }, sizeof (int));
+               (void *) (int []) { UDP_BUFFER_SIZE }, sizeof (int));
 #if defined(IP_MTU_DISCOVER) && defined(IP_PMTUDISC_DONT)
     setsockopt(handle, IPPROTO_IP, IP_MTU_DISCOVER,
-               (int []) { IP_PMTUDISC_DONT }, sizeof (int));
+               (void *) (int []) { IP_PMTUDISC_DONT }, sizeof (int));
 #elif defined(IP_DONTFRAG)
-    setsockopt(handle, IPPROTO_IP, IP_DONTFRAG,  (int []) { 0 }, sizeof (int));
+    setsockopt(handle, IPPROTO_IP, IP_DONTFRAG,
+               (void *) (int []) { 0 }, sizeof (int));
 #endif
 }
 
@@ -326,7 +328,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     udp_request->timeout_timer = NULL;
     udp_request->client_proxy_handle = client_proxy_handle;
     udp_request->client_sockaddr_len = sizeof udp_request->client_sockaddr;
-    nread = recvfrom(client_proxy_handle, dns_packet, sizeof dns_packet, 0,
+    nread = recvfrom(client_proxy_handle,
+                     (void *) dns_packet, sizeof dns_packet, 0,
                      (struct sockaddr *) &udp_request->client_sockaddr,
                      &udp_request->client_sockaddr_len);
     if (nread < (ssize_t) 0) {
