@@ -258,7 +258,7 @@ options_parse(AppContext * const app_context,
             exit(0);
         default:
             options_usage();
-            exit(0);
+            exit(1);
         }
     }
     options_apply(proxy_context);
