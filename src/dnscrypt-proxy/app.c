@@ -36,10 +36,27 @@ sockaddr_from_ip_and_port(struct sockaddr_storage * const sockaddr,
                           const char * const ip, const char * const port,
                           const char * const error_msg)
 {
-    char sockaddr_port[INET6_ADDRSTRLEN + sizeof "[]:65535"];
-    int  sockaddr_len_int;
+    char   sockaddr_port[INET6_ADDRSTRLEN + sizeof "[]:65535"];
+    int    sockaddr_len_int;
+    char  *pnt;
+    _Bool  has_column = 0;
+    _Bool  has_columns = 0;
+    _Bool  has_brackets = *ip == '[';
 
-    if (strchr(ip, ':') != NULL && *ip != '[') {
+    if ((pnt = strchr(ip, ':')) != NULL) {
+        has_column = 1;
+        if (strchr(pnt + 1, ':') != NULL) {
+            has_columns = 1;
+        }
+    }
+    sockaddr_len_int = (int) sizeof *sockaddr;
+    if ((has_brackets != 0 || has_column != has_columns) &&
+        evutil_parse_sockaddr_port(ip, (struct sockaddr *) sockaddr,
+                                   &sockaddr_len_int) == 0) {
+        *sockaddr_len_p = (ev_socklen_t) sockaddr_len_int;
+        return 0;
+    }
+    if (has_columns != 0 && has_brackets == 0) {
         evutil_snprintf(sockaddr_port, sizeof sockaddr_port, "[%s]:%s",
                         ip, port);
     } else {
@@ -170,6 +187,9 @@ revoke_privileges(ProxyContext * const proxy_context)
 int
 dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 {
+    char local_addr_s[INET6_ADDRSTRLEN + sizeof "[]:65535"];
+    char resolver_addr_s[INET6_ADDRSTRLEN + sizeof "[]:65535"];
+
     if (proxy_context->listeners_started != 0) {
         return 0;
     }
@@ -177,9 +197,14 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
         udp_listener_start(proxy_context) != 0) {
         exit(1);
     }
-    logger(proxy_context, LOG_INFO, "Proxying from [%s (%s)] to [%s (%s)]",
-           proxy_context->local_ip, proxy_context->local_port,
-           proxy_context->resolver_ip, proxy_context->resolver_port);
+    evutil_format_sockaddr_port((const struct sockaddr *)
+                                &proxy_context->local_sockaddr,
+                                local_addr_s, sizeof local_addr_s);
+    evutil_format_sockaddr_port((const struct sockaddr *)
+                                &proxy_context->resolver_sockaddr,
+                                resolver_addr_s, sizeof resolver_addr_s);
+    logger(proxy_context, LOG_INFO, "Proxying from %s to %s",
+           local_addr_s, resolver_addr_s);
 
     proxy_context->listeners_started = 1;
 
