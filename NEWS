@@ -1,4 +1,8 @@
 
+* Version 0.12:
+ - Datagrams are resent after running out of memory, or if the queue
+   was full.
+
 * Version 0.11:
  - A new tool, hostip, can resolve host names before dnscrypt-proxy is
    started. This should help resolving chicken-and-egg problems on

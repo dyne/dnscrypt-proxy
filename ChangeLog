@@ -1,5 +1,29 @@
 Date:   2012-07-16
 
+    Fix UDP retries: ditch the retry timer after a successful sendto().
+
+Date:   2012-07-16
+
+    Update FreeBSD port.
+
+Date:   2012-07-16
+
+    Update NetBSD / Dragonfly BSD packages again.
+
+Date:   2012-07-16
+
+    Update OpenBSD package.
+
+Date:   2012-07-16
+
+    Update Homebrew formula.
+
+Date:   2012-07-16
+
+    Bring back _FORTIFY_SOURCE.
+
+Date:   2012-07-16
+
     Prepare OpenBSD package update.
 
 Date:   2012-07-16
