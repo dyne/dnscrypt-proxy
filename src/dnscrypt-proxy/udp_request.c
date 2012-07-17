@@ -69,7 +69,7 @@ udp_request_kill(UDPRequest * const udp_request)
 
 static int sendto_with_retry(SendtoWithRetryCtx * const ctx);
 
-#ifdef UDP_REQUEST_RETRY
+#ifndef UDP_REQUEST_NO_RETRIES
 static void
 sendto_with_retry_timer_cb(evutil_socket_t retry_timer_handle, short ev_flags,
                            void * const ctx_)
@@ -114,7 +114,7 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
            "sendto: [%s]", evutil_socket_error_to_string(err));
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
 
-#ifndef UDP_REQUEST_RETRY
+#ifdef UDP_REQUEST_NO_RETRIES
     (void) ctx_cb;
     (void) retriable;
     udp_request_kill(udp_request);
