@@ -1,5 +1,13 @@
 Date:   2012-07-17
 
+    Bind UDP listeners first.
+
+Date:   2012-07-17
+
+    Update ChangeLog
+
+Date:   2012-07-17
+
     Reset ac_configure_args before configuring libevent.
     This fixes the issue with the OpenBSD port, that was reseting both CC and
     CFLAGS.
