@@ -1,3 +1,51 @@
+Date:   2012-07-17
+
+    Reset ac_configure_args before configuring libevent.
+    This fixes the issue with the OpenBSD port, that was reseting both CC and
+    CFLAGS.
+
+Date:   2012-07-17
+
+    Use both -fPIE (cc) and -pie (linker) or none.
+
+Date:   2012-07-17
+
+    Restore -pie.
+    It breaks the OpenBSD-current port, but unbreaks Linux, aaahhhhhh.
+
+Date:   2012-07-17
+
+    No more rlimit for now.
+
+Date:   2012-07-17
+
+    Don't strip symbols on Debian packages. Screw you, stupid Debian policies.
+
+Date:   2012-07-17
+
+    Start UDP listeners first. They provide an error message when they fail.
+
+Date:   2012-07-17
+
+    Linux doesn't like RLIMIT_NPROC = 0.
+
+Date:   2012-07-16
+
+    Use nonexistent.local instead of nonexistent.example.com
+    or else OpenDNS servers can return the "guide" IP instead of NXDOMAIN.
+
+Date:   2012-07-16
+
+    Invert the ifdef logic for retries.
+
+Date:   2012-07-16
+
+    Enable retries.
+
+Date:   2012-07-16
+
+    DNSCrypt 0.12
+
 Date:   2012-07-16
 
     Fix UDP retries: ditch the retry timer after a successful sendto().

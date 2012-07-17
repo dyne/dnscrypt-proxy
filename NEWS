@@ -2,6 +2,8 @@
 * Version 0.12:
  - Datagrams are resent after running out of memory, or if the queue
    was full.
+ - Missing compilation flags broke 0.11 on some Linux distributions.
+   This has been fixed.
 
 * Version 0.11:
  - A new tool, hostip, can resolve host names before dnscrypt-proxy is
