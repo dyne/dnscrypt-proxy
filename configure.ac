@@ -292,7 +292,7 @@ AC_ARG_ENABLE(ssp,
     for flag in `echo $CFLAGS`; do
       case "$flag" in
        -fstack-protector*) ;;
-        *) AS_VAR_APPEND([nxflags], [" '$flag'"]) ;;
+        *) AS_VAR_APPEND([nxflags], [" $flag"]) ;;
       esac
     done
     CFLAGS="$nxflags"
@@ -308,7 +308,7 @@ AC_ARG_ENABLE(debug,
         case "$flag" in
           -O*) ;;
           -g*) ;;
-          *) AS_VAR_APPEND([nxflags], [" '$flag'"]) ;;
+          *) AS_VAR_APPEND([nxflags], [" $flag"]) ;;
         esac
       done
       CFLAGS="$nxflags -O0 -g3"
