@@ -41,12 +41,6 @@ echo "${PKG_NAME} (${VERSION}) unstable; urgency=low
 
 find "${INSTALL_DIR}/share/man" -type f -name "*.[0-9]" -exec gzip -9 {} \;
 
-[ -d "${INSTALL_DIR}/bin" ] && \
-  find "${INSTALL_DIR}/bin" -type f -perm +111 -exec strip {} \;
-
-[ -d "${INSTALL_DIR}/sbin" ] && \
-  find "${INSTALL_DIR}/sbin" -type f -perm +111 -exec strip {} \;
-
 find "$BASE_DIR" -type d -exec chmod 755 {} \;
 
 sudo chown -R 0:0 "$BASE_DIR" || exit 1
