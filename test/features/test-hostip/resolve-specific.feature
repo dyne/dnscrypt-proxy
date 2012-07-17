@@ -24,7 +24,7 @@ Feature: See if hostip can resolve names given a specific resolver
 
   Scenario: resolve a nonexistent name
   
-    When I run `hostip -r 8.8.8.8 nonexistent.example.com`
+    When I run `hostip -r 8.8.8.8 nonexistent.local`
     Then the output should contain exactly:
     """
     [name does not exist]
@@ -34,7 +34,7 @@ Feature: See if hostip can resolve names given a specific resolver
 
   Scenario: resolve a nonexistent IPv6 name
   
-    When I run `hostip -r 8.8.8.8 -6 nonexistent.example.com`
+    When I run `hostip -r 8.8.8.8 -6 nonexistent.local`
     Then the output should contain exactly:
     """
     [name does not exist]
