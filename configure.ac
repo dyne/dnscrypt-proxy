@@ -292,7 +292,7 @@ AC_ARG_ENABLE(ssp,
     for flag in `echo $CFLAGS`; do
       case "$flag" in
        -fstack-protector*) ;;
-        *) nxflags="$nxflags $flag"
+        *) AS_VAR_APPEND([nxflags], [" '$flag'"]) ;;
       esac
     done
     CFLAGS="$nxflags"
@@ -308,7 +308,7 @@ AC_ARG_ENABLE(debug,
         case "$flag" in
           -O*) ;;
           -g*) ;;
-          *) nxflags="$nxflags $flag"
+          *) AS_VAR_APPEND([nxflags], [" '$flag'"]) ;;
         esac
       done
       CFLAGS="$nxflags -O0 -g3"
@@ -341,7 +341,16 @@ LT_INIT([disable-shared])
 
 dnl Subconfig.
 
-ac_configure_args=""
+nx_ac_configure_args=""
+for flag in $ac_configure_args; do
+  case "$flag" in
+    \'--build*) AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--host*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    *) ;;
+  esac
+done
+ac_configure_args="$nx_ac_configure_args"
+
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*) ;;
   *) ac_configure_args="$ac_configure_args --disable-thread-support" ;;
