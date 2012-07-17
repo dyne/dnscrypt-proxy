@@ -2,6 +2,8 @@
 @newgroup _dnscrypt-proxy:688
 @newuser _dnscrypt-proxy:688:_dnscrypt-proxy:daemon:dnscrypt-proxy user:/var/empty:/sbin/nologin
 @man man/man8/dnscrypt-proxy.8
+@man man/man8/hostip.8
+@bin bin/hostip
 @bin sbin/dnscrypt-proxy
 share/doc/dnscrypt-proxy
 @rcscript ${RCDIR}/dnscrypt_proxy
