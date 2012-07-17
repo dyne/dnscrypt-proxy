@@ -1,9 +1,6 @@
 
 #include <config.h>
 #include <sys/types.h>
-#ifdef HAVE_SETRLIMIT
-# include <sys/resource.h>
-#endif
 #include <sys/time.h>
 
 #ifdef HAVE_SANDBOX_H
@@ -30,5 +27,5 @@ sandboxes_pidproc(void)
         return -1;
     }
 #endif
-    return sandboxes_rlimit();
+    return 0;
 }
