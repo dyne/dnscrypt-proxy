@@ -193,8 +193,8 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
     if (proxy_context->listeners_started != 0) {
         return 0;
     }
-    if (tcp_listener_start(proxy_context) != 0 ||
-        udp_listener_start(proxy_context) != 0) {
+    if (udp_listener_start(proxy_context) != 0 ||
+        tcp_listener_start(proxy_context) != 0) {
         exit(1);
     }
     evutil_format_sockaddr_port((const struct sockaddr *)
