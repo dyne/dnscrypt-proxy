@@ -13,22 +13,10 @@
 
 #include "sandboxes.h"
 
-static int
-sandboxes_rlimit(void)
-{
-#ifdef HAVE_SETRLIMIT
-    if (setrlimit(RLIMIT_NPROC,
-                  & (struct rlimit) { .rlim_cur = 0, .rlim_max = 0 }) != 0) {
-        return -1;
-    }
-#endif
-    return 0;
-}
-
 int
 sandboxes_app(void)
 {
-    return sandboxes_rlimit();
+    return 0;
 }
 
 int
