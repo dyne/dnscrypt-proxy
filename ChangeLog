@@ -1,5 +1,37 @@
 Date:   2012-07-16
 
+    Nuke -pie for now. It breaks the OpenBSD-current port.
+
+Date:   2012-07-16
+
+    Update NetBSD / Dragonfly BSD package
+
+Date:   2012-07-16
+
+    Bump Homebrew package
+
+Date:   2012-07-16
+
+    Cleanup dist-files
+
+Date:   2012-07-16
+
+    Bump fpm packages to 0.11
+
+Date:   2012-07-16
+
+    Screw you, gcc
+
+Date:   2012-07-16
+
+    gcc nits
+
+Date:   2012-07-16
+
+    Disable UDP sendto() retries for now.
+
+Date:   2012-07-16
+
     0.11
 
 Date:   2012-07-16
