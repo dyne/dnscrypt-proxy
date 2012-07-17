@@ -228,8 +228,8 @@ main(int argc, char *argv[])
     logger_noformat(&proxy_context, LOG_INFO, "Done");
 
     if (cert_updater_init(&proxy_context) != 0 ||
-        tcp_listener_bind(&proxy_context) != 0 ||
-        udp_listener_bind(&proxy_context) != 0) {
+        udp_listener_bind(&proxy_context) != 0 ||
+        tcp_listener_bind(&proxy_context) != 0) {
         exit(1);
     }
 #ifdef SIGPIPE
@@ -244,8 +244,8 @@ main(int argc, char *argv[])
 
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
     cert_updater_free(&proxy_context);
-    tcp_listener_stop(&proxy_context);
     udp_listener_stop(&proxy_context);
+    tcp_listener_stop(&proxy_context);
     event_base_free(proxy_context.event_loop);
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
