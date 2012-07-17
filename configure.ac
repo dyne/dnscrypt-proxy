@@ -17,6 +17,7 @@ LX_CFLAGS=${CFLAGS-NONE}
 AC_PROG_CC_C99
 AC_USE_SYSTEM_EXTENSIONS
 CPPFLAGS="$CPPFLAGS -D_XPG4_2=1 -D_GNU_SOURCE=1"
+CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
 
 AS_IF([test "$cross_compiling" != no],
   AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
@@ -33,10 +34,12 @@ AX_CHECK_COMPILE_FLAG([-fPIE], [
   )
 ])
 
-AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior], [CFLAGS="$CFLAGS -fcatch-undefined-c99-behavior"])
+AX_CHECK_COMPILE_FLAG([-fcatch-undefined-c99-behavior],
+  [CFLAGS="$CFLAGS -fcatch-undefined-c99-behavior"],
+  [AX_CHECK_COMPILE_FLAG([-fwrapv], [CFLAGS="$CFLAGS -fwrapv"])]
+)
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"])
-AX_CHECK_COMPILE_FLAG([-fwrapv], [CFLAGS="$CFLAGS -fwrapv"])
 
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)

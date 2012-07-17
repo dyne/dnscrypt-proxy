@@ -1,5 +1,17 @@
 Date:   2012-07-16
 
+    Prepare OpenBSD package update.
+
+Date:   2012-07-16
+
+    Add -fwrapv
+
+Date:   2012-07-16
+
+    Update ChangeLog
+
+Date:   2012-07-16
+
     Nuke -pie for now. It breaks the OpenBSD-current port.
 
 Date:   2012-07-16
