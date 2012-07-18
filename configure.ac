@@ -1,5 +1,5 @@
-AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 1.0, https://github.com/opendns/dnscrypt-proxy/issues)
+AC_PREREQ([2.61])
+AC_INIT([dnscrypt-proxy],[1.0],[https://github.com/opendns/dnscrypt-proxy/issues])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
@@ -80,17 +80,16 @@ AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wall], [CWFLAGS="$CWFLAGS -Wall"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wextra], [CWFLAGS="$CWFLAGS -Wextra"])
 
 AC_MSG_CHECKING(for clang)
-AC_TRY_COMPILE(,
-    [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
 #ifndef __clang__
 be sad
 #endif
-    ],
-    [AC_MSG_RESULT(yes)
-     AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wno-unknown-warning-option],
-       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
-    [AC_MSG_RESULT(no)],
-)
+]])],
+  [AC_MSG_RESULT(yes)
+   AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wno-unknown-warning-option],
+  [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
+  [AC_MSG_RESULT(no)
+])
 
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wbad-function-cast], [CWFLAGS="$CWFLAGS -Wbad-function-cast"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wcast-align], [CWFLAGS="$CWFLAGS -Wcast-align"])
@@ -115,7 +114,7 @@ AX_CHECK_LINK_FLAG([-Wl,-z,relro], [LDFLAGS="$LDFLAGS -Wl,-z,relro"])
 AX_CHECK_LINK_FLAG([-Wl,-z,now], [LDFLAGS="$LDFLAGS -Wl,-z,now"])
 AX_CHECK_LINK_FLAG([-Wl,-z,noexecstack], [LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"])
 
-AC_PROG_LIBTOOL
+LT_INIT
 AC_SUBST(LIBTOOL_DEPS)
 
 AC_ARG_VAR([RONN], [path to the ronn text processor])
