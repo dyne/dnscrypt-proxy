@@ -1,2 +1,2 @@
 
-#include <config.h>
+#include <dnscrypt/plugin.h>
