@@ -298,11 +298,13 @@ AC_ARG_ENABLE(ssp,
   ])
 ])
 
-PLUGINS=
+plugins=disabled
 AC_ARG_ENABLE(plugins,
 [AS_HELP_STRING(--enable-plugins,Enable support for plugins - experimental)],
 [AM_CFLAGS="$AM_CFLAGS -DPLUGINS=1"
- PLUGINS=enabled])
+ plugins=enabled
+ LDTL_INIT])
+AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
 
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
@@ -344,7 +346,6 @@ dnl Libtool.
 
 LT_INIT([dlopen])
 LT_CONFIG_LTDL_DIR([libltdl])
-LTDL_INIT
 
 dnl Subconfig.
 

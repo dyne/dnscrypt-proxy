@@ -47,23 +47,19 @@ AM_CFLAGS = @CWFLAGS@
 AM_CPPFLAGS = \
 	-I../ext \
 	-I../libevent/include \
-	-I../@NACL_PATH@/include/local \
-	$(LTDLINCL)
+	-I../@NACL_PATH@/include/local
 
-dnscrypt_proxy_LDFLAGS = \
-	-export-dynamic
+dnscrypt_proxy_LDFLAGS =
 
 dnscrypt_proxy_LDADD = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
-	../@NACL_PATH@/lib/local/libnacl.a \
-	$(LIBLTDL)
+	../@NACL_PATH@/lib/local/libnacl.a
 
 dnscrypt_proxy_DEPENDENCIES = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
-	../libnacl/.done \
-	$(LTDLDEPS)
+	../libnacl/.done
 
 BUILT_SOURCES = \
 	../libnacl/.done \
@@ -81,3 +77,10 @@ probes_dnscrypt_proxy.h: probes_dnscrypt_proxy.d
 CLEANFILES = \
 	probes.h \
 	probes_dnscrypt_proxy.h
+
+if PLUGINS
+AM_CPPFLAGS += $(LTDLINCL)
+dnscrypt_proxy_LDFLAGS += -export-dynamic
+dnscrypt_proxy_LDADD += $(LIBLTDL)
+dnscrypt_proxy_DEPENDENCIES += $(LTDLDEPS)
+endif
