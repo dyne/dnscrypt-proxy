@@ -60,6 +60,9 @@ dnscrypt_proxy_LDADD = \
 	$(LIBLTDL)
 
 dnscrypt_proxy_DEPENDENCIES = \
+	../libevent/libevent_extra.la \
+	../libevent/libevent_core.la \
+	../libnacl/.done \
 	$(LTDLDEPS)
 
 BUILT_SOURCES = \
