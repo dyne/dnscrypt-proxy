@@ -266,7 +266,7 @@ options_parse(AppContext * const app_context,
                             "Support for plugins hasn't been compiled in.");
             exit(1);
 #else
-            if (plugin_option_parse_str
+            if (plugin_options_parse_str
                 (proxy_context->app_context->dcps_context, optarg) != 0) {
                 exit(2);
             }
@@ -277,8 +277,9 @@ options_parse(AppContext * const app_context,
             exit(1);
         }
     }
-    options_apply(proxy_context);
-
+    if (options_apply(proxy_context) != 0) {
+        return -1;
+    }
     return 0;
 }
 

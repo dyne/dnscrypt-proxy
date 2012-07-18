@@ -10,7 +10,8 @@
 #include "plugin_support.h"
 
 int
-plugin_option_parse_str(DCPluginSupportContext * const dcps_context, char *str)
+plugin_options_parse_str(DCPluginSupportContext * const dcps_context,
+                         char * const str)
 {
     DCPluginSupport *dcps;
     char            *arg;

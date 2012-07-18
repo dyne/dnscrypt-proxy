@@ -60,6 +60,13 @@ plugin_support_add_option(DCPluginSupport * const dcps, char * const arg)
     return 0;
 }
 
+static int
+plugin_support_load(DCPluginSupport * const dcps)
+{
+    assert(dcps != NULL);
+    return 0;
+}
+
 DCPluginSupportContext *
 plugin_support_context_new(void)
 {
@@ -104,4 +111,22 @@ plugin_support_context_free(DCPluginSupportContext * const dcps_context)
         plugin_support_free(dcps);
     }
     free(dcps_context);
+}
+
+int
+plugin_support_context_load(DCPluginSupportContext * const dcps_context)
+{
+    DCPluginSupport *dcps;
+    _Bool            failed = 0;
+
+    assert(dcps_context != NULL);
+    SLIST_FOREACH(dcps, &dcps_context->dcps_list, next) {
+        if (plugin_support_load(dcps) != 0) {
+            failed = 1;
+        }
+    }
+    if (failed != 0) {
+        return -1;
+    }
+    return 0;
 }

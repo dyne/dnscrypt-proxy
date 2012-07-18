@@ -227,6 +227,10 @@ main(int argc, char *argv[])
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
         exit(2);
     }
+    if (plugin_support_context_load(&app_context.dcps_context) != 0) {
+        logger_noformat(NULL, LOG_ERR, "Unable to load plugins");
+        exit(2);
+    }
 #endif
     if (proxy_context_init(&proxy_context, argc, argv) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
