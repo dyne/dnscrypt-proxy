@@ -12,15 +12,15 @@
 #include "queue.h"
 
 DCPluginSupport *
-plugin_support_new(const char * const plugin_name)
+plugin_support_new(const char * const plugin_file)
 {
     DCPluginSupport *dcps;
 
     if ((dcps = calloc((size_t) 1U, sizeof *dcps)) == NULL) {
         return NULL;
     }
-    assert(plugin_name != NULL && *plugin_name != 0);
-    dcps->plugin_name = plugin_name;
+    assert(plugin_file != NULL && *plugin_file != 0);
+    dcps->plugin_file = plugin_file;
     dcps->argv = NULL;
 
     return dcps;
@@ -29,7 +29,7 @@ plugin_support_new(const char * const plugin_name)
 void
 plugin_support_free(DCPluginSupport * const dcps)
 {
-    assert(dcps->plugin_name != NULL && *dcps->plugin_name != 0);
+    assert(dcps->plugin_file != NULL && *dcps->plugin_file != 0);
     free(dcps->argv);
     dcps->argv = NULL;
     free(dcps);

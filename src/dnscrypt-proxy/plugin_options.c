@@ -14,18 +14,18 @@ plugin_option_parse_str(DCPluginSupportContext * const dcps_context, char *str)
 {
     DCPluginSupport *dcps;
     char            *arg;
-    char            *plugin_name;
+    char            *plugin_file;
     char            *tmp;
 
     assert(dcps_context != NULL);
     assert(str != NULL);
-    if (*(plugin_name = str) == 0) {
+    if (*(plugin_file = str) == 0) {
         return -1;
     }
     if ((arg = strchr(str, ',')) != NULL) {
         *arg++ = 0;
     }
-    if ((dcps = plugin_support_new(plugin_name)) == NULL) {
+    if ((dcps = plugin_support_new(plugin_file)) == NULL) {
         return -1;
     }
     while (arg != NULL) {

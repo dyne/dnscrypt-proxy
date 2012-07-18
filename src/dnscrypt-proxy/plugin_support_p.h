@@ -6,7 +6,7 @@
 
 struct DCPluginSupport_ {
     SLIST_ENTRY(DCPluginSupport_) next;
-    const char  *plugin_name;
+    const char  *plugin_file;
     char       **argv;
     int          argc;
 };
