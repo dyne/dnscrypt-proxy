@@ -6,9 +6,9 @@
 #include "plugin_options.h"
 
 int
-plugin_option_parse_str(DCPluginSupport * const dpcs, char *str)
+plugin_option_parse_str(DCPluginSupportContext * const dpcs_context, char *str)
 {
-    assert(dpcs != NULL);
+    assert(dpcs_context != NULL);
     assert(str != NULL);
 
     return 0;

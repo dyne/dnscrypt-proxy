@@ -2,9 +2,9 @@
 #ifndef __PLUGIN_SUPPORT_H__
 #define __PLUGIN_SUPPORT_H__ 1
 
-typedef struct DCPluginSupport_ DCPluginSupport;
+typedef struct DCPluginSupportContext_ DCPluginSupportContext;
 
-DCPluginSupport *plugin_support_new(void);
-void plugin_support_free(DCPluginSupport * const dcps);
+DCPluginSupportContext *plugin_support_context_new(void);
+void plugin_support_context_free(DCPluginSupportContext * const dcps_context);
 
 #endif

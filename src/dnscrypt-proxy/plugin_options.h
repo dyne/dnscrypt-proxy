@@ -4,6 +4,7 @@
 
 #include "plugin_support.h"
 
-int plugin_option_parse_str(DCPluginSupport * const dpcs, char *str);
+int plugin_option_parse_str(DCPluginSupportContext *dpcs_context,
+                            char *str);
 
 #endif

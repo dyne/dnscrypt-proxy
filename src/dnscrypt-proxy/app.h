@@ -10,7 +10,7 @@
 typedef struct AppContext_ {
     struct ProxyContext_ *proxy_context;
 #ifdef PLUGINS
-    DCPluginSupport *dpcs;
+    DCPluginSupportContext *dpcs_context;
 #endif
 } AppContext;
 
