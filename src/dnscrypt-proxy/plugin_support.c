@@ -2,6 +2,8 @@
 #include <config.h>
 
 #include <assert.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <dnscrypt/plugin.h>
 
@@ -19,6 +21,7 @@ plugin_support_new(const char * const plugin_name)
     }
     assert(plugin_name != NULL && *plugin_name != 0);
     dcps->plugin_name = plugin_name;
+    dcps->argv = NULL;
 
     return dcps;
 }
@@ -27,7 +30,34 @@ void
 plugin_support_free(DCPluginSupport * const dcps)
 {
     assert(dcps->plugin_name != NULL && *dcps->plugin_name != 0);
+    free(dcps->argv);
+    dcps->argv = NULL;
     free(dcps);
+}
+
+int
+plugin_support_add_option(DCPluginSupport * const dcps, char * const arg)
+{
+    char **argv;
+
+    if (*arg == 0) {
+        return 0;
+    }
+    if (dcps->argc >= INT_MAX) {
+        return -1;
+    }
+    if (SIZE_MAX / sizeof *argv <= (unsigned int) (dcps->argc + 2U)) {
+        return -1;
+    }
+    if ((argv = realloc(dcps->argv, (unsigned int) (dcps->argc + 2U) *
+                        sizeof *argv)) == NULL) {
+        return -1;
+    }
+    argv[dcps->argc++] = arg;
+    argv[dcps->argc] = NULL;
+    dcps->argv = argv;
+
+    return 0;
 }
 
 DCPluginSupportContext *

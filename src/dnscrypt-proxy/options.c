@@ -270,6 +270,7 @@ options_parse(AppContext * const app_context,
                 (proxy_context->app_context->dcps_context, optarg) != 0) {
                 exit(2);
             }
+            break;
 #endif
         default:
             options_usage();
