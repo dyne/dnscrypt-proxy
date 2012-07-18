@@ -22,6 +22,9 @@
 #include "logger.h"
 #include "pid_file.h"
 #include "utils.h"
+#ifdef PLUGINS
+# include "plugin_options.h"
+#endif
 
 static struct option getopt_long_options[] = {
     { "local-address", 1, NULL, 'a' },
@@ -38,6 +41,7 @@ static struct option getopt_long_options[] = {
 #ifndef _WIN32
     { "pidfile", 1, NULL, 'p' },
 #endif
+    { "plugin", 1, NULL, 'X' },
     { "resolver-address", 1, NULL, 'r' },
     { "resolver-port", 1, NULL, 't' },
     { "user", 1, NULL, 'u' },
@@ -48,9 +52,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TV";
+static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TVX";
 #else
-static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:TV";
+static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -256,6 +260,17 @@ options_parse(AppContext * const app_context,
         case 'V':
             options_version();
             exit(0);
+        case 'X':
+#ifndef PLUGINS
+            logger_noformat(proxy_context, LOG_ERR,
+                            "Support for plugins hasn't been compiled in.");
+            exit(1);
+#else
+            if (plugin_option_parse_str(proxy_context->app_context->dpcs,
+                                        optarg) != 0) {
+                exit(2);
+            }
+#endif
         default:
             options_usage();
             exit(1);

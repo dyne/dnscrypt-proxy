@@ -86,7 +86,10 @@ dnscrypt_proxy_LDADD += $(LIBLTDL)
 dnscrypt_proxy_DEPENDENCIES += $(LTDLDEPS)
 
 dnscrypt_proxy_SOURCES += \
+	plugin_options.c \
+	plugin_options.h \
+	plugin_support.c \
 	plugin_support.h \
-	plugin_support.c
+	plugin_support_p.h
 
 endif

@@ -23,6 +23,9 @@
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
+#ifdef PLUGINS
+#include "plugin_support.h"
+#endif
 
 #ifndef INET6_ADDRSTRLEN
 # define INET6_ADDRSTRLEN 46U
@@ -152,10 +155,11 @@ static void
 revoke_privileges(ProxyContext * const proxy_context)
 {
     (void) proxy_context;
-#ifndef DEBUG
-    salsa20_random_stir();
+
     init_tz();
     (void) strerror(ENOENT);
+#ifndef DEBUG
+    salsa20_random_stir();
 # ifndef _WIN32
     if (proxy_context->user_dir != NULL) {
         if (chdir(proxy_context->user_dir) != 0 ||
@@ -218,6 +222,12 @@ main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
+#ifdef PLUGINS
+    if ((app_context.dpcs = plugin_support_new()) == NULL) {
+        logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
+        exit(2);
+    }
+#endif
     if (proxy_context_init(&proxy_context, argc, argv) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
         exit(1);
@@ -247,6 +257,9 @@ main(int argc, char *argv[])
     udp_listener_stop(&proxy_context);
     tcp_listener_stop(&proxy_context);
     event_base_free(proxy_context.event_loop);
+#ifdef PLUGINS
+    plugin_support_free(app_context.dpcs);
+#endif
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     salsa20_random_close();
