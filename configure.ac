@@ -85,9 +85,12 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
 #ifndef __clang__
 be sad
 #endif
-    ]])],[AC_MSG_RESULT(yes)
-     AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wno-unknown-warning-option],
-       [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],[AC_MSG_RESULT(no)])
+]])],
+  [AC_MSG_RESULT(yes)
+   AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wno-unknown-warning-option],
+  [CWFLAGS="$CWFLAGS -Wno-unknown-warning-option"])],
+  [AC_MSG_RESULT(no)
+])
 
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wbad-function-cast], [CWFLAGS="$CWFLAGS -Wbad-function-cast"])
 AX_CHECK_COMPILE_FLAG([$CWFLAGS -Wcast-align], [CWFLAGS="$CWFLAGS -Wcast-align"])
