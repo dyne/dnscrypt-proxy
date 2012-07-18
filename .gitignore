@@ -1,5 +1,7 @@
 *.cmake
 *.dSYM
+*.la
+*.lo
 *.log
 *.o
 *.s
@@ -10,6 +12,7 @@
 .DS_Store
 .deps
 .done
+.libs
 INSTALL
 Makefile
 Makefile.in
@@ -46,12 +49,10 @@ src/hostip/hostip
 src/libevent/*.la
 src/libevent/*.lo
 src/libevent/*.pc
-src/libevent/.libs
 src/libevent/include/event2/event-config.h
 src/libevent/m4/libtool.m4
 src/libevent/m4/ltoptions.m4
 src/libevent/m4/ltversion.m4
-src/libevent/sample/.libs
 src/libevent/sample/dns-example
 src/libevent/sample/event-test
 src/libevent/sample/hello-world
@@ -59,7 +60,6 @@ src/libevent/sample/http-server
 src/libevent/sample/le-proxy
 src/libevent/sample/signal-test
 src/libevent/sample/time-test
-src/libevent/test/.libs
 src/libevent/test/bench
 src/libevent/test/bench_cascade
 src/libevent/test/bench_http

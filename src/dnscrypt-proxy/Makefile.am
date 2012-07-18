@@ -49,8 +49,6 @@ AM_CPPFLAGS = \
 	-I../libevent/include \
 	-I../@NACL_PATH@/include/local
 
-dnscrypt_proxy_LDFLAGS =
-
 dnscrypt_proxy_LDADD = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
@@ -80,7 +78,6 @@ CLEANFILES = \
 
 if PLUGINS
 AM_CPPFLAGS += $(LTDLINCL)
-dnscrypt_proxy_LDFLAGS += -export-dynamic
 dnscrypt_proxy_LDADD += $(LIBLTDL)
 dnscrypt_proxy_DEPENDENCIES += $(LTDLDEPS)
 endif

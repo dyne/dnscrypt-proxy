@@ -302,8 +302,7 @@ plugins=disabled
 AC_ARG_ENABLE(plugins,
 [AS_HELP_STRING(--enable-plugins,Enable support for plugins - experimental)],
 [AM_CFLAGS="$AM_CFLAGS -DPLUGINS=1"
- plugins=enabled
- LDTL_INIT])
+ plugins=enabled])
 AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
 
 AC_ARG_ENABLE(debug,
@@ -346,6 +345,9 @@ dnl Libtool.
 
 LT_INIT([dlopen])
 LT_CONFIG_LTDL_DIR([libltdl])
+if test x$plugins = xenabled; then
+  LTDL_INIT
+fi
 
 dnl Subconfig.
 
@@ -388,6 +390,8 @@ AC_CONFIG_FILES([Makefile
                  src/libnacl/tests/Makefile
                  src/libnacl/okcompilers/c
                  src/libnacl/okcompilers/do
+                 src/plugins/Makefile
+                 src/plugins/example/Makefile
                  test/Makefile])
 
 AC_OUTPUT
