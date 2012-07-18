@@ -1,0 +1,5 @@
+
+#ifndef __DNSCRYPT_VERSION_H__
+#define __DNSCRYPT_VERSION_H__ 1
+
+#endif

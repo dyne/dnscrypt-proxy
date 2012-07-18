@@ -7,5 +7,7 @@ SUBDIRS = \
 	hostip
 
 if PLUGINS
-SUBDIRS += plugins
+SUBDIRS += \
+	include
+	plugins
 endif

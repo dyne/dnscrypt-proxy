@@ -77,7 +77,16 @@ CLEANFILES = \
 	probes_dnscrypt_proxy.h
 
 if PLUGINS
-AM_CPPFLAGS += $(LTDLINCL)
+
+AM_CPPFLAGS += \
+	$(LTDLINCL) \
+	-I../include
+
 dnscrypt_proxy_LDADD += $(LIBLTDL)
 dnscrypt_proxy_DEPENDENCIES += $(LTDLDEPS)
+
+dnscrypt_proxy_SOURCES += \
+	plugin_support.h \
+	plugin_support.c
+
 endif

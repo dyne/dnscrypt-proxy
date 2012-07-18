@@ -389,6 +389,8 @@ AC_CONFIG_FILES([Makefile
                  src/hostip/Makefile
                  src/dnscrypt-proxy/Makefile
                  src/ext/Makefile
+                 src/include/Makefile
+                 src/include/dnscrypt/version.h
                  src/libnacl/Makefile
                  src/libnacl/tests/Makefile
                  src/libnacl/okcompilers/c

@@ -46,6 +46,7 @@ src/Makefile.in
 src/dnscrypt-proxy/Makefile.in
 src/dnscrypt-proxy/dnscrypt-proxy
 src/hostip/hostip
+src/include/dnscrypt/version.h
 src/libevent/*.la
 src/libevent/*.lo
 src/libevent/*.pc
