@@ -223,7 +223,7 @@ main(int argc, char *argv[])
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
 #ifdef PLUGINS
-    if ((app_context.dpcs_context = plugin_support_context_new()) == NULL) {
+    if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
         exit(2);
     }
@@ -258,7 +258,7 @@ main(int argc, char *argv[])
     tcp_listener_stop(&proxy_context);
     event_base_free(proxy_context.event_loop);
 #ifdef PLUGINS
-    plugin_support_context_free(app_context.dpcs_context);
+    plugin_support_context_free(app_context.dcps_context);
 #endif
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
