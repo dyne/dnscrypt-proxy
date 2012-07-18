@@ -1,5 +1,25 @@
 Date:   2012-07-17
 
+    Reenable --enable-debug
+
+Date:   2012-07-17
+
+    Don't double quote CFLAGS.
+
+Date:   2012-07-17
+
+    Change the way we pass the autoconf args to the libevent autoconf script.
+
+Date:   2012-07-17
+
+    fpm -> 0.12
+
+Date:   2012-07-17
+
+    Update ChangeLog for 0.12
+
+Date:   2012-07-17
+
     Bind UDP listeners first.
 
 Date:   2012-07-17
