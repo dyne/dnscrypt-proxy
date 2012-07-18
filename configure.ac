@@ -304,7 +304,7 @@ AC_ARG_ENABLE(ssp,
 plugins=disabled
 AC_ARG_ENABLE(plugins,
 [AS_HELP_STRING(--enable-plugins,Enable support for plugins - experimental)],
-[AM_CFLAGS="$AM_CFLAGS -DPLUGINS=1"
+[CPPFLAGS="$CPPFLAGS -DPLUGINS=1"
  plugins=enabled])
 AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
 
@@ -322,7 +322,7 @@ AC_ARG_ENABLE(debug,
     done
     CFLAGS="$nxflags -O0 -g3"
   ])
-  AM_CFLAGS="$AM_CFLAGS -DDEBUG=1"
+  CPPFLAGS="$CPPFLAGS -DDEBUG=1"
 ])
 
 AC_ARG_WITH(safecode,
@@ -332,7 +332,7 @@ AC_ARG_WITH(safecode,
     : ${SAFECODE_HOME:=/opt/safecode}
     LDFLAGS="$LDFLAGS -L${SAFECODE_HOME}/lib"
     LIBS="$LIBS -lsc_dbg_rt -lpoolalloc_bitmap -lstdc++"
-    AM_CFLAGS="$AM_CFLAGS -fmemsafety"
+    CFLAGS="$CFLAGS -fmemsafety"
   ])
 ])
 
