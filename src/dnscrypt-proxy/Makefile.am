@@ -8,8 +8,6 @@ dnscrypt_proxy_SOURCES = \
 	cert.c \
 	cert.h \
 	cert_p.h \
-	dl.c \
-	dl.h \
 	dnscrypt.c \
 	dnscrypt.h \
 	dnscrypt_client.c \
@@ -49,12 +47,20 @@ AM_CFLAGS = @CWFLAGS@
 AM_CPPFLAGS = \
 	-I../ext \
 	-I../libevent/include \
-	-I../@NACL_PATH@/include/local
+	-I../@NACL_PATH@/include/local \
+	$(LTDLINCL)
+
+dnscrypt_proxy_LDFLAGS = \
+	-export-dynamic
 
 dnscrypt_proxy_LDADD = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
-	../@NACL_PATH@/lib/local/libnacl.a
+	../@NACL_PATH@/lib/local/libnacl.a \
+	$(LIBLTDL)
+
+dnscrypt_proxy_DEPENDENCIES = \
+	$(LTDLDEPS)
 
 BUILT_SOURCES = \
 	../libnacl/.done \
