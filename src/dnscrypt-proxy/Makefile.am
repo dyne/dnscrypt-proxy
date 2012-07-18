@@ -54,6 +54,11 @@ dnscrypt_proxy_LDADD = \
 	../libevent/libevent_core.la \
 	../@NACL_PATH@/lib/local/libnacl.a
 
+dnscrypt_proxy_DEPENDENCIES = \
+ 	../libevent/libevent_extra.la \
+ 	../libevent/libevent_core.la \
+ 	../libnacl/.done
+
 BUILT_SOURCES = \
 	../libnacl/.done \
 	probes.h
