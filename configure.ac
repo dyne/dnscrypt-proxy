@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT(dnscrypt-proxy, 1.0, https://github.com/opendns/dnscrypt-proxy/issues)
+AC_INIT(dnscrypt-proxy, 1.1-dev, https://github.com/opendns/dnscrypt-proxy/issues)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/dnscrypt-proxy/app.c])
 AC_CONFIG_HEADER([config.h])
@@ -152,8 +152,7 @@ AC_SYS_LARGEFILE
 AC_CHECK_HEADERS([sys/cdefs.h sys/feature_tests.h])
 AC_CHECK_HEADERS([execinfo.h paths.h pwd.h uuid/uuid.h])
 AC_CHECK_HEADERS([sandbox.h])
-
-AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit])
+AC_CHECK_HEADERS([LibLoaderApi.h WinBase.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 
@@ -277,6 +276,9 @@ esac
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
 
+AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit])
+AC_CHECK_FUNCS([dlopen])
+
 dnl Switches.
 
 AC_HEADER_ASSERT
@@ -298,6 +300,12 @@ AC_ARG_ENABLE(ssp,
     CFLAGS="$nxflags"
   ])
 ])
+
+PLUGINS=
+AC_ARG_ENABLE(plugins,
+[AS_HELP_STRING(--enable-plugins,Enable support for plugins - experimental)],
+[AM_CFLAGS="$AM_CFLAGS -DPLUGINS=1"
+ PLUGINS=enabled])
 
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
@@ -333,6 +341,7 @@ NACL_PATH=libnacl/build/${NACL_HOSTNAME}
 AC_SUBST([MAINT])
 AC_SUBST([NACL_PATH])
 AC_SUBST([PROBES_SOURCE])
+AC_SUBST([PLUGINS])
 
 dnl Libtool.
 

@@ -8,6 +8,8 @@ dnscrypt_proxy_SOURCES = \
 	cert.c \
 	cert.h \
 	cert_p.h \
+	dl.c \
+	dl.h \
 	dnscrypt.c \
 	dnscrypt.h \
 	dnscrypt_client.c \
