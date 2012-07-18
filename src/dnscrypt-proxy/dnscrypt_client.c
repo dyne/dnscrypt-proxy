@@ -127,12 +127,10 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
     }
     dnscrypt_memzero(nonce, sizeof nonce);
     assert(len >= DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
-#ifdef TRIM_PADDING_FROM_REPLIES
     while (buf[--len] == 0U) { }
     if (buf[len] != 0x80) {
         return -1;
     }
-#endif
     *lenp = len - (DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
     memmove(buf,
             buf + DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES, *lenp);
