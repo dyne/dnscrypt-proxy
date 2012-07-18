@@ -21,6 +21,7 @@ libdcplugin_example_la_SOURCES = \
 libdcplugin_example_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	-export-dynamic \
+	-module \
 	-version-info $(PLUGIN_VERSION)
 
 libdcplugin_example_la_CPPFLAGS = \
