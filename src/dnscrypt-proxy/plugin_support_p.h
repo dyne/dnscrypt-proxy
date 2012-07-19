@@ -18,4 +18,6 @@ struct DCPluginSupportContext_ {
     SLIST_HEAD(DCPluginSupportList_, DCPluginSupport_) dcps_list;
 };
 
+typedef int (*DCPluginInit)(DCPlugin * const dcplugin, int argc, char argv[]);
+
 #endif

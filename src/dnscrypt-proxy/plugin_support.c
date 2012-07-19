@@ -39,6 +39,32 @@ plugin_support_add_option(DCPluginSupport * const dcps, char * const arg)
     return 0;
 }
 
+static void *
+plugin_support_load_symbol(DCPluginSupport * const dcps,
+                           const char * const symbol)
+{
+    void *fn;
+
+    assert(dcps->handle != NULL);
+    if ((fn = lt_dlsym(dcps->handle, symbol)) == NULL) {
+        logger(NULL, LOG_ERR, "Plugin: symbol [%s] not found in [%s]",
+               symbol, dcps->plugin_file);
+    }
+    return fn;
+}
+
+static int
+plugin_support_call_init(DCPluginSupport * const dcps)
+{
+    DCPluginInit dcplugin_init;
+
+    if ((dcplugin_init =
+         plugin_support_load_symbol(dcps, "dcplugin_init")) == NULL) {
+        return -1;
+    }
+    return 0;
+}
+
 static int
 plugin_support_load(DCPluginSupport * const dcps)
 {
@@ -60,8 +86,9 @@ plugin_support_load(DCPluginSupport * const dcps)
         return -1;
     }
     lt_dladvise_destroy(&advise);
+    dcps->handle = handle;
 
-    return 0;
+    return plugin_support_call_init(dcps);
 }
 
 static int
