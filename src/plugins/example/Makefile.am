@@ -2,6 +2,8 @@
 pkglib_LTLIBRARIES = \
 	libdcplugin_example.la
 
+libdcplugin_example_la_LIBTOOLFLAGS = --tag=disable-static
+
 libdcplugin_example_la_SOURCES = \
 	example.c
 
