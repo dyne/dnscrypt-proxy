@@ -62,6 +62,11 @@ plugin_support_call_init(DCPluginSupport * const dcps)
          plugin_support_load_symbol(dcps, "dcplugin_init")) == NULL) {
         return -1;
     }
+    if (dcplugin_init(dcps->plugin, dcps->argc, dcps->argv) != 0) {
+        logger(NULL, LOG_ERR, "Plugin: unable to initialize [%s]",
+               dcps->plugin_file);
+        return -1;
+    }
     return 0;
 }
 
@@ -105,16 +110,6 @@ plugin_support_unload(DCPluginSupport * const dcps)
     return 0;
 }
 
-void
-plugin_support_free(DCPluginSupport * const dcps)
-{
-    plugin_support_unload(dcps);
-    assert(dcps->plugin_file != NULL && *dcps->plugin_file != 0);
-    free(dcps->argv);
-    dcps->argv = NULL;
-    free(dcps);
-}
-
 DCPluginSupport *
 plugin_support_new(const char * const plugin_file)
 {
@@ -123,12 +118,28 @@ plugin_support_new(const char * const plugin_file)
     if ((dcps = calloc((size_t) 1U, sizeof *dcps)) == NULL) {
         return NULL;
     }
+    if ((dcps->plugin = calloc((size_t) 1U, sizeof *dcps->plugin)) == NULL) {
+        free(dcps);
+        return NULL;
+    }
     assert(plugin_file != NULL && *plugin_file != 0);
     dcps->plugin_file = plugin_file;
     dcps->argv = NULL;
     dcps->handle = NULL;
 
     return dcps;
+}
+
+void
+plugin_support_free(DCPluginSupport * const dcps)
+{
+    plugin_support_unload(dcps);
+    assert(dcps->plugin_file != NULL && *dcps->plugin_file != 0);
+    assert(dcps->plugin != NULL);
+    free(dcps->plugin);
+    free(dcps->argv);
+    dcps->argv = NULL;
+    free(dcps);
 }
 
 DCPluginSupportContext *

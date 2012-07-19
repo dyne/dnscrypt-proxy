@@ -9,6 +9,7 @@
 struct DCPluginSupport_ {
     SLIST_ENTRY(DCPluginSupport_) next;
     lt_dlhandle  handle;
+    DCPlugin    *plugin;
     const char  *plugin_file;
     char       **argv;
     int          argc;

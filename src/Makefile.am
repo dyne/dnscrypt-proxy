@@ -8,6 +8,6 @@ SUBDIRS = \
 
 if PLUGINS
 SUBDIRS += \
-	include
+	include \
 	plugins
 endif

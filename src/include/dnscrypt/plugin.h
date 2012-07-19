@@ -2,6 +2,7 @@
 #ifndef __DNSCRYPT_PLUGIN_H__
 #define __DNSCRYPT_PLUGIN_H__ 1
 
+#include <dnscrypt/private.h>
 #include <dnscrypt/version.h>
 
 typedef struct DCPlugin_ DCPlugin;

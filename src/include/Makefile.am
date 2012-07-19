@@ -1,6 +1,7 @@
 
 DNSCRYPT_EXPORT = \
 	dnscrypt/plugin.h \
+	dnscrypt/private.h \
 	dnscrypt/version.h
 
 EXTRA_SRC = $(DNSCRYPT_EXPORT) \
