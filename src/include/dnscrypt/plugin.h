@@ -12,12 +12,12 @@
  *
  * Plugins are modules that have to implement (at least) dcplugin_init().
  *
- * Plugins can be loaded by dnscrypt-proxy using
+ * Plugins can be dynamicaly loaded by dnscrypt-proxy using
  * --plugin=<path to module>[,arguments]
  * Ex:
  * --plugin=/usr/local/lib/dnscrypt-proxy/test.dll,-a,-H,--user=42
  *
- * Multiple plugins can be laoded, and queries will be sequentially passed
+ * Multiple plugins can be chained, and queries will be sequentially passed
  * through all of them.
  *
  * The only header file you should include in a plugin is <dnscrypt/plugin.h>
