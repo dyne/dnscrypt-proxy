@@ -62,6 +62,7 @@ plugin_support_call_init(DCPluginSupport * const dcps)
          plugin_support_load_symbol(dcps, "dcplugin_init")) == NULL) {
         return -1;
     }
+    assert(dcps->argc > 0 && dcps->argv != NULL);
     if (dcplugin_init(dcps->plugin, dcps->argc, dcps->argv) != 0) {
         logger(NULL, LOG_ERR, "Plugin: unable to initialize [%s]",
                dcps->plugin_file);
