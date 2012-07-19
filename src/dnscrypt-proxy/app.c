@@ -227,15 +227,17 @@ main(int argc, char *argv[])
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
         exit(2);
     }
-    if (plugin_support_context_load(&app_context.dcps_context) != 0) {
-        logger_noformat(NULL, LOG_ERR, "Unable to load plugins");
-        exit(2);
-    }
 #endif
     if (proxy_context_init(&proxy_context, argc, argv) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
         exit(1);
     }
+#ifdef PLUGINS
+    if (plugin_support_context_load(app_context.dcps_context) != 0) {
+        logger_noformat(NULL, LOG_ERR, "Unable to load plugins");
+        exit(2);
+    }
+#endif
     app_context.proxy_context = &proxy_context;
     logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
     dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
