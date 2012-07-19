@@ -134,6 +134,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
     ProxyContext    *proxy_context = tcp_request->proxy_context;
     struct evbuffer *input = bufferevent_get_input(proxy_resolver_bev);
     size_t           available_size;
+    size_t           dns_packet_len;
     size_t           uncurved_len;
 
     if (tcp_request->status.has_dns_reply_len == 0) {
@@ -179,12 +180,13 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
     }
     DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(tcp_request, uncurved_len);
     assert(uncurved_len <= tcp_request->dns_reply_len);
-    dns_uncurved_reply_len_buf[0] = (uncurved_len >> 8) & 0xff;
-    dns_uncurved_reply_len_buf[1] = uncurved_len & 0xff;
+    dns_packet_len = uncurved_len;
+    dns_uncurved_reply_len_buf[0] = (dns_packet_len >> 8) & 0xff;
+    dns_uncurved_reply_len_buf[1] = dns_packet_len & 0xff;
     if (bufferevent_write(tcp_request->client_proxy_bev,
                           dns_uncurved_reply_len_buf, (size_t) 2U) != 0 ||
         bufferevent_write(tcp_request->client_proxy_bev, dns_reply,
-                          uncurved_len) != 0) {
+                          dns_packet_len) != 0) {
         tcp_request_kill(tcp_request);
         return;
     }
