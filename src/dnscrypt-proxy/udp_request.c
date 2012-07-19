@@ -401,6 +401,10 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         max_packet_size = sizeof dns_packet;
     }
     assert(max_packet_size <= sizeof dns_packet);
+    if (udp_request->proxy_context->tcp_only != 0) {
+        proxy_client_send_truncated(udp_request, dns_packet, dns_packet_len);
+        return;
+    }
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_packet_len);
     size_t max_len = dns_packet_len + DNSCRYPT_MAX_PADDING +
@@ -408,8 +412,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     if (max_len > max_packet_size) {
         max_len = max_packet_size;
     }
-    if (udp_request->proxy_context->tcp_only != 0 ||
-        dns_packet_len + dnscrypt_query_header_size() > max_len) {
+    if (dns_packet_len + dnscrypt_query_header_size() > max_len) {
         proxy_client_send_truncated(udp_request, dns_packet, dns_packet_len);
         return;
     }
