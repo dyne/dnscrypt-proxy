@@ -246,6 +246,27 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     memset(udp_request->client_nonce, 0, sizeof udp_request->client_nonce);
     assert(uncurved_len <= dns_packet_len);
     dns_packet_len = uncurved_len;
+#ifdef PLUGINS
+    const size_t max_packet_size_for_filter = sizeof dns_packet;
+    DCPluginDNSPacket dcp_packet = {
+        .client_sockaddr = &udp_request->client_sockaddr,
+        .dns_packet = dns_packet,
+        .dns_packet_len_p = &dns_packet_len,
+        .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
+        .dns_packet_max_len = max_packet_size_for_filter
+    };
+    assert(proxy_context->app_context->dcps_context != NULL);
+    const DCPluginSyncFilterResult res =
+        plugin_support_context_apply_sync_post_filters
+        (proxy_context->app_context->dcps_context, &dcp_packet);
+    assert(dns_packet_len > (size_t) 0U &&
+           dns_packet_len <= sizeof dns_packet &&
+           dns_packet_len <= max_packet_size_for_filter);
+    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        udp_request_kill(udp_request);
+        return;
+    }
+#endif
     sendto_with_retry(& (SendtoWithRetryCtx) {
        .udp_request = udp_request,
        .handle = udp_request->client_proxy_handle,
@@ -422,12 +443,12 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
         (proxy_context->app_context->dcps_context, &dcp_packet);
+    assert(dns_packet_len > (size_t) 0U && dns_packet_len <= max_packet_size &&
+           dns_packet_len <= max_packet_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
         udp_request_kill(udp_request);
         return;
     }
-    assert(dns_packet_len > (size_t) 0U && dns_packet_len <= max_packet_size &&
-           dns_packet_len <= max_packet_size_for_filter);
 #endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_packet_len);
