@@ -265,6 +265,10 @@ AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
 
+AC_CHECK_HEADER([ldns/ldns.h], [AC_CHECK_LIB(ldns, ldns_verify_trusted)], [ ],
+[#include <stdlib.h>
+ #include <stdint.h>])
+
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)
     AC_CHECK_LIB([ws2_32], [_head_libws2_32_a])
