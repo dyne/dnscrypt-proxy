@@ -405,6 +405,29 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         proxy_client_send_truncated(udp_request, dns_packet, dns_packet_len);
         return;
     }
+#ifdef PLUGINS
+    size_t max_packet_size_for_filter = dns_packet_len;
+    if (max_packet_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
+        max_packet_size_for_filter = max_packet_size -
+            (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
+    }
+    DCPluginDNSPacket dcp_packet = {
+        .client_sockaddr = &udp_request->client_sockaddr,
+        .dns_packet = dns_packet,
+        .dns_packet_len_p = &dns_packet_len,
+        .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
+        .dns_packet_max_len = max_packet_size_for_filter
+    };
+    const DCPluginSyncFilterResult res =
+        plugin_support_context_apply_sync_pre_filters
+        (proxy_context->app_context->dcps_context, &dcp_packet);
+    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        udp_request_kill(udp_request);
+        return;
+    }
+    assert(dns_packet_len > (size_t) 0U && dns_packet_len <= max_packet_size &&
+           dns_packet_len <= max_packet_size_for_filter);
+#endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_packet_len);
     size_t max_len = dns_packet_len + DNSCRYPT_MAX_PADDING +
