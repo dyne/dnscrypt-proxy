@@ -264,9 +264,18 @@ AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
 
-AC_CHECK_HEADER([ldns/ldns.h], [AC_CHECK_LIB(ldns, ldns_verify_trusted)], [ ],
+use_ldns=no
+AC_CHECK_HEADER([ldns/ldns.h], [
+  AC_CHECK_LIB(ldns, ldns_verify_trusted, [
+    AC_DEFINE(USE_LDNS,,[define to use the ldns library])
+    LDNS_LIBS=-lldns
+    use_ldns=yes
+  ])
+], [ ],
 [#include <stdlib.h>
  #include <stdint.h>])
+AM_CONDITIONAL(USE_LDNS, test x$use_ldns = xyes)
+AC_SUBST([LDNS_LIBS])
 
 case $host_os in
   cygwin* | mingw* | pw32* | cegcc*)
@@ -344,7 +353,6 @@ NACL_PATH=libnacl/build/${NACL_HOSTNAME}
 AC_SUBST([MAINT])
 AC_SUBST([NACL_PATH])
 AC_SUBST([PROBES_SOURCE])
-AC_SUBST([PLUGINS])
 
 dnl Libtool.
 
