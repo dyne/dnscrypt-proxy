@@ -27,6 +27,7 @@ struct DCPluginSupport_ {
 
 struct DCPluginSupportContext_ {
     SLIST_HEAD(DCPluginSupportList_, DCPluginSupport_) dcps_list;
+    _Bool lt_enabled;
 };
 
 #endif

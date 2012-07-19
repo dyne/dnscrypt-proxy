@@ -418,6 +418,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
         .dns_packet_max_len = max_packet_size_for_filter
     };
+    assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
         (proxy_context->app_context->dcps_context, &dcp_packet);

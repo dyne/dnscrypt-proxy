@@ -207,6 +207,9 @@ plugin_support_context_free(DCPluginSupportContext * const dcps_context)
     SLIST_FOREACH_SAFE(dcps, &dcps_context->dcps_list, next, dcps_tmp) {
         plugin_support_free(dcps);
     }
+    if (dcps_context->lt_enabled != 0) {
+        lt_dlexit();
+    }
     free(dcps_context);
 }
 
@@ -217,7 +220,7 @@ plugin_support_context_load(DCPluginSupportContext * const dcps_context)
     _Bool            failed = 0;
 
     assert(dcps_context != NULL);
-    if (lt_dlinit() != 0) {
+    if (dcps_context->lt_enabled == 0 && lt_dlinit() != 0) {
         return -1;
     }
     SLIST_FOREACH(dcps, &dcps_context->dcps_list, next) {
@@ -225,7 +228,6 @@ plugin_support_context_load(DCPluginSupportContext * const dcps_context)
             failed = 1;
         }
     }
-    lt_dlexit();
     if (failed != 0) {
         return -1;
     }

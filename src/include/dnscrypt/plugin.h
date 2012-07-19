@@ -15,8 +15,14 @@ typedef enum DCPluginSyncFilterResult_ {
     DCP_SYNC_FILTER_RESULT_FATAL
 } DCPluginSyncFilterResult;
 
-int dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[]);
-int dcplugin_destroy(DCPlugin * const dcplugin);
+int dcplugin_init(DCPlugin *dcplugin, int argc, char *argv[]);
+int dcplugin_destroy(DCPlugin *dcplugin);
+
+DCPluginSyncFilterResult
+dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
+
+DCPluginSyncFilterResult
+dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
 
 #define dcplugin_get_user_data(P) ((P)->user_data)
 #define dcplugin_set_user_data(P, V) ((P)->user_data = (V))

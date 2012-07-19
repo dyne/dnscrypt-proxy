@@ -16,3 +16,11 @@ int dcplugin_destroy(DCPlugin * const dcplugin)
 
     return 0;
 }
+
+DCPluginSyncFilterResult
+dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
+{
+    (void) dcplugin;
+
+    return 0;
+}
