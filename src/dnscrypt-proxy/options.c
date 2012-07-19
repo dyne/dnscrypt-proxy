@@ -263,11 +263,13 @@ options_parse(AppContext * const app_context,
         case 'X':
 #ifndef PLUGINS
             logger_noformat(proxy_context, LOG_ERR,
-                            "Support for plugins hasn't been compiled in.");
+                            "Support for plugins hasn't been compiled in");
             exit(1);
 #else
             if (plugin_options_parse_str
                 (proxy_context->app_context->dcps_context, optarg) != 0) {
+                logger_noformat(proxy_context, LOG_ERR,
+                                "Error while parsing plugin options");
                 exit(2);
             }
             break;
