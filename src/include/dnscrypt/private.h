@@ -2,7 +2,10 @@
 #ifndef __DNSCRYPT_PRIVATE_H__
 #define __DNSCRYPT_PRIVATE_H__ 1
 
+#include <sys/types.h>
+
 #include <stdint.h>
+#include <stdlib.h>
 
 struct DCPlugin_ {
     void *user_data;
