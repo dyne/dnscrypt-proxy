@@ -28,6 +28,9 @@
 #include "udp_request.h"
 #include "udp_request_p.h"
 #include "utils.h"
+#ifdef PLUGINS
+# include "plugin_support.h"
+#endif
 
 static void
 udp_request_free(UDPRequest * const udp_request)

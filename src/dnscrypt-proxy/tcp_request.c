@@ -30,6 +30,9 @@
 #include "tcp_request.h"
 #include "tcp_request_p.h"
 #include "udp_request.h"
+#ifdef PLUGINS
+# include "plugin_support.h"
+#endif
 
 static void
 tcp_request_free(TCPRequest * const tcp_request)

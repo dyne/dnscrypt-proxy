@@ -43,10 +43,18 @@ static void *
 plugin_support_load_symbol(DCPluginSupport * const dcps,
                            const char * const symbol)
 {
+    assert(dcps->handle != NULL);
+
+    return lt_dlsym(dcps->handle, symbol);
+}
+
+static void *
+plugin_support_load_symbol_err(DCPluginSupport * const dcps,
+                               const char * const symbol)
+{
     void *fn;
 
-    assert(dcps->handle != NULL);
-    if ((fn = lt_dlsym(dcps->handle, symbol)) == NULL) {
+    if ((fn = plugin_support_load_symbol(dcps, symbol)) == NULL) {
         logger(NULL, LOG_ERR, "Plugin: symbol [%s] not found in [%s]",
                symbol, dcps->plugin_file);
     }
@@ -59,7 +67,7 @@ plugin_support_call_init(DCPluginSupport * const dcps)
     DCPluginInit dcplugin_init;
 
     if ((dcplugin_init =
-         plugin_support_load_symbol(dcps, "dcplugin_init")) == NULL) {
+         plugin_support_load_symbol_err(dcps, "dcplugin_init")) == NULL) {
         return -1;
     }
     assert(dcps->argc > 0 && dcps->argv != NULL);
@@ -68,6 +76,11 @@ plugin_support_call_init(DCPluginSupport * const dcps)
                dcps->plugin_file);
         return -1;
     }
+    dcps->sync_post_filter =
+        plugin_support_load_symbol(dcps, "dcplugin_sync_post_filter");
+    dcps->sync_pre_filter =
+        plugin_support_load_symbol(dcps, "dcplugin_sync_pre_filter");
+
     return 0;
 }
 
@@ -133,6 +146,8 @@ plugin_support_new(const char * const plugin_file)
     dcps->plugin_file = plugin_file;
     dcps->argv = NULL;
     dcps->handle = NULL;
+    dcps->sync_post_filter = NULL;
+    dcps->sync_pre_filter = NULL;
 
     return dcps;
 }
@@ -215,4 +230,76 @@ plugin_support_context_load(DCPluginSupportContext * const dcps_context)
         return -1;
     }
     return 0;
+}
+
+static DCPluginSyncFilterResult
+plugin_support_context_get_result_from_dcps(DCPluginSyncFilterResult result,
+                                            DCPluginSyncFilterResult result_dcps)
+{
+    switch (result_dcps) {
+    case DCP_SYNC_FILTER_RESULT_OK:
+        break;
+    case DCP_SYNC_FILTER_RESULT_KILL:
+        if (result == DCP_SYNC_FILTER_RESULT_OK) {
+            result = DCP_SYNC_FILTER_RESULT_KILL;
+        }
+        break;
+    case DCP_SYNC_FILTER_RESULT_ERROR:
+        if (result != DCP_SYNC_FILTER_RESULT_FATAL) {
+            result = DCP_SYNC_FILTER_RESULT_ERROR;
+        }
+        break;
+    case DCP_SYNC_FILTER_RESULT_FATAL:
+    default:
+        result = DCP_SYNC_FILTER_RESULT_FATAL;
+    }
+    return result;
+}
+
+DCPluginSyncFilterResult
+plugin_support_context_apply_sync_post_filters(DCPluginSupportContext *dcps_context,
+                                               DCPluginDNSPacket *dcp_packet)
+{
+    DCPluginSupport          *dcps;
+    const size_t              dns_packet_max_len = dcp_packet->dns_packet_max_len;
+    DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
+    DCPluginSyncFilterResult  result_dcps;
+
+    assert(dcp_packet->dns_packet != NULL &&
+           dcp_packet->dns_packet_len_p != NULL &&
+           *dcp_packet->dns_packet_len_p > (size_t) 0U);
+    SLIST_FOREACH(dcps, &dcps_context->dcps_list, next) {
+        if (dcps->sync_post_filter != NULL) {
+            result_dcps = dcps->sync_post_filter(dcps->plugin, dcp_packet);
+            result = plugin_support_context_get_result_from_dcps(result,
+                                                                 result_dcps);
+            assert(*dcp_packet->dns_packet_len_p <= dns_packet_max_len);
+            assert(*dcp_packet->dns_packet_len_p > (size_t) 0U);
+        }
+    }
+    return result;
+}
+
+DCPluginSyncFilterResult
+plugin_support_context_apply_sync_pre_filters(DCPluginSupportContext *dcps_context,
+                                              DCPluginDNSPacket *dcp_packet)
+{
+    DCPluginSupport          *dcps;
+    const size_t              dns_packet_max_len = dcp_packet->dns_packet_max_len;
+    DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
+    DCPluginSyncFilterResult  result_dcps;
+
+    assert(dcp_packet->dns_packet != NULL &&
+           dcp_packet->dns_packet_len_p != NULL &&
+           *dcp_packet->dns_packet_len_p > (size_t) 0U);
+    SLIST_FOREACH(dcps, &dcps_context->dcps_list, next) {
+        if (dcps->sync_pre_filter != NULL) {
+            result_dcps = dcps->sync_pre_filter(dcps->plugin, dcp_packet);
+            result = plugin_support_context_get_result_from_dcps(result,
+                                                                 result_dcps);
+        }
+        assert(*dcp_packet->dns_packet_len_p <= dns_packet_max_len);
+        assert(*dcp_packet->dns_packet_len_p > (size_t) 0U);
+    }
+    return result;
 }
