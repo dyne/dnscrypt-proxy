@@ -8,5 +8,6 @@
 typedef struct DCPlugin_ DCPlugin;
 
 int dcplugin_init(DCPlugin * const dcplugin, int argc, char argv[]);
+int dcplugin_destroy(DCPlugin * const dcplugin);
 
 #endif

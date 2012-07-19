@@ -99,8 +99,14 @@ plugin_support_load(DCPluginSupport * const dcps)
 static int
 plugin_support_unload(DCPluginSupport * const dcps)
 {
+    DCPluginDestroy dcplugin_destroy;
+
     if (dcps->handle == NULL) {
         return 0;
+    }
+    dcplugin_destroy = plugin_support_load_symbol(dcps, "dcplugin_destroy");
+    if (dcplugin_destroy != NULL) {
+        dcplugin_destroy(dcps);
     }
     if (lt_dlclose(dcps->handle) != 0) {
         return -1;

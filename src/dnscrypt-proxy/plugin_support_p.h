@@ -20,5 +20,6 @@ struct DCPluginSupportContext_ {
 };
 
 typedef int (*DCPluginInit)(DCPlugin * const dcplugin, int argc, char argv[]);
+typedef int (*DCPluginDestroy)(DCPlugin * const dcplugin);
 
 #endif
