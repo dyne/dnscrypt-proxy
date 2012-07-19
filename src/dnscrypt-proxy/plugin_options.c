@@ -23,15 +23,13 @@ plugin_options_parse_str(DCPluginSupportContext * const dcps_context,
     if (*(plugin_file = str) == 0) {
         return -1;
     }
-    if ((arg = strchr(str, ',')) != NULL) {
-        *arg++ = 0;
-    }
-    if ((dcps = plugin_support_new(plugin_file)) == NULL) {
-        return -1;
-    }
+    arg = str;
     while (arg != NULL) {
         if ((tmp = strchr(arg, ',')) != NULL) {
             *tmp++ = 0;
+        }
+        if (dcps == NULL && (dcps = plugin_support_new(plugin_file)) == NULL) {
+            return -1;
         }
         if (plugin_support_add_option(dcps, arg) != 0) {
             return -1;
