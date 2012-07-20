@@ -1,12 +1,14 @@
 
 #include <dnscrypt/plugin.h>
 
-int dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
+int
+dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
     return 0;
 }
 
-int dcplugin_destroy(DCPlugin * const dcplugin)
+int
+dcplugin_destroy(DCPlugin * const dcplugin)
 {
     return 0;
 }
