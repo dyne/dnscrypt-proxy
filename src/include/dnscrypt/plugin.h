@@ -73,7 +73,7 @@ typedef enum DCPluginSyncFilterResult_ {
 } DCPluginSyncFilterResult;
 
 /**
- * This is the entry point of a plugin.
+ * This is the entry point for a plugin.
  *
  * @param dcplugin a plugin object
  * @param argc the number of command-line arguments for this plugin
