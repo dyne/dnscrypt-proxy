@@ -407,6 +407,7 @@ AC_CONFIG_FILES([Makefile
                  src/libnacl/okcompilers/do
                  src/plugins/Makefile
                  src/plugins/example/Makefile
+                 src/plugins/example-ldns/Makefile
                  test/Makefile])
 
 AC_OUTPUT
