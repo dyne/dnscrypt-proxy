@@ -397,7 +397,7 @@ AC_CONFIG_FILES([Makefile
                  man/Makefile
                  src/Makefile
                  src/hostip/Makefile
-                 src/dnscrypt-proxy/Makefile
+                 src/proxy/Makefile
                  src/ext/Makefile
                  src/include/Makefile
                  src/include/dnscrypt/version.h
