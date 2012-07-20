@@ -1,6 +1,6 @@
 #! /bin/sh
 
-VERSION="0.12"
+VERSION="1.0"
 MAINTAINER="OpenDNS Inc <dnscrypt@opendns.com>"
 CATEGORY="net"
 URL="https://github.com/opendns/dnscrypt-proxy"
