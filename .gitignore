@@ -43,8 +43,8 @@ probes_dnscrypt_proxy.h
 src/*.o
 src/.deps
 src/Makefile.in
-src/dnscrypt-proxy/Makefile.in
-src/dnscrypt-proxy/dnscrypt-proxy
+src/proxy/Makefile.in
+src/proxy/dnscrypt-proxy
 src/hostip/hostip
 src/include/dnscrypt/version.h
 src/include/Doxyfile
