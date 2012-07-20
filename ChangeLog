@@ -1,3 +1,56 @@
+Date:   2012-07-20
+
+    Update .gitignore to reflect the dnscrypt-proxy->proxy changes
+
+Date:   2012-07-20
+
+    Update autoconf again :)
+
+Date:   2012-07-20
+
+    Update autoconf
+
+Date:   2012-07-20
+
+    The "dnscrypt-proxy" dir just becomes "proxy" to reduce diff w/ dns-proxy.
+
+Date:   2012-07-20
+
+    Remove uv_alloc_buffer_size leftover from the libuv days.
+
+Date:   2012-07-18
+
+    Use CPPFLAGS, not AM_CFLAGS.
+
+Date:   2012-07-17
+
+    tab
+
+Date:   2012-07-17
+
+    Add explicit dependencies.
+
+Date:   2012-07-17
+
+    Update autoconf script.
+
+Date:   2012-07-17
+
+    Remove TRIM_PADDING_FROM_REPLIES. We always do.
+
+Date:   2012-07-17
+
+    Move to version 1.0
+
+Date:   2012-07-17
+
+    libevent: Fix a memory leak on error in evhttp_uriencode.
+    Not used in dnscrypt-proxy, but we should keep that up to date.
+
+Date:   2012-07-17
+
+    Update ChangeLog
+
 Date:   2012-07-17
 
     Reenable --enable-debug

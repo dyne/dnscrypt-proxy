@@ -1,4 +1,8 @@
 
+* Version 1.0:
+ - Autotools scripts have been improved.
+ - 1.0.
+
 * Version 0.12:
  - Datagrams are resent after running out of memory, or if the queue
    was full.
