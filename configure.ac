@@ -408,6 +408,7 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/Makefile
                  src/plugins/example/Makefile
                  src/plugins/example-ldns/Makefile
+                 src/plugins/example-ldns-2/Makefile
                  test/Makefile])
 
 AC_OUTPUT
