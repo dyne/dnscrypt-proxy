@@ -7,6 +7,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct DCPlugin_ {
     void *user_data;
 };
@@ -18,5 +22,9 @@ struct DCPluginDNSPacket_ {
     size_t                   client_sockaddr_len_s;
     size_t                   dns_packet_max_len;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

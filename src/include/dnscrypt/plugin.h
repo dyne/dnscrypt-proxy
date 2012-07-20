@@ -23,8 +23,15 @@
  * The only header file you should include in a plugin is <dnscrypt/plugin.h>
  */
 
+#include <assert.h>
+#include <string.h>
+
 #include <dnscrypt/private.h>
 #include <dnscrypt/version.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * A dnscrypt-proxy plugin object. This is an opaque structure that gets
@@ -155,6 +162,20 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
 #define dcplugin_get_wire_data(D) ((D)->dns_packet)
 
 /**
+ * Change the content of the DNS packet.
+ *
+ * @param D a DCPluginDNSPacket object
+ * @param V the new content as a pointer to a uint8_t * buffer
+ * @param L the new length of the packet
+ *
+ * @see dcplugin_get_wire_data_len(), dcplugin_get_wire_data_max_len()
+ */
+#define dcplugin_set_wire_data(D, V, L) do { \
+      dcplugin_set_wire_data_len((D), (L)); \
+      memcpy(dcplugin_get_wire_data(D), (V), (L)); \
+    } while(0)
+
+/**
  * Get the number of bytes of the raw DNS packet.
  * @param D a DCPluginDNSPacket object
  * @return the number of bytes in the packet as a size_t object
@@ -167,12 +188,14 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
  * Update the size of the DNS packet.
  *
  * @param D a DCPluginDNSPacket object
- * @param V new size, that should always be smaller than the max allowed size
- * @return the number of bytes in the packet as a size_t object
+ * @param L new size, that should always be smaller than the max allowed size
  *
  * @see dcplugin_get_wire_data_max_len(), dcplugin_get_wire_data_len()
  */
-#define dcplugin_set_wire_data_len(D, V) ((*((D)->dns_packet_len_p)) = V)
+#define dcplugin_set_wire_data_len(D, L) do { \
+      assert(dcplugin_get_wire_data_max_len(D) >= (L)); \
+      (*((D)->dns_packet_len_p)) = (L); \
+    } while(0)
 
 /**
  * Get the maximum allowed number of bytes for the DNS packet.
@@ -183,5 +206,9 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
  * @see dcplugin_set_wire_data_len()
  */
 #define dcplugin_get_wire_data_max_len(D) ((D)->dns_packet_max_len)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
