@@ -3,5 +3,5 @@ SUBDIRS = \
 	ext \
 	libevent \
 	libnacl \
-	dnscrypt-proxy \
+	proxy \
 	hostip
