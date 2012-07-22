@@ -1,3 +1,63 @@
+Date:   2012-07-21
+
+    Target Gingerbread.
+
+Date:   2012-07-21
+
+    Threads? We don't need threads any more.
+
+Date:   2012-07-21
+
+    Add a compilation script for Android
+
+Date:   2012-07-21
+
+    Bump to -j3 :)
+
+Date:   2012-07-21
+
+    Don't use dtrace when cross-compiling.
+
+Date:   2012-07-21
+
+    nacl: always include <stdlib.h> when rand*() is needed.
+
+Date:   2012-07-21
+
+    ensure that libnacl/do is always executable
+
+Date:   2012-07-21
+
+    Don't use a hardcoded "ranlib" command. It doesn't play well with cross-compilation.
+
+Date:   2012-07-21
+
+    arpa/inet.h is required for htonl() in cert.c
+
+Date:   2012-07-20
+
+    Update FreeBSD port
+
+Date:   2012-07-20
+
+    Update Dragonfly BSD / NetBSD pkg
+
+Date:   2012-07-20
+
+    Update Homebrew formula
+
+Date:   2012-07-20
+
+    Update OpenBSD package
+
+Date:   2012-07-20
+
+    Bump fpm package to 1.0
+
+Date:   2012-07-20
+
+    Version 1.0
+
 Date:   2012-07-20
 
     Update .gitignore to reflect the dnscrypt-proxy->proxy changes
