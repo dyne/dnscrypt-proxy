@@ -382,4 +382,5 @@ AC_CONFIG_FILES([Makefile
 
 AC_OUTPUT
 
+chmod +x src/libnacl/do
 chmod +x src/libnacl/okcompilers/do
