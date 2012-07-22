@@ -126,10 +126,16 @@ AC_PATH_PROG([SIXJACK], [sixjack], [#])
 AC_ARG_VAR([AR], [path to the ar utility])
 AC_CHECK_TOOL([AR], [ar], [ar])
 
-AS_IF([test `(uname -s) 2>/dev/null` = "Darwin"], [
-  AC_ARG_VAR([DTRACE], [path to dtrace if you have it])
-  AC_PATH_PROG([DTRACE], [dtrace])
-])
+case $host_os in
+  darwin*)
+    case $build_os in
+      darwin*)
+        AC_ARG_VAR([DTRACE], [path to dtrace if you have it])
+        AC_PATH_PROG([DTRACE], [dtrace])
+      ;;
+    esac
+  ;;
+esac
 AS_IF([test -n "$DTRACE"],[
   PROBES_SOURCE="probes_dnscrypt_proxy.h"
 ],[
