@@ -34,7 +34,7 @@ Installation
 
 The daemon is known to work on recent versions of OSX, OpenBSD, Bitrig,
 NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a jailbroken
-device), and Windows (requires MingW).
+device), Solaris (SmartOS) and Windows (requires MingW).
 
 Download the
 [latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
