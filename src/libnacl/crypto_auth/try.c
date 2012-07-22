@@ -4,6 +4,7 @@
  * Public domain.
  */
 
+#include <stdlib.h>
 #include "crypto_hash_sha256.h"
 #include "crypto_auth.h"
 #include "windows/windows-quirks.h"

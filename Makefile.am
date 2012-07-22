@@ -6,6 +6,7 @@ EXTRA_DIST = \
 	README.markdown \
 	TECHNOTES \
 	THANKS \
+	android.sh \
 	autogen.sh \
 	com.opendns.osx.DNSCryptProxy.plist \
 	iphone.sh

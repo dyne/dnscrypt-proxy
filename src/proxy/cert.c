@@ -1,6 +1,12 @@
 
 #include <config.h>
 #include <sys/types.h>
+#ifdef _WIN32
+# include <winsock2.h>
+#else
+# include <sys/socket.h>
+# include <arpa/inet.h>
+#endif
 
 #include <assert.h>
 #include <stdint.h>
