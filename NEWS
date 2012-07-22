@@ -1,6 +1,7 @@
 
 * Version 1.0.1:
- - dnscrypt-proxy and hostip can now be compiled for Android.
+ - dnscrypt-proxy and hostip can now be compiled for Android and
+   Solaris.
 
 * Version 1.0:
  - Autotools scripts have been improved.
