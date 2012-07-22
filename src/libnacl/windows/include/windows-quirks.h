@@ -1,7 +1,7 @@
 
-#ifdef _WIN32
-
 #include <stdlib.h>
+
+#ifdef _WIN32
 
 static void
 srandom(unsigned seed)
