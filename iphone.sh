@@ -7,6 +7,6 @@ export SDK="${BASEDIR}/SDKs/iPhoneOS6.0.sdk"
 export CFLAGS="-Oz -pthread -mthumb -arch armv7 -isysroot ${SDK}"
 export LDFLAGS="-pthread -mthumb -arch armv7 -isysroot ${SDK}"
 
-./configure --host=arm-apple-darwin10 && make -j2
+./configure --host=arm-apple-darwin10 && make -j3
 
 echo 'Now, using codesign(1) to sign dnscrypt-proxy'
