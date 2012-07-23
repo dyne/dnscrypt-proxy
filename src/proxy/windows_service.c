@@ -19,7 +19,9 @@ main(int argc, char *argv[])
 #include <string.h>
 #include <windows.h>
 
-#define SERVICE_NAME "dnscrypt-proxy"
+#ifndef SERVICE_NAME
+# define SERVICE_NAME "dnscrypt-proxy"
+#endif
 
 static SERVICE_STATUS        service_status;
 static SERVICE_STATUS_HANDLE service_status_handle;
