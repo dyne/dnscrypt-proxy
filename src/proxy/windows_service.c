@@ -26,7 +26,7 @@ main(int argc, char *argv[])
 static SERVICE_STATUS        service_status;
 static SERVICE_STATUS_HANDLE service_status_handle;
 
-static void
+static void WINAPI
 control_handler(const DWORD wanted_state)
 {
     if (wanted_state == SERVICE_CONTROL_STOP &&
@@ -36,7 +36,7 @@ control_handler(const DWORD wanted_state)
     SetServiceStatus(service_status_handle, &service_status);
 }
 
-static void
+static void WINAPI
 service_main(DWORD argc_, LPTSTR *argv_)
 {
     memset(&service_status, 0, sizeof service_status);
