@@ -1,3 +1,35 @@
+Date:   2012-07-23
+
+    Update NEWS
+
+Date:   2012-07-23
+
+    WINAPI
+
+Date:   2012-07-23
+
+    Make the service name overridable
+
+Date:   2012-07-23
+
+    Make dnscrypt-proxy work as a Windows service.
+
+Date:   2012-07-23
+
+    Add dnscrypt_proxy_loop_break()
+
+Date:   2012-07-22
+
+    Add Solaris support.
+
+Date:   2012-07-22
+
+    Don't define _XPG4_2
+
+Date:   2012-07-21
+
+    Update NEWS / ChangeLog
+
 Date:   2012-07-21
 
     Target Gingerbread.

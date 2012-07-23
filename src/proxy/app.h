@@ -14,4 +14,7 @@ typedef struct AppContext_ {
 #endif
 } AppContext;
 
+int dnscrypt_proxy_main(int argc, char *argv[]);
+int dnscrypt_proxy_loop_break(void);
+
 #endif

@@ -40,7 +40,9 @@ dnscrypt_proxy_SOURCES = \
 	udp_request.h \
 	udp_request_p.h \
 	utils.c \
-	utils.h
+	utils.h \
+	windows_service.c \
+	windows_service.h
 
 AM_CFLAGS = @CWFLAGS@
 
