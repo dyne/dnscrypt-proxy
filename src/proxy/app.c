@@ -212,6 +212,16 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 }
 
 int
+dnscrypt_proxy_loop_break(void)
+{
+    if (app_context.proxy_context != NULL &&
+        app_context.proxy_context->event_loop != NULL) {
+        event_base_loopbreak(app_context.proxy_context->event_loop);
+    }
+    return 0;
+}
+
+int
 main(int argc, char *argv[])
 {
     ProxyContext proxy_context;
