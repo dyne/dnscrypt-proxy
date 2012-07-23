@@ -28,7 +28,8 @@
 # define INET6_ADDRSTRLEN 46U
 #endif
 
-static AppContext app_context;
+static AppContext            app_context;
+static volatile sig_atomic_t skip_dispatch;
 
 static int
 sockaddr_from_ip_and_port(struct sockaddr_storage * const sockaddr,
@@ -217,12 +218,14 @@ dnscrypt_proxy_loop_break(void)
     if (app_context.proxy_context != NULL &&
         app_context.proxy_context->event_loop != NULL) {
         event_base_loopbreak(app_context.proxy_context->event_loop);
+    } else {
+        skip_dispatch = 1;
     }
     return 0;
 }
 
 int
-main(int argc, char *argv[])
+dnscrypt_proxy_main(int argc, char *argv[])
 {
     ProxyContext proxy_context;
 
@@ -250,8 +253,9 @@ main(int argc, char *argv[])
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
-    event_base_dispatch(proxy_context.event_loop);
-
+    if (skip_dispatch == 0) {
+        event_base_dispatch(proxy_context.event_loop);
+    }
     logger_noformat(&proxy_context, LOG_INFO, "Stopping proxy");
     cert_updater_free(&proxy_context);
     udp_listener_stop(&proxy_context);
