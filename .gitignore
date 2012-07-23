@@ -22,6 +22,7 @@ config.*
 configure
 depcomp
 install-sh
+libltdl
 libtool
 ltmain.sh
 m4/libtool.m4
