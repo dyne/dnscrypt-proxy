@@ -18,6 +18,7 @@ main(int argc, char *argv[])
 #include <getopt.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
@@ -165,6 +166,47 @@ append_string_to_tstring(TCHAR ** const str1_p, size_t * const str1_len_p,
     free(str2_tchar);
 
     return ret;
+}
+
+static char **
+cmdline_clone_options(const int argc, char ** const argv)
+{
+    char **argv_new;
+
+    if (argc >= INT_MAX || argc >= SIZE_MAX / sizeof *argv_new ||
+        (argv_new = calloc((unsigned int) argc + 1U,
+                           sizeof *argv_new)) == NULL) {
+        return NULL;
+    }
+    memcpy(argv_new, argv, (unsigned int) (argc + 1U) * sizeof *argv_new);
+
+    return argv_new;
+}
+
+static int
+cmdline_add_option(int * const argc_p, char *** const argv_p,
+                   const char * const arg)
+{
+    char  *arg_dup;
+    char **argv_new;
+
+    if (*argc_p >= INT_MAX ||
+        SIZE_MAX / sizeof *argv_new <= (unsigned int) (*argc_p + 2U)) {
+        return -1;
+    }
+    if ((argv_new = realloc(*argv_p, (unsigned int) (*argc_p + 2U) *
+                            sizeof *argv_new)) == NULL) {
+        return -1;
+    }
+    if ((arg_dup = strdup(arg)) == NULL) {
+        free(argv_new);
+        return -1;
+    }
+    argv_new[(*argc_p)++] = arg_dup;
+    argv_new[*argc_p] = NULL;
+    *argv_p = argv_new;
+
+    return 0;
 }
 
 static int
