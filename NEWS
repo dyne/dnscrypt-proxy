@@ -2,7 +2,9 @@
 * Version 1.0.1:
  - dnscrypt-proxy and hostip can now be compiled for Android and
    Solaris.
- - The proxy can now run as a Windows service.
+ - The proxy can now run as a Windows service. The new --install and
+   --uninstall command-line switches can automatically register the proxy
+   as a service.
 
 * Version 1.0:
  - Autotools scripts have been improved.

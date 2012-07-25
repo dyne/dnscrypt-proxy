@@ -1,3 +1,23 @@
+Date:   2012-07-24
+
+    WINDOWS_SERVICE_NAME
+
+Date:   2012-07-24
+
+    Add --install, --reinstall and --uninstall switches to install as a service.
+
+Date:   2012-07-23
+
+    Head towards 1.0.1
+
+Date:   2012-07-23
+
+    gitignore libltdl
+
+Date:   2012-07-23
+
+    Update ChangeLog
+
 Date:   2012-07-23
 
     Update NEWS
