@@ -125,7 +125,7 @@ windows_service_install(void)
         (scm_handle, WINDOWS_SERVICE_NAME,
          WINDOWS_SERVICE_NAME, SERVICE_ALL_ACCESS,
          SERVICE_WIN32_OWN_PROCESS, SERVICE_DEMAND_START,
-         SERVICE_ERROR_NORMAL, self_path, NULL, NULL, NULL, NULL, NULL);
+         SERVICE_ERROR_NORMAL, self_path, NULL, NULL, L"\0\0", NULL, NULL);
 
     if (service_handle == NULL) {
         CloseServiceHandle(scm_handle);
