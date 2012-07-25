@@ -19,16 +19,11 @@ plugin_support_add_option(DCPluginSupport * const dcps, char * const arg)
 {
     char **argv;
 
-    if (*arg == 0) {
-        return 0;
-    }
     if (dcps->argc >= INT_MAX) {
         return -1;
     }
-    if (SIZE_MAX / sizeof *argv <= (unsigned int) (dcps->argc + 2U)) {
-        return -1;
-    }
-    if ((argv = realloc(dcps->argv, (unsigned int) (dcps->argc + 2U) *
+    if (SIZE_MAX / sizeof *argv <= (unsigned int) (dcps->argc + 2U) ||
+        (argv = realloc(dcps->argv, (unsigned int) (dcps->argc + 2U) *
                         sizeof *argv)) == NULL) {
         return -1;
     }
