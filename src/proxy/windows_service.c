@@ -92,7 +92,7 @@ windows_service_uninstall(void)
     if (scm_handle == NULL) {
         return -1;
     }
-    service_handle = OpenService(scm_handle, NAME_IN_SERVICES, DELETE);
+    service_handle = OpenService(scm_handle, WINDOWS_SERVICE_NAME, DELETE);
     if (service_handle == NULL) {
         CloseServiceHandle(scm_handle);
         return 0;
