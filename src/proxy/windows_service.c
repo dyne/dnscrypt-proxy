@@ -20,6 +20,7 @@ main(int argc, char *argv[])
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <tchar.h>
 #include <windows.h>
 
 #include "logger.h"
@@ -31,6 +32,7 @@ main(int argc, char *argv[])
 
 static SERVICE_STATUS        service_status;
 static SERVICE_STATUS_HANDLE service_status_handle;
+static _Bool                 app_is_running_as_a_service;
 
 static void WINAPI
 control_handler(const DWORD wanted_state)
@@ -78,6 +80,8 @@ windows_main(int argc, char *argv[])
         free(service_name);
         return dnscrypt_proxy_main(argc, argv);
     }
+    app_is_running_as_a_service = 1;
+
     return 0;
 }
 
@@ -107,11 +111,71 @@ windows_service_uninstall(void)
 }
 
 static int
-windows_service_install(void)
+append_tstring_to_tstring(TCHAR ** const str1_p, size_t * const str1_len_p,
+                          const TCHAR * const str2)
 {
-    TCHAR     self_path[MAX_PATH];
-    SC_HANDLE scm_handle;
-    SC_HANDLE service_handle;
+    TCHAR  *str1_tmp;
+    size_t  required_len;
+    size_t  str2_len;
+
+    if (str2 == NULL) {
+        return 0;
+    }
+    str2_len = _tcslen(str2);
+    if (SIZE_MAX / sizeof (sizeof *str1_tmp) - str2_len <= *str1_len_p) {
+        return -1;
+    }
+    required_len = *str1_len_p + str2_len + 1U;
+    if ((str1_tmp = realloc(*str1_p,
+                            required_len * sizeof (*str1_tmp))) == NULL) {
+        return -1;
+    }
+    memcpy(str1_tmp + *str1_len_p, str2, str2_len * sizeof (*str2));
+    *str1_p = str1_tmp;
+    *str1_len_p = *str1_len_p + str2_len;
+    (*str1_p)[*str1_len_p] = 0;
+
+    return 0;
+}
+
+static int
+append_string_to_tstring(TCHAR ** const str1_p, size_t * const str1_len_p,
+                         const char * const str2)
+{
+    TCHAR  *str2_tchar;
+    size_t  str2_len;
+    int     ret;
+
+    if (sizeof (TCHAR) == sizeof(char)) {
+        return append_tstring_to_tstring(str1_p, str1_len_p,
+                                         (const TCHAR *) str2);
+    }
+    str2_len = strlen(str2);
+    if (str2_len >= SIZE_MAX / sizeof *str2_tchar) {
+        return -1;
+    }
+    if ((str2_tchar = calloc(str2_len + 1U, sizeof *str2_tchar)) == NULL) {
+        return -1;
+    }
+    ret = -1;
+    if (MultiByteToWideChar(CP_UTF8, 0, str2, -1,
+                            (LPWSTR) str2_tchar, str2_len + 1U) > 0) {
+        ret = append_tstring_to_tstring(str1_p, str1_len_p, str2_tchar);
+    }
+    free(str2_tchar);
+
+    return ret;
+}
+
+static int
+windows_service_install(const int argc, const char * const argv[])
+{
+    TCHAR      self_path[MAX_PATH];
+    TCHAR     *cmd_line = NULL;
+    SC_HANDLE  scm_handle;
+    SC_HANDLE  service_handle;
+    size_t     cmd_line_size = (size_t) 0U;
+    int        i;
 
     windows_service_uninstall();
     if (GetModuleFileName(NULL, self_path, MAX_PATH) <= (DWORD) 0) {
@@ -121,12 +185,19 @@ windows_service_install(void)
     if (scm_handle == NULL) {
         return -1;
     }
+    append_tstring_to_tstring(&cmd_line, &cmd_line_size, self_path);
+    i = 1;
+    while (i < argc) {
+        append_tstring_to_tstring(&cmd_line, &cmd_line_size, _T(" "));
+        append_string_to_tstring(&cmd_line, &cmd_line_size, argv[i]);
+        i++;
+    }
     service_handle = CreateService
         (scm_handle, WINDOWS_SERVICE_NAME,
          WINDOWS_SERVICE_NAME, SERVICE_ALL_ACCESS,
          SERVICE_WIN32_OWN_PROCESS, SERVICE_DEMAND_START,
-         SERVICE_ERROR_NORMAL, self_path, NULL, NULL, L"\0\0", NULL, NULL);
-
+         SERVICE_ERROR_NORMAL, cmd_line, NULL, NULL, NULL, NULL, NULL);
+    free(cmd_line);
     if (service_handle == NULL) {
         CloseServiceHandle(scm_handle);
         return -1;
@@ -138,12 +209,16 @@ windows_service_install(void)
 }
 
 int
-windows_service_option(const int opt_flag)
+windows_service_option(const int opt_flag, const int argc,
+                       const char *argv[])
 {
+    if (app_is_running_as_a_service != 0) {
+        return 0;
+    }
     switch (opt_flag) {
     case WIN_OPTION_INSTALL:
     case WIN_OPTION_REINSTALL:
-        if (windows_service_install() != 0) {
+        if (windows_service_install(argc, argv) != 0) {
             logger_noformat(NULL, LOG_ERR, "Unable to install the service");
             exit(1);
         } else {

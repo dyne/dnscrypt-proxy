@@ -8,6 +8,7 @@ typedef enum WinOption_ {
     WIN_OPTION_UNINSTALL
 } WinOption;
 
-int windows_service_option(const int opt_flag);
+int windows_service_option(const int opt_flag,
+                           const int argc, const char *argv[]);
 
 #endif
