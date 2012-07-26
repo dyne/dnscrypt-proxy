@@ -310,6 +310,7 @@ windows_service_install(const int argc, const char * const argv[])
         CloseServiceHandle(scm_handle);
         return -1;
     }
+    StartService(service_handle, (DWORD) 0, NULL);
     CloseServiceHandle(service_handle);
     CloseServiceHandle(scm_handle);
 
