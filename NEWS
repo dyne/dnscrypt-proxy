@@ -4,7 +4,8 @@
    Solaris.
  - The proxy can now run as a Windows service. The new --install and
    --uninstall command-line switches can automatically register the proxy
-   as a service.
+   as a service. Startup options are read from the Windows registry.
+   See the README-WINDOWS.markdown file for details.
 
 * Version 1.0:
  - Autotools scripts have been improved.

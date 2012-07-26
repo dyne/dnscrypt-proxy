@@ -36,6 +36,8 @@ options:
 Startup options can be specified as subkeys from this registry key:
 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters`
 
+The service is named `dnscrypt-proxy`.
+
 The following subkeys are recognized and should be self-explanatory:
 
     LocalAddress      (REG_SZ)
