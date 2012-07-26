@@ -49,24 +49,6 @@ control_handler(const DWORD wanted_state)
     SetServiceStatus(service_status_handle, &service_status);
 }
 
-static void WINAPI
-service_main(DWORD argc_, LPTSTR *argv_)
-{
-    memset(&service_status, 0, sizeof service_status);
-    service_status.dwServiceType = SERVICE_WIN32;
-    service_status.dwCurrentState = SERVICE_START_PENDING;
-    service_status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
-    service_status_handle =
-        RegisterServiceCtrlHandler(WINDOWS_SERVICE_NAME, control_handler);
-    if (service_status_handle == 0) {
-        return;
-    }
-    service_status.dwCurrentState = SERVICE_RUNNING;
-    SetServiceStatus(service_status_handle, &service_status);
-
-    dnscrypt_proxy_main((int) argc_, (char **) argv_);
-}
-
 static char **
 cmdline_clone_options(const int argc, char ** const argv)
 {
@@ -104,6 +86,7 @@ cmdline_add_option(int * const argc_p, char *** const argv_p,
     argv_new[(*argc_p)++] = arg_dup;
     argv_new[*argc_p] = NULL;
     *argv_p = argv_new;
+    logger(NULL, LOG_INFO, "Adding command-line option: [%s]", arg_dup);
 
     return 0;
 }
@@ -149,6 +132,7 @@ windows_service_registry_read_dword(const char * const key,
 {
     HKEY   hk = NULL;
     DWORD  value = 0;
+    DWORD  value_len = (DWORD) sizeof value;
     DWORD  value_type;
     int    ret = -1;
 
@@ -158,7 +142,7 @@ windows_service_registry_read_dword(const char * const key,
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
         return -1;
     }
-    if (RegQueryValueEx(hk, key, 0, &value_type, (void *) &value, NULL)
+    if (RegQueryValueEx(hk, key, 0, &value_type, (void *) &value, &value_len)
         == ERROR_SUCCESS && value_type == (DWORD) REG_DWORD) {
         *value_p = value;
         ret = 0;
@@ -189,12 +173,6 @@ windows_build_command_line_from_registry(int * const argc_p,
     if (windows_service_registry_read_string
         ("ProviderKey", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--provider-key");
-        err += cmdline_add_option(argc_p, argv_p, string_value);
-        free(string_value);
-    }
-    if (windows_service_registry_read_string
-        ("Logfile", &string_value) == 0) {
-        err += cmdline_add_option(argc_p, argv_p, "--logfile");
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
     }
@@ -230,6 +208,33 @@ windows_build_command_line_from_registry(int * const argc_p,
         return -1;
     }
     return 0;
+}
+
+static void WINAPI
+service_main(DWORD argc_, LPTSTR *argv_)
+{
+    char **argv = (char **) argv_;
+    int    argc = (int) argc_;
+
+    assert(argc_ < INT_MAX);
+    if (windows_build_command_line_from_registry(&argc, &argv) != 0) {
+        logger_noformat(NULL, LOG_ERR,
+                        "Unable to build a command line from the registry");
+        return;
+    }
+    memset(&service_status, 0, sizeof service_status);
+    service_status.dwServiceType = SERVICE_WIN32;
+    service_status.dwCurrentState = SERVICE_START_PENDING;
+    service_status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
+    service_status_handle =
+        RegisterServiceCtrlHandler(WINDOWS_SERVICE_NAME, control_handler);
+    if (service_status_handle == 0) {
+        return;
+    }
+    service_status.dwCurrentState = SERVICE_RUNNING;
+    SetServiceStatus(service_status_handle, &service_status);
+
+    dnscrypt_proxy_main(argc, argv);
 }
 
 static int
