@@ -243,11 +243,6 @@ windows_main(int argc, char *argv[])
     static SERVICE_TABLE_ENTRY service_table[2];
     char                      *service_name;
 
-    if (windows_build_command_line_from_registry(&argc, &argv) != 0) {
-        logger_noformat(NULL, LOG_ERR,
-                        "Unable to build a command line from the registry");
-        return 1;
-    }
     if ((service_name = strdup(WINDOWS_SERVICE_NAME)) == NULL) {
         perror("strdup");
         return 1;
