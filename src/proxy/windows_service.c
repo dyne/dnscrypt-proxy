@@ -108,22 +108,25 @@ cmdline_add_option(int * const argc_p, char *** const argv_p,
     return 0;
 }
 
-static char *
-windows_service_registry_read_string(const char * const key)
+static int
+windows_service_registry_read_string(const char * const key,
+                                     char ** const value_p)
 {
     BYTE   *value = NULL;
     HKEY    hk = NULL;
     DWORD   value_len;
     DWORD   value_type;
 
+    *value_p = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
-        return NULL;
+        return -1;
     }
     if (RegQueryValueEx(hk, key, 0,
                         &value_type, NULL, &value_len) == ERROR_SUCCESS &&
-        value_type == (DWORD) REG_SZ && value_len <= SIZE_MAX &&
+        value_type == (DWORD) REG_SZ &&
+        value_len <= SIZE_MAX && value_len > (DWORD) 0 &&
         (value = malloc((size_t) value_len)) != NULL) {
         if (RegQueryValueEx(hk, key, 0,
                             &value_type, value, &value_len) != ERROR_SUCCESS ||
@@ -135,43 +138,93 @@ windows_service_registry_read_string(const char * const key)
                (value_len > 0 && value[value_len - 1] == 0));
     }
     RegCloseKey(hk);
+    *value_p = (char *) value;
 
-    return (char *) value;
+    return - (value == NULL);
+}
+
+static int
+windows_service_registry_read_dword(const char * const key,
+                                    DWORD * const value_p)
+{
+    HKEY   hk = NULL;
+    DWORD  value = 0;
+    DWORD  value_type;
+    int    ret = -1;
+
+    *value_p = (DWORD) 0;
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
+        return -1;
+    }
+    if (RegQueryValueEx(hk, key, 0, &value_type, (void *) &value, NULL)
+        == ERROR_SUCCESS && value_type == (DWORD) REG_DWORD) {
+        *value_p = value;
+        ret = 0;
+    }
+    RegCloseKey(hk);
+
+    return ret;
 }
 
 static int
 windows_build_command_line_from_registry(int * const argc_p,
                                          char *** const argv_p)
 {
-    char *string_value;
-    int   err = 0;
+    char   dword_string[sizeof "2147483648"];
+    char  *string_value;
+    DWORD  dword_value;
+    int    err = 0;
 
     if ((*argv_p = cmdline_clone_options(*argc_p, *argv_p)) == NULL) {
         exit(1);
     }
-    if ((string_value = windows_service_registry_read_string
-         ("LocalAddress")) != NULL) {
+    if (windows_service_registry_read_string
+        ("LocalAddress", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--local-address");
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
     }
-    if ((string_value = windows_service_registry_read_string
-         ("ProviderKey")) != NULL) {
+    if (windows_service_registry_read_string
+        ("ProviderKey", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--provider-key");
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
     }
-    if ((string_value = windows_service_registry_read_string
-         ("ProviderName")) != NULL) {
+    if (windows_service_registry_read_string
+        ("Logfile", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--logfile");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if (windows_service_registry_read_string
+        ("ProviderName", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--provider-name");
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
     }
-    if ((string_value = windows_service_registry_read_string
-         ("ResolverAddress")) != NULL) {
+    if (windows_service_registry_read_string
+        ("ResolverAddress", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--resolver-address");
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
+    }
+    if (windows_service_registry_read_dword
+        ("EDNSPayloadSize", &dword_value) == 0) {
+        snprintf(dword_string, sizeof dword_string, "%ld", (long) dword_value);
+        err += cmdline_add_option(argc_p, argv_p, "--edns-payload-size");
+        err += cmdline_add_option(argc_p, argv_p, dword_string);
+    }
+    if (windows_service_registry_read_dword
+        ("MaxActiveRequests", &dword_value) == 0) {
+        snprintf(dword_string, sizeof dword_string, "%ld", (long) dword_value);
+        err += cmdline_add_option(argc_p, argv_p, "--max-active-requests");
+        err += cmdline_add_option(argc_p, argv_p, dword_string);
+    }
+    if (windows_service_registry_read_dword
+        ("TCPOnly", &dword_value) == 0 && dword_value > (DWORD) 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--tcp-only");
     }
     if (err != 0) {
         return -1;
