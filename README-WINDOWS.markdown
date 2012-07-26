@@ -26,7 +26,7 @@ Congratulations, you're now using DNSCrypt.
 Advanced usage
 --------------
 
-The Windows builds of `dnscrypt-proxy` adds the following command-line
+The Windows build of `dnscrypt-proxy` adds the following command-line
 options:
 
 - `--install`: install the proxy as a service.

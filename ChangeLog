@@ -1,5 +1,22 @@
 Date:   2012-07-26
 
+    Gentoo ebuild for dnscrypt-proxy 1.0.
+
+Merge: f3f8357 86d764e
+Date:   2012-07-26
+
+    Merge remote-tracking branch 'upstream/master' into lebel
+
+Date:   2012-07-26
+
+    Grammar
+
+Date:   2012-07-26
+
+    More links and docs.
+
+Date:   2012-07-26
+
     / => \
 
 Date:   2012-07-26
@@ -665,6 +682,11 @@ Date:   2012-06-21
 
     Update FreeBSD package.
 
+Merge: f04c9ed 7a99603
+Date:   2012-06-21
+
+    Merge remote branch 'upstream/master' into lebel
+
 Date:   2012-06-21
 
     Update Homebrew formula.
@@ -1040,6 +1062,14 @@ Date:   2012-05-25
 Date:   2012-05-23
 
     Gentoo ebuiild for dnscrypt-proxy 0.9.4.
+
+Date:   2012-05-23
+
+    use --enable-nonblocking-random as suggested by Frank DENIS.
+
+Date:   2012-05-23
+
+    dnscrypt-proxy 0.9.4.
 
 Date:   2012-05-22
 
