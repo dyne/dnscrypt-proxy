@@ -1,7 +1,7 @@
 Using DNSCrypt on Windows
 =========================
 
-On Windows, dnscrypt-proxy can be started from the command-line the same way
+On Windows, `dnscrypt-proxy` can be started from the command-line the same way
 as on other operating systems.
 
 Alternatively, it can run as a Windows Service.
@@ -34,7 +34,7 @@ options:
 - `--uninstall`: uninstall the service.
 
 Startup options can be specified as subkeys from this registry key:
-`HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services/dnscrypt-proxy\Parameters`
+`HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters`
 
 The following subkeys are recognized and should be self-explanatory:
 
