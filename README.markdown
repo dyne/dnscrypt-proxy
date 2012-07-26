@@ -99,6 +99,22 @@ DNSCrypt comes pre-configured for OpenDNS, although the
 and `--provider-key=<provider public key>` can be specified in
 order to change the default settings.
 
+Installation as a service (Windows only)
+----------------------------------------
+
+The proxy can be installed as a Windows service.
+
+Copy the `dnscrypt-proxy.exe` file to any location, then open a
+terminal and type (eventually with the full path to `dnscrypt-proxy.exe`):
+
+    dnscrypt-proxy.exe --install
+
+It will install a new service named `dnscrypt-proxy`.
+
+After being stopped, the service can be removed with:
+
+    dnscrypt-proxy.exe --uninstall
+
 Using DNSCrypt in combination with a DNS cache
 ----------------------------------------------
 

@@ -1,3 +1,91 @@
+Date:   2012-07-26
+
+    / => \
+
+Date:   2012-07-26
+
+    Add a README file for Windows.
+
+Date:   2012-07-26
+
+    Actually start the service.
+
+Date:   2012-07-26
+
+    Don't parse the command-line if the service is run as a... service.
+
+Date:   2012-07-26
+
+    Remove Logfile from the registry.
+
+Date:   2012-07-26
+
+    Support settings pretty much everything through the registry
+
+Date:   2012-07-26
+
+    Reorder variables
+
+Date:   2012-07-25
+
+    xor what we get from the system PRG with a HMAC of it.
+    If the system PRG is truly random, it's a no-op.
+    If a way to recover a state given a few CryptGenRandom() stream samples is
+    found, leaked dnscrypt keys will still require breaking SHA2 in order take
+    advantage of this.
+
+Date:   2012-07-25
+
+    Start reading the configuration from the registry
+
+Date:   2012-07-25
+
+    Don't bother registering the command-line, since we will use the registry.
+
+Date:   2012-07-25
+
+    Auto-start the service, and add what it takes to read the registry.
+
+Date:   2012-07-25
+
+    Read 952 bits (a full SHA256 block + a final one) from the system RNG
+
+Date:   2012-07-25
+
+    Add code for having a dynamic argv, so that we can use the registry to update it
+
+Date:   2012-07-25
+
+    Keep the command line switches
+
+Date:   2012-07-24
+
+    CreateService() dependencies should be an actual NULL string.
+
+Date:   2012-07-24
+
+    Document the new command-line switches for running the proxy as a service.
+
+Date:   2012-07-24
+
+    WINDOWS_SERVICE_NAME
+
+Date:   2012-07-24
+
+    Add --install, --reinstall and --uninstall switches to install as a service.
+
+Date:   2012-07-23
+
+    Head towards 1.0.1
+
+Date:   2012-07-23
+
+    gitignore libltdl
+
+Date:   2012-07-23
+
+    Update ChangeLog
+
 Date:   2012-07-23
 
     Update NEWS

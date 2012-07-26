@@ -22,6 +22,7 @@
 #include "logger.h"
 #include "pid_file.h"
 #include "utils.h"
+#include "windows_service.h"
 #ifdef PLUGINS
 # include "plugin_options.h"
 #endif
@@ -49,12 +50,17 @@ static struct option getopt_long_options[] = {
     { "local-port", 1, NULL, 'P' },
     { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
+#ifdef _WIN32
+    { "install", 0, NULL, WIN_OPTION_INSTALL },
+    { "reinstall", 0, NULL, WIN_OPTION_REINSTALL },
+    { "uninstall", 0, NULL, WIN_OPTION_UNINSTALL },
+#endif
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char   *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TVX";
+static const char *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TVX";
 #else
-static const char   *getopt_options = "a:e:hk:n:r:t:u:N:P:TVX";
+static const char *getopt_options = "a:e:hk:n:r:t:u:N:P:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -88,8 +94,13 @@ options_usage(void)
     options_version();
     puts("\nOptions:\n");
     do {
-        printf("  -%c\t--%s%s\n", options->val, options->name,
-               options->has_arg ? "=..." : "");
+        if (options->val < 256) {
+            printf("  -%c\t--%s%s\n", options->val, options->name,
+                   options->has_arg ? "=..." : "");
+        } else {
+            printf("    \t--%s%s\n", options->name,
+                   options->has_arg ? "=..." : "");
+        }
         options++;
     } while (options->name != NULL);
     puts("\nPlease consult the dnscrypt-proxy(8) man page for details.\n");
@@ -271,6 +282,15 @@ options_parse(AppContext * const app_context,
                 logger_noformat(proxy_context, LOG_ERR,
                                 "Error while parsing plugin options");
                 exit(2);
+            }
+#endif
+            break;
+#ifdef _WIN32
+        case WIN_OPTION_INSTALL:
+        case WIN_OPTION_UNINSTALL:
+            if (windows_service_option(opt_flag, argc, argv) != 0) {
+                options_usage();
+                exit(1);
             }
             break;
 #endif
