@@ -95,7 +95,7 @@ salsa20_random_init(void)
 void
 salsa20_random_stir(void)
 {
-    unsigned char key0[crypto_stream_salsa20_KEYBYTES];
+    unsigned char key0[2 * 64  - 1 - 8];
 
     memset(stream.rnd32, 0, sizeof stream.rnd32);
     stream.rnd32_outleft = (size_t) 0U;
