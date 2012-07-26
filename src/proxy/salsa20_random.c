@@ -23,6 +23,8 @@
 #endif
 
 #define SALSA20_RANDOM_BLOCK_SIZE crypto_core_salsa20_OUTPUTBYTES
+#define SHA256_BLOCK_SIZE 64U
+#define SHA256_MIN_PAD_SIZE (1U + 8U)
 
 typedef struct Salsa20Random_ {
     unsigned char key[crypto_stream_salsa20_KEYBYTES];
@@ -95,7 +97,12 @@ salsa20_random_init(void)
 void
 salsa20_random_stir(void)
 {
-    unsigned char key0[2 * 64  - 1 - 8];
+    unsigned char  m0[3U * SHA256_BLOCK_SIZE - SHA256_MIN_PAD_SIZE];
+    unsigned char *k0 = m0 + SHA256_BLOCK_SIZE;
+    unsigned char  m1[SHA256_BLOCK_SIZE + crypto_hash_sha256_BYTES];
+    unsigned char *k1 = m1 + SHA256_BLOCK_SIZE;
+    const size_t   sizeof_k0 = sizeof m0 - SHA256_BLOCK_SIZE;
+    size_t         i;
 
     memset(stream.rnd32, 0, sizeof stream.rnd32);
     stream.rnd32_outleft = (size_t) 0U;
@@ -103,20 +110,29 @@ salsa20_random_stir(void)
         salsa20_random_init();
         stream.initialized = 1;
     }
+    memset(m0, 0x69, SHA256_BLOCK_SIZE);
+    memset(m1, 0x42, SHA256_BLOCK_SIZE);
 #ifndef _WIN32
-    if (safe_read(stream.random_data_source_fd, key0,
-                  sizeof key0) != (ssize_t) sizeof key0) {
+    if (safe_read(stream.random_data_source_fd, k0,
+                  sizeof_k0) != (ssize_t) sizeof_k0) {
         abort();
     }
 #else /* _WIN32 */
-    if (! CryptGenRandom(stream.hcrypt_prov, sizeof key0, key0)) {
+    if (! CryptGenRandom(stream.hcrypt_prov, sizeof_k0, k0)) {
         abort();
     }
 #endif
-    COMPILER_ASSERT(sizeof stream.key == (size_t) 32U);
-    COMPILER_ASSERT(sizeof stream.key <= sizeof key0);
-    crypto_hash_sha256(stream.key, key0, sizeof key0);
-    dnscrypt_memzero(key0, sizeof key0);
+    COMPILER_ASSERT(sizeof m0 >= 2U * SHA256_BLOCK_SIZE);
+    crypto_hash_sha256(k1, m0, sizeof m0);
+    COMPILER_ASSERT(sizeof m1 >= SHA256_BLOCK_SIZE + crypto_hash_sha256_BYTES);
+    crypto_hash_sha256(stream.key, m1, sizeof m1);
+    dnscrypt_memzero(m1, sizeof m1);
+    COMPILER_ASSERT(sizeof stream.key == crypto_hash_sha256_BYTES);
+    assert(sizeof stream.key <= sizeof_k0);
+    for (i = (size_t) 0U; i < sizeof stream.key; i++) {
+        stream.key[i] ^= k0[i];
+    }
+    dnscrypt_memzero(m0, sizeof m0);
 }
 
 static void
