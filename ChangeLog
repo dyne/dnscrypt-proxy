@@ -1,3 +1,682 @@
+Date:   2012-07-26
+
+    / => \
+
+Date:   2012-07-26
+
+    Add a README file for Windows.
+
+Date:   2012-07-26
+
+    Actually start the service.
+
+Date:   2012-07-26
+
+    Don't parse the command-line if the service is run as a... service.
+
+Date:   2012-07-26
+
+    Remove Logfile from the registry.
+
+Date:   2012-07-26
+
+    Support settings pretty much everything through the registry
+
+Date:   2012-07-26
+
+    Reorder variables
+
+Date:   2012-07-25
+
+    xor what we get from the system PRG with a HMAC of it.
+    If the system PRG is truly random, it's a no-op.
+    If a way to recover a state given a few CryptGenRandom() stream samples is
+    found, leaked dnscrypt keys will still require breaking SHA2 in order take
+    advantage of this.
+
+Date:   2012-07-25
+
+    Start reading the configuration from the registry
+
+Date:   2012-07-25
+
+    Don't bother registering the command-line, since we will use the registry.
+
+Date:   2012-07-25
+
+    Auto-start the service, and add what it takes to read the registry.
+
+Date:   2012-07-25
+
+    Read 952 bits (a full SHA256 block + a final one) from the system RNG
+
+Date:   2012-07-25
+
+    Add code for having a dynamic argv, so that we can use the registry to update it
+
+Date:   2012-07-25
+
+    Keep the command line switches
+
+Date:   2012-07-24
+
+    CreateService() dependencies should be an actual NULL string.
+
+Date:   2012-07-24
+
+    Document the new command-line switches for running the proxy as a service.
+
+Date:   2012-07-24
+
+    WINDOWS_SERVICE_NAME
+
+Date:   2012-07-24
+
+    Add --install, --reinstall and --uninstall switches to install as a service.
+
+Date:   2012-07-23
+
+    Head towards 1.0.1
+
+Date:   2012-07-23
+
+    gitignore libltdl
+
+Date:   2012-07-23
+
+    Update ChangeLog
+
+Date:   2012-07-23
+
+    Update NEWS
+
+Date:   2012-07-23
+
+    WINAPI
+
+Date:   2012-07-23
+
+    Make the service name overridable
+
+Date:   2012-07-23
+
+    Make dnscrypt-proxy work as a Windows service.
+
+Date:   2012-07-23
+
+    Add dnscrypt_proxy_loop_break()
+
+Date:   2012-07-22
+
+    Add Solaris support.
+
+Date:   2012-07-22
+
+    Don't define _XPG4_2
+
+Date:   2012-07-21
+
+    Update NEWS / ChangeLog
+
+Date:   2012-07-21
+
+    Target Gingerbread.
+
+Date:   2012-07-21
+
+    Threads? We don't need threads any more.
+
+Date:   2012-07-21
+
+    Add a compilation script for Android
+
+Date:   2012-07-21
+
+    Bump to -j3 :)
+
+Date:   2012-07-21
+
+    Don't use dtrace when cross-compiling.
+
+Date:   2012-07-21
+
+    nacl: always include <stdlib.h> when rand*() is needed.
+
+Date:   2012-07-21
+
+    ensure that libnacl/do is always executable
+
+Date:   2012-07-21
+
+    Don't use a hardcoded "ranlib" command. It doesn't play well with cross-compilation.
+
+Date:   2012-07-21
+
+    arpa/inet.h is required for htonl() in cert.c
+
+Date:   2012-07-20
+
+    Update FreeBSD port
+
+Date:   2012-07-20
+
+    Update Dragonfly BSD / NetBSD pkg
+
+Date:   2012-07-20
+
+    Update Homebrew formula
+
+Date:   2012-07-20
+
+    Update OpenBSD package
+
+Date:   2012-07-20
+
+    Bump fpm package to 1.0
+
+Date:   2012-07-20
+
+    Version 1.0
+
+Date:   2012-07-20
+
+    Update .gitignore to reflect the dnscrypt-proxy->proxy changes
+
+Date:   2012-07-20
+
+    Update autoconf again :)
+
+Date:   2012-07-20
+
+    Update autoconf
+
+Date:   2012-07-20
+
+    The "dnscrypt-proxy" dir just becomes "proxy" to reduce diff w/ dns-proxy.
+
+Date:   2012-07-20
+
+    Remove uv_alloc_buffer_size leftover from the libuv days.
+
+Date:   2012-07-18
+
+    Use CPPFLAGS, not AM_CFLAGS.
+
+Date:   2012-07-17
+
+    tab
+
+Date:   2012-07-17
+
+    Add explicit dependencies.
+
+Date:   2012-07-17
+
+    Update autoconf script.
+
+Date:   2012-07-17
+
+    Remove TRIM_PADDING_FROM_REPLIES. We always do.
+
+Date:   2012-07-17
+
+    Move to version 1.0
+
+Date:   2012-07-17
+
+    libevent: Fix a memory leak on error in evhttp_uriencode.
+    Not used in dnscrypt-proxy, but we should keep that up to date.
+
+Date:   2012-07-17
+
+    Update ChangeLog
+
+Date:   2012-07-17
+
+    Reenable --enable-debug
+
+Date:   2012-07-17
+
+    Don't double quote CFLAGS.
+
+Date:   2012-07-17
+
+    Change the way we pass the autoconf args to the libevent autoconf script.
+
+Date:   2012-07-17
+
+    fpm -> 0.12
+
+Date:   2012-07-17
+
+    Update ChangeLog for 0.12
+
+Date:   2012-07-17
+
+    Bind UDP listeners first.
+
+Date:   2012-07-17
+
+    Update ChangeLog
+
+Date:   2012-07-17
+
+    Reset ac_configure_args before configuring libevent.
+    This fixes the issue with the OpenBSD port, that was reseting both CC and
+    CFLAGS.
+
+Date:   2012-07-17
+
+    Use both -fPIE (cc) and -pie (linker) or none.
+
+Date:   2012-07-17
+
+    Restore -pie.
+    It breaks the OpenBSD-current port, but unbreaks Linux, aaahhhhhh.
+
+Date:   2012-07-17
+
+    No more rlimit for now.
+
+Date:   2012-07-17
+
+    Don't strip symbols on Debian packages. Screw you, stupid Debian policies.
+
+Date:   2012-07-17
+
+    Start UDP listeners first. They provide an error message when they fail.
+
+Date:   2012-07-17
+
+    Linux doesn't like RLIMIT_NPROC = 0.
+
+Date:   2012-07-16
+
+    Use nonexistent.local instead of nonexistent.example.com
+    or else OpenDNS servers can return the "guide" IP instead of NXDOMAIN.
+
+Date:   2012-07-16
+
+    Invert the ifdef logic for retries.
+
+Date:   2012-07-16
+
+    Enable retries.
+
+Date:   2012-07-16
+
+    DNSCrypt 0.12
+
+Date:   2012-07-16
+
+    Fix UDP retries: ditch the retry timer after a successful sendto().
+
+Date:   2012-07-16
+
+    Update FreeBSD port.
+
+Date:   2012-07-16
+
+    Update NetBSD / Dragonfly BSD packages again.
+
+Date:   2012-07-16
+
+    Update OpenBSD package.
+
+Date:   2012-07-16
+
+    Update Homebrew formula.
+
+Date:   2012-07-16
+
+    Bring back _FORTIFY_SOURCE.
+
+Date:   2012-07-16
+
+    Prepare OpenBSD package update.
+
+Date:   2012-07-16
+
+    Add -fwrapv
+
+Date:   2012-07-16
+
+    Update ChangeLog
+
+Date:   2012-07-16
+
+    Nuke -pie for now. It breaks the OpenBSD-current port.
+
+Date:   2012-07-16
+
+    Update NetBSD / Dragonfly BSD package
+
+Date:   2012-07-16
+
+    Bump Homebrew package
+
+Date:   2012-07-16
+
+    Cleanup dist-files
+
+Date:   2012-07-16
+
+    Bump fpm packages to 0.11
+
+Date:   2012-07-16
+
+    Screw you, gcc
+
+Date:   2012-07-16
+
+    gcc nits
+
+Date:   2012-07-16
+
+    Disable UDP sendto() retries for now.
+
+Date:   2012-07-16
+
+    0.11
+
+Date:   2012-07-16
+
+    Check for -W combos, not for individual switches.
+
+Date:   2012-07-16
+
+    Add config.guess patch for bitrig to the tree.
+
+Date:   2012-07-16
+
+    Try harder to trigger the gcc warning bug.
+
+Date:   2012-07-16
+
+    Move clang detection
+
+Date:   2012-07-16
+
+    Update Changelog
+
+Date:   2012-07-16
+
+    Improve ax_check_compile_flag by adding an unused variable in order to
+    always trigger a non-fatal compiler warning.
+
+Date:   2012-07-16
+
+    Ignore unknown warnings only if we are using clang.
+
+Date:   2012-07-16
+
+    Remove -Wno-unknown-warning-option because of this stupid gcc.
+
+Date:   2012-07-16
+
+    libevent Win32: avoid crash when waiting forever on zero fds.
+
+Date:   2012-07-16
+
+    Explicitly mention libtool in the autoconf script.
+
+Date:   2012-07-16
+
+    Run sandbox_init() only if it's not a stub.
+
+Date:   2012-07-16
+
+    Update Changelog
+
+Date:   2012-07-16
+
+    Xcode 4.5DP3
+
+Date:   2012-07-16
+
+    Test --tcp-only
+
+Date:   2012-07-16
+
+    Update dist-files
+
+Date:   2012-07-16
+
+    opendnscache-proxy was the name of dnscrypt 1 year ago.
+    Rename it to dnscrypt-proxy.
+
+Date:   2012-07-16
+
+    Mention PowerDNS.
+
+Date:   2012-07-16
+
+    And Gemfile and more tests.
+
+Date:   2012-07-16
+
+    Exit with 1 when an invalid option is given in hostip, too.
+
+Date:   2012-07-16
+
+    Exit with 1 when an unknown option is given.
+
+Date:   2012-07-16
+
+    Revert to always using -fstack-protector-all on Windows.
+    If it fails outside the MingW environment, either do some magic to
+    statically link it, or use --disable-ssp if you're desperate.
+
+Date:   2012-07-15
+
+    Statically link libssp on Windows.
+
+Date:   2012-07-15
+
+    Windoz nitz
+
+Date:   2012-07-15
+
+    Add --disable-ssp option for platforms lacking libssp. (sad)
+
+Date:   2012-07-15
+
+    Ignore deprecated declarations warnings for sandbox*()
+
+Date:   2012-07-15
+
+    Reorder
+
+Date:   2012-07-15
+
+    Try to better detect Windows targets.
+
+Date:   2012-07-15
+
+    Copy with Winsock2 prototypes.
+
+Date:   2012-07-15
+
+    Use ev_socklen_t everywhere.
+
+Date:   2012-07-15
+
+    Update noops for systems without dtrace.
+
+Date:   2012-07-15
+
+    Update NEWS / ChangeLog
+
+Date:   2012-07-15
+
+    Deprecate --local-port and --resolver-port
+
+Date:   2012-07-15
+
+    Use some crazy heuristics to support ip:port addresses as well as the old
+    format --x-address and --x-port.
+
+Date:   2012-07-15
+
+    Export evutil_format_sockaddr_port()
+
+Date:   2012-07-15
+
+    Update NEWS/ChangeLog
+
+Date:   2012-07-15
+
+    Remove pwnam comments.
+
+Date:   2012-07-15
+
+    Rename SendtoWithRetryCbCtx to SendtoWithRetryCtx
+
+Date:   2012-07-15
+
+    Retries is zero, already, thanks to calloc().
+
+Date:   2012-07-15
+
+    Support retries on Windows.
+
+Date:   2012-07-15
+
+    Retry every second. On relevant errors only. At least on !_WIN32.
+    Windows roots are the DOS, anyway.
+
+Date:   2012-07-15
+
+    Retry on UDP sendto() error.
+    We should only do that on non-fatal errors only.
+    Which means testing for different error codes on Windows. Bleh.
+
+Date:   2012-07-15
+
+    Factorize sendto() calls and pave the way for retrying on non-fatal errors.
+
+Date:   2012-07-13
+
+    Port 443 is already the default.
+
+Date:   2012-07-12
+
+    Don't assert(! TAILQ_EMPTY()) unless the request has actually been inserted in
+    the list of queued requests.
+    Should fix issue #19.
+
+Date:   2012-07-12
+
+    hostip: add things Windows needs in order to get the in6_addr structure defined
+
+Date:   2012-07-11
+
+    Check for setrlimit() existence.
+
+Date:   2012-07-11
+
+    Restrict a bit more what processes can do.
+
+Date:   2012-07-09
+
+    Build hostip last.
+
+Date:   2012-07-06
+
+    Indentation nits...
+
+Date:   2012-07-06
+
+    Update ChangeLog, bump version to 0.11
+
+Date:   2012-07-06
+
+    Introduce hostip(8), a tool for resolving a name before dnscrypt-proxy starts.
+    It should help fighting the chicken-and-egg issue seen on routers, where
+    dnscrypt-proxy requires a working NTP server, but the NTP server requires
+    a working resolver.
+
+Date:   2012-07-06
+
+    Useless indentation nits.
+
+Date:   2012-07-02
+
+    Use ioctl() instead of fnctl(fnctl()) as much as possible. Saves 1 syscall.
+
+Date:   2012-07-02
+
+    Define getpwnam() and struct passwd if getpwnam(3) exists but the headers don't.
+
+Date:   2012-06-26
+
+    Xcode 4.5 DP2
+
+Date:   2012-06-24
+
+    Bump Linux packages to 10.0.1
+
+Date:   2012-06-24
+
+    Update ChangeLog
+
+Date:   2012-06-24
+
+    Current dev version is 0.10.1
+
+Date:   2012-06-24
+
+    chroot() as soon as we can again. Drop libevent2's evdns arc4random() to use
+    our chroot()-proof salsa20_random() function instead.
+
+Date:   2012-06-24
+
+    libevent: resurrect evdns_set_random_bytes_fn() and add evdns_set_random_init_fn().
+    Using the provided RC4 generator is nice, but we maybe want to use something
+    else, in particular if we need something that is guaranteed to work in a
+    chroot jail, without a /dev/*random device.
+
+Date:   2012-06-24
+
+    libevent: don't use memset(<something on the stack>) to securely wipe a buffer,
+    because it's prone to compiler optimization.
+
+Date:   2012-06-24
+
+    libevent: do not close /dev/*random and /proc/**/uuid descriptors, in order to
+    keep them accessible after chroot(), when reseeding is needed.
+
+Date:   2012-06-24
+
+    Revoke privileges after cert_updater_start() for systems without arc4random().
+    Pointed out by Ben Kibbey.
+
+Date:   2012-06-24
+
+    Change arc4random_uniform() to calculate ``2**32 % upper_bound'' as
+    ``-upper_bound % upper_bound''.
+    From OpenBSD.
+
+Date:   2012-06-21
+
+    Update pkgsrc packages.
+
+Date:   2012-06-21
+
+    Update FreeBSD package.
+
+Date:   2012-06-21
+
+    Update Homebrew formula.
+
+Date:   2012-06-21
+
+    Update OpenBSD port.
+
+Date:   2012-06-21
+
+    Update ChangeLog
+
 Date:   2012-06-21
 
     Don't install libevent.

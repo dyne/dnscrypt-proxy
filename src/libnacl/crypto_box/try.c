@@ -4,6 +4,7 @@
  * Public domain.
  */
 
+#include <stdlib.h>
 #include "crypto_box.h"
 #include "windows/windows-quirks.h"
 

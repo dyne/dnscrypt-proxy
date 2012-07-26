@@ -1,5 +1,5 @@
 
-DISTNAME=	dnscrypt-proxy-0.10
+DISTNAME=	dnscrypt-proxy-1.0
 CATEGORIES=	net
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 

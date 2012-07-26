@@ -1,4 +1,37 @@
 
+* Version 1.0.1:
+ - dnscrypt-proxy and hostip can now be compiled for Android and
+   Solaris.
+ - The proxy can now run as a Windows service. The new --install and
+   --uninstall command-line switches can automatically register the proxy
+   as a service. Startup options are read from the Windows registry.
+   See the README-WINDOWS.markdown file for details.
+
+* Version 1.0:
+ - Autotools scripts have been improved.
+ - 1.0.
+
+* Version 0.12:
+ - Datagrams are resent after running out of memory, or if the queue
+   was full.
+ - Missing compilation flags broke 0.11 on some Linux distributions.
+   This has been fixed.
+
+* Version 0.11:
+ - A new tool, hostip, can resolve host names before dnscrypt-proxy is
+   started. This should help resolving chicken-and-egg problems on
+   routers, as reported by LanceThePants.
+ - The --local-port and --resolver-port options have been deprecated.
+   Please use --local-address=<ip>:<port> eand
+   --resolver-address=<ip>:<port> instead.
+ - Improved stability on Win32.
+
+* Version 0.10.1:
+ - The daemon didn't start on some Linux distributions lacking the
+   RANDOM_UUID sysctl. This has been fixed.
+ - The config.guess files have been patched in order to run out of the
+   box on Bitrig.
+
 * Version 0.10:
  - Almost a complete rewrite, with libuv being replaced by libevent.
  - The max number of simultaneous queries is now global, not

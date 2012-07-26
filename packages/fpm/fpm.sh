@@ -1,6 +1,6 @@
 #! /bin/sh
 
-VERSION="0.10"
+VERSION="1.0"
 MAINTAINER="OpenDNS Inc <dnscrypt@opendns.com>"
 CATEGORY="net"
 URL="https://github.com/opendns/dnscrypt-proxy"
@@ -40,12 +40,6 @@ echo "${PKG_NAME} (${VERSION}) unstable; urgency=low
  -- ${MAINTAINER}  $(date -R)" | gzip -9 > "$DEBIAN_CHANGELOG_FILE"
 
 find "${INSTALL_DIR}/share/man" -type f -name "*.[0-9]" -exec gzip -9 {} \;
-
-[ -d "${INSTALL_DIR}/bin" ] && \
-  find "${INSTALL_DIR}/bin" -type f -perm +111 -exec strip {} \;
-
-[ -d "${INSTALL_DIR}/sbin" ] && \
-  find "${INSTALL_DIR}/sbin" -type f -perm +111 -exec strip {} \;
 
 find "$BASE_DIR" -type d -exec chmod 755 {} \;
 

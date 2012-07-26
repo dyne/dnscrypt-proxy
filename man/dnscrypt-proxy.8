@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "DNSCRYPT\-PROXY" "8" "June 2012" "" ""
+.TH "DNSCRYPT\-PROXY" "8" "July 2012" "" ""
 .
 .SH "NAME"
 \fBdnscrypt\-proxy\fR \- A DNSCrypt forwarder
@@ -30,7 +30,7 @@ Intead, run a DNS cache like \fBUnbound\fR, and configure it to use \fBdnscrypt\
 .SH "OPTIONS"
 .
 .IP "\(bu" 4
-\fB\-a\fR, \fB\-\-local\-address=<ip>\fR: what local IP the daemon will listen to\.
+\fB\-a\fR, \fB\-\-local\-address=<ip>[:port]\fR: what local IP the daemon will listen to, with an optional port\. The default port is 53\.
 .
 .IP "\(bu" 4
 \fB\-d\fR, \fB\-\-daemonize\fR: detach from the current terminal and run the server in background\.
@@ -54,19 +54,13 @@ Intead, run a DNS cache like \fBUnbound\fR, and configure it to use \fBdnscrypt\
 \fB\-p\fR, \fB\-\-pidfile=<file>\fR: write the PID number to a file\.
 .
 .IP "\(bu" 4
-\fB\-r\fR, \fB\-\-resolver\-address=<ip>\fR: a DNSCrypt\-capable resolver IP address\.
-.
-.IP "\(bu" 4
-\fB\-t\fR, \fB\-\-resolver\-port=<port>\fR: connect to the resolver on port \fIport\fR, as a workaround if UDP over port 53 is filtered\. The default port is 443\.
+\fB\-r\fR, \fB\-\-resolver\-address=<ip>[:port]\fR: a DNSCrypt\-capable resolver IP address with an optional port\. The default port is 443\.
 .
 .IP "\(bu" 4
 \fB\-u\fR, \fB\-\-user=<user name>\fR: chroot(2) to this user\'s home directory and drop privileges\.
 .
 .IP "\(bu" 4
 \fB\-N\fR, \fB\-\-provider\-name=<FQDN>\fR: the fully\-qualified name of the dnscrypt certificate provider\.
-.
-.IP "\(bu" 4
-\fB\-P\fR, \fB\-\-local\-port=<port>\fR: local port to listen to\.
 .
 .IP "\(bu" 4
 \fB\-T\fR, \fB\-\-tcp\-only\fR: always use TCP\. A connection made using UDP will get a truncated response, so that the (stub) resolver retries using TCP\.
@@ -91,9 +85,12 @@ $ dnscrypt\-proxy \-\-daemonize
 .
 .nf
 
-$ dnscrypt\-proxy \-\-provider\-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \-\-provider\-name=2\.dnscrypt\-cert\.dnscrypt\.org\. \-\-resolver\-ip=208\.67\.220\.220 \-\-daemonize
+$ dnscrypt\-proxy \-\-provider\-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \-\-provider\-name=2\.dnscrypt\-cert\.dnscrypt\.org\. \-\-resolver\-ip=208\.67\.220\.220:53 \-\-daemonize
 .
 .fi
+.
+.SH "SEE ALSO"
+hostip(8)
 .
 .SH "COPYRIGHT"
 dnscrypt\-proxy is Copyright (C) 2011\-2012 OpenDNS, Inc\. \fBhttp://www\.opendns\.com/\fR

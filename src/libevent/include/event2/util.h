@@ -483,6 +483,17 @@ struct sockaddr;
 */
 int evutil_parse_sockaddr_port(const char *str, struct sockaddr *out, int *outlen);
 
+/**
+ * Format an address to ipv4:port or [ipv6]:port
+ * 
+ * @param sa A struct sockaddr
+ * @param out The output buffer
+ * @param outlen The output buffer length
+ * @return 0 on success
+ */
+const char *evutil_format_sockaddr_port(const struct sockaddr *sa, char *out,
+                                        size_t outlen);
+    
 /** Compare two sockaddrs; return 0 if they are equal, or less than 0 if sa1
  * preceeds sa2, or greater than 0 if sa1 follows sa2.  If include_port is
  * true, consider the port as well as the address.  Only implemented for

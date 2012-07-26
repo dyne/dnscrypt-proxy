@@ -20,4 +20,7 @@ echo 'echo " @LDFLAGS@ @LIBS@"' >> bin/oklibs-local
 echo '#!/bin/sh' > bin/okar-local
 echo 'exec @AR@ "$@"' >> bin/okar-local
 
+echo '#!/bin/sh' > bin/okranlib-local
+echo 'exec @RANLIB@ "$@"' >> bin/okranlib-local
+
 chmod +x bin/ok*

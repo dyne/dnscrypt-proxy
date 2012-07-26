@@ -1311,6 +1311,10 @@ err:
 #undef GET8
 }
 
+static int (*rand_init_function)(void) = evutil_secure_rng_init;
+
+static void (*rand_bytes_function)(void *buf, size_t n) =
+	evutil_secure_rng_get_bytes;
 
 void
 evdns_set_transaction_id_fn(ev_uint16_t (*fn)(void))
@@ -1318,8 +1322,15 @@ evdns_set_transaction_id_fn(ev_uint16_t (*fn)(void))
 }
 
 void
-evdns_set_random_bytes_fn(void (*fn)(char *, size_t))
+evdns_set_random_init_fn(int (*fn)(void))
 {
+	rand_init_function = fn;
+}
+
+void
+evdns_set_random_bytes_fn(void (*fn)(void *, size_t))
+{
+	rand_bytes_function = fn;
 }
 
 /* Try to choose a strong transaction id which isn't already in flight */
@@ -1328,7 +1339,7 @@ transaction_id_pick(struct evdns_base *base) {
 	ASSERT_LOCKED(base);
 	for (;;) {
 		u16 trans_id;
-		evutil_secure_rng_get_bytes(&trans_id, sizeof(trans_id));
+		rand_bytes_function(&trans_id, sizeof(trans_id));
 
 		if (trans_id == 0xffff) continue;
 		/* now check to see if that id is already inflight */
@@ -2741,7 +2752,7 @@ request_new(struct evdns_base *base, struct evdns_request *handle, int type,
 		unsigned i;
 		char randbits[(sizeof(namebuf)+7)/8];
 		strlcpy(namebuf, name, sizeof(namebuf));
-		evutil_secure_rng_get_bytes(randbits, (name_len+7)/8);
+		rand_bytes_function(randbits, (name_len+7)/8);
 		for (i = 0; i < name_len; ++i) {
 			if (EVUTIL_ISALPHA(namebuf[i])) {
 				if ((randbits[i >> 3] & (1<<(i & 7))))
@@ -3883,7 +3894,7 @@ evdns_base_new(struct event_base *event_base, int initialize_nameservers)
 {
 	struct evdns_base *base;
 
-	if (evutil_secure_rng_init() < 0) {
+	if (rand_init_function != NULL && rand_init_function() < 0) {
 		log(EVDNS_LOG_WARN, "Unable to seed random number generator; "
 		    "DNS can't run.");
 		return NULL;

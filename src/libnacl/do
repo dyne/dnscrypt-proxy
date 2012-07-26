@@ -126,7 +126,7 @@ do
     ( cd "$work" && $compiler -c ${project}_base.c ) && break
   done
   okar-$abi cr "$lib/$abi/lib${project}.a" "$work/${project}_base.o"
-  ( ranlib "$lib/$abi/lib${project}.a" || exit 0 )
+  ( okranlib-$abi "$lib/$abi/lib${project}.a" || exit 0 )
 done
 
 ulimit -c 0
@@ -269,7 +269,7 @@ do
 
 	    [ "$ok" = 1 ] || continue
 	    okar-$abi cr "$op.a" *.o || continue
-	    ranlib "$op.a"
+	    okranlib-$abi "$op.a"
 
 	    $compiler \
 	      -I. -I"$include" -I"$include/$abi" \
@@ -295,7 +295,7 @@ do
 
       [ -f "$o/$p/used" ] \
       && okar-$abi cr "$lib/$abi/lib${project}.a" "$work/best"/*.o \
-      && ( ranlib "$lib/$abi/lib${project}.a" || exit 0 ) \
+      && ( okranlib-$abi "$lib/$abi/lib${project}.a" || exit 0 ) \
       && cp -p "$work/$op.h" "$include/$abi/$op.h" \
       && [ -f "$o/$p/selected" ] \
       && cp -p "$work/$o.h" "$include/$abi/$o.h" \

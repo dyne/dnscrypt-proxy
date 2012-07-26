@@ -44,6 +44,9 @@
 #ifdef _EVENT_HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
+#ifdef _EVENT_HAVE_SYS_IOCTL_H
+#include <sys/ioctl.h>
+#endif
 #ifdef _EVENT_HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -304,6 +307,14 @@ evutil_make_socket_nonblocking(evutil_socket_t fd)
 			return -1;
 		}
 	}
+#elif defined(FIONBIO)
+    {
+        int nonblocking = 1;
+        if (ioctl(fd, FIONBIO, &nonblocking) != 0) {
+			event_warn("ioctl(%d, FIONBIO, 1)", fd);
+			return -1;
+        }
+    }
 #else
 	{
 		int flags;
@@ -338,7 +349,13 @@ evutil_make_listen_socket_reuseable(evutil_socket_t sock)
 int
 evutil_make_socket_closeonexec(evutil_socket_t fd)
 {
-#if !defined(WIN32) && defined(_EVENT_HAVE_SETFD)
+#if !defined(WIN32)
+# ifdef FIOCLEX
+    if (ioctl(fd, FIOCLEX, NULL) != 0) {
+		event_warn("ioctl(%d, FIOCLEX, NULL)", fd);
+		return -1;
+    }
+# elif defined(_EVENT_HAVE_SETFD)
 	int flags;
 	if ((flags = fcntl(fd, F_GETFD, NULL)) < 0) {
 		event_warn("fcntl(%d, F_GETFD)", fd);
@@ -348,6 +365,7 @@ evutil_make_socket_closeonexec(evutil_socket_t fd)
 		event_warn("fcntl(%d, F_SETFD)", fd);
 		return -1;
 	}
+# endif
 #endif
 	return 0;
 }

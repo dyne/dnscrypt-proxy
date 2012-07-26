@@ -4,7 +4,7 @@
 #
 
 PORTNAME=	dnscrypt-proxy
-PORTVERSION=	0.10
+PORTVERSION=	1.0
 CATEGORIES=	dns
 MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
 LICENSE=	BSD
@@ -19,7 +19,8 @@ MAKE_JOBS_SAFE=	yes
 CONFIGURE_ARGS=	--sysconfdir=${PREFIX}/etc \
 		--localstatedir=/var
 
-MAN8=		dnscrypt-proxy.8
+MAN8=		dnscrypt-proxy.8 \
+		hostip.8
 
 .include <bsd.port.pre.mk>
 

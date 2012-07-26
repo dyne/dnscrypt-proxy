@@ -92,6 +92,17 @@ static int arc4_seeded_ok;
 
 static inline unsigned char arc4_getbyte(void);
 
+static void
+arc4random_memzero(void * const pnt, const size_t size)
+{
+    volatile unsigned char *pnt_ = (volatile unsigned char *) pnt;
+    size_t                     i = (size_t) 0U;
+
+    while (i < size) {
+        pnt_[i++] = 0U;
+    }
+}
+
 static inline void
 arc4_init(void)
 {
@@ -161,7 +172,7 @@ arc4_seed_win32(void)
 	if (!CryptGenRandom(provider, sizeof(buf), buf))
 		return -1;
 	arc4_addrandom(buf, sizeof(buf));
-	memset(buf, 0, sizeof(buf));
+	arc4random_memzero(buf, sizeof(buf));
 	arc4_seeded_ok = 1;
 	return 0;
 }
@@ -199,7 +210,7 @@ arc4_seed_sysctl_linux(void)
 		return -1;
 
 	arc4_addrandom(buf, sizeof(buf));
-	memset(buf, 0, sizeof(buf));
+	arc4random_memzero(buf, sizeof(buf));
 	arc4_seeded_ok = 1;
 	return 0;
 }
@@ -239,7 +250,7 @@ arc4_seed_sysctl_bsd(void)
 		return -1;
 
 	arc4_addrandom(buf, sizeof(buf));
-	memset(buf, 0, sizeof(buf));
+	arc4random_memzero(buf, sizeof(buf));
 	arc4_seeded_ok = 1;
 	return 0;
 }
@@ -255,16 +266,16 @@ arc4_seed_proc_sys_kernel_random_uuid(void)
 	 * but not /dev/urandom.  Let's try /proc/sys/kernel/random/uuid.
 	 * Its format is stupid, so we need to decode it from hex.
 	 */
-	int fd;
+	static int fd = -1;
 	char buf[128];
 	unsigned char entropy[64];
 	int bytes, n, i, nybbles;
 	for (bytes = 0; bytes<ADD_ENTROPY; ) {
-		fd = evutil_open_closeonexec("/proc/sys/kernel/random/uuid", O_RDONLY, 0);
-		if (fd < 0)
+		if (fd == -1)
+			fd = evutil_open_closeonexec("/proc/sys/kernel/random/uuid", O_RDONLY, 0);
+		if (fd == -1)
 			return -1;
 		n = read(fd, buf, sizeof(buf));
-		close(fd);
 		if (n<=0)
 			return -1;
 		memset(entropy, 0, sizeof(entropy));
@@ -284,8 +295,8 @@ arc4_seed_proc_sys_kernel_random_uuid(void)
 		arc4_addrandom(entropy, nybbles/2);
 		bytes += nybbles/2;
 	}
-	memset(entropy, 0, sizeof(entropy));
-	memset(buf, 0, sizeof(buf));
+	arc4random_memzero(entropy, sizeof(entropy));
+	arc4random_memzero(buf, sizeof(buf));
 	return 0;
 }
 #endif
@@ -300,19 +311,20 @@ arc4_seed_urandom(void)
 		"/dev/srandom", "/dev/urandom", "/dev/random", NULL
 	};
 	unsigned char buf[ADD_ENTROPY];
-	int fd, i;
+	static int fd = -1;
+	int i;
 	size_t n;
 
 	for (i = 0; filenames[i]; ++i) {
-		fd = evutil_open_closeonexec(filenames[i], O_RDONLY, 0);
-		if (fd<0)
+		if (fd == -1)
+			fd = evutil_open_closeonexec(filenames[i], O_RDONLY, 0);
+		if (fd == -1)
 			continue;
 		n = read_all(fd, buf, sizeof(buf));
-		close(fd);
 		if (n != sizeof(buf))
 			return -1;
 		arc4_addrandom(buf, sizeof(buf));
-		memset(buf, 0, sizeof(buf));
+		arc4random_memzero(buf, sizeof(buf));
 		arc4_seeded_ok = 1;
 		return 0;
 	}

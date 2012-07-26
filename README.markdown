@@ -34,7 +34,7 @@ Installation
 
 The daemon is known to work on recent versions of OSX, OpenBSD, Bitrig,
 NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a jailbroken
-device), and Windows (requires MingW).
+device), Solaris (SmartOS) and Windows (requires MingW).
 
 Download the
 [latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
@@ -83,9 +83,8 @@ set of resolvers with:
 Other common command-line switches include:
 
 * `--daemonize` in order to run the server as a background process.
-* `--local-address=<ip>` in order to locally bind a different IP address than
-  127.0.0.1
-* `--local-port=<port>` to change the local port to listen to.
+* `--local-address=<ip>[:port]` in order to locally bind a different IP
+address than 127.0.0.1
 * `--logfile=<file>` in order to write log data to a dedicated file. By
   default, logs are sent to stdout if the server is running in foreground,
   and to syslog if it is running in background.
@@ -95,9 +94,26 @@ Other common command-line switches include:
 * `--user=<user name>` in order to chroot()/drop privileges.
 
 DNSCrypt comes pre-configured for OpenDNS, although the
-`--resolver-address=<ip>`, `--provider-name=<certificate provider FQDN>`
+`--resolver-address=<ip>[:port]`,
+`--provider-name=<certificate provider FQDN>`
 and `--provider-key=<provider public key>` can be specified in
 order to change the default settings.
+
+Installation as a service (Windows only)
+----------------------------------------
+
+The proxy can be installed as a Windows service.
+
+Copy the `dnscrypt-proxy.exe` file to any location, then open a
+terminal and type (eventually with the full path to `dnscrypt-proxy.exe`):
+
+    dnscrypt-proxy.exe --install
+
+It will install a new service named `dnscrypt-proxy`.
+
+After being stopped, the service can be removed with:
+
+    dnscrypt-proxy.exe --uninstall
 
 Using DNSCrypt in combination with a DNS cache
 ----------------------------------------------
@@ -107,7 +123,8 @@ queries will **not** be cached and every single query will require a
 round-trip to the upstream resolver.
 
 For optimal performance, the recommended way of running DNSCrypt is to
-run it as a forwarder for a local DNS cache, like `unbound`.
+run it as a forwarder for a local DNS cache, like `unbound` or
+`powerdns-recursor`.
 
 Both can safely run on the same machine as long as they are listening
 to different IP addresses (preferred) or different ports.
@@ -128,7 +145,15 @@ instead of different ports.
 Then start `dnscrypt-proxy`, telling it to use a specific port (`40`, in
 this example):
 
-    # dnscrypt-proxy --local-port=40 --daemonize
+    # dnscrypt-proxy --local-address=127.0.0.1:40 --daemonize
+
+IPv6 support
+------------
+
+IPv6 is fully supported. IPv6 addresses with a port number should be
+specified as [ip]:port
+
+    # dnscrypt-proxy --local-address='[::1]:40' --daemonize
 
 Queries using nonstandard ports / over TCP
 ------------------------------------------
@@ -183,6 +208,17 @@ are usually safe.
 
 A value below or equal to 512 will disable this mechanism, unless a
 client sends a packet with an OPT section providing a payload size.
+
+The `hostip` utility
+--------------------
+
+The DNSCrypt proxy ships with a simple tool named `hostip` that
+resolves a name to IPv4 or IPv6 addresses.
+
+This tool can be useful for starting some services before
+`dnscrypt-proxy`.
+
+Queries made by `hostip` are not authenticated.
 
 GUIs for dnscrypt-proxy
 -----------------------
