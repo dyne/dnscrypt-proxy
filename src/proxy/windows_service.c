@@ -67,54 +67,6 @@ service_main(DWORD argc_, LPTSTR *argv_)
     dnscrypt_proxy_main((int) argc_, (char **) argv_);
 }
 
-static int
-windows_main(int argc, char *argv[])
-{
-    static SERVICE_TABLE_ENTRY service_table[2];
-    char                      *service_name;
-
-    if ((service_name = strdup(WINDOWS_SERVICE_NAME)) == NULL) {
-        perror("strdup");
-        return 1;
-    }
-    memcpy(service_table, (SERVICE_TABLE_ENTRY[2]) {
-        { .lpServiceName = service_name, .lpServiceProc = service_main },
-        { .lpServiceName = NULL,         .lpServiceProc = (void *) NULL }
-    }, sizeof service_table);
-    if (StartServiceCtrlDispatcher(service_table) == 0) {
-        free(service_name);
-        return dnscrypt_proxy_main(argc, argv);
-    }
-    app_is_running_as_a_service = 1;
-
-    return 0;
-}
-
-static int
-windows_service_uninstall(void)
-{
-    SC_HANDLE scm_handle;
-    SC_HANDLE service_handle;
-    int       ret = 0;
-
-    scm_handle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-    if (scm_handle == NULL) {
-        return -1;
-    }
-    service_handle = OpenService(scm_handle, WINDOWS_SERVICE_NAME, DELETE);
-    if (service_handle == NULL) {
-        CloseServiceHandle(scm_handle);
-        return 0;
-    }
-    if (DeleteService(service_handle) == 0) {
-        ret = -1;
-    }
-    CloseServiceHandle(service_handle);
-    CloseServiceHandle(scm_handle);
-
-    return ret;
-}
-
 static char **
 cmdline_clone_options(const int argc, char ** const argv)
 {
@@ -157,7 +109,7 @@ cmdline_add_option(int * const argc_p, char *** const argv_p,
 }
 
 static char *
-windows_service_registry_read_parameter(const char * const key)
+windows_service_registry_read_string(const char * const key)
 {
     BYTE   *value = NULL;
     HKEY    hk = NULL;
@@ -188,12 +140,107 @@ windows_service_registry_read_parameter(const char * const key)
 }
 
 static int
+windows_build_command_line_from_registry(int * const argc_p,
+                                         char *** const argv_p)
+{
+    char *string_value;
+    int   err = 0;
+
+    if ((*argv_p = cmdline_clone_options(*argc_p, *argv_p)) == NULL) {
+        exit(1);
+    }
+    if ((string_value = windows_service_registry_read_string
+         ("LocalAddress")) != NULL) {
+        err += cmdline_add_option(argc_p, argv_p, "--local-address");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if ((string_value = windows_service_registry_read_string
+         ("ProviderKey")) != NULL) {
+        err += cmdline_add_option(argc_p, argv_p, "--provider-key");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if ((string_value = windows_service_registry_read_string
+         ("ProviderName")) != NULL) {
+        err += cmdline_add_option(argc_p, argv_p, "--provider-name");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if ((string_value = windows_service_registry_read_string
+         ("ResolverAddress")) != NULL) {
+        err += cmdline_add_option(argc_p, argv_p, "--resolver-address");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if (err != 0) {
+        return -1;
+    }
+    return 0;
+}
+
+static int
+windows_main(int argc, char *argv[])
+{
+    static SERVICE_TABLE_ENTRY service_table[2];
+    char                      *service_name;
+
+    if (windows_build_command_line_from_registry(&argc, &argv) != 0) {
+        logger_noformat(NULL, LOG_ERR,
+                        "Unable to build a command line from the registry");
+        return 1;
+    }
+    if ((service_name = strdup(WINDOWS_SERVICE_NAME)) == NULL) {
+        perror("strdup");
+        return 1;
+    }
+    memcpy(service_table, (SERVICE_TABLE_ENTRY[2]) {
+        { .lpServiceName = service_name, .lpServiceProc = service_main },
+        { .lpServiceName = NULL,         .lpServiceProc = (void *) NULL }
+    }, sizeof service_table);
+    if (StartServiceCtrlDispatcher(service_table) == 0) {
+        free(service_name);
+        return dnscrypt_proxy_main(argc, argv);
+    }
+    app_is_running_as_a_service = 1;
+
+    return 0;
+}
+
+static int
+windows_service_uninstall(void)
+{
+    SC_HANDLE scm_handle;
+    SC_HANDLE service_handle;
+    int       ret = 0;
+
+    scm_handle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    if (scm_handle == NULL) {
+        return -1;
+    }
+    service_handle = OpenService(scm_handle, WINDOWS_SERVICE_NAME, DELETE);
+    if (service_handle == NULL) {
+        CloseServiceHandle(scm_handle);
+        return 0;
+    }
+    if (DeleteService(service_handle) == 0) {
+        ret = -1;
+    }
+    CloseServiceHandle(service_handle);
+    CloseServiceHandle(scm_handle);
+
+    return ret;
+}
+
+static int
 windows_service_install(const int argc, const char * const argv[])
 {
     char      self_path[MAX_PATH];
     SC_HANDLE scm_handle;
     SC_HANDLE service_handle;
 
+    (void) argc;
+    (void) argv;
     if (GetModuleFileName(NULL, self_path, MAX_PATH) <= (DWORD) 0) {
         return -1;
     }
