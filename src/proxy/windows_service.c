@@ -30,6 +30,11 @@ main(int argc, char *argv[])
 #ifndef WINDOWS_SERVICE_NAME
 # define WINDOWS_SERVICE_NAME "dnscrypt-proxy"
 #endif
+#ifndef WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY
+# define  WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY \
+    "SYSTEM\\CurrentControlSet\\Services\\" \
+    WINDOWS_SERVICE_NAME "\\Parameters"
+#endif
 
 static SERVICE_STATUS        service_status;
 static SERVICE_STATUS_HANDLE service_status_handle;
@@ -173,7 +178,7 @@ cmdline_clone_options(const int argc, char ** const argv)
 {
     char **argv_new;
 
-    if (argc >= INT_MAX || argc >= SIZE_MAX / sizeof *argv_new ||
+    if (argc >= INT_MAX || (size_t) argc >= SIZE_MAX / sizeof *argv_new ||
         (argv_new = calloc((unsigned int) argc + 1U,
                            sizeof *argv_new)) == NULL) {
         return NULL;
@@ -209,6 +214,37 @@ cmdline_add_option(int * const argc_p, char *** const argv_p,
     return 0;
 }
 
+static char *
+windows_service_registry_read_parameter(const char * const key)
+{
+    BYTE   *value = NULL;
+    HKEY    hk = NULL;
+    DWORD   value_len;
+    DWORD   value_type;
+
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
+        return NULL;
+    }
+    if (RegQueryValueEx(hk, key, 0,
+                        &value_type, NULL, &value_len) == ERROR_SUCCESS &&
+        value_type == (DWORD) REG_SZ && value_len <= SIZE_MAX &&
+        (value = malloc((size_t) value_len)) != NULL) {
+        if (RegQueryValueEx(hk, key, 0,
+                            &value_type, value, &value_len) != ERROR_SUCCESS ||
+            value_type != (DWORD) REG_SZ) {
+            free(value);
+            value = NULL;
+        }
+        assert(value == NULL || value_len == 0 ||
+               (value_len > 0 && value[value_len - 1] == 0));
+    }
+    RegCloseKey(hk);
+
+    return (char *) value;
+}
+
 static int
 windows_service_install(const int argc, const char * const argv[])
 {
@@ -219,7 +255,6 @@ windows_service_install(const int argc, const char * const argv[])
     size_t     cmd_line_size = (size_t) 0U;
     int        i;
 
-    windows_service_uninstall();
     if (GetModuleFileName(NULL, self_path, MAX_PATH) <= (DWORD) 0) {
         return -1;
     }
@@ -237,7 +272,7 @@ windows_service_install(const int argc, const char * const argv[])
     service_handle = CreateService
         (scm_handle, WINDOWS_SERVICE_NAME,
          WINDOWS_SERVICE_NAME, SERVICE_ALL_ACCESS,
-         SERVICE_WIN32_OWN_PROCESS, SERVICE_DEMAND_START,
+         SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START,
          SERVICE_ERROR_NORMAL, cmd_line, NULL, NULL, NULL, NULL, NULL);
     free(cmd_line);
     if (service_handle == NULL) {
@@ -260,12 +295,13 @@ windows_service_option(const int opt_flag, const int argc,
     switch (opt_flag) {
     case WIN_OPTION_INSTALL:
     case WIN_OPTION_REINSTALL:
+        windows_service_uninstall();
         if (windows_service_install(argc, argv) != 0) {
             logger_noformat(NULL, LOG_ERR, "Unable to install the service");
             exit(1);
         } else {
             logger_noformat(NULL, LOG_INFO, "The " WINDOWS_SERVICE_NAME
-                            " service has been installed (but not started)");
+                            " service has been installed and started");
             exit(0);
         }
         break;
