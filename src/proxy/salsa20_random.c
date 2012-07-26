@@ -98,11 +98,11 @@ void
 salsa20_random_stir(void)
 {
     unsigned char  m0[3U * SHA256_BLOCK_SIZE - SHA256_MIN_PAD_SIZE];
-    unsigned char *k0 = m0 + SHA256_BLOCK_SIZE;
     unsigned char  m1[SHA256_BLOCK_SIZE + crypto_hash_sha256_BYTES];
+    unsigned char *k0 = m0 + SHA256_BLOCK_SIZE;
     unsigned char *k1 = m1 + SHA256_BLOCK_SIZE;
-    const size_t   sizeof_k0 = sizeof m0 - SHA256_BLOCK_SIZE;
     size_t         i;
+    size_t         sizeof_k0 = sizeof m0 - SHA256_BLOCK_SIZE;
 
     memset(stream.rnd32, 0, sizeof stream.rnd32);
     stream.rnd32_outleft = (size_t) 0U;
