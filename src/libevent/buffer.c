@@ -2265,6 +2265,8 @@ evbuffer_write_iovec(struct evbuffer *buffer, evutil_socket_t fd,
 		}
 		chain = chain->next;
 	}
+	if (! i)
+		return 0;
 #ifdef WIN32
 	{
 		DWORD bytesSent;
