@@ -92,8 +92,8 @@ typedef struct ProxyContext_ {
     ev_socklen_t             local_sockaddr_len;
     ev_socklen_t             resolver_sockaddr_len;
     size_t                   edns_payload_size;
-    evutil_socket_t          udp_proxy_resolver_handle;
     evutil_socket_t          udp_listener_handle;
+    evutil_socket_t          udp_proxy_resolver_handle;
 #ifndef _WIN32
     uid_t                    user_id;
     gid_t                    user_group;
