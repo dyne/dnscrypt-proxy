@@ -363,6 +363,7 @@ dnl Libtool.
 
 LT_INIT([dlopen])
 LT_CONFIG_LTDL_DIR([libltdl])
+LTDL_INIT
 
 dnl Subconfig.
 
