@@ -178,7 +178,7 @@ an incoming query is received, the daemon immediately replies with a
 The daemon then authenticates the query and forwards it over TCP
 to the resolver.
 
-TCP is slower than UDP, and this workaround should never be used
+`--tcp-only` is slower than UDP, and this workaround should never be used
 except when bypassing a filter is actually required. Moreover,
 multiple queries over a single TCP connections aren't supported yet.
 
