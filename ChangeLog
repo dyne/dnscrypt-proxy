@@ -1,3 +1,102 @@
+Merge: 0d07695 24e697c
+Date:   2012-07-30
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Cut the crap. DNS using TCP can actually be faster than UDP. Provided that the resolver supports pipelining.
+      Bump NDK to r8b
+
+Date:   2012-07-29
+
+    Cut the crap. DNS using TCP can actually be faster than UDP.
+    Provided that the resolver supports pipelining.
+
+Date:   2012-07-29
+
+    Bump NDK to r8b
+
+Merge: c260e87 b12196d
+Date:   2012-07-29
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Regen man pages
+      Mention that in hostip, --resolver-address can include a port number.
+      sort
+      The --resolver-ip command-line switch is gone. Pointed out by awfulhak@
+
+Date:   2012-07-29
+
+    Regen man pages
+
+Date:   2012-07-29
+
+    Mention that in hostip, --resolver-address can include a port number.
+
+Date:   2012-07-29
+
+    sort
+
+Date:   2012-07-29
+
+    The --resolver-ip command-line switch is gone. Pointed out by awfulhak@
+
+Merge: 51a5d57 2ac78d9
+Date:   2012-07-26
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Bring libevent patches up to a0912e32068621eb776d678224e4108511d281e3
+
+Date:   2012-07-26
+
+    Bring libevent patches up to a0912e32068621eb776d678224e4108511d281e3
+    
+        Check more setsockopt return values when binding sockets. Found by coverity
+    
+        memset sockaddr_in before using it. Found by coverity.
+    
+        Move assignment outside tt_assert in ssl unit tests. Appeases coverity.
+    
+        Add checks to various return values in unit tests. Found by coverity
+    
+        Avoid possible needless call to writev. Found by coverity.
+    
+        Remove unused variable; spotted by coverity
+    
+        Avoid more crashes/bad calls in unit tests; found by coverity
+    
+        Add some missing null checks to unit tests; found by coverity
+    
+        Fix resource leaks in the unit tests; found by coverity
+    
+        Fix various check-after-dereference issues in unit tests: found by coverity
+    
+        Set umask before calling mkstemp in unit tests. Found by coverity
+    
+        Fix possible uninitialized read in dns regression tests. Found by coverity.
+    
+        Remove deadcode in http regression tests. Found by coverity.
+
+Merge: 5e7e8a5 82cd026
+Date:   2012-07-26
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update ChangeLog
+      Gentoo ebuild for dnscrypt-proxy 1.0.
+      Grammar
+      use --enable-nonblocking-random as suggested by Frank DENIS.
+      dnscrypt-proxy 0.9.4.
+
+Date:   2012-07-26
+
+    Update ChangeLog
+
 Date:   2012-07-26
 
     Gentoo ebuild for dnscrypt-proxy 1.0.
@@ -10,6 +109,32 @@ Date:   2012-07-26
 Date:   2012-07-26
 
     Grammar
+
+Merge: 682ea2d fe1cc6a
+Date:   2012-07-26
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      More links and docs.
+      / => \
+      Add a README file for Windows.
+      Actually start the service.
+      Don't parse the command-line if the service is run as a... service.
+      Remove Logfile from the registry.
+      Support settings pretty much everything through the registry
+      Reorder variables
+      xor what we get from the system PRG with a HMAC of it. If the system PRG is truly random, it's a no-op. If a way to recover a state given a few CryptGenRandom() stream samples is found, leaked dnscrypt keys will still require breaking SHA2 in order take advantage of this.
+      Start reading the configuration from the registry
+      Don't bother registering the command-line, since we will use the registry.
+      Auto-start the service, and add what it takes to read the registry.
+      Read 952 bits (a full SHA256 block + a final one) from the system RNG
+      Add code for having a dynamic argv, so that we can use the registry to update it
+      Keep the command line switches
+      CreateService() dependencies should be an actual NULL string.
+      Document the new command-line switches for running the proxy as a service.
+      WINDOWS_SERVICE_NAME
+      Add --install, --reinstall and --uninstall switches to install as a service.
 
 Date:   2012-07-26
 
@@ -69,6 +194,10 @@ Date:   2012-07-25
 
 Date:   2012-07-25
 
+    Allow empty options.
+
+Date:   2012-07-25
+
     Add code for having a dynamic argv, so that we can use the registry to update it
 
 Date:   2012-07-25
@@ -90,6 +219,21 @@ Date:   2012-07-24
 Date:   2012-07-24
 
     Add --install, --reinstall and --uninstall switches to install as a service.
+
+Merge: 1966e98 f3dd2c4
+Date:   2012-07-23
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Head towards 1.0.1
+      gitignore libltdl
+      Update ChangeLog
+      Update NEWS
+      WINAPI
+      Make the service name overridable
+      Make dnscrypt-proxy work as a Windows service.
+      Add dnscrypt_proxy_loop_break()
 
 Date:   2012-07-23
 
@@ -123,6 +267,15 @@ Date:   2012-07-23
 
     Add dnscrypt_proxy_loop_break()
 
+Merge: b675340 4d62957
+Date:   2012-07-22
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Add Solaris support.
+      Don't define _XPG4_2
+
 Date:   2012-07-22
 
     Add Solaris support.
@@ -130,6 +283,23 @@ Date:   2012-07-22
 Date:   2012-07-22
 
     Don't define _XPG4_2
+
+Merge: ffa0fa2 d443b5d
+Date:   2012-07-21
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update NEWS / ChangeLog
+      Target Gingerbread.
+      Threads? We don't need threads any more.
+      Add a compilation script for Android
+      Bump to -j3 :)
+      Don't use dtrace when cross-compiling.
+      nacl: always include <stdlib.h> when rand*() is needed.
+      ensure that libnacl/do is always executable
+      Don't use a hardcoded "ranlib" command. It doesn't play well with cross-compilation.
+      arpa/inet.h is required for htonl() in cert.c
 
 Date:   2012-07-21
 
@@ -171,6 +341,19 @@ Date:   2012-07-21
 
     arpa/inet.h is required for htonl() in cert.c
 
+Merge: f1fa600 be57332
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update FreeBSD port
+      Update Dragonfly BSD / NetBSD pkg
+      Update Homebrew formula
+      Update OpenBSD package
+      Bump fpm package to 1.0
+      Version 1.0
+
 Date:   2012-07-20
 
     Update FreeBSD port
@@ -197,11 +380,47 @@ Date:   2012-07-20
 
 Date:   2012-07-20
 
+    Add a second sample plugin
+
+Merge: 0a6a1d6 4747092
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update .gitignore to reflect the dnscrypt-proxy->proxy changes
+
+Date:   2012-07-20
+
+    Ignore Doxyfile for now
+
+Date:   2012-07-20
+
     Update .gitignore to reflect the dnscrypt-proxy->proxy changes
 
 Date:   2012-07-20
 
+    Move plugin code in proxy/ as well.
+
+Merge: 124c97b 4a87920
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update autoconf again :)
+
+Date:   2012-07-20
+
     Update autoconf again :)
+
+Merge: 486243a 165facb
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Update autoconf
 
 Date:   2012-07-20
 
@@ -209,19 +428,233 @@ Date:   2012-07-20
 
 Date:   2012-07-20
 
+    Prepare another plugin
+
+Merge: b9d22cd 5761595
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      The "dnscrypt-proxy" dir just becomes "proxy" to reduce diff w/ dns-proxy.
+
+Date:   2012-07-20
+
     The "dnscrypt-proxy" dir just becomes "proxy" to reduce diff w/ dns-proxy.
+
+Merge: d7be569 649fa34
+Date:   2012-07-20
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Remove uv_alloc_buffer_size leftover from the libuv days.
 
 Date:   2012-07-20
 
     Remove uv_alloc_buffer_size leftover from the libuv days.
 
+Date:   2012-07-20
+
+    Grammar
+
+Date:   2012-07-20
+
+    Add an example that uses ldns.
+
+Date:   2012-07-19
+
+    Make headers C++-friendly and add a macro for copying a raw packet.
+
+Date:   2012-07-19
+
+    KNF
+
+Date:   2012-07-19
+
+    Ignore unused arguments, in order to keep the example as small as possible.
+
+Date:   2012-07-19
+
+    Use dns_packet_len in TCP code, to reduce the diff with the UDP code.
+
+Date:   2012-07-19
+
+    Typoz
+
+Date:   2012-07-19
+
+    Doxygen the plugin API
+
+Date:   2012-07-19
+
+    UDP post filter
+
+Date:   2012-07-19
+
+    Export version.
+
+Date:   2012-07-19
+
+    Keep libtool up until the plugin context is released.
+
+Date:   2012-07-19
+
+    Add headers to get size_t defined.
+
+Date:   2012-07-19
+
+    Call the first pre-filter.
+
+Date:   2012-07-19
+
+    Looks like duplicate code, but if --tcp-only has been enabled, we don't
+    want to call pre-filters.
+
+Date:   2012-07-19
+
+    Prepare pre- and post- filters.
+
+Merge: 7337e74 cb06b13
+Date:   2012-07-18
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Use CPPFLAGS, not AM_CFLAGS.
+
 Date:   2012-07-18
 
     Use CPPFLAGS, not AM_CFLAGS.
 
+Date:   2012-07-18
+
+    dcps->argc should always be > 0 now.
+
+Date:   2012-07-18
+
+    Set argv[0] to the plugin path
+
+Date:   2012-07-18
+
+    Don't link ldns, that will only be for some specific plugins.
+
+Date:   2012-07-18
+
+    Disable static libraries for plugins
+
+Date:   2012-07-18
+
+    Log when parsing a --plugin switch fails.
+
+Date:   2012-07-18
+
+    Remove module version.
+
+Date:   2012-07-18
+
+    Fix plugin args
+
+Date:   2012-07-18
+
+    Fix dcplugin_init() prototype.
+
+Date:   2012-07-18
+
+    No need to check for LibLoaderApi.h and WinBase.h any more.
+
+Date:   2012-07-18
+
+    Check if libldns is available.
+
+Date:   2012-07-18
+
+    Add dcplugin_destroy()
+
+Date:   2012-07-18
+
+    Start actually calling plugins.
+
+Date:   2012-07-18
+
+    Start resolving symbols
+
+Date:   2012-07-18
+
+    Load dynamic libraries.
+
+Date:   2012-07-18
+
+    Link plugins with -module
+
+Date:   2012-07-18
+
+    Prepare for loading plugins.
+
+Date:   2012-07-18
+
+    plugin_name -> plugin_file
+
+Date:   2012-07-18
+
+    Store plugin-specific options.
+
+Date:   2012-07-18
+
+    Create and insert plugins.
+
+Date:   2012-07-18
+
+    Use DCPluginSupportContext to handle multiple DCPluginSupport objects.
+
+Date:   2012-07-18
+
+    More infrastructure for plugins.
+
+Date:   2012-07-18
+
+    Document PLUGIN_REVISION
+
+Date:   2012-07-18
+
+    Use CPPFLAGS, not AM_CFLAGS.
+
+Date:   2012-07-18
+
+    <dnscrypt/plugin.h> is what developers should include for writing plugins.
+
+Date:   2012-07-18
+
+    Install dnscrypt headers for plugin developers.
+
+Merge: b3e9707 9c1197d
+Date:   2012-07-17
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      tab
+
 Date:   2012-07-17
 
     tab
+
+Merge: fb2a7f0 2799372
+Date:   2012-07-17
+
+    Merge branch 'master' into 1.1
+    
+    * master:
+      Add explicit dependencies.
+      Update autoconf script.
+
+Date:   2012-07-17
+
+    Prepare a simple plugin.
+
+Date:   2012-07-17
+
+    Only build and link ltdl if plugins are enabled.
 
 Date:   2012-07-17
 
@@ -229,7 +662,23 @@ Date:   2012-07-17
 
 Date:   2012-07-17
 
+    Add some explicit dependencies
+
+Date:   2012-07-17
+
+    Replace dl.[ch] with libltdl
+
+Date:   2012-07-17
+
     Update autoconf script.
+
+Date:   2012-07-17
+
+    Add libltdl
+
+Date:   2012-07-17
+
+    Add a basic dynamic library loader.
 
 Date:   2012-07-17
 
