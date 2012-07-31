@@ -363,9 +363,6 @@ dnl Libtool.
 
 LT_INIT([dlopen])
 LT_CONFIG_LTDL_DIR([libltdl])
-if test x$plugins = xenabled; then
-  LTDL_INIT
-fi
 
 dnl Subconfig.
 
