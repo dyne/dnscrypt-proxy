@@ -1,3 +1,69 @@
+Date:   2012-07-31
+
+    If an evdns_getaddrinfo timeout happens while pending_cb is set, and a
+    callback is about to run, but we get a call to evdns_getaddrinfo_gotresolve
+    before it finishes.
+    libevent dc3207767d4f06b31
+
+Date:   2012-07-29
+
+    Cut the crap. DNS using TCP can actually be faster than UDP.
+    Provided that the resolver supports pipelining.
+
+Date:   2012-07-29
+
+    Bump NDK to r8b
+
+Date:   2012-07-29
+
+    Regen man pages
+
+Date:   2012-07-29
+
+    Mention that in hostip, --resolver-address can include a port number.
+
+Date:   2012-07-29
+
+    sort
+
+Date:   2012-07-29
+
+    The --resolver-ip command-line switch is gone. Pointed out by awfulhak@
+
+Date:   2012-07-26
+
+    Bring libevent patches up to a0912e32068621eb776d678224e4108511d281e3
+    
+        Check more setsockopt return values when binding sockets. Found by coverity
+    
+        memset sockaddr_in before using it. Found by coverity.
+    
+        Move assignment outside tt_assert in ssl unit tests. Appeases coverity.
+    
+        Add checks to various return values in unit tests. Found by coverity
+    
+        Avoid possible needless call to writev. Found by coverity.
+    
+        Remove unused variable; spotted by coverity
+    
+        Avoid more crashes/bad calls in unit tests; found by coverity
+    
+        Add some missing null checks to unit tests; found by coverity
+    
+        Fix resource leaks in the unit tests; found by coverity
+    
+        Fix various check-after-dereference issues in unit tests: found by coverity
+    
+        Set umask before calling mkstemp in unit tests. Found by coverity
+    
+        Fix possible uninitialized read in dns regression tests. Found by coverity.
+    
+        Remove deadcode in http regression tests. Found by coverity.
+
+Date:   2012-07-26
+
+    Update ChangeLog
+
 Date:   2012-07-26
 
     Gentoo ebuild for dnscrypt-proxy 1.0.
