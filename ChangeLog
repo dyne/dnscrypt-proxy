@@ -1,3 +1,18 @@
+Date:   2012-07-31
+
+    If an evdns_getaddrinfo timeout happens while pending_cb is set, and a
+    callback is about to run, but we get a call to evdns_getaddrinfo_gotresolve
+    before it finishes.
+    libevent dc3207767d4f06b31
+
+Date:   2012-07-30
+
+    Always install ltdl
+
+Date:   2012-07-30
+
+    Merge 1.1 to master.
+
 Merge: 0d07695 24e697c
 Date:   2012-07-30
 
