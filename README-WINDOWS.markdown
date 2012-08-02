@@ -33,7 +33,7 @@ options:
 - `--reinstall`: ditto.
 - `--uninstall`: uninstall the service.
 
-Startup options can be specified as subkeys from this registry key:
+Startup options should specified as subkeys from this registry key:
 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters`
 
 The service is named `dnscrypt-proxy`.
