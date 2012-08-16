@@ -29,12 +29,6 @@
 # define DNS_MAX_PACKET_SIZE_UDP DNS_MAX_PACKET_SIZE_UDP_SEND
 #endif
 
-#ifndef DNS_DEFAULT_LOCAL_PORT
-# define DNS_DEFAULT_LOCAL_PORT "53"
-#endif
-#ifndef DNS_DEFAULT_RESOLVER_PORT
-# define DNS_DEFAULT_RESOLVER_PORT "443"
-#endif
 #ifndef DNS_DEFAULT_STANDARD_DNS_PORT
 # define DNS_DEFAULT_STANDARD_DNS_PORT "53"
 #endif
@@ -77,13 +71,11 @@ typedef struct ProxyContext_ {
     AppContext              *app_context;
     struct event_base       *event_loop;
     const char              *local_ip;
-    const char              *local_port;
     const char              *log_file;
     const char              *pid_file;
     const char              *provider_name;
     const char              *provider_publickey_s;
     const char              *resolver_ip;
-    const char              *resolver_port;
     struct evconnlistener   *tcp_conn_listener;
     struct event            *tcp_accept_timer;
     struct event            *udp_listener_event;

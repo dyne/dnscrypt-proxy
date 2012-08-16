@@ -44,10 +44,8 @@ static struct option getopt_long_options[] = {
 #endif
     { "plugin", 1, NULL, 'X' },
     { "resolver-address", 1, NULL, 'r' },
-    { "resolver-port", 1, NULL, 't' },
     { "user", 1, NULL, 'u' },
     { "provider-name", 1, NULL, 'N' },
-    { "local-port", 1, NULL, 'P' },
     { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
 #ifdef _WIN32
@@ -58,9 +56,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:l:n:p:r:t:u:N:P:TVX";
+static const char *getopt_options = "a:de:hk:l:n:p:r:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:n:r:t:u:N:P:TVX";
+static const char *getopt_options = "a:e:hk:n:r:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -116,14 +114,12 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
     proxy_context->local_ip = "127.0.0.1";
-    proxy_context->local_port = DNS_DEFAULT_LOCAL_PORT;
     proxy_context->log_fd = -1;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
     proxy_context->provider_name = DEFAULT_PROVIDER_NAME;
     proxy_context->provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY;
     proxy_context->resolver_ip = DEFAULT_RESOLVER_IP;
-    proxy_context->resolver_port = DNS_DEFAULT_RESOLVER_PORT;
 #ifndef _WIN32
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
@@ -243,9 +239,6 @@ options_parse(AppContext * const app_context,
         case 'r':
             proxy_context->resolver_ip = optarg;
             break;
-        case 't':
-            proxy_context->resolver_port = optarg;
-            break;
 #ifdef HAVE_GETPWNAM
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);
@@ -261,9 +254,6 @@ options_parse(AppContext * const app_context,
 #endif
         case 'N':
             proxy_context->provider_name = optarg;
-            break;
-        case 'P':
-            proxy_context->local_port = optarg;
             break;
         case 'T':
             proxy_context->tcp_only = 1;

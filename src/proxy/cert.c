@@ -318,9 +318,7 @@ cert_updater_update(ProxyContext * const proxy_context)
                                            DNS_QUERY_NO_SEARCH) != 0) {
         return -1;
     }
-    if (proxy_context->tcp_only != 0 &&
-        strcmp(proxy_context->resolver_port,
-               DNS_DEFAULT_STANDARD_DNS_PORT) != 0) {
+    if (proxy_context->tcp_only != 0) {
         (void) evdns_base_nameserver_ip_add(cert_updater->evdns_base,
                                             proxy_context->resolver_ip);
     }
