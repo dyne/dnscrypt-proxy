@@ -74,7 +74,7 @@ static const char *getopt_options = "a:e:hk:n:r:u:N:TVX";
 # define DEFAULT_PROVIDER_NAME "2.dnscrypt-cert.opendns.com."
 #endif
 #ifndef DEFAULT_RESOLVER_IP
-# define DEFAULT_RESOLVER_IP "208.67.220.220"
+# define DEFAULT_RESOLVER_IP "208.67.220.220:443"
 #endif
 
 static void
@@ -113,7 +113,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count = 0U;
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
-    proxy_context->local_ip = "127.0.0.1";
+    proxy_context->local_ip = "127.0.0.1:53";
     proxy_context->log_fd = -1;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
