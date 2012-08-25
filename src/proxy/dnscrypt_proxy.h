@@ -59,7 +59,7 @@
 #define DNS_OFFSET_EDNS_TYPE         0U
 #define DNS_OFFSET_EDNS_PAYLOAD_SIZE 2U
 
-#define DNS_DEFAULT_EDNS_PAYLOAD_SIZE 1280U
+#define DNS_DEFAULT_EDNS_PAYLOAD_SIZE 1252U
 
 typedef TAILQ_HEAD(TCPRequestQueue_, TCPRequest_) TCPRequestQueue;
 typedef TAILQ_HEAD(UDPRequestQueue_, UDPRequest_) UDPRequestQueue;

@@ -200,7 +200,7 @@ Unix-like operating systems.
 
 `dnscrypt-proxy` can transparently rewrite outgoing packets before
 authenticating them, in order to add the EDNS0 mechanism. By
-default, a conservative payload size of 1280 bytes is advertised.
+default, a conservative payload size of 1252 bytes is advertised.
 
 This size can be made larger by starting the proxy with the
 `--edns-payload-size=<bytes>` command-line switch. Values up to 4096

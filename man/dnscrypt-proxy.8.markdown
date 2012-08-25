@@ -42,7 +42,7 @@ ports.
     pseudo-RR to outgoing queries in order to enable the EDNS0
     extension mechanism. The payload size is the size of the largest
     response we accept from the resolver before retrying over TCP.
-    This feature is enabled by default, with a payload size of 1280
+    This feature is enabled by default, with a payload size of 1252
     bytes. Any value below 512 disables it.
 
   * `-h`, `--help`: show usage.
