@@ -1,3 +1,94 @@
+Date:   2012-08-24
+
+    Shrink the default max payload size to 1252 bytes.
+
+Date:   2012-08-24
+
+    Update libevent to 2.0.20
+
+Date:   2012-08-20
+
+    Include the port number in default IPs.
+    Restore support for specifying IP addresses without ports.
+
+Date:   2012-08-21
+
+    Update email.
+
+Date:   2012-08-17
+
+    Don't use backtrace on Bitrig
+
+Date:   2012-08-16
+
+    -P and -t are gone for good.
+
+Date:   2012-08-07
+
+    Typo
+
+Date:   2012-08-06
+
+    DP4
+
+Merge: 1128c06 357d1be
+Date:   2012-08-03
+
+    Merge branch '1.0.x'
+    
+    * 1.0.x:
+      livevent: Add explicit AC_PROG_SED to configure.in so all autoconfs will expose $(SED) + avoid unused variable declaration.
+      When running the proxy as a Windows service, options have to be specified using the registry.
+      Bump dnscrypt-proxy homebrew formula
+
+Date:   2012-08-03
+
+    livevent: Add explicit AC_PROG_SED to configure.in so all autoconfs will expose $(SED)
+    + avoid unused variable declaration.
+
+Date:   2012-08-01
+
+    When running the proxy as a Windows service, options have to be specified
+    using the registry.
+
+Date:   2012-07-31
+
+    Actually install LTDL
+
+Date:   2012-07-31
+
+    Bump dnscrypt-proxy homebrew formula
+
+Merge: 0016faf 18e9180
+Date:   2012-07-31
+
+    Merge branch '1.0.x'
+    
+    * 1.0.x:
+      Export droid-gcc variables
+      fpm -> 1.0.1
+      Update ChangeLog
+      If an evdns_getaddrinfo timeout happens while pending_cb is set, and a callback is about to run, but we get a call to evdns_getaddrinfo_gotresolve before it finishes. libevent dc3207767d4f06b31
+
+Date:   2012-07-31
+
+    Export droid-gcc variables
+
+Date:   2012-07-31
+
+    fpm -> 1.0.1
+
+Date:   2012-07-31
+
+    Update ChangeLog
+
+Date:   2012-07-31
+
+    If an evdns_getaddrinfo timeout happens while pending_cb is set, and a
+    callback is about to run, but we get a call to evdns_getaddrinfo_gotresolve
+    before it finishes.
+    libevent dc3207767d4f06b31
+
 Date:   2012-07-31
 
     If an evdns_getaddrinfo timeout happens while pending_cb is set, and a
