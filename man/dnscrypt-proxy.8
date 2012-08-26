@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "DNSCRYPT\-PROXY" "8" "July 2012" "" ""
+.TH "DNSCRYPT\-PROXY" "8" "August 2012" "" ""
 .
 .SH "NAME"
 \fBdnscrypt\-proxy\fR \- A DNSCrypt forwarder
@@ -36,7 +36,7 @@ Intead, run a DNS cache like \fBUnbound\fR, and configure it to use \fBdnscrypt\
 \fB\-d\fR, \fB\-\-daemonize\fR: detach from the current terminal and run the server in background\.
 .
 .IP "\(bu" 4
-\fB\-e\fR, \fB\-\-edns\-payload\-size=<bytes>\fR: transparently add an OPT pseudo\-RR to outgoing queries in order to enable the EDNS0 extension mechanism\. The payload size is the size of the largest response we accept from the resolver before retrying over TCP\. This feature is enabled by default, with a payload size of 1280 bytes\. Any value below 512 disables it\.
+\fB\-e\fR, \fB\-\-edns\-payload\-size=<bytes>\fR: transparently add an OPT pseudo\-RR to outgoing queries in order to enable the EDNS0 extension mechanism\. The payload size is the size of the largest response we accept from the resolver before retrying over TCP\. This feature is enabled by default, with a payload size of 1252 bytes\. Any value below 512 disables it\.
 .
 .IP "\(bu" 4
 \fB\-h\fR, \fB\-\-help\fR: show usage\.
