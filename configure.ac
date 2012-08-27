@@ -411,8 +411,8 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/Makefile
                  src/plugins/example/Makefile
                  src/plugins/example-ldns/Makefile
-                 src/plugins/example-ldns-2/Makefile
                  src/plugins/example-ldns-opendns-bypass/Makefile
+                 src/plugins/example-ldns-opendns-deviceid/Makefile
                  src/plugins/example-ldns-opendns-parental-protection/Makefile
                  test/Makefile])
 

@@ -5,7 +5,7 @@ SUBDIRS = \
 if USE_LDNS
 SUBDIRS += \
 	example-ldns \
-	example-ldns-2 \
 	example-ldns-opendns-bypass \
+	example-ldns-opendns-deviceid \
 	example-ldns-opendns-parental-protection
 endif
