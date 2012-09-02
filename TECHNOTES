@@ -41,7 +41,7 @@ The following information has to be provided to the proxy:
 
 - The provider name (defaults to 2.dnscrypt-cert.opendns.com.)
 - The provider public key (defaults to the current one for OpenDNS).
-- The resolver IP address (defaults to 208.67.222.222).
+- The resolver IP address (defaults to 208.67.220.220).
 
 At startup and every 60 minute, the proxy directly connects to the specified
 resolver IP address and issues a TXT query for the provider name. The

@@ -20,7 +20,7 @@ dnscrypt-proxy(8) is started.
   * `-h`, `--help`: show usage.
 
   * `-r`, `--resolver-address=<ip>[:port]`: the resolver IP address
-(default: 208.67.222.222, OpenDNS).
+(default: 208.67.220.220, OpenDNS).
 
   * `-V`, `--version`: show version number.
 

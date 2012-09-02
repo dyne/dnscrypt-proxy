@@ -1,3 +1,12 @@
+Date:   2012-09-02
+
+    The OSX GUI probably works on 32-bit systems now, and the OpenDNS GUI for
+    Windows is apparently labeled "OpenDNSCrypt".
+
+Date:   2012-09-02
+
+    Upcase
+
 Date:   2012-08-29
 
     Add an optional function for describing a plugin.
