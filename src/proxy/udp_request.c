@@ -247,13 +247,13 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     assert(uncurved_len <= dns_reply_len);
     dns_reply_len = uncurved_len;
 #ifdef PLUGINS
-    const size_t max_packet_size_for_filter = sizeof dns_reply;
+    const size_t max_reply_size_for_filter = sizeof dns_reply;
     DCPluginDNSPacket dcp_packet = {
         .client_sockaddr = &udp_request->client_sockaddr,
         .dns_packet = dns_reply,
         .dns_packet_len_p = &dns_reply_len,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
-        .dns_packet_max_len = max_packet_size_for_filter
+        .dns_packet_max_len = max_reply_size_for_filter
     };
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
@@ -261,7 +261,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
         (proxy_context->app_context->dcps_context, &dcp_packet);
     assert(dns_reply_len > (size_t) 0U &&
            dns_reply_len <= sizeof dns_reply &&
-           dns_reply_len <= max_packet_size_for_filter);
+           dns_reply_len <= max_reply_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
         udp_request_kill(udp_request);
         return;
@@ -358,7 +358,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     ssize_t       curve_ret;
     ssize_t       nread;
     size_t        dns_query_len = (size_t) 0U;
-    size_t        max_packet_size;
+    size_t        max_query_size;
     size_t        request_edns_payload_size;
 
     (void) ev_flags;
@@ -414,22 +414,22 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                      sizeof dns_query, &request_edns_payload_size);
 
     if (request_edns_payload_size < DNS_MAX_PACKET_SIZE_UDP_SEND) {
-        max_packet_size = DNS_MAX_PACKET_SIZE_UDP_SEND;
+        max_query_size = DNS_MAX_PACKET_SIZE_UDP_SEND;
     } else {
-        max_packet_size = request_edns_payload_size;
+        max_query_size = request_edns_payload_size;
     }
-    if (max_packet_size > sizeof dns_query) {
-        max_packet_size = sizeof dns_query;
+    if (max_query_size > sizeof dns_query) {
+        max_query_size = sizeof dns_query;
     }
-    assert(max_packet_size <= sizeof dns_query);
+    assert(max_query_size <= sizeof dns_query);
     if (udp_request->proxy_context->tcp_only != 0) {
         proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
         return;
     }
 #ifdef PLUGINS
-    size_t max_packet_size_for_filter = dns_query_len;
-    if (max_packet_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
-        max_packet_size_for_filter = max_packet_size -
+    size_t max_query_size_for_filter = dns_query_len;
+    if (max_query_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
+        max_query_size_for_filter = max_query_size -
             (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
     }
     DCPluginDNSPacket dcp_packet = {
@@ -437,14 +437,14 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         .dns_packet = dns_query,
         .dns_packet_len_p = &dns_query_len,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
-        .dns_packet_max_len = max_packet_size_for_filter
+        .dns_packet_max_len = max_query_size_for_filter
     };
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
         (proxy_context->app_context->dcps_context, &dcp_packet);
-    assert(dns_query_len > (size_t) 0U && dns_query_len <= max_packet_size &&
-           dns_query_len <= max_packet_size_for_filter);
+    assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
+           dns_query_len <= max_query_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
         udp_request_kill(udp_request);
         return;
@@ -454,8 +454,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
            > dns_query_len);
     size_t max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
         dnscrypt_query_header_size();
-    if (max_len > max_packet_size) {
-        max_len = max_packet_size;
+    if (max_len > max_query_size) {
+        max_len = max_query_size;
     }
     if (dns_query_len + dnscrypt_query_header_size() > max_len) {
         proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
