@@ -179,19 +179,19 @@ static void
 resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
                      void * const proxy_context_)
 {
-    uint8_t                  dns_packet[DNS_MAX_PACKET_SIZE_UDP];
+    uint8_t                  dns_reply[DNS_MAX_PACKET_SIZE_UDP];
     ProxyContext            *proxy_context = proxy_context_;
     UDPRequest              *scanned_udp_request;
     UDPRequest              *udp_request = NULL;
     struct sockaddr_storage  resolver_sockaddr;
     ev_socklen_t             resolver_sockaddr_len = sizeof resolver_sockaddr;
     ssize_t                  nread;
-    size_t                   dns_packet_len = (size_t) 0U;
+    size_t                   dns_reply_len = (size_t) 0U;
     size_t                   uncurved_len;
 
     (void) ev_flags;
     nread = recvfrom(proxy_resolver_handle,
-                     (void *) dns_packet, sizeof dns_packet, 0,
+                     (void *) dns_reply, sizeof dns_reply, 0,
                      (struct sockaddr *) &resolver_sockaddr,
                      &resolver_sockaddr_len);
     if (nread < (ssize_t) 0) {
@@ -211,7 +211,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     TAILQ_FOREACH(scanned_udp_request,
                   &proxy_context->udp_request_queue, queue) {
         if (dnscrypt_cmp_client_nonce(scanned_udp_request->client_nonce,
-                                      dns_packet, (size_t) nread) == 0) {
+                                      dns_reply, (size_t) nread) == 0) {
             udp_request = scanned_udp_request;
             break;
         }
@@ -222,19 +222,19 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
         return;
     }
     if (nread < (ssize_t) (DNS_HEADER_SIZE + dnscrypt_response_header_size()) ||
-        nread > (ssize_t) sizeof dns_packet) {
+        nread > (ssize_t) sizeof dns_reply) {
         udp_request_kill(udp_request);
         return;
     }
     DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_REPLIED(udp_request);
-    dns_packet_len = (size_t) nread;
-    assert(dns_packet_len <= sizeof dns_packet);
+    dns_reply_len = (size_t) nread;
+    assert(dns_reply_len <= sizeof dns_reply);
 
-    uncurved_len = dns_packet_len;
+    uncurved_len = dns_reply_len;
     DNSCRYPT_PROXY_REQUEST_UNCURVE_START(udp_request, uncurved_len);
     if (dnscrypt_client_uncurve
         (&udp_request->proxy_context->dnscrypt_client,
-            udp_request->client_nonce, dns_packet, &uncurved_len) != 0) {
+            udp_request->client_nonce, dns_reply, &uncurved_len) != 0) {
         DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR(udp_request);
         DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_GOT_INVALID_REPLY(udp_request);
         logger_noformat(udp_request->proxy_context, LOG_WARNING,
@@ -244,14 +244,14 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     }
     DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(udp_request, uncurved_len);
     memset(udp_request->client_nonce, 0, sizeof udp_request->client_nonce);
-    assert(uncurved_len <= dns_packet_len);
-    dns_packet_len = uncurved_len;
+    assert(uncurved_len <= dns_reply_len);
+    dns_reply_len = uncurved_len;
 #ifdef PLUGINS
-    const size_t max_packet_size_for_filter = sizeof dns_packet;
+    const size_t max_packet_size_for_filter = sizeof dns_reply;
     DCPluginDNSPacket dcp_packet = {
         .client_sockaddr = &udp_request->client_sockaddr,
-        .dns_packet = dns_packet,
-        .dns_packet_len_p = &dns_packet_len,
+        .dns_packet = dns_reply,
+        .dns_packet_len_p = &dns_reply_len,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
         .dns_packet_max_len = max_packet_size_for_filter
     };
@@ -259,9 +259,9 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_post_filters
         (proxy_context->app_context->dcps_context, &dcp_packet);
-    assert(dns_packet_len > (size_t) 0U &&
-           dns_packet_len <= sizeof dns_packet &&
-           dns_packet_len <= max_packet_size_for_filter);
+    assert(dns_reply_len > (size_t) 0U &&
+           dns_reply_len <= sizeof dns_reply &&
+           dns_reply_len <= max_packet_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
         udp_request_kill(udp_request);
         return;
@@ -270,8 +270,8 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     sendto_with_retry(& (SendtoWithRetryCtx) {
        .udp_request = udp_request,
        .handle = udp_request->client_proxy_handle,
-       .buffer = dns_packet,
-       .length = dns_packet_len,
+       .buffer = dns_reply,
+       .length = dns_reply_len,
        .flags = 0,
        .dest_addr = (struct sockaddr *) &udp_request->client_sockaddr,
        .dest_len = udp_request->client_sockaddr_len,
@@ -281,19 +281,19 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
 
 static void
 proxy_client_send_truncated(UDPRequest * const udp_request,
-                            uint8_t dns_packet[DNS_MAX_PACKET_SIZE_UDP],
-                            size_t dns_packet_len)
+                            uint8_t dns_reply[DNS_MAX_PACKET_SIZE_UDP],
+                            size_t dns_reply_len)
 {
     DNSCRYPT_PROXY_REQUEST_UDP_TRUNCATED(udp_request);
 
-    assert(dns_packet_len > DNS_OFFSET_FLAGS2);
-    dns_packet[DNS_OFFSET_FLAGS] |= DNS_FLAGS_TC | DNS_FLAGS_QR;
-    dns_packet[DNS_OFFSET_FLAGS2] |= DNS_FLAGS2_RA;
+    assert(dns_reply_len > DNS_OFFSET_FLAGS2);
+    dns_reply[DNS_OFFSET_FLAGS] |= DNS_FLAGS_TC | DNS_FLAGS_QR;
+    dns_reply[DNS_OFFSET_FLAGS2] |= DNS_FLAGS2_RA;
     sendto_with_retry(& (SendtoWithRetryCtx) {
         .udp_request = udp_request,
         .handle = udp_request->client_proxy_handle,
-        .buffer = dns_packet,
-        .length = dns_packet_len,
+        .buffer = dns_reply,
+        .length = dns_reply_len,
         .flags = 0,
         .dest_addr = (struct sockaddr *) &udp_request->client_sockaddr,
         .dest_len = udp_request->client_sockaddr_len,
@@ -352,12 +352,12 @@ static void
 client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                    void * const proxy_context_)
 {
-    uint8_t       dns_packet[DNS_MAX_PACKET_SIZE_UDP];
+    uint8_t       dns_query[DNS_MAX_PACKET_SIZE_UDP];
     ProxyContext *proxy_context = proxy_context_;
     UDPRequest   *udp_request;
     ssize_t       curve_ret;
     ssize_t       nread;
-    size_t        dns_packet_len = (size_t) 0U;
+    size_t        dns_query_len = (size_t) 0U;
     size_t        max_packet_size;
     size_t        request_edns_payload_size;
 
@@ -372,7 +372,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     udp_request->client_proxy_handle = client_proxy_handle;
     udp_request->client_sockaddr_len = sizeof udp_request->client_sockaddr;
     nread = recvfrom(client_proxy_handle,
-                     (void *) dns_packet, sizeof dns_packet, 0,
+                     (void *) dns_query, sizeof dns_query, 0,
                      (struct sockaddr *) &udp_request->client_sockaddr,
                      &udp_request->client_sockaddr_len);
     if (nread < (ssize_t) 0) {
@@ -384,7 +384,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         return;
     }
     if (nread < (ssize_t) DNS_HEADER_SIZE ||
-        (size_t) nread > sizeof dns_packet) {
+        (size_t) nread > sizeof dns_query) {
         logger_noformat(proxy_context, LOG_WARNING, "Short query received");
         free(udp_request);
         return;
@@ -407,35 +407,35 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     memset(&udp_request->status, 0, sizeof udp_request->status);
     udp_request->status.is_in_queue = 1;
 
-    dns_packet_len = (size_t) nread;
-    assert(dns_packet_len <= sizeof dns_packet);
+    dns_query_len = (size_t) nread;
+    assert(dns_query_len <= sizeof dns_query);
 
-    edns_add_section(proxy_context, dns_packet, &dns_packet_len,
-                     sizeof dns_packet, &request_edns_payload_size);
+    edns_add_section(proxy_context, dns_query, &dns_query_len,
+                     sizeof dns_query, &request_edns_payload_size);
 
     if (request_edns_payload_size < DNS_MAX_PACKET_SIZE_UDP_SEND) {
         max_packet_size = DNS_MAX_PACKET_SIZE_UDP_SEND;
     } else {
         max_packet_size = request_edns_payload_size;
     }
-    if (max_packet_size > sizeof dns_packet) {
-        max_packet_size = sizeof dns_packet;
+    if (max_packet_size > sizeof dns_query) {
+        max_packet_size = sizeof dns_query;
     }
-    assert(max_packet_size <= sizeof dns_packet);
+    assert(max_packet_size <= sizeof dns_query);
     if (udp_request->proxy_context->tcp_only != 0) {
-        proxy_client_send_truncated(udp_request, dns_packet, dns_packet_len);
+        proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
         return;
     }
 #ifdef PLUGINS
-    size_t max_packet_size_for_filter = dns_packet_len;
+    size_t max_packet_size_for_filter = dns_query_len;
     if (max_packet_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
         max_packet_size_for_filter = max_packet_size -
             (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
     }
     DCPluginDNSPacket dcp_packet = {
         .client_sockaddr = &udp_request->client_sockaddr,
-        .dns_packet = dns_packet,
-        .dns_packet_len_p = &dns_packet_len,
+        .dns_packet = dns_query,
+        .dns_packet_len_p = &dns_query_len,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
         .dns_packet_max_len = max_packet_size_for_filter
     };
@@ -443,37 +443,37 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
         (proxy_context->app_context->dcps_context, &dcp_packet);
-    assert(dns_packet_len > (size_t) 0U && dns_packet_len <= max_packet_size &&
-           dns_packet_len <= max_packet_size_for_filter);
+    assert(dns_query_len > (size_t) 0U && dns_query_len <= max_packet_size &&
+           dns_query_len <= max_packet_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
         udp_request_kill(udp_request);
         return;
     }
 #endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
-           > dns_packet_len);
-    size_t max_len = dns_packet_len + DNSCRYPT_MAX_PADDING +
+           > dns_query_len);
+    size_t max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
         dnscrypt_query_header_size();
     if (max_len > max_packet_size) {
         max_len = max_packet_size;
     }
-    if (dns_packet_len + dnscrypt_query_header_size() > max_len) {
-        proxy_client_send_truncated(udp_request, dns_packet, dns_packet_len);
+    if (dns_query_len + dnscrypt_query_header_size() > max_len) {
+        proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
         return;
     }
-    DNSCRYPT_PROXY_REQUEST_CURVE_START(udp_request, dns_packet_len);
+    DNSCRYPT_PROXY_REQUEST_CURVE_START(udp_request, dns_query_len);
     curve_ret =
         dnscrypt_client_curve(&udp_request->proxy_context->dnscrypt_client,
-                              udp_request->client_nonce, dns_packet,
-                              dns_packet_len, max_len);
+                              udp_request->client_nonce, dns_query,
+                              dns_query_len, max_len);
     if (curve_ret <= (ssize_t) 0) {
         DNSCRYPT_PROXY_REQUEST_CURVE_ERROR(udp_request);
         return;
     }
-    dns_packet_len = (size_t) curve_ret;
-    assert(dns_packet_len >= dnscrypt_query_header_size());
-    DNSCRYPT_PROXY_REQUEST_CURVE_DONE(udp_request, dns_packet_len);
-    assert(dns_packet_len <= sizeof dns_packet);
+    dns_query_len = (size_t) curve_ret;
+    assert(dns_query_len >= dnscrypt_query_header_size());
+    DNSCRYPT_PROXY_REQUEST_CURVE_DONE(udp_request, dns_query_len);
+    assert(dns_query_len <= sizeof dns_query);
 
     udp_request->timeout_timer =
         evtimer_new(udp_request->proxy_context->event_loop,
@@ -487,8 +487,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     sendto_with_retry(& (SendtoWithRetryCtx) {
         .udp_request = udp_request,
         .handle = proxy_context->udp_proxy_resolver_handle,
-        .buffer = dns_packet,
-        .length = dns_packet_len,
+        .buffer = dns_query,
+        .length = dns_query_len,
         .flags = 0,
         .dest_addr = (struct sockaddr *) &proxy_context->resolver_sockaddr,
         .dest_len = proxy_context->resolver_sockaddr_len,
