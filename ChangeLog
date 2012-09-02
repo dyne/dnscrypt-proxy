@@ -1,3 +1,28 @@
+Date:   2012-08-29
+
+    Add an optional function for describing a plugin.
+
+Date:   2012-08-29
+
+    Rename sample plugins
+
+Date:   2012-08-27
+
+    Rename example-ldns-2 to example-ldns-opendns-deviceid and add the ability
+    to provide a device id on the command line.
+
+Date:   2012-08-27
+
+    Add two new OpenDNS-specific example plugins
+
+Date:   2012-08-26
+
+    Regen dnscrypt-proxy man page.
+
+Date:   2012-08-26
+
+    Update ChangeLog
+
 Date:   2012-08-24
 
     Shrink the default max payload size to 1252 bytes.

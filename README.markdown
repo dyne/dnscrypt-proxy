@@ -229,8 +229,7 @@ projects:
 
 - [DNSCrypt OSX Client](https://github.com/opendns/dnscrypt-osx-client):
 a preferences pane, a menu bar indicator and a service to change the
-DNS settings. OSX only, written in Objective C. 64-bit CPU required.
-Experimental.
+DNS settings. OSX only, written in Objective C. Experimental.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
@@ -238,7 +237,7 @@ different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET.
 
 - [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
-Official GUI for Windows, by OpenDNS.
+Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
 
 - dnscrypt-proxy is also available on Cydia, and it can be easily
 enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
