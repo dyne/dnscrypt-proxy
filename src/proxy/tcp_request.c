@@ -179,6 +179,7 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         return;
     }
     DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(tcp_request, uncurved_len);
+    memset(tcp_request->client_nonce, 0, sizeof tcp_request->client_nonce);
     assert(uncurved_len <= dns_reply_len);
     dns_reply_len = uncurved_len;
 #ifdef PLUGINS
