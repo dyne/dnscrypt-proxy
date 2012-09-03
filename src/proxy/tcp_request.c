@@ -145,7 +145,8 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         tcp_request->status.has_dns_reply_len = 1;
     }
     assert(tcp_request->status.has_dns_reply_len != 0);
-    if (tcp_request->dns_reply_len <
+    dns_reply_len = tcp_request->dns_reply_len;
+    if (dns_reply_len <
         (size_t) DNS_HEADER_SIZE + dnscrypt_response_header_size()) {
         logger_noformat(proxy_context, LOG_WARNING, "Short reply received");
         DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_GOT_INVALID_REPLY(tcp_request);
@@ -153,20 +154,19 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         return;
     }
     available_size = evbuffer_get_length(input);
-    if (available_size < tcp_request->dns_reply_len) {
+    if (available_size < dns_reply_len) {
         bufferevent_setwatermark(tcp_request->proxy_resolver_bev,
-                                 EV_READ, tcp_request->dns_reply_len,
-                                 tcp_request->dns_reply_len);
+                                 EV_READ, dns_reply_len, dns_reply_len);
         return;
     }
     DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_REPLIED(tcp_request);
-    assert(available_size >= tcp_request->dns_reply_len);
-    uncurved_len = tcp_request->dns_reply_len;
-    dns_reply = evbuffer_pullup(input, (ssize_t) uncurved_len);
+    assert(available_size >= dns_reply_len);
+    dns_reply = evbuffer_pullup(input, (ssize_t) dns_reply_len);
     if (dns_reply == NULL) {
         tcp_request_kill(tcp_request);
         return;
     }
+    uncurved_len = dns_reply_len;
     DNSCRYPT_PROXY_REQUEST_UNCURVE_START(tcp_request, uncurved_len);
     if (dnscrypt_client_uncurve(&proxy_context->dnscrypt_client,
                                 tcp_request->client_nonce,
@@ -179,8 +179,29 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         return;
     }
     DNSCRYPT_PROXY_REQUEST_UNCURVE_DONE(tcp_request, uncurved_len);
-    assert(uncurved_len <= tcp_request->dns_reply_len);
+    assert(uncurved_len <= dns_reply_len);
     dns_reply_len = uncurved_len;
+#ifdef PLUGINS
+    const size_t max_reply_size_for_filter = tcp_request->dns_reply_len;
+    DCPluginDNSPacket dcp_packet = {
+        .client_sockaddr = &tcp_request->client_sockaddr,
+        .dns_packet = dns_reply,
+        .dns_packet_len_p = &dns_reply_len,
+        .client_sockaddr_len_s = (size_t) tcp_request->client_sockaddr_len,
+        .dns_packet_max_len = max_reply_size_for_filter
+    };
+    assert(proxy_context->app_context->dcps_context != NULL);
+    const DCPluginSyncFilterResult res =
+        plugin_support_context_apply_sync_post_filters
+        (proxy_context->app_context->dcps_context, &dcp_packet);
+    assert(dns_reply_len > (size_t) 0U &&
+           dns_reply_len <= tcp_request->dns_reply_len &&
+           dns_reply_len <= max_reply_size_for_filter);
+    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        tcp_request_kill(tcp_request);
+        return;
+    }
+#endif
     dns_uncurved_reply_len_buf[0] = (dns_reply_len >> 8) & 0xff;
     dns_uncurved_reply_len_buf[1] = dns_reply_len & 0xff;
     if (bufferevent_write(tcp_request->client_proxy_bev,
