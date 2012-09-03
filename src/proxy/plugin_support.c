@@ -1,10 +1,18 @@
 
 #include <config.h>
 
+#include <sys/types.h>
+#ifndef _WIN32
+# include <sys/stat.h>
+#endif
+
 #include <assert.h>
 #include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
+#ifndef _WIN32
+# include <unistd.h>
+#endif
 
 #include <dnscrypt/plugin.h>
 #include <ltdl.h>
@@ -80,6 +88,25 @@ plugin_support_call_init(DCPluginSupport * const dcps)
 }
 
 static int
+plugin_support_check_permissions(const char * const plugin_file)
+{
+    assert(plugin_file != NULL);
+
+#ifndef _WIN32
+    struct stat st;
+
+    if (stat(plugin_file, &st) != 0) {
+        return -1;
+    }
+    if (st.st_uid != (uid_t) 0 && access(plugin_file, W_OK) != 0) {
+        return -1;
+    }
+#endif
+
+    return 0;
+}
+
+static int
 plugin_support_load(DCPluginSupport * const dcps)
 {
     lt_dladvise advise;
@@ -93,6 +120,12 @@ plugin_support_load(DCPluginSupport * const dcps)
     lt_dladvise_local(&advise);
     lt_dladvise_ext(&advise);
     logger(NULL, LOG_INFO, "Loading plugin [%s]", dcps->plugin_file);
+    if (plugin_support_check_permissions(dcps->plugin_file) != 0) {
+        logger(NULL, LOG_ERR, "Insecure permissions on [%s]",
+               dcps->plugin_file);
+        lt_dladvise_destroy(&advise);
+        return -1;
+    }
     if ((handle = lt_dlopenadvise(dcps->plugin_file, advise)) == NULL) {
         logger(NULL, LOG_ERR, "Unable to load [%s]: [%s]",
                dcps->plugin_file, lt_dlerror());
