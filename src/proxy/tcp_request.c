@@ -230,7 +230,8 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     struct evbuffer *input = bufferevent_get_input(client_proxy_bev);
     ssize_t          curve_ret;
     size_t           available_size;
-    size_t           max_len;
+    size_t           dns_query_len;
+    size_t           max_query_size;
 
     if (tcp_request->status.has_dns_query_len == 0) {
         assert(evbuffer_get_length(input) >= (size_t) 2U);
@@ -240,30 +241,20 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
         tcp_request->status.has_dns_query_len = 1;
     }
     assert(tcp_request->status.has_dns_query_len != 0);
-    if (tcp_request->dns_query_len < (size_t) DNS_HEADER_SIZE) {
+    dns_query_len = tcp_request->dns_query_len;
+    if (dns_query_len < (size_t) DNS_HEADER_SIZE) {
         logger_noformat(proxy_context, LOG_WARNING, "Short query received");
         tcp_request_kill(tcp_request);
         return;
     }
     available_size = evbuffer_get_length(input);
-    if (available_size < tcp_request->dns_query_len) {
+    if (available_size < dns_query_len) {
         bufferevent_setwatermark(tcp_request->client_proxy_bev,
-                                 EV_READ, tcp_request->dns_query_len,
-                                 tcp_request->dns_query_len);
+                                 EV_READ, dns_query_len, dns_query_len);
         return;
     }
-    assert(available_size >= tcp_request->dns_query_len);
+    assert(available_size >= dns_query_len);
     bufferevent_disable(tcp_request->client_proxy_bev, EV_READ);
-    max_len = tcp_request->dns_query_len + DNSCRYPT_MAX_PADDING +
-        dnscrypt_query_header_size();
-    if (max_len > sizeof dns_query) {
-        max_len = sizeof dns_query;
-    }
-    assert(max_len <= DNS_MAX_PACKET_SIZE_TCP - 2U);
-    if (tcp_request->dns_query_len + dnscrypt_query_header_size() > max_len) {
-        tcp_request_kill(tcp_request);
-        return;
-    }
     assert(tcp_request->proxy_resolver_query_evbuf == NULL);
     if ((tcp_request->proxy_resolver_query_evbuf = evbuffer_new()) == NULL) {
         tcp_request_kill(tcp_request);
@@ -271,25 +262,62 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     }
     if ((ssize_t)
         evbuffer_remove_buffer(input, tcp_request->proxy_resolver_query_evbuf,
-                               tcp_request->dns_query_len)
-        != (ssize_t) tcp_request->dns_query_len) {
+                               dns_query_len) != (ssize_t) dns_query_len) {
         tcp_request_kill(tcp_request);
         return;
     }
-    assert(tcp_request->dns_query_len <= sizeof dns_query);
+    assert(dns_query_len <= sizeof dns_query);
     if ((ssize_t) evbuffer_remove(tcp_request->proxy_resolver_query_evbuf,
-                                  dns_query, tcp_request->dns_query_len)
-        != (ssize_t) tcp_request->dns_query_len) {
+                                  dns_query, dns_query_len)
+        != (ssize_t) dns_query_len) {
         tcp_request_kill(tcp_request);
         return;
     }
-    DNSCRYPT_PROXY_REQUEST_CURVE_START(tcp_request,
-                                       tcp_request->dns_query_len);
+    max_query_size = sizeof dns_query;
+    assert(max_query_size < DNS_MAX_PACKET_SIZE_TCP);
+#ifdef PLUGINS
+    size_t max_query_size_for_filter = dns_query_len;
+    if (max_query_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
+        max_query_size_for_filter = max_query_size -
+            (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
+    }
+    DCPluginDNSPacket dcp_packet = {
+        .client_sockaddr = &tcp_request->client_sockaddr,
+        .dns_packet = dns_query,
+        .dns_packet_len_p = &dns_query_len,
+        .client_sockaddr_len_s = (size_t) tcp_request->client_sockaddr_len,
+        .dns_packet_max_len = max_query_size_for_filter
+    };
+    assert(proxy_context->app_context->dcps_context != NULL);
+    const DCPluginSyncFilterResult res =
+        plugin_support_context_apply_sync_pre_filters
+        (proxy_context->app_context->dcps_context, &dcp_packet);
+    assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
+           dns_query_len <= max_query_size_for_filter);
+    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        tcp_request_kill(tcp_request);
+        return;
+    }
+#endif
+    assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
+           > dns_query_len);
+    size_t max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
+        dnscrypt_query_header_size();
+    if (max_len > max_query_size) {
+        max_len = max_query_size;
+    }
+    if (dns_query_len + dnscrypt_query_header_size() > max_len) {
+        tcp_request_kill(tcp_request);
+        return;
+    }
+    assert(max_len <= DNS_MAX_PACKET_SIZE_TCP - 2U);
     assert(max_len <= sizeof dns_query);
+    assert(dns_query_len <= max_len);
+    DNSCRYPT_PROXY_REQUEST_CURVE_START(tcp_request, dns_query_len);
     curve_ret =
         dnscrypt_client_curve(&proxy_context->dnscrypt_client,
                               tcp_request->client_nonce,
-                              dns_query, tcp_request->dns_query_len, max_len);
+                              dns_query, dns_query_len, max_len);
     if (curve_ret <= (ssize_t) 0) {
         DNSCRYPT_PROXY_REQUEST_CURVE_ERROR(tcp_request);
         tcp_request_kill(tcp_request);
@@ -327,6 +355,14 @@ tcp_connection_cb(struct evconnlistener * const tcp_conn_listener,
     tcp_request->proxy_context = proxy_context;
     tcp_request->timeout_timer = NULL;
     tcp_request->proxy_resolver_query_evbuf = NULL;
+#ifdef PLUGINS
+    assert(client_sockaddr_len_int >= 0 &&
+           sizeof tcp_request->client_sockaddr >=
+           (size_t) client_sockaddr_len_int);
+    memcpy(&tcp_request->client_sockaddr, client_sockaddr,
+           (size_t) client_sockaddr_len_int);
+    tcp_request->client_sockaddr_len = (ev_socklen_t) client_sockaddr_len_int;
+#endif
     tcp_request->client_proxy_bev =
         bufferevent_socket_new(proxy_context->event_loop, handle,
                                BEV_OPT_CLOSE_ON_FREE);
