@@ -13,6 +13,13 @@ EXTRA_DIST = \
 	iphone.sh
 
 SUBDIRS = \
-	man \
+	man
+
+if PLUGINS
+SUBDIRS += \
+	libltdl
+endif
+
+SUBDIRS += \
 	src \
 	test
