@@ -40,6 +40,7 @@ The service is named `dnscrypt-proxy`.
 
 The following subkeys are recognized and should be self-explanatory:
 
+    Plugins           (REG_MULTI_SZ)
     LocalAddress      (REG_SZ)
     ProviderKey       (REG_SZ)
     ProviderName      (REG_SZ)
