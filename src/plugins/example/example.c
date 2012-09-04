@@ -1,6 +1,12 @@
 
 #include <dnscrypt/plugin.h>
 
+const char *
+dcplugin_description(DCPlugin * const dcplugin)
+{
+    return "A sample (useless) plugin for dnscrypt-proxy";
+}
+
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {

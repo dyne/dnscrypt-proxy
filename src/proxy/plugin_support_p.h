@@ -10,6 +10,7 @@
 
 typedef int (*DCPluginInit)(DCPlugin * const dcplugin, int argc, char *argv[]);
 typedef int (*DCPluginDestroy)(DCPlugin * const dcplugin);
+typedef const char *(*DCPluginDescription)(DCPlugin * const dcplugin);
 
 typedef DCPluginSyncFilterResult (*DCPluginSyncFilter)
 (DCPlugin * const dcplugin, DCPluginDNSPacket *dcp_packet);

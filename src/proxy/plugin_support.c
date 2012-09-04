@@ -64,10 +64,29 @@ plugin_support_load_symbol_err(DCPluginSupport * const dcps,
     return fn;
 }
 
+static const char *
+plugin_support_description(DCPluginSupport * const dcps)
+{
+    DCPluginDescription  dcplugin_description;
+    const char          *description;
+
+    assert(dcps != NULL);
+    if ((dcplugin_description =
+         plugin_support_load_symbol(dcps, "dcplugin_description")) == NULL) {
+        return NULL;
+    }
+    if ((description = dcplugin_description(dcps->plugin)) == NULL ||
+        *description == 0) {
+        return NULL;
+    }
+    return description;
+}
+
 static int
 plugin_support_call_init(DCPluginSupport * const dcps)
 {
-    DCPluginInit dcplugin_init;
+    DCPluginInit  dcplugin_init;
+    const char   *description;
 
     if ((dcplugin_init =
          plugin_support_load_symbol_err(dcps, "dcplugin_init")) == NULL) {
@@ -75,7 +94,7 @@ plugin_support_call_init(DCPluginSupport * const dcps)
     }
     assert(dcps->argc > 0 && dcps->argv != NULL);
     if (dcplugin_init(dcps->plugin, dcps->argc, dcps->argv) != 0) {
-        logger(NULL, LOG_ERR, "Plugin: unable to initialize [%s]",
+        logger(NULL, LOG_ERR, "Unable to initialize plugin [%s]",
                dcps->plugin_file);
         return -1;
     }
@@ -83,7 +102,11 @@ plugin_support_call_init(DCPluginSupport * const dcps)
         plugin_support_load_symbol(dcps, "dcplugin_sync_post_filter");
     dcps->sync_pre_filter =
         plugin_support_load_symbol(dcps, "dcplugin_sync_pre_filter");
-
+    if ((description = plugin_support_description(dcps)) == NULL) {
+        logger_noformat(NULL, LOG_INFO, "Plugin loaded");
+    } else {
+        logger(NULL, LOG_INFO, "Loaded plugin: [%s]", description);
+    }
     return 0;
 }
 
