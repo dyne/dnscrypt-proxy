@@ -140,7 +140,6 @@ windows_service_registry_read_multi_sz(const char * const key,
     DWORD   value_len;
     DWORD   value_type;
 
-    *value_p = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
@@ -164,7 +163,7 @@ windows_service_registry_read_multi_sz(const char * const key,
     if (value == NULL) {
         return -1;
     }
-    windows_service_parse_multi_sz(cb, value, (size_t) value_len);
+    windows_service_parse_multi_sz(cb, (const char *) value, (size_t) value_len);
     free(value);
 
     return 0;
