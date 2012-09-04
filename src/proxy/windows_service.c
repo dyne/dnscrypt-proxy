@@ -103,7 +103,8 @@ windows_service_parse_multi_sz_cb(WindowsServiceParseMultiSzCb * const cb,
                                   const char *string)
 {
     assert(cb->cb == windows_service_parse_multi_sz_cb);
-    (void) string;
+    *(cb->err_p) += cmdline_add_option(cb->argc_p, cb->argv_p, "--plugin");
+    *(cb->err_p) += cmdline_add_option(cb->argc_p, cb->argv_p, string);
 }
 
 static int
@@ -282,6 +283,13 @@ windows_build_command_line_from_registry(int * const argc_p,
         ("TCPOnly", &dword_value) == 0 && dword_value > (DWORD) 0) {
         err += cmdline_add_option(argc_p, argv_p, "--tcp-only");
     }
+    windows_service_registry_read_multi_sz
+        ("Plugins", & (WindowsServiceParseMultiSzCb) {
+            .cb = windows_service_parse_multi_sz_cb,
+            .argc_p = argc_p,
+            .argv_p = argv_p,
+            .err_p = &err
+        });
     if (err != 0) {
         return -1;
     }
