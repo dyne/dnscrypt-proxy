@@ -68,7 +68,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     for (i = 0U; i < answers_count; i++) {
         answer = ldns_rr_list_rr(answers, i);
         if (ldns_rr_get_type(answer) == LDNS_RR_TYPE_A) {
-            if (strcmp("157.166.255.18",
+            if (strcmp("67.215.65.132",
                        ldns_rdf2str(ldns_rr_a_address(answer))) == 0) {
                 should_be_blocked = 1;
                 break;
