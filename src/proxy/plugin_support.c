@@ -7,8 +7,10 @@
 #endif
 
 #include <assert.h>
+#include <errno.h>
 #include <limits.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #ifndef _WIN32
 # include <unistd.h>
@@ -143,9 +145,10 @@ plugin_support_load(DCPluginSupport * const dcps)
     lt_dladvise_local(&advise);
     lt_dladvise_ext(&advise);
     logger(NULL, LOG_INFO, "Loading plugin [%s]", dcps->plugin_file);
+
     if (plugin_support_check_permissions(dcps->plugin_file) != 0) {
-        logger(NULL, LOG_ERR, "Insecure permissions on [%s]",
-               dcps->plugin_file);
+        logger(NULL, LOG_ERR, "Plugin [%s] can't be loaded: [%s]",
+               dcps->plugin_file, strerror(errno));
         lt_dladvise_destroy(&advise);
         return -1;
     }
