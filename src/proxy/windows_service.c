@@ -91,6 +91,84 @@ cmdline_add_option(int * const argc_p, char *** const argv_p,
     return 0;
 }
 
+typedef struct WindowsServiceParseMultiSzCb_ {
+    void  (*cb)(struct WindowsServiceParseMultiSzCb_ *, const char *string);
+    int    * const argc_p;
+    char *** const argv_p;
+    int    * const err_p;
+} WindowsServiceParseMultiSzCb;
+
+static void
+windows_service_parse_multi_sz_cb(WindowsServiceParseMultiSzCb * const cb,
+                                  const char *string)
+{
+    assert(cb->cb == windows_service_parse_multi_sz_cb);
+    (void) string;
+}
+
+static int
+windows_service_parse_multi_sz(WindowsServiceParseMultiSzCb * const cb,
+                               const char * const multi_sz,
+                               const size_t multi_sz_len)
+{
+    const char *multi_sz_pnt = multi_sz;
+    const char *zero;
+    size_t      len;
+    size_t      multi_sz_remaining_len = multi_sz_len;
+    size_t      zlen;
+
+    while (multi_sz_remaining_len > (size_t) 0U &&
+           (zero = memchr(multi_sz_pnt, 0, multi_sz_remaining_len)) != NULL) {
+        if ((len = (size_t) (zero - multi_sz_pnt)) > (size_t) 0U) {
+            cb->cb(cb, multi_sz_pnt);
+        }
+        zlen = len + (size_t) 1U;
+        assert(zlen <= multi_sz_remaining_len);
+        multi_sz_remaining_len -= zlen;
+        multi_sz_pnt += zlen;
+    }
+    return 0;
+}
+
+static int
+windows_service_registry_read_multi_sz(const char * const key,
+                                       WindowsServiceParseMultiSzCb * const cb)
+{
+    BYTE   *value = NULL;
+    HKEY    hk = NULL;
+    DWORD   value_len;
+    DWORD   value_type;
+
+    *value_p = NULL;
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
+        return -1;
+    }
+    if (RegQueryValueEx(hk, key, 0,
+                        &value_type, NULL, &value_len) == ERROR_SUCCESS &&
+        value_type == (DWORD) REG_MULTI_SZ &&
+        value_len <= SIZE_MAX && value_len > (DWORD) 0 &&
+        (value = malloc((size_t) value_len)) != NULL) {
+        if (RegQueryValueEx(hk, key, 0,
+                            &value_type, value, &value_len) != ERROR_SUCCESS ||
+            value_type != (DWORD) REG_MULTI_SZ) {
+            free(value);
+            value = NULL;
+        }
+        assert(value == NULL || value_len == 0 ||
+               (value_len > 0 && value[value_len - 1] == 0));
+    }
+    RegCloseKey(hk);
+    if (value == NULL) {
+        return -1;
+    }
+    windows_service_parse_multi_sz(cb, value, (size_t) value_len);
+    free(value);
+
+    return 0;
+}
+
 static int
 windows_service_registry_read_string(const char * const key,
                                      char ** const value_p)
