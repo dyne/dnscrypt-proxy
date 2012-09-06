@@ -7,6 +7,14 @@ dcplugin_description(DCPlugin * const dcplugin)
     return "A sample (useless) plugin for dnscrypt-proxy";
 }
 
+const char *
+dcplugin_long_description(DCPlugin * const dcplugin)
+{
+    return
+        "This is a sample plugin, that actually doesn't do anything.\n"
+        "Really. That's the beauty of it.";
+}
+
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
