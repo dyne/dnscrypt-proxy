@@ -1099,6 +1099,9 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
 		GET32(ttl);
 		GET16(datalength);
 
+		EVUTIL_ASSERT(INT_MAX > 0xFFFF + 0xFFFF);
+		if (datalength <= 0U || j + datalength > length)
+			break;
 		if (type == TYPE_A && class == CLASS_INET) {
 			int addrcount, addrtocopy;
 			if (req->request_type != TYPE_A) {
