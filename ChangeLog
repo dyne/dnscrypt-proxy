@@ -1,5 +1,29 @@
 Date:   2012-09-06
 
+    Rename the .plist file.
+
+Date:   2012-09-06
+
+    Use plugin_long_description() in the null plugin, too.
+
+Date:   2012-09-06
+
+    Add dcplugin_long_description()
+
+Date:   2012-09-06
+
+    Add basic probes for filters.
+
+Date:   2012-09-06
+
+    Retabify, try to match the initial code style.
+
+Date:   2012-09-06
+
+    Update ChangeLog
+
+Date:   2012-09-06
+
     Check the RR length before any parsing, even if it's redundant.
 
 Date:   2012-09-05

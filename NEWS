@@ -1,4 +1,10 @@
 
+* Version 1.1.0:
+ - dnscrypt-proxy can now use plugins in order to alter/inspect
+   queries and responses before and after they are relayed.
+ - The default max payload size has been trimmed down to 1252 bytes
+   for compatibility with some scary network setups.
+
 * Version 1.0.1:
  - dnscrypt-proxy and hostip can now be compiled for Android and
    Solaris.
