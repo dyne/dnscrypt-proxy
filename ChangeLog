@@ -1,3 +1,99 @@
+Date:   2012-09-06
+
+    Check the RR length before any parsing, even if it's redundant.
+
+Date:   2012-09-05
+
+    evdns: store more than 1 TXT record.
+
+Date:   2012-09-05
+
+    Don't assume that only one TXT record will be received.
+
+Date:   2012-09-04
+
+    Add libltdl to SUBDIRS, if plugins are enabled.
+
+Date:   2012-09-03
+
+    80 cols
+
+Date:   2012-09-03
+
+    Windows nits
+
+Date:   2012-09-03
+
+    Add Plugins to the list of Windows registry keys, before I forget.
+
+Date:   2012-09-03
+
+    Parse the "Plugins" key if there is one in the Windows registry.
+
+Date:   2012-09-03
+
+    Windows: implement windows_service_registry_read_multi_sz()
+
+Date:   2012-09-03
+
+    Return NXDOMAIN for an IP that actually needs it.
+
+Date:   2012-09-03
+
+    Display the actual error when a plugin can't be loaded.
+
+Date:   2012-09-03
+
+    Remove example-ldns-opendns-bypass
+
+Date:   2012-09-03
+
+    Display the plugin description if we have one.
+
+Date:   2012-09-03
+
+    Check that a plugin either belongs to root, or would be writeable by whoever
+    runs the current process (or at least, by whoever can write to the fs).
+    It's not very useful, it's racy, but it's better than nothing.
+
+Date:   2012-09-03
+
+    Wipe the client nonce after uncurving a reply.
+    Useful for debugging.
+
+Date:   2012-09-03
+
+    Add tcp post-filters.
+
+Date:   2012-09-02
+
+    No more dns_packet_len, stay consistent between udp_ & tcp_request.c
+
+Date:   2012-09-02
+
+    Regen man pages.
+
+Date:   2012-09-02
+
+    Add prefilters for TCP.
+
+Date:   2012-09-02
+
+    Don't use max_packet_size. When using TCP, the packet size is not the data
+    size, so, use the 'packet' terminology to actually mean a packet size, and
+    something different to mean a DNS packet.
+    No change to the compiled code, but it will help to make things more
+    consistent between udp_request.c and tcp_request.c.
+
+Date:   2012-09-02
+
+    Don't use dns_packet*, use dns_(query|reply)* in udp_request.c just like in
+    tcp_request.c
+
+Date:   2012-09-02
+
+    The default resolver is 208.67.220.220, not .222.222
+
 Date:   2012-09-02
 
     The OSX GUI probably works on 32-bit systems now, and the OpenDNS GUI for
