@@ -255,6 +255,8 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
         .dns_packet_max_len = max_reply_size_for_filter
     };
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_START(udp_request, dns_reply_len,
+                                              max_reply_size_for_filter);
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_post_filters
@@ -263,9 +265,12 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
            dns_reply_len <= sizeof dns_reply &&
            dns_reply_len <= max_reply_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_ERROR(udp_request, res);
         udp_request_kill(udp_request);
         return;
     }
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_DONE(udp_request, dns_reply_len,
+                                             max_reply_size_for_filter);
 #endif
     sendto_with_retry(& (SendtoWithRetryCtx) {
        .udp_request = udp_request,
@@ -439,6 +444,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         .client_sockaddr_len_s = (size_t) udp_request->client_sockaddr_len,
         .dns_packet_max_len = max_query_size_for_filter
     };
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_START(udp_request, dns_query_len,
+                                             max_query_size_for_filter);
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
@@ -446,9 +453,12 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
            dns_query_len <= max_query_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(udp_request, res);
         udp_request_kill(udp_request);
         return;
     }
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(udp_request, dns_query_len,
+                                            max_query_size_for_filter);
 #endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_query_len);

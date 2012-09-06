@@ -191,6 +191,8 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
         .client_sockaddr_len_s = (size_t) tcp_request->client_sockaddr_len,
         .dns_packet_max_len = max_reply_size_for_filter
     };
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_START(tcp_request, dns_reply_len,
+                                              max_reply_size_for_filter);
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_post_filters
@@ -199,9 +201,12 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
            dns_reply_len <= tcp_request->dns_reply_len &&
            dns_reply_len <= max_reply_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_ERROR(tcp_request, res);
         tcp_request_kill(tcp_request);
         return;
     }
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_POST_DONE(tcp_request, dns_reply_len,
+                                             max_reply_size_for_filter);
 #endif
     dns_uncurved_reply_len_buf[0] = (dns_reply_len >> 8) & 0xff;
     dns_uncurved_reply_len_buf[1] = dns_reply_len & 0xff;
@@ -310,6 +315,8 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
         .client_sockaddr_len_s = (size_t) tcp_request->client_sockaddr_len,
         .dns_packet_max_len = max_query_size_for_filter
     };
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_START(tcp_request, dns_query_len,
+                                             max_query_size_for_filter);
     assert(proxy_context->app_context->dcps_context != NULL);
     const DCPluginSyncFilterResult res =
         plugin_support_context_apply_sync_pre_filters
@@ -317,9 +324,12 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
            dns_query_len <= max_query_size_for_filter);
     if (res != DCP_SYNC_FILTER_RESULT_OK) {
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(tcp_request, res);
         tcp_request_kill(tcp_request);
         return;
     }
+    DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(tcp_request, dns_query_len,
+                                            max_query_size_for_filter);
 #endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_query_len);
