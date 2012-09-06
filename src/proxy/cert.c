@@ -96,7 +96,7 @@ cert_parse_bincert(ProxyContext * const proxy_context,
         return -1;
     }
     logger(proxy_context, LOG_INFO,
-           "This certificates supersedes certificate #%lu",
+           "This certificate supersedes certificate #%lu",
            (unsigned long) previous_serial);
 
     return 0;
