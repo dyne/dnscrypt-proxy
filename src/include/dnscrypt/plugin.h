@@ -93,12 +93,20 @@ int dcplugin_init(DCPlugin *dcplugin, int argc, char *argv[]);
 int dcplugin_destroy(DCPlugin *dcplugin);
 
 /**
- * This optional function returns a description of the plugin.
+ * This optional function returns a one-ine description of the plugin.
  *
  * @param dcplugin a plugin object
- * @return a human-readable description of the plugin
+ * @return a human-readable one-line description of the plugin
  */
 const char *dcplugin_description(DCPlugin *dcplugin);
+
+/**
+ * This optional function returns a long description of the plugin.
+ *
+ * @param dcplugin a plugin object
+ * @return a human-readable long, multiline description of the plugin
+ */
+const char *dcplugin_long_description(DCPlugin *dcplugin);
 
 /**
  * This optional function implements a pre-filter, for a query.
