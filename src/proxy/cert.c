@@ -243,7 +243,7 @@ cert_query_cb(int result, char type, int count, int ttl,
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_COMMUNICATION();
         return;
     }
-    assert(count == 0 || count == 1);
+    assert(count >= 0);
     while (i < count) {
         cert_open_bincert(proxy_context,
                           (const SignedBincert *) txt_records[i].txt,
