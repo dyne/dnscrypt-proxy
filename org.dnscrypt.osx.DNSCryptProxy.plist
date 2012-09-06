@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>com.opendns.osx.DNSCryptProxy</string>
+    <string>org.dnscrypt.osx.DNSCryptProxy</string>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>

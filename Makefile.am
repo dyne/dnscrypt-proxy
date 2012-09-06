@@ -9,7 +9,7 @@ EXTRA_DIST = \
 	THANKS \
 	android.sh \
 	autogen.sh \
-	com.opendns.osx.DNSCryptProxy.plist \
+	org.dnscrypt.osx.DNSCryptProxy.plist \
 	iphone.sh
 
 SUBDIRS = \
