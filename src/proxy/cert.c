@@ -9,6 +9,7 @@
 #endif
 
 #include <assert.h>
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,8 +59,8 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     uint32_t serial;
     memcpy(&serial, bincert->serial, sizeof serial);
     serial = htonl(serial);
-    logger(proxy_context, LOG_INFO, "Server certificate #%lu received",
-           (unsigned long) serial);
+    logger(proxy_context, LOG_INFO,
+           "Server certificate #%" PRIu32 " received", serial);
 
     uint32_t ts_begin;
     memcpy(&ts_begin, bincert->ts_begin, sizeof ts_begin);
@@ -90,14 +91,14 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     memcpy(&previous_serial, previous_bincert->serial, sizeof previous_serial);
     previous_serial = htonl(previous_serial);
     if (previous_serial > serial) {
-        logger(proxy_context, LOG_INFO,
-               "Certificate #%lu has been superseded by certificate #%lu",
-               (unsigned long) previous_serial, (unsigned long) serial);
+        logger(proxy_context, LOG_INFO, "Certificate #%" PRIu32 " "
+               "has been superseded by certificate #%" PRIu32,
+               previous_serial, serial);
         return -1;
     }
     logger(proxy_context, LOG_INFO,
-           "This certificate supersedes certificate #%lu",
-           (unsigned long) previous_serial);
+           "This certificate supersedes certificate #%" PRIu32,
+           previous_serial);
 
     return 0;
 }
