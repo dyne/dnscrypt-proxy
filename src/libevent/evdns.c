@@ -216,11 +216,11 @@ struct reply {
 		struct {
 			char name[HOST_NAME_MAX];
 		} ptr;
-        struct {
-            u32 recordscount;
-            struct txt_record records[MAX_TXT_RRS];
-        } txt;
-    } data;
+		struct {
+			u32 recordscount;
+			struct txt_record records[MAX_TXT_RRS];
+		} txt;
+	} data;
 };
 
 struct nameserver {
@@ -811,7 +811,7 @@ reply_run_callback(struct deferred_cb *d, void *user_pointer)
 			    user_pointer);
 		else
 			cb->user_callback(cb->err, 0, 0, cb->ttl, NULL, user_pointer);
-        break;
+		break;
 	default:
 		EVUTIL_ASSERT(0);
 	}
@@ -1159,28 +1159,28 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
 			j += 16*addrtocopy;
 			reply.have_answer = 1;
 			if (reply.data.aaaa.addrcount == MAX_V6_ADDRS) break;
-        } else if (type == TYPE_TXT) {
-            u8 txtlen;
-            if (req->request_type != TYPE_TXT) {
-                j += datalength; continue;
-            }
-            txtlen = packet[j];
-            if (txtlen > sizeof reply.data.txt.records[0].txt ||
-                datalength <= txtlen || j + txtlen >= length) {
-                goto err;
-            }
-            memcpy(reply.data.txt.records[reply.data.txt.recordscount].txt,
-                   &packet[j + 1], txtlen);
-            reply.data.txt.records[reply.data.txt.recordscount].len
-                = (size_t) txtlen;
-            reply.data.txt.recordscount++;
-            ttl_r = MIN(ttl_r, ttl);
-            reply.have_answer = 1;
-            j += datalength;
-            if (reply.data.txt.recordscount >= MAX_TXT_RRS) {
-                break;
-            }
-        } else {
+	} else if (type == TYPE_TXT) {
+		u8 txtlen;
+		if (req->request_type != TYPE_TXT) {
+			j += datalength; continue;
+		}
+		txtlen = packet[j];
+		if (txtlen > sizeof reply.data.txt.records[0].txt ||
+			datalength <= txtlen || j + txtlen >= length) {
+			goto err;
+		}
+		memcpy(reply.data.txt.records[reply.data.txt.recordscount].txt,
+		    &packet[j + 1], txtlen);
+		reply.data.txt.records[reply.data.txt.recordscount].len
+		    = (size_t) txtlen;
+		reply.data.txt.recordscount++;
+		ttl_r = MIN(ttl_r, ttl);
+		reply.have_answer = 1;
+		j += datalength;
+		if (reply.data.txt.recordscount >= MAX_TXT_RRS) {
+			break;
+		}
+	} else {
 			/* skip over any other type of resource */
 			j += datalength;
 		}
