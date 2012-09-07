@@ -1,5 +1,21 @@
 Date:   2012-09-06
 
+    Bump revision to 1.1.0rc1
+
+Date:   2012-09-06
+
+    Don't cast uint32_t values to print them. That's retarded.
+
+Date:   2012-09-06
+
+    Grammar
+
+Date:   2012-09-06
+
+    Update ChangeLog/NEWS.
+
+Date:   2012-09-06
+
     Rename the .plist file.
 
 Date:   2012-09-06

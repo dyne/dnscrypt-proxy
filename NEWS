@@ -1,5 +1,5 @@
 
-* Version 1.1.0:
+* Version 1.1.0rc1:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
    queries and responses before and after they are relayed.
  - The default max payload size has been trimmed down to 1252 bytes
