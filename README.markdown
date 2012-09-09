@@ -178,9 +178,9 @@ an incoming query is received, the daemon immediately replies with a
 The daemon then authenticates the query and forwards it over TCP
 to the resolver.
 
-`--tcp-only` is slower than UDP, and this workaround should never be used
-except when bypassing a filter is actually required. Moreover,
-multiple queries over a single TCP connections aren't supported yet.
+`--tcp-only` is slower than UDP because multiple queries over a single
+TCP connections aren't supported yet, and this workaround should
+never be used except when bypassing a filter is actually required.
 
 EDNS payload size
 -----------------
