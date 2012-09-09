@@ -59,6 +59,28 @@ The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
 Command-line switches are documented in the `dnscrypt-proxy(8)` man page.
 
+GUIs for dnscrypt-proxy
+-----------------------
+
+If you need a simple graphical user interface in order to start/stop
+the proxy and change your DNS settings, check out the following
+projects:
+
+- [DNSCrypt OSX Client](https://github.com/opendns/dnscrypt-osx-client):
+a preferences pane, a menu bar indicator and a service to change the
+DNS settings. OSX only, written in Objective C. Experimental.
+
+- [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
+Easily enable/disable DNSCrypt on multiple adapters. Supports
+different ports and protocols, IPv6, parental controls and the proxy
+can act as a gateway service. Windows only, written in .NET.
+
+- [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
+Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
+
+- dnscrypt-proxy is also available on Cydia, and it can be easily
+enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
+
 Usage
 -----
 
@@ -220,26 +242,3 @@ This tool can be useful for starting some services before
 `dnscrypt-proxy`.
 
 Queries made by `hostip` are not authenticated.
-
-GUIs for dnscrypt-proxy
------------------------
-
-If you need a simple graphical user interface in order to start/stop
-the proxy and change your DNS settings, check out the following
-projects:
-
-- [DNSCrypt OSX Client](https://github.com/opendns/dnscrypt-osx-client):
-a preferences pane, a menu bar indicator and a service to change the
-DNS settings. OSX only, written in Objective C. Experimental.
-
-- [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
-Easily enable/disable DNSCrypt on multiple adapters. Supports
-different ports and protocols, IPv6, parental controls and the proxy
-can act as a gateway service. Windows only, written in .NET.
-
-- [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
-Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
-
-- dnscrypt-proxy is also available on Cydia, and it can be easily
-enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
-
