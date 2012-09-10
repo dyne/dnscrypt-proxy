@@ -1,5 +1,30 @@
 Date:   2012-09-09
 
+    Thank you, Black Roland!
+
+Date:   2012-09-09
+
+    Move the GUIs section up
+
+Date:   2012-09-09
+
+    Reorder the Android build script so that TARGET_TOOLCHAIN_VERSION is defined
+    before it is used :)
+
+Date:   2012-09-09
+
+    Add Android
+
+Date:   2012-09-09
+
+    That was --resolver-port
+
+Date:   2012-09-09
+
+    Mention that --local-port and --remote-port are gone for good.
+
+Date:   2012-09-09
+
     Don't lie about why TCP is slow.
 
 Date:   2012-09-06

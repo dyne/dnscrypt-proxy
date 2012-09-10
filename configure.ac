@@ -413,6 +413,7 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/example-ldns/Makefile
                  src/plugins/example-ldns-opendns-deviceid/Makefile
                  src/plugins/example-ldns-opendns-parental-control/Makefile
+                 src/plugins/example-ldns-opendns-set-client-ip/Makefile
                  test/Makefile])
 
 AC_OUTPUT
