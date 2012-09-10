@@ -1,4 +1,8 @@
 
+* Version 1.1.0-rc2:
+ - The Android build script has been fixed.
+ - Plugin examples have been updated.
+
 * Version 1.1.0-rc1:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
    queries and responses before and after they are relayed.
