@@ -19,6 +19,10 @@ const char *
 dcplugin_long_description(DCPlugin * const dcplugin)
 {
     return
+        "If you defined a policy for your network, this plugin allows\n"
+        "using this policy no matter where you are, and without interfering\n"
+        "with the networks you are roaming on.\n"
+        "\n"
         "The IP address must be a hex-encoded IPv4 address.\n"
         "\n"
         "Usage:\n"
