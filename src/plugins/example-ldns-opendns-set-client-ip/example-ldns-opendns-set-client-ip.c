@@ -9,6 +9,24 @@
 #define EDNS_HEADER    "4f44" "000b" "4f444e5300" "00" "10"
 #define EDNS_CLIENT_IP "7f000001"
 
+const char *
+dcplugin_description(DCPlugin * const dcplugin)
+{
+    return "Apply the OpenDNS settings defined for a specific IP address";
+}
+
+const char *
+dcplugin_long_description(DCPlugin * const dcplugin)
+{
+    return
+        "The IP address must be a hex-encoded IPv4 address.\n"
+        "\n"
+        "Usage:\n"
+        "\n"
+        "# dnscrypt-proxy --plugin \\\n"
+        "  .../libdcplugin_example_ldns_opendns_set_client_ip.la,7f000001";
+}
+
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
