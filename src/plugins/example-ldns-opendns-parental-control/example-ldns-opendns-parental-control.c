@@ -5,6 +5,27 @@
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
+const char *
+dcplugin_description(DCPlugin * const dcplugin)
+{
+    return "Apply extended OpenDNS parental controls";
+}
+
+const char *
+dcplugin_long_description(DCPlugin * const dcplugin)
+{
+    return
+        "This enables the following filter set, if one hasn't been defined\n"
+        "for the current network or device:\n"
+        "- lingerie/bikini\n"
+        "- adult themes\n"
+        "- nudity\n"
+        "- pornography\n"
+        "- proxy/anonymizer\n"
+        "- sexuality\n"
+        "- tasteless";
+}
+
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
