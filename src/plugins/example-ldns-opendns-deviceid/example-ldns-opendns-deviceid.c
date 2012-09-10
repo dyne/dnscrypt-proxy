@@ -9,6 +9,37 @@
 #define EDNS_HEADER "0004000f4f70656e444e53"
 #define EDNS_DEV_ID "cafebabedeadbeef"
 
+const char *
+dcplugin_description(DCPlugin * const dcplugin)
+{
+    return "Add an OpenDNS device identifier to outgoing queries";
+}
+
+const char *
+dcplugin_long_description(DCPlugin * const dcplugin)
+{
+    return
+        "Some routers provide advanced support for OpenDNS, and allow using\n"
+        "a specific set of settings no matter what their IP address is.\n"
+        "\n"
+        "Since they don't support dnscrypt, outgoing encrypted queries can\n"
+        "not be rewritten by these routers, and OpenDNS will not recognize\n"
+        "the router settings.\n"
+        "\n"
+        "This plugin adds a device identifier to outgoing packets, so that\n"
+        "router settings can be used, even when using dnscrypt.\n"
+        "\n"
+        "When connected without dnscrypt through such a router, the\n"
+        "following command will print your device id:\n"
+        "\n"
+        "$ dig TXT debug.opendns.com\n"
+        "\n"
+        "Just pass this device id as an argument to this plugin:\n"
+        "\n"
+        "# dnscrypt-proxy --plugin \\\n"
+        "  .../libdcplugin_example_ldns_opendns_deviceid.la,XXXXXXXXXXXXXXXX\n";
+}
+
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
