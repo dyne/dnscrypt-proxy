@@ -99,15 +99,15 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
 
     if (sendto(ctx->handle, ctx->buffer, ctx->length, ctx->flags,
                ctx->dest_addr, ctx->dest_len) == (ssize_t) ctx->length) {
-        if (ctx->cb) {
-            ctx->cb(udp_request);
-        }
         if (udp_request->sendto_retry_timer != NULL) {
             assert(event_get_callback_arg(udp_request->sendto_retry_timer)
                    == ctx);
             free(ctx);
             event_free(udp_request->sendto_retry_timer);
             udp_request->sendto_retry_timer = NULL;
+        }
+        if (ctx->cb) {
+            ctx->cb(udp_request);
         }
         return 0;
     }
