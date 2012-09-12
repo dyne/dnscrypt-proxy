@@ -5,6 +5,7 @@
 
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
+#include <ldns/util.h>
 
 #define EDNS_HEADER           "4f56" "0014" "4f444e5300" "00"
 #define EDNS_HEADER_CLIENT_IP "10"
@@ -51,6 +52,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     char   *edns_hex;
     size_t  edns_hex_size = sizeof EDNS_DATA;
 
+    ldns_init_random(NULL, 0U);
     edns_hex = malloc(edns_hex_size);
     dcplugin_set_user_data(dcplugin, edns_hex);
     if (edns_hex == NULL) {
@@ -73,19 +75,35 @@ dcplugin_destroy(DCPlugin *dcplugin)
     return 0;
 }
 
+static void
+fill_with_random_hex_data(char * const str, size_t size)
+{
+    size_t   i = (size_t) 0U;
+    uint16_t rnd;
+
+    while (i < size) {
+        rnd = ldns_get_random();
+        str[i++] = "0123456789abcdef"[rnd & 0xf];
+        str[i++] = "0123456789abcdef"[(rnd >> 8) & 0xf];
+    }
+}
+
 DCPluginSyncFilterResult
 dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
     uint8_t  *new_packet;
     ldns_rdf *edns_data;
+    char     *edns_data_str;
     ldns_pkt *packet;
     size_t    new_packet_size;
 
     ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
                   dcplugin_get_wire_data_len(dcp_packet));
 
-    edns_data = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_HEX,
-                                     dcplugin_get_user_data(dcplugin));
+    edns_data_str = dcplugin_get_user_data(dcplugin);
+    fill_with_random_hex_data(edns_data_str + EDNS_FODDER_OFFSET,
+                              sizeof EDNS_FODDER - 1U);
+    edns_data = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_HEX, edns_data_str);
     ldns_pkt_set_edns_data(packet, edns_data);
 
     ldns_pkt2wire(&new_packet, packet, &new_packet_size);
