@@ -37,6 +37,8 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "If you defined a policy for your network, this plugin allows\n"
         "using this policy no matter where you are, and without interfering\n"
         "with the networks you are roaming on.\n"
+        "This plugin also allows using your IPv4 network settings even when\n"
+        "connecting to OpenDNS using IPv6.\n"
         "\n"
         "The IP address must be a hex-encoded IPv4 address.\n"
         "\n"
