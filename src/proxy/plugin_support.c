@@ -187,7 +187,7 @@ plugin_support_unload(DCPluginSupport * const dcps)
 DCPluginSupport *
 plugin_support_new(const char * const plugin_file)
 {
-    DCPluginSupport *dcps = NULL;
+    DCPluginSupport *dcps;
 
     if ((dcps = calloc((size_t) 1U, sizeof *dcps)) == NULL) {
         return NULL;
