@@ -6,17 +6,20 @@
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
-#define EDNS_HEADER_CLIENT_IP "4f44" "000b" "4f444e5300" "00" "10"
+#define EDNS_HEADER           "4f56" "0014" "4f444e5300" "00"
+#define EDNS_HEADER_CLIENT_IP "10"
 #define EDNS_CLIENT_IP        "7f000001"
-#define EDNS_HEADER_FODDER    "4f56" "000f" "4f444e5301" "00" "08"
+#define EDNS_HEADER_FODDER    "40"
 #define EDNS_FODDER           "deadbeefabad1dea"
 
-#define EDNS_DATA \
+#define EDNS_DATA EDNS_HEADER \
     EDNS_HEADER_CLIENT_IP EDNS_CLIENT_IP EDNS_HEADER_FODDER EDNS_FODDER
 
-#define EDNS_CLIENT_IP_OFFSET (sizeof EDNS_HEADER_CLIENT_IP - 1U)
+#define EDNS_CLIENT_IP_OFFSET (sizeof EDNS_HEADER - 1U + \
+                               sizeof EDNS_HEADER_CLIENT_IP - 1U)
 
-#define EDNS_FODDER_OFFSET (sizeof EDNS_HEADER_CLIENT_IP - 1U + \
+#define EDNS_FODDER_OFFSET (sizeof EDNS_HEADER - 1U + \
+                            sizeof EDNS_HEADER_CLIENT_IP - 1U + \
                             sizeof EDNS_CLIENT_IP - 1U + \
                             sizeof EDNS_HEADER_FODDER - 1U)
 
@@ -57,7 +60,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     assert(sizeof EDNS_CLIENT_IP - 1U == (size_t) 8U);
     if (argc > 1 && strlen(argv[1]) == (size_t) 8U) {
         memcpy(edns_hex + EDNS_CLIENT_IP_OFFSET,
-               argv[1], sizeof EDNS_CLIENT_IP);
+               argv[1], sizeof EDNS_CLIENT_IP - 1U);
     }
     return 0;
 }
