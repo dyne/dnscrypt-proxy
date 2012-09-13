@@ -1,24 +1,17 @@
 
-* Version 1.1.0-rc2:
- - The Android build script has been fixed.
- - Plugin examples have been updated.
- - Memory leaks when fetching certificates have been fixed, a
-   use-after-free has been fixed, uninitialized variables have been
-   initialized, fixing support for plugins on non-OSX systems. Updating
-   is recommended, especially on Windows.
- - The plugin API has been documented.
- - A new configuration flag, --enable-relaxed-plugins-permissions,
-   allows loading plugin files that are not owned by root or by the current
-   user.
-
-* Version 1.1.0-rc1:
+* Version 1.1.0:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
    queries and responses before and after they are relayed.
+   See README-PLUGINS.markdown for more information.
  - The default max payload size has been trimmed down to 1252 bytes
    for compatibility with some scary network setups.
  - The --local-port and --resolver-port options are gone for good.
-   They had been deprecated for a while.
+   They had been deprecated for a while and were undocumented since
+   version 1.0.
  - Multiple certificates are now properly handled.
+ - Memory leaks have been fixed, a big bad use-after-free condition
+   has been fixed, uninitialized variables have been initialized.
+   Upgrading is recommended, especially on Windows.
 
 * Version 1.0.1:
  - dnscrypt-proxy and hostip can now be compiled for Android and
