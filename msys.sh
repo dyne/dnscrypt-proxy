@@ -1,8 +1,6 @@
 #! /bin/sh
 
-export CFLAGS="-fdata-sections -ffunction-sections -Os \
-               -fomit-frame-pointer -march=pentium4 -mtune=core2"
-
+export CFLAGS="-Os -fomit-frame-pointer -march=pentium4 -mtune=core2"
 export LDFLAGS="-Wl,--gc-sections"
 
 ./configure --disable-ssp && make -j3 install-strip
