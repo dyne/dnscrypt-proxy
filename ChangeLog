@@ -1,3 +1,32 @@
+Date:   2012-09-12
+
+    Sync libevent, fix two memory leaks in evdns.
+
+Date:   2012-09-11
+
+    The set-client-ip plugin also allows applying network settings when using IPv6
+
+Date:   2012-09-11
+
+    set-client-ip: randomize the fodder
+
+Date:   2012-09-11
+
+    More data set-client-ip needs.
+
+Date:   2012-09-11
+
+    The set-client-ip plugin needs more data in order to properly apply the
+    network settings.
+
+Date:   2012-09-10
+
+    Improve documentation for the set-client-ip plugin.
+
+Date:   2012-09-10
+
+    Update ChangeLog.
+
 Date:   2012-09-10
 
     More descriptions
