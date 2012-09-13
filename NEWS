@@ -2,6 +2,10 @@
 * Version 1.1.0-rc2:
  - The Android build script has been fixed.
  - Plugin examples have been updated.
+ - Memory leaks when fetching certificates have been fixed, a
+   use-after-free has been fixed, uninitialized variables have been
+   initialized, fixing support for plugins on non-OSX systems. Updating
+   is recommended, especially on Windows.
 
 * Version 1.1.0-rc1:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
