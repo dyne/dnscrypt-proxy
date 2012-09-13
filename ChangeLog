@@ -1,6 +1,45 @@
+Merge: f568bce beac641
+Date:   2012-09-12
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      In sendto_with_retry(), free()ing the timer beforehand is a good idea but turning that in a different use-after-free is not.
+      Initialize dcps at the right place. I'm just totally unable to write a single line of code when I am at the office.
+      The sendto_retry timer should be free()d before the callback, or else we end up with a big bad use after free and an even bigger and badder double free.
+      Initialize dcps before using it, duh. It used to make virtually any plugin crash before it even had a chance to load on Linux, and on platforms it used to work on, it worked by accident. Reported by @transitorykris, confirmed by Valgrind.
+
+Date:   2012-09-12
+
+    Update ChangeLog
+
 Date:   2012-09-12
 
     Sync libevent, fix two memory leaks in evdns.
+
+Date:   2012-09-12
+
+    In sendto_with_retry(), free()ing the timer beforehand is a good idea
+    but turning that in a different use-after-free is not.
+
+Date:   2012-09-12
+
+    Initialize dcps at the right place. I'm just totally unable to write a
+    single line of code when I am at the office.
+
+Date:   2012-09-12
+
+    The sendto_retry timer should be free()d before the callback, or else we
+    end up with a big bad use after free and an even bigger and badder
+    double free.
+
+Date:   2012-09-12
+
+    Initialize dcps before using it, duh.
+    It used to make virtually any plugin crash before it even had a chance
+    to load on Linux, and on platforms it used to work on, it worked by
+    accident.
+    Reported by @transitorykris, confirmed by Valgrind.
 
 Date:   2012-09-11
 
