@@ -66,6 +66,9 @@ switch, followed by the full path to a plugin (library or libtool
 
 Filters will always be applied sequentially, in the given order.
 
+On Unix systems, a file containing a `dnscrypt-proxy` plugin must be
+owned either by root, or by the user running the proxy.
+
 When run as a Windows service, the list of plugins to load should be
 given as a multi-strings (`REG_MULTI_SZ` value).
 
