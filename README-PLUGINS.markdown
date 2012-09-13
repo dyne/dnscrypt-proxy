@@ -128,6 +128,9 @@ The return code of a filter can be either of:
 - `DCP_SYNC_FILTER_RESULT_ERROR` to drop the packet and indicate that a
 non-fatal error occurred.
 
+API documentation
+-----------------
 
-
+For more info about the API, see the online [dnscrypt API
+documentation](http://dnscrypt.org/plugin-api/plugin_8h.html).
 
