@@ -6,6 +6,7 @@
    use-after-free has been fixed, uninitialized variables have been
    initialized, fixing support for plugins on non-OSX systems. Updating
    is recommended, especially on Windows.
+ - The plugin API has been documented.
 
 * Version 1.1.0-rc1:
  - dnscrypt-proxy can now use plugins in order to alter/inspect

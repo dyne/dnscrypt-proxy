@@ -1,3 +1,37 @@
+Date:   2012-09-13
+
+    Add a link to the API documentation.
+
+Date:   2012-09-13
+
+    Quote
+
+Date:   2012-09-13
+
+    More doc on plugins
+
+Date:   2012-09-13
+
+    Return REFUSED instead of NXDOMAIN when we get a blacklisted IP in a record of a
+    response. It makes more sense, and OpenDNS can return the same IP for different
+    reasons, not only NXDOMAIN.
+
+Date:   2012-09-12
+
+    Start documenting plugins
+
+Date:   2012-09-12
+
+    Untab README-WINDOWS
+
+Date:   2012-09-12
+
+    Update NEWS
+
+Date:   2012-09-12
+
+    Update ChangeLog
+
 Merge: f568bce beac641
 Date:   2012-09-12
 
