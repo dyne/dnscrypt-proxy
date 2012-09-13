@@ -7,6 +7,9 @@
    initialized, fixing support for plugins on non-OSX systems. Updating
    is recommended, especially on Windows.
  - The plugin API has been documented.
+ - A new configuration flag, --enable-relaxed-plugins-permissions,
+   allows loading plugin files that are not owned by root or by the current
+   user.
 
 * Version 1.1.0-rc1:
  - dnscrypt-proxy can now use plugins in order to alter/inspect

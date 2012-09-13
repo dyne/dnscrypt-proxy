@@ -119,11 +119,13 @@ plugin_support_check_permissions(const char * const plugin_file)
 
 #ifndef _WIN32
     struct stat st;
-    const uid_t uid = getuid();
 
     if (stat(plugin_file, &st) != 0) {
         return -1;
     }
+# ifndef RELAXED_PLUGINS_PERMISSIONS
+    const uid_t uid = getuid();
+
     if (st.st_uid != (uid_t) 0) {
         if (uid == (uid_t) 0) {
             errno = EPERM;
@@ -133,6 +135,7 @@ plugin_support_check_permissions(const char * const plugin_file)
             return -1;
         }
     }
+# endif
 #endif
 
     return 0;

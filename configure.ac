@@ -324,6 +324,13 @@ AC_ARG_ENABLE(plugins,
  plugins=enabled])
 AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
 
+relaxed_plugins_permissions=disabled
+AC_ARG_ENABLE(relaxed-plugins-permissions,
+[AS_HELP_STRING(--enable-relaxed-plugins-permissions,Allow loading plugins owned by other users)],
+[CPPFLAGS="$CPPFLAGS -DRELAXED_PLUGINS_PERMISSIONS=1"
+ relaxed_plugins_permissions=enabled])
+AM_CONDITIONAL(RELAXED_PLUGINS_PERMISSIONS, test x$relaxed_plugins_permissions = xenabled)
+
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
 [

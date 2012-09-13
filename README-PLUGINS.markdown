@@ -69,6 +69,12 @@ Filters will always be applied sequentially, in the given order.
 On Unix systems, a file containing a `dnscrypt-proxy` plugin must be
 owned either by root, or by the user running the proxy.
 
+You can relax this rule. This can be especially useful on OSX when using
+Homebrew, that encourages /usr/local to be owned by a non-root user.
+In order to relax this rule, use `--enable-relaxed-plugins-permissions`:
+
+    ./configure --enable-plugins --enable-relaxed-plugins-permissions
+
 When run as a Windows service, the list of plugins to load should be
 given as a multi-strings (`REG_MULTI_SZ` value).
 
