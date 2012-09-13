@@ -1,6 +1,9 @@
 DNSCrypt Plugins
 ================
 
+Overview
+--------
+
 Starting with version 1.1.0, `dnscrypt-proxy` can be extended with
 plugins.
 
@@ -21,6 +24,9 @@ ignore a query.
     query -> pre-plugins -> encryption/authentication -> resolver
 
     client <- post-plugins <- verification/decryption <- resolver
+
+Usage
+-----
 
 Technically, a plugin is just a native shared library. A good old `.so` file on
 Unix, a `.dylib` file on OSX and a `.DLL` file on Windows.
@@ -49,3 +55,77 @@ plugins will be compiled.
 
 If the `./configure` isn't given a different prefix, example plugins
 are installed in `/usr/local/lib/dnscrypt-proxy`.
+
+`dnscrypt-proxy` can load any number of plugins using the `--plugin`
+switch, followed by the full path to a plugin (library or libtool
+`.la` file):
+
+    dnscrypt-proxy \
+        --plugin=/usr/local/lib/dnscrypt-proxy/libdcplugin_example.la \
+        --plugin=/usr/local/lib/dnscrypt-proxy/libdcplugin_example2.la
+
+Filters will always be applied sequentially, in the given order.
+
+When run as a Windows service, the list of plugins to load should be
+given as a multi-strings (`REG_MULTI_SZ` value).
+
+Each plugin can optionally parse one or more arguments:
+
+    --plugin=...libdcplugin_example.la,--one,--two,--three=4
+    --plugin=...libdcplugin_example2.la,127.0.0.1
+
+The plugin API
+--------------
+
+When compiled with support for plugins, `dnscrypt-proxy` installs
+development headers (in `/usr/local/include/dnscrypt` with the default
+prefix).
+
+In addition, the `dnscrypt-proxy` source code ships with a few example
+plugins in the `src/plugins` directory to get you started.
+
+The `<dnscrypt/plugin.h>` header file is the only one you need to
+include in a plugin. Feel free to take a look at its Doxygen documentation.
+
+The bare minimum a plugin needs to implement is a `dcplugin_init()`
+function. This function is evaluated when the proxy starts, and can
+optionally parse a list of arguments:
+
+    #include <dnscrypt/plugin.h>
+
+    int
+    dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
+    {
+        return 0;
+    }
+
+The DCPlugin type is an opaque structure that can store plugin-local
+data using the `dcplugin_get_user_data()` and `dcplugin_set_user_data()` macros.
+
+A filter can implement a pre-filter, a post-filter, or both. The
+related functions are optional.
+
+    DCPluginSyncFilterResult
+    dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
+
+    DCPluginSyncFilterResult
+    dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet);
+
+These functions are given an opaque `DCPluginDNSPacket` type, storing
+the packet in wire format, and metadata, including the client IP address.
+
+Avoid accessing these metadata directly, and use the macros defined in
+`dnscrypt/plugins.h` instead.
+
+A filter can alter the content of the DNS packet, and change its
+length with `dcplugin_set_wire_data_len()`. However, the size of the
+packet should never be larger than the size returned by
+`dcplugin_get_wire_data_max_len`.
+
+The return code of a filter can be either of:
+- DCP_SYNC_FILTER_RESULT_OK
+- DCP_SYNC_FILTER_RESULT_KILL in order to drop the packet
+- DCP_SYNC_FILTER_RESULT_ERROR to drop the packet and indicate that a
+non-fatal error occurred.
+
+
