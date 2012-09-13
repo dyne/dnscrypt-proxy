@@ -92,6 +92,7 @@ sendto_with_retry_timer_cb(evutil_socket_t retry_timer_handle, short ev_flags,
 static int
 sendto_with_retry(SendtoWithRetryCtx * const ctx)
 {
+    void              (*cb)(UDPRequest *udp_request);
     SendtoWithRetryCtx *ctx_cb;
     UDPRequest         *udp_request = ctx->udp_request;
     int                 err;
@@ -99,15 +100,16 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
 
     if (sendto(ctx->handle, ctx->buffer, ctx->length, ctx->flags,
                ctx->dest_addr, ctx->dest_len) == (ssize_t) ctx->length) {
-        if (ctx->cb) {
-            ctx->cb(udp_request);
-        }
+        cb = ctx->cb;
         if (udp_request->sendto_retry_timer != NULL) {
             assert(event_get_callback_arg(udp_request->sendto_retry_timer)
                    == ctx);
             free(ctx);
             event_free(udp_request->sendto_retry_timer);
             udp_request->sendto_retry_timer = NULL;
+        }
+        if (cb) {
+            cb(udp_request);
         }
         return 0;
     }

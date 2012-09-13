@@ -13,7 +13,7 @@ int
 plugin_options_parse_str(DCPluginSupportContext * const dcps_context,
                          char * const str)
 {
-    DCPluginSupport *dcps;
+    DCPluginSupport *dcps = NULL;
     char            *arg;
     char            *plugin_file;
     char            *tmp;
