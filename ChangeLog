@@ -1,5 +1,25 @@
 Date:   2012-09-13
 
+    -fdata-sections -ffunction-sections doesn't seem very useful on Windows
+
+Date:   2012-09-13
+
+    Having new lines in flags is a bad idea.
+
+Date:   2012-09-13
+
+    Import a script to build the proxy on Win32
+
+Date:   2012-09-13
+
+    Silent MingW.
+
+Date:   2012-09-13
+
+    Update ChangeLog
+
+Date:   2012-09-13
+
     Introduce --enable-relaxed-plugins-permissions
 
 Date:   2012-09-13
