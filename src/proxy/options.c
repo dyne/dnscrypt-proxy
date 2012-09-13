@@ -278,7 +278,8 @@ options_parse(AppContext * const app_context,
 #ifdef _WIN32
         case WIN_OPTION_INSTALL:
         case WIN_OPTION_UNINSTALL:
-            if (windows_service_option(opt_flag, argc, argv) != 0) {
+            if (windows_service_option(opt_flag, argc,
+                                       (const char **) argv) != 0) {
                 options_usage();
                 exit(1);
             }
