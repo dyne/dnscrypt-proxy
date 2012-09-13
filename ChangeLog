@@ -1,5 +1,26 @@
 Date:   2012-09-13
 
+    Use Xcode 4.5
+
+Date:   2012-09-13
+
+    Pick up the new name for the blocking plugin
+
+Date:   2012-09-13
+
+    Rename example-ldns example-ldns-blocking
+
+Date:   2012-09-13
+
+    1.1.0-RC1 also fixed lookups of multiple TXT records, and thus
+    handling of multiple certificates.
+
+Date:   2012-09-13
+
+    Finally, the plugin API has been kinda documented.
+
+Date:   2012-09-13
+
     Add a link to the API documentation.
 
 Date:   2012-09-13
