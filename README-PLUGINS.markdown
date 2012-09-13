@@ -123,9 +123,11 @@ packet should never be larger than the size returned by
 `dcplugin_get_wire_data_max_len`.
 
 The return code of a filter can be either of:
-- DCP_SYNC_FILTER_RESULT_OK
-- DCP_SYNC_FILTER_RESULT_KILL in order to drop the packet
-- DCP_SYNC_FILTER_RESULT_ERROR to drop the packet and indicate that a
+- `DCP_SYNC_FILTER_RESULT_OK`
+- `DCP_SYNC_FILTER_RESULT_KILL` in order to drop the packet
+- `DCP_SYNC_FILTER_RESULT_ERROR` to drop the packet and indicate that a
 non-fatal error occurred.
+
+
 
 
