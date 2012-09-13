@@ -15,6 +15,7 @@
    for compatibility with some scary network setups.
  - The --local-port and --resolver-port options are gone for good.
    They had been deprecated for a while.
+ - Multiple certificates are now properly handled.
 
 * Version 1.0.1:
  - dnscrypt-proxy and hostip can now be compiled for Android and
