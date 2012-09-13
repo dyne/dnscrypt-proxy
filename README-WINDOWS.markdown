@@ -18,7 +18,7 @@ dnscrypt](https://github.com/opendns/dnscrypt-proxy/downloads)
 the full path to the file):
 
     dnscrypt-proxy.exe --install
-    
+
 4) Change your DNS settings to `127.0.0.1`
 
 Congratulations, you're now using DNSCrypt.
@@ -47,6 +47,6 @@ The following subkeys are recognized and should be self-explanatory:
     ResolverAddress   (REG_SZ)
     EDNSPayloadSize   (DWORD)
     MaxActiveRequests (DWORD)
-    TCPOnly           (DWORD)    
+    TCPOnly           (DWORD)
 
 The service should be restarted after the registry has been updated.
