@@ -1,5 +1,14 @@
 Date:   2012-09-13
 
+    Introduce --enable-relaxed-plugins-permissions
+
+Date:   2012-09-13
+
+    If the proxy is run as root, refuse to load a plugin not owned by root.
+    Yes, it's still totally racy, and not super useful, but better than nothing.
+
+Date:   2012-09-13
+
     Xcode 4.5-GM is just called Xcode
 
 Date:   2012-09-13
