@@ -76,7 +76,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         }
     }
     if (should_be_blocked != 0) {
-        ldns_pkt_set_rcode(packet, LDNS_RCODE_NXDOMAIN);
+        ldns_pkt_set_rcode(packet, LDNS_RCODE_REFUSED);
         ldns_pkt2wire(&new_packet, packet, &new_packet_size);
         dcplugin_set_wire_data(dcp_packet, new_packet, new_packet_size);
         free(new_packet);
