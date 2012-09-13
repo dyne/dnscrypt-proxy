@@ -410,7 +410,7 @@ AC_CONFIG_FILES([Makefile
                  src/libnacl/okcompilers/do
                  src/plugins/Makefile
                  src/plugins/example/Makefile
-                 src/plugins/example-ldns/Makefile
+                 src/plugins/example-ldns-blocking/Makefile
                  src/plugins/example-ldns-opendns-deviceid/Makefile
                  src/plugins/example-ldns-opendns-parental-control/Makefile
                  src/plugins/example-ldns-opendns-set-client-ip/Makefile

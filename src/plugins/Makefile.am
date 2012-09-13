@@ -4,7 +4,7 @@ SUBDIRS = \
 
 if USE_LDNS
 SUBDIRS += \
-	example-ldns \
+	example-ldns-blocking \
 	example-ldns-opendns-deviceid \
 	example-ldns-opendns-parental-control \
 	example-ldns-opendns-set-client-ip
