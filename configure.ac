@@ -28,11 +28,14 @@ AX_CHECK_COMPILE_FLAG([-fPIC], [
     [CFLAGS="$CFLAGS -fPIC"]
   )
 ])
-AX_CHECK_COMPILE_FLAG([-fPIE], [
-  AX_CHECK_LINK_FLAG([-fPIE],
-    [AX_CHECK_LINK_FLAG([-pie],
-      [CFLAGS="$CFLAGS -fPIE"
-       LDFLAGS="$LDFLAGS -pie"])
+
+AS_IF([test "$enable_pie" != "no"],[
+  AX_CHECK_COMPILE_FLAG([-fPIE], [
+    AX_CHECK_LINK_FLAG([-fPIE],
+      [AX_CHECK_LINK_FLAG([-pie],
+        [CFLAGS="$CFLAGS -fPIE"
+         LDFLAGS="$LDFLAGS -pie"])
+    ])
   ])
 ])
 
@@ -299,9 +302,9 @@ dnl Switches.
 
 AC_HEADER_ASSERT
 
-AC_ARG_ENABLE(blocking-random,
-[AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
-[AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
+AC_ARG_ENABLE(pie,
+[AS_HELP_STRING(--enable-pie,Produce position independent executables @<:@default=yes@:>@)],
+ enable_pie=$enableval, enable_pie="maybe")
 
 AC_ARG_ENABLE(ssp,
 [AS_HELP_STRING(--disable-ssp,Don't compile with -fstack-protector)],
@@ -330,6 +333,10 @@ AC_ARG_ENABLE(relaxed-plugins-permissions,
 [CPPFLAGS="$CPPFLAGS -DRELAXED_PLUGINS_PERMISSIONS=1"
  relaxed_plugins_permissions=enabled])
 AM_CONDITIONAL(RELAXED_PLUGINS_PERMISSIONS, test x$relaxed_plugins_permissions = xenabled)
+
+AC_ARG_ENABLE(blocking-random,
+[AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
+[AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
 
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
