@@ -24,7 +24,7 @@
 #include "tcp_request.h"
 #include "udp_request.h"
 #ifdef PLUGINS
-#include "plugin_support.h"
+# include "plugin_support.h"
 #endif
 
 #ifndef INET6_ADDRSTRLEN
