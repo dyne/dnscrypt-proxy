@@ -49,4 +49,11 @@ The following subkeys are recognized and should be self-explanatory:
     MaxActiveRequests (DWORD)
     TCPOnly           (DWORD)
 
+For example, in order to listen to local address `127.0.0.7` instead
+of `127.0.0.1`, the string value `127.0.0.7` should be set for the key
+`HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters\LocalAddress`.
+
+Plugins should be listed as full paths to .DLL files, optionally
+followed by a coma and plugin-specific arguments.
+
 The service should be restarted after the registry has been updated.
