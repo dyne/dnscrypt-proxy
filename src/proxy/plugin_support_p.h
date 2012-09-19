@@ -21,7 +21,7 @@ struct DCPluginSupport_ {
     DCPluginSyncFilter  sync_pre_filter;
     lt_dlhandle         handle;
     DCPlugin           *plugin;
-    const char         *plugin_file;
+    char               *plugin_file;
     char              **argv;
     int                 argc;
 };

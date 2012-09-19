@@ -334,6 +334,13 @@ AC_ARG_ENABLE(relaxed-plugins-permissions,
  relaxed_plugins_permissions=enabled])
 AM_CONDITIONAL(RELAXED_PLUGINS_PERMISSIONS, test x$relaxed_plugins_permissions = xenabled)
 
+plugins_root=disabled
+AC_ARG_ENABLE(plugins-root,
+[AS_HELP_STRING(--enable-plugins-root,Only load plugins sitting in the default plugins directory)],
+[CPPFLAGS="$CPPFLAGS -DENABLE_PLUGINS_ROOT=1"
+ plugins_root=enabled])
+AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
+
 AC_ARG_ENABLE(blocking-random,
 [AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
 [AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])

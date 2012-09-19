@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #ifndef _WIN32
 # include <unistd.h>
 #endif
@@ -120,7 +121,7 @@ plugin_support_check_permissions(const char * const plugin_file)
 #ifndef _WIN32
     struct stat st;
 
-    if (stat(plugin_file, &st) != 0) {
+    if (stat(plugin_file, &st) != 0 || !S_ISREG(st.st_mode)) {
         return -1;
     }
 # ifndef RELAXED_PLUGINS_PERMISSIONS
@@ -194,6 +195,39 @@ plugin_support_unload(DCPluginSupport * const dcps)
     return 0;
 }
 
+static char *
+plugin_support_expand_plugin_file(const char * const plugin_file)
+{
+    char   *expanded_plugin_file;
+    size_t  plugin_file_len;
+    size_t  plugins_root_len = sizeof PLUGINS_ROOT - (size_t) 1U;
+    size_t  sizeof_expanded_plugin_file;
+
+#ifdef ENABLE_PLUGINS_ROOT
+    if (strstr(plugin_file, "..") != NULL || *plugin_file == '/') {
+        return NULL;
+    }
+    if (strncmp(plugin_file, PLUGINS_ROOT, plugins_root_len) == 0) {
+        return strdup(plugin_file);
+    }
+#else
+    if (*plugin_file == '/') {
+        return strdup(plugin_file);
+    }
+#endif
+    plugin_file_len = strlen(plugin_file);
+    assert(SIZE_MAX - plugins_root_len > plugin_file_len);
+    sizeof_expanded_plugin_file = plugins_root_len + plugin_file_len + 1U;
+    if ((expanded_plugin_file = malloc(sizeof_expanded_plugin_file)) == NULL) {
+        return NULL;
+    }
+    memcpy(expanded_plugin_file, PLUGINS_ROOT, plugins_root_len);
+    memcpy(expanded_plugin_file + plugins_root_len, plugin_file,
+           plugin_file_len + 1U);
+
+    return expanded_plugin_file;
+}
+
 DCPluginSupport *
 plugin_support_new(const char * const plugin_file)
 {
@@ -207,7 +241,11 @@ plugin_support_new(const char * const plugin_file)
         return NULL;
     }
     assert(plugin_file != NULL && *plugin_file != 0);
-    dcps->plugin_file = plugin_file;
+    if ((dcps->plugin_file =
+         plugin_support_expand_plugin_file(plugin_file)) == NULL) {
+        free(dcps);
+        return NULL;
+    }
     dcps->argv = NULL;
     dcps->handle = NULL;
     dcps->sync_post_filter = NULL;
@@ -223,6 +261,8 @@ plugin_support_free(DCPluginSupport * const dcps)
     assert(dcps->plugin_file != NULL && *dcps->plugin_file != 0);
     assert(dcps->plugin != NULL);
     free(dcps->plugin);
+    free(dcps->plugin_file);
+    dcps->plugin_file = NULL;
     free(dcps->argv);
     dcps->argv = NULL;
     free(dcps);

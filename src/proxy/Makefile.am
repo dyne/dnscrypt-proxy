@@ -82,7 +82,8 @@ if PLUGINS
 
 AM_CPPFLAGS += \
 	$(LTDLINCL) \
-	-I../include
+	-I../include \
+	-DPLUGINS_ROOT=\"$(pkglibdir)/\"
 
 dnscrypt_proxy_LDADD += $(LIBLTDL)
 dnscrypt_proxy_DEPENDENCIES += $(LTDLDEPS)

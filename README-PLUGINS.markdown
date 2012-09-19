@@ -57,12 +57,18 @@ If the `./configure` isn't given a different prefix, example plugins
 are installed in `/usr/local/lib/dnscrypt-proxy`.
 
 `dnscrypt-proxy` can load any number of plugins using the `--plugin`
-switch, followed by the full path to a plugin (library or libtool
-`.la` file):
+switch, followed by the path to a plugin (library or libtool `.la` file):
 
     dnscrypt-proxy \
         --plugin=/usr/local/lib/dnscrypt-proxy/libdcplugin_example.la \
         --plugin=/usr/local/lib/dnscrypt-proxy/libdcplugin_example2.la
+
+A full path is actually not required for plugins sitting in the default
+plugins directory (`/usr/local/lib/dnscrypt-proxy` by default):
+
+    dnscrypt-proxy \
+        --plugin=libdcplugin_example.la \
+        --plugin=libdcplugin_example2.la
 
 Filters will always be applied sequentially, in the given order.
 
