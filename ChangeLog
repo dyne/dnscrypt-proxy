@@ -1,3 +1,28 @@
+Date:   2012-09-19
+
+    Plugins can now be loaded from a default directory ($pkglibdir).
+    In addition, a new configure flag, --enable-plugins-root, disallows loading
+    plugins outside this directory.
+
+Date:   2012-09-18
+
+    README-WINDOWS: ...\dnscrypt-proxy\Parameters is confusing, as "parameters"
+    can be understood as a variable. So, add an example.
+    Explain how plugins should be specified by the way.
+
+Date:   2012-09-18
+
+    Indentatino :)
+
+Date:   2012-09-16
+
+    A new configure flag, --disable-pie, can disable position-independent executables.
+    A bad idea, but required by some OS.
+
+Date:   2012-09-13
+
+    Merge 1.1.0 changelog, since there will probably be no more RC.
+
 Date:   2012-09-13
 
     Import example-ldns-blocking.c
