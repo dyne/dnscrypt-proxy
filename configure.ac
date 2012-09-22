@@ -1,5 +1,5 @@
 AC_PREREQ([2.61])
-AC_INIT([dnscrypt-proxy],[1.1.0-rc2],[https://github.com/opendns/dnscrypt-proxy/issues])
+AC_INIT([dnscrypt-proxy],[1.1.0],[https://github.com/opendns/dnscrypt-proxy/issues])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([libltdl/config])
 AC_CONFIG_SRCDIR([src/proxy/app.c])
@@ -431,6 +431,7 @@ AC_CONFIG_FILES([Makefile
                  src/libnacl/okcompilers/do
                  src/plugins/Makefile
                  src/plugins/example/Makefile
+                 src/plugins/example-logging/Makefile
                  src/plugins/example-ldns-blocking/Makefile
                  src/plugins/example-ldns-opendns-deviceid/Makefile
                  src/plugins/example-ldns-opendns-parental-control/Makefile

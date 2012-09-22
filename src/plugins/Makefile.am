@@ -3,7 +3,8 @@ EXTRA_DIST = \
 	WARNING
 
 SUBDIRS = \
-	example
+	example \
+	example-logging
 
 if USE_LDNS
 SUBDIRS += \
