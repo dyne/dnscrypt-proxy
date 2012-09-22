@@ -1,3 +1,32 @@
+Date:   2012-09-22
+
+    Add a new plugin that logs queries.
+
+Date:   2012-09-22
+
+    Add WARNING for plugins.
+
+Date:   2012-09-22
+
+    Don't include the full path to a plugin in examples.
+
+Date:   2012-09-22
+
+    Use strcasecmp() in order to caselessly compare IPv6 addresses.
+
+Date:   2012-09-22
+
+    Rewrite the ldns-blocking plugin, so that it can block any name and IP address.
+    This plugin can be very useful in order to block ads and buggy replies.
+
+Date:   2012-09-19
+
+    Move build scripts to a dist-build directory, add one for osx.
+
+Date:   2012-09-19
+
+    Update ChangeLog
+
 Date:   2012-09-19
 
     Plugins can now be loaded from a default directory ($pkglibdir).
