@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
@@ -224,7 +225,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
             }
             scanned = blocking->ips;
             do {
-                if (strcmp(scanned->str, answer_str) == 0) {
+                if (strcasecmp(scanned->str, answer_str) == 0) {
                     LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
                                    LDNS_RCODE_REFUSED);
                     break;
