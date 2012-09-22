@@ -1,4 +1,7 @@
 
+EXTRA_DIST = \
+	WARNING
+
 SUBDIRS = \
 	example
 
