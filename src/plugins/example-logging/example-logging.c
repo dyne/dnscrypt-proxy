@@ -80,7 +80,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     unsigned char        c;
     _Bool                first = 1;
 
-    if (wire_data_len < 13U || wire_data[4] != 0U || wire_data[5] != 1U) {
+    if (wire_data_len < 15U || wire_data[4] != 0U || wire_data[5] != 1U) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
     while (i < wire_data_len && (csize = wire_data[i]) != 0U &&
