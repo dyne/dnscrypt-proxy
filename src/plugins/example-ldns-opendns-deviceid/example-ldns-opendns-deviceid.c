@@ -37,7 +37,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "Just pass this device id as an argument to this plugin:\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
-        "  .../libdcplugin_example_ldns_opendns_deviceid.la,XXXXXXXXXXXXXXXX";
+        "  libdcplugin_example_ldns_opendns_deviceid.la,XXXXXXXXXXXXXXXX";
 }
 
 int

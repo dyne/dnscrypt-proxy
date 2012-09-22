@@ -45,7 +45,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "Usage:\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
-        "  .../libdcplugin_example_ldns_opendns_set_client_ip.la,7f000001";
+        "  libdcplugin_example_ldns_opendns_set_client_ip.la,7f000001";
 }
 
 int
