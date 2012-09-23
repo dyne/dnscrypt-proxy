@@ -3,6 +3,7 @@
 #include <sys/types.h>
 
 #include <errno.h>
+#include <locale.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -129,8 +130,15 @@ proxy_context_free(ProxyContext * const proxy_context)
     logger_close(proxy_context);
 }
 
-static
-int init_tz(void)
+static int
+init_locale(void)
+{
+    setlocale(LC_CTYPE, "C");
+    setlocale(LC_COLLATE, "C");
+}
+
+static int
+init_tz(void)
 {
     static char  default_tz_for_putenv[] = "TZ=UTC+00:00";
     char         stbuf[10U];
@@ -157,6 +165,7 @@ revoke_privileges(ProxyContext * const proxy_context)
 {
     (void) proxy_context;
 
+    init_locale();
     init_tz();
     (void) strerror(ENOENT);
 #ifndef DEBUG
