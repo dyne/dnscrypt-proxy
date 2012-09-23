@@ -83,6 +83,9 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (wire_data_len < 15U || wire_data[4] != 0U || wire_data[5] != 1U) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
+    if (wire_data[i] == 0U) {
+        putc_unlocked('.', fp);
+    }
     while (i < wire_data_len && (csize = wire_data[i]) != 0U &&
            csize < wire_data_len - i) {
         i++;
