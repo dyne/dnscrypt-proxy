@@ -238,11 +238,16 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
     StrList  *scanned;
     ldns_rr  *question;
     char     *owner_str;
+    size_t    owner_str_len;
 
     scanned = blocking->domains;
     question = ldns_rr_list_rr(ldns_pkt_question(packet), 0U);
     if ((owner_str = ldns_rdf2str(ldns_rr_owner(question))) == NULL) {
         return DCP_SYNC_FILTER_RESULT_FATAL;
+    }
+    owner_str_len = strlen(owner_str);
+    if (owner_str_len > (size_t) 1U && owner_str[--owner_str_len] == '.') {
+        owner_str[owner_str_len] = 0;
     }
     do {
         if (wildcard_match(owner_str, scanned->str)) {
