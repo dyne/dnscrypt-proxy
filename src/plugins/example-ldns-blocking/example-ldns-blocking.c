@@ -1,4 +1,6 @@
 
+#include <assert.h>
+#include <ctype.h>
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,6 +81,68 @@ parse_str_list(const char * const file)
     return str_list;
 }
 
+
+static char *
+substr_find(const char *str, const char * const substr, const size_t max_len)
+{
+    const char *str_max;
+    size_t      str_len = strlen(str);
+    int         substr_c0;
+
+    assert(strlen(substr) >= max_len);
+    if (str_len < max_len) {
+        return NULL;
+    }
+    str_max = str + str_len - max_len;
+    substr_c0 = tolower((int) (unsigned char) substr[0]);
+    do {
+        if (tolower((int) (unsigned char) *str) == substr_c0 &&
+            strncasecmp(str, substr, max_len) == 0) {
+            return (char *) str;
+        }
+    } while (str++ < str_max);
+
+    return NULL;
+}
+
+static _Bool
+wildcard_match(const char * const str, const char *pattern)
+{
+    size_t pattern_len = strlen(pattern);
+    _Bool  wildcard_start = 0;
+    _Bool  wildcard_end = 0;
+
+    if (pattern_len <= (size_t) 0U) {
+        return 0;
+    }
+    if (*pattern == '*') {
+        if (pattern_len <= (size_t) 1U) {
+            return 1;
+        }
+        wildcard_start = 1;
+        pattern++;
+        pattern_len--;
+    }
+    assert(pattern_len > 0U);
+    if (pattern[pattern_len - 1U] == '*') {
+        if (pattern_len <= (size_t) 1U) {
+            return 1;
+        }
+        wildcard_end = 1;
+        pattern_len--;
+    }
+    if (wildcard_start == 0) {
+        return (wildcard_end == 0 ?
+                strcasecmp(str, pattern) :
+                strncasecmp(str, pattern, pattern_len)) == 0;
+    }
+    const char * const found = substr_find(str, pattern, pattern_len);
+    if (found == NULL) {
+        return 0;
+    }
+    return wildcard_end == 0 ? *(found + pattern_len) == 0 : 1;
+}
+
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {
@@ -100,7 +164,8 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "A file should list one entry per line.\n"
         "\n"
         "IPv4 and IPv6 addresses are supported.\n"
-        "For names, wildcards (*) are also supported.\n"
+        "For names, leading and trailing wildcards (*) are also supported\n"
+        "(e.g. *xxx*, *.example.com, ads.*)\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
         "  libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names\n";
@@ -166,11 +231,72 @@ dcplugin_destroy(DCPlugin * const dcplugin)
     return 0;
 }
 
+static DCPluginSyncFilterResult
+apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
+                    ldns_pkt * const packet)
+{
+    StrList  *scanned;
+    ldns_rr  *question;
+    char     *owner_str;
+
+    scanned = blocking->domains;
+    question = ldns_rr_list_rr(ldns_pkt_question(packet), 0U);
+    if ((owner_str = ldns_rdf2str(ldns_rr_owner(question))) == NULL) {
+        return DCP_SYNC_FILTER_RESULT_FATAL;
+    }
+    do {
+        if (wildcard_match(owner_str, scanned->str)) {
+            LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
+                           LDNS_RCODE_REFUSED);
+            break;
+        }
+    } while ((scanned = scanned->next) != NULL);
+    free(owner_str);
+
+    return DCP_SYNC_FILTER_RESULT_OK;
+}
+
+static DCPluginSyncFilterResult
+apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
+                ldns_pkt * const packet)
+{
+    StrList      *scanned;
+    ldns_rr_list *answers;
+    ldns_rr      *answer;
+    char         *answer_str;
+    ldns_rr_type  type;
+    size_t        answers_count;
+    size_t        i;
+
+    answers = ldns_pkt_answer(packet);
+    answers_count = ldns_rr_list_rr_count(answers);
+    for (i = (size_t) 0U; i < answers_count; i++) {
+        answer = ldns_rr_list_rr(answers, i);
+        type = ldns_rr_get_type(answer);
+        if (type != LDNS_RR_TYPE_A && type != LDNS_RR_TYPE_AAAA) {
+            continue;
+        }
+        if ((answer_str = ldns_rdf2str(ldns_rr_a_address(answer))) == NULL) {
+            return DCP_SYNC_FILTER_RESULT_FATAL;
+        }
+        scanned = blocking->ips;
+        do {
+            if (strcasecmp(scanned->str, answer_str) == 0) {
+                LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
+                               LDNS_RCODE_REFUSED);
+                break;
+            }
+        } while ((scanned = scanned->next) != NULL);
+        free(answer_str);
+    }
+}
+
 DCPluginSyncFilterResult
 dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
-    Blocking *blocking = dcplugin_get_user_data(dcplugin);
-    ldns_pkt *packet;
+    Blocking                 *blocking = dcplugin_get_user_data(dcplugin);
+    ldns_pkt                 *packet;
+    DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
 
     if (blocking->domains == NULL && blocking->ips == NULL) {
         return DCP_SYNC_FILTER_RESULT_OK;
@@ -180,61 +306,18 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (packet == NULL) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
-    if (blocking->domains != NULL) {
-        StrList  *scanned;
-        ldns_rdf *owner;
-        ldns_rdf *scanned_rdf;
-        ldns_rr  *question;
-
-        scanned = blocking->domains;
-        question = ldns_rr_list_rr(ldns_pkt_question(packet), 0U);
-        owner = ldns_rr_owner(question);
-        do {
-            if ((scanned_rdf = ldns_dname_new_frm_str(scanned->str)) == NULL) {
-                return DCP_SYNC_FILTER_RESULT_FATAL;
-            }
-            if (ldns_dname_match_wildcard(owner, scanned_rdf) != 0) {
-                LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
-                               LDNS_RCODE_REFUSED);
-                ldns_rdf_free(scanned_rdf);
-                break;
-            }
-            ldns_rdf_free(scanned_rdf);
-        } while ((scanned = scanned->next) != NULL);
+    if (blocking->domains != NULL &&
+        (result = apply_block_domains(dcp_packet, blocking, packet)
+            != DCP_SYNC_FILTER_RESULT_OK)) {
+        ldns_pkt_free(packet);
+        return result;
     }
-
-    if (blocking->ips != NULL) {
-        StrList      *scanned;
-        ldns_rr_list *answers;
-        ldns_rr      *answer;
-        char         *answer_str;
-        ldns_rr_type  type;
-        size_t        answers_count;
-        size_t        i;
-
-        answers = ldns_pkt_answer(packet);
-        answers_count = ldns_rr_list_rr_count(answers);
-        for (i = (size_t) 0U; i < answers_count; i++) {
-            answer = ldns_rr_list_rr(answers, i);
-            type = ldns_rr_get_type(answer);
-            if (type != LDNS_RR_TYPE_A && type != LDNS_RR_TYPE_AAAA) {
-                continue;
-            }
-            if ((answer_str = ldns_rdf2str(ldns_rr_a_address(answer))) == NULL) {
-                return DCP_SYNC_FILTER_RESULT_FATAL;
-            }
-            scanned = blocking->ips;
-            do {
-                if (strcasecmp(scanned->str, answer_str) == 0) {
-                    LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
-                                   LDNS_RCODE_REFUSED);
-                    break;
-                }
-            } while ((scanned = scanned->next) != NULL);
-            free(answer_str);
-        }
+    if (blocking->ips != NULL &&
+        (result = apply_block_ips(dcp_packet, blocking, packet)
+            != DCP_SYNC_FILTER_RESULT_OK)) {
+        ldns_pkt_free(packet);
+        return result;
     }
-
     ldns_pkt_free(packet);
 
     return DCP_SYNC_FILTER_RESULT_OK;
