@@ -1,5 +1,25 @@
 Date:   2012-09-24
 
+    Mention the example plugins.
+
+Date:   2012-09-24
+
+    Can you seriously expect Windows to implement putc_unlocked()? LOL.
+
+Date:   2012-09-24
+
+    Ensure that assertions are always turned on.
+
+Date:   2012-09-24
+
+    Add missing return statement.
+
+Date:   2012-09-24
+
+    Update the ChangeLog
+
+Date:   2012-09-24
+
     Spaces vs tabs. Fu fu fu fu fuuuuuuuu
 
 Date:   2012-09-24
