@@ -1,3 +1,36 @@
+Date:   2012-09-24
+
+    Spaces vs tabs. Fu fu fu fu fuuuuuuuu
+
+Date:   2012-09-24
+
+    libevent: arc4random_buf() doesn't return a value. Fix ev_arc4random_buf().
+
+Date:   2012-09-23
+
+    logging plugin: display a dot for a query for dot (duh!).
+
+Date:   2012-09-23
+
+    Zap the final dot in a name before doing pattern matching on it.
+
+Date:   2012-09-23
+
+    Don't use ldns wildcard matching, match * everywhere instead.
+    People want to filter things like *xxx*, so let them do that.
+
+Date:   2012-09-23
+
+    Init the locale.
+
+Date:   2012-09-22
+
+    example-logging: bump the minimal required length up.
+
+Date:   2012-09-22
+
+    Update the ChangeLog
+
 Date:   2012-09-22
 
     Add a new plugin that logs queries.
