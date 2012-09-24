@@ -4,6 +4,10 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#ifndef putc_unlocked
+# define putc_unlocked(c, stream) putc((c), (stream))
+#endif
+
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {
