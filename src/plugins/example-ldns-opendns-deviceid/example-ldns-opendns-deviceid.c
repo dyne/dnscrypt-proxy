@@ -1,6 +1,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <dnscrypt/plugin.h>
@@ -36,7 +37,9 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "\n"
         "$ dig TXT debug.opendns.com\n"
         "\n"
-        "Just pass this device id as an argument to this plugin:\n"
+        "Just pass this device id as an argument to this plugin or, if you\n"
+        "don't want this information to be visible in the process name,\n"
+        "store it in an environment variable named OPENDNS_DEVICE_ID.\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
         "  libdcplugin_example_ldns_opendns_deviceid.la,XXXXXXXXXXXXXXXX";
@@ -45,6 +48,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
+    char   *device_id;
     char   *edns_hex;
     size_t  edns_hex_size = sizeof EDNS_HEADER EDNS_DEV_ID;
     
@@ -55,9 +59,13 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     }
     memcpy(edns_hex, EDNS_HEADER EDNS_DEV_ID, edns_hex_size);
     assert(sizeof EDNS_DEV_ID - 1U == (size_t) 16U);
+    device_id = getenv("OPENDNS_DEVICE_ID");
     if (argc > 1 && strlen(argv[1]) == (size_t) 16U) {
+        device_id = argv[1];
+    }
+    if (device_id != NULL) {
         memcpy(edns_hex + sizeof EDNS_HEADER - (size_t) 1U,
-               argv[1], sizeof EDNS_DEV_ID);
+               device_id, sizeof EDNS_DEV_ID);
     }
     return 0;
 }
