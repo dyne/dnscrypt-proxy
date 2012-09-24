@@ -135,6 +135,8 @@ init_locale(void)
 {
     setlocale(LC_CTYPE, "C");
     setlocale(LC_COLLATE, "C");
+
+    return 0;
 }
 
 static int
