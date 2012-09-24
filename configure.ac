@@ -6,7 +6,7 @@ AC_CONFIG_SRCDIR([src/proxy/app.c])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SUBDIRS([src/libevent])
 AC_CANONICAL_HOST
-AM_INIT_AUTOMAKE([1.9 dist-bzip2])
+AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-pax])
 AM_MAINTAINER_MODE
 AM_DEP_TRACK
 
