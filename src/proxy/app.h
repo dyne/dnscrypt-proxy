@@ -7,6 +7,10 @@
 # include "plugin_support.h"
 #endif
 
+#ifdef NDEBUG
+# error Assertions should be turned on. Always.
+#endif
+
 typedef struct AppContext_ {
     struct ProxyContext_ *proxy_context;
 #ifdef PLUGINS

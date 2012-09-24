@@ -300,8 +300,6 @@ AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit])
 
 dnl Switches.
 
-AC_HEADER_ASSERT
-
 AC_ARG_ENABLE(pie,
 [AS_HELP_STRING(--enable-pie,Produce position independent executables @<:@default=yes@:>@)],
  enable_pie=$enableval, enable_pie="maybe")
@@ -416,6 +414,11 @@ export LDFLAGS
 export LIBS
 
 dnl Output.
+
+AH_VERBATIM([NDEBUG], [/* Never ever ignore assertions */
+#ifdef NDEBUG
+#/**/undef/**/ NDEBUG
+#endif])
 
 AC_CONFIG_FILES([Makefile
                  man/Makefile
