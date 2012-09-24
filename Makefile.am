@@ -8,12 +8,11 @@ EXTRA_DIST = \
 	README-WINDOWS.markdown \
 	TECHNOTES \
 	THANKS \
-	android.sh \
 	autogen.sh \
-	org.dnscrypt.osx.DNSCryptProxy.plist \
-	iphone.sh
+	org.dnscrypt.osx.DNSCryptProxy.plist
 
 SUBDIRS = \
+	dist-build \
 	man
 
 if PLUGINS

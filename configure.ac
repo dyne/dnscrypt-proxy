@@ -421,6 +421,7 @@ AH_VERBATIM([NDEBUG], [/* Never ever ignore assertions */
 #endif])
 
 AC_CONFIG_FILES([Makefile
+                 dist-build/Makefile
                  man/Makefile
                  src/Makefile
                  src/hostip/Makefile
