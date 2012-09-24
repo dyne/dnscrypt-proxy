@@ -5,6 +5,8 @@
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
+DCPLUGIN_MAIN(__FILE__);
+
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {

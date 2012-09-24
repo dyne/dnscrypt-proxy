@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+DCPLUGIN_MAIN(__FILE__);
+
 #ifndef putc_unlocked
 # define putc_unlocked(c, stream) putc((c), (stream))
 #endif

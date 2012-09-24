@@ -102,12 +102,16 @@ plugins in the `src/plugins` directory to get you started.
 The `<dnscrypt/plugin.h>` header file is the only one you need to
 include in a plugin. Feel free to take a look at its Doxygen documentation.
 
-The bare minimum a plugin needs to implement is a `dcplugin_init()`
-function. This function is evaluated when the proxy starts, and can
-optionally parse a list of arguments:
+The bare minimum a plugin needs is to mention `DCPLUGIN_MAIN(__FILE__)`
+and to implement is a `dcplugin_init()` function.
+
+This function is evaluated when the proxy starts, and can optionally
+parse a list of arguments:
 
     #include <dnscrypt/plugin.h>
-
+    
+    DCPLUGIN_MAIN(__FILE__);
+    
     int
     dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     {

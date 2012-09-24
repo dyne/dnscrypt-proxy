@@ -1,6 +1,8 @@
 
 #include <dnscrypt/plugin.h>
 
+DCPLUGIN_MAIN(__FILE__);
+
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {

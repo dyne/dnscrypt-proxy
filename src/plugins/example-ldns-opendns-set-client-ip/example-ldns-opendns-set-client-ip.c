@@ -7,6 +7,8 @@
 #include <ldns/ldns.h>
 #include <ldns/util.h>
 
+DCPLUGIN_MAIN(__FILE__);
+
 #define EDNS_HEADER           "4f56" "0014" "4f444e5300" "00"
 #define EDNS_HEADER_CLIENT_IP "10"
 #define EDNS_CLIENT_IP        "7f000001"

@@ -34,6 +34,15 @@ extern "C" {
 #endif
 
 /**
+ * This macro should be present once in every plugin.
+ *
+ * It basically defines all the symbols that have to be exported.
+ *
+ * @param ID a string identifier, only used for debugging. Can be __FILE__.
+ */
+#define DCPLUGIN_MAIN(ID) DCPLUGIN_MAIN_PRIVATE(ID)
+
+/**
  * A dnscrypt-proxy plugin object. This is an opaque structure that gets
  * passed to all callbacks.
  *

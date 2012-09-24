@@ -6,6 +6,8 @@
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
+DCPLUGIN_MAIN(__FILE__);
+
 #define EDNS_HEADER "0004000f4f70656e444e53"
 #define EDNS_DEV_ID "cafebabedeadbeef"
 

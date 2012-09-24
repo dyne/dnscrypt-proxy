@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <dnscrypt/version.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,6 +24,10 @@ struct DCPluginDNSPacket_ {
     size_t                   client_sockaddr_len_s;
     size_t                   dns_packet_max_len;
 };
+
+#define DCPLUGIN_MAIN_PRIVATE(ID) \
+    int dcplugin_interface_version_major = DCP_INTERFACE_VERSION_MAJOR; \
+    int dcplugin_interface_version_minor = DCP_INTERFACE_VERSION_MINOR
 
 #ifdef __cplusplus
 }
