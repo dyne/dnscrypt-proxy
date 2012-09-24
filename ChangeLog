@@ -1,5 +1,17 @@
 Date:   2012-09-24
 
+    Enable support for plugins in Windows builds.
+
+Date:   2012-09-24
+
+    Require plugins to mention DCPLUGIN_MAIN(__FILE__);
+
+Date:   2012-09-24
+
+    Update the ChangeLog, again.
+
+Date:   2012-09-24
+
     Android and iPhone build scripts have been moved.
 
 Date:   2012-09-24
