@@ -60,7 +60,7 @@ ev_arc4random_buf(void *buf, size_t n)
 {
 #if defined(_EVENT_HAVE_ARC4RANDOM_BUF) && !defined(__APPLE__)
 	arc4random_buf(buf, n);
-    return;
+	return;
 #else
 	unsigned char *b = buf;
 
@@ -73,7 +73,7 @@ ev_arc4random_buf(void *buf, size_t n)
 	 */
 	if (arc4random_buf != NULL) {
 		arc4random_buf(buf, n);
-        return;
+		return;
 	}
 #endif
 	/* Make sure that we start out with b at a 4-byte alignment; plenty
