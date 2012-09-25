@@ -80,8 +80,7 @@ static const char *getopt_options = "a:e:hk:n:r:u:N:TVX";
 static void
 options_version(void)
 {
-    puts(PACKAGE_STRING "\n"
-         "Copyright (C) 2011-2012 OpenDNS, Inc.");
+    puts(PACKAGE_STRING);
 }
 
 static void
