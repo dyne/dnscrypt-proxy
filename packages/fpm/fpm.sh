@@ -1,9 +1,9 @@
 #! /bin/sh
 
-VERSION="1.0.1"
-MAINTAINER="OpenDNS Inc <dnscrypt@opendns.com>"
+VERSION="1.1.0"
+MAINTAINER="Frank Denis <dnscrypt@pureftpd.org>"
 CATEGORY="net"
-URL="https://github.com/opendns/dnscrypt-proxy"
+URL="http://dnscrypt.org"
 VENDOR="OpenDNS"
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver
 The DNSCrypt protocol is very similar to DNSCurve, but focuses on
@@ -34,7 +34,7 @@ export LC_TIME="C"
 mkdir -p -- $(dirname "$DEBIAN_COPYRIGHT_FILE") || exit 1
 cp -- "$COPYRIGHT_FILE" "$DEBIAN_COPYRIGHT_FILE" || exit 1
 
-echo "${PKG_NAME} (${VERSION}) unstable; urgency=low
+echo "${PKG_NAME} (${VERSION}) unstable; urgency=medium
   * See ${URL}
 
  -- ${MAINTAINER}  $(date -R)" | gzip -9 > "$DEBIAN_CHANGELOG_FILE"
