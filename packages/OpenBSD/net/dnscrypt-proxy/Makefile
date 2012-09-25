@@ -1,35 +1,42 @@
 # $OpenBSD$
 
-COMMENT=	secure communications between a client and a DNS resolver
+COMMENT-main=		secure communications between a DNS client and resolver
+COMMENT-plugins=	example plugins for dnscrypt-proxy
 
-DISTNAME=	dnscrypt-proxy-1.1.0
-CATEGORIES=	net
-MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
+DISTNAME=		dnscrypt-proxy-1.1.0
+CATEGORIES=		net
+MASTER_SITES=		https://github.com/downloads/opendns/dnscrypt-proxy/
 
-HOMEPAGE=	http://dnscrypt.org
+HOMEPAGE=		http://dnscrypt.org
 
-MAINTAINER=	Frank Denis <dnscrypt@pureftpd.org>
+MAINTAINER=		Frank Denis <dnscrypt@pureftpd.org>
 
 PERMIT_PACKAGE_CDROM=	No
 PERMIT_PACKAGE_FTP=	No
 PERMIT_DISTFILES_CDROM=	No
 PERMIT_DISTFILES_FTP=	No
 
-WANTLIB=	c execinfo kvm ltdl m
+MULTI_PACKAGES=		-main -plugins
 
-LIB_DEPENDS=	devel/libexecinfo \
-		devel/libtool,-ltdl
+WANTLIB-main=		c execinfo kvm ltdl m
+WANTLIB-plugins=	c ldns m
 
-BUILD_DEPENDS=	archivers/gtar
-TAR=		${LOCALBASE}/bin/gtar
+LIB_DEPENDS-main=	devel/libexecinfo \
+			devel/libtool,-ltdl
 
-CONFIGURE_STYLE= gnu
+BUILD_DEPENDS-plugins=	devel/libtool
+LIB_DEPENDS-plugins=	net/ldns/libldns
 
-CONFIGURE_ARGS+= --enable-plugins --enable-plugins-root
+BUILD_DEPENDS=		archivers/gtar
+TAR=			${LOCALBASE}/bin/gtar
 
-DOCS=	README-PLUGINS.markdown \
-	README.markdown \
-	TECHNOTES
+CONFIGURE_STYLE=	gnu
+
+CONFIGURE_ARGS+=	--enable-plugins --enable-plugins-root
+
+DOCS=			README-PLUGINS.markdown \
+			README.markdown \
+			TECHNOTES
 
 post-install:
 	${INSTALL_DATA_DIR} ${PREFIX}/share/doc/dnscrypt-proxy

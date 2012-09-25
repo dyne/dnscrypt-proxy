@@ -1,0 +1,29 @@
+A collection of plugins for dnscrypt-proxy.
+
+- example-ldns-blocking: This plugin returns a REFUSED response if the
+query name is in a list of blacklisted names, or if at least one of
+the returned IP addresses happens to be in a list of blacklisted IPs.
+
+- example-ldns-logging: This plugin logs the client queries to the
+standard output (default) or to a file.
+
+Plugins that only work when using OpenDNS resolvers:
+
+- example-ldns-opendns-deviceid: Some routers provide advanced support
+for OpenDNS, and allow using a specific set of settings no matter what
+their IP address is. Since they don't support dnscrypt, outgoing
+encrypted queries can not be rewritten by these routers, and OpenDNS
+will not recognize the router settings. This plugin adds a device
+identifier to outgoing packets, so that router settings can be used,
+even when using dnscrypt.
+
+- example-ldns-opendns-parental-control: When using OpenDNS, this enables
+the following filter set, if one hasn't been defined: lingerie, adult
+themes, nudity, pornography, proxy/anonymizer, sexuality and tasteless.
+
+- example-ldns-opendns-set-client-ip: If you defined a policy for your
+network, this plugin allows using this policy no matter where you are,
+and without interfering with the networks you are roaming on. This plugin
+also allows using your IPv4 network settings even when connecting to OpenDNS
+using IPv6.
+
