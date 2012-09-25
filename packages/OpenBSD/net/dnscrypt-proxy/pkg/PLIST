@@ -1,9 +1,23 @@
 @comment $OpenBSD$
 @newgroup _dnscrypt-proxy:688
 @newuser _dnscrypt-proxy:688:_dnscrypt-proxy:daemon:dnscrypt-proxy user:/var/empty:/sbin/nologin
+%%SHARED%%
+@bin bin/hostip
+include/dnscrypt/
+include/dnscrypt/plugin.h
+include/dnscrypt/private.h
+include/dnscrypt/version.h
+lib/dnscrypt-proxy/
+lib/dnscrypt-proxy/libdcplugin_example.la
+lib/dnscrypt-proxy/libdcplugin_example_ldns_blocking.la
+lib/dnscrypt-proxy/libdcplugin_example_ldns_opendns_deviceid.la
+lib/dnscrypt-proxy/libdcplugin_example_ldns_opendns_parental_control.la
+lib/dnscrypt-proxy/libdcplugin_example_ldns_opendns_set_client_ip.la
+lib/dnscrypt-proxy/libdcplugin_example_logging.la
 @man man/man8/dnscrypt-proxy.8
 @man man/man8/hostip.8
-@bin bin/hostip
 @bin sbin/dnscrypt-proxy
-share/doc/dnscrypt-proxy
-@rcscript ${RCDIR}/dnscrypt_proxy
+share/doc/dnscrypt-proxy/
+share/doc/dnscrypt-proxy/README-PLUGINS.markdown
+share/doc/dnscrypt-proxy/README.markdown
+share/doc/dnscrypt-proxy/TECHNOTES
