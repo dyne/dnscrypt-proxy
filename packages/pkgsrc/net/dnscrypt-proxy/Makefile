@@ -1,7 +1,7 @@
 
 DISTNAME=	dnscrypt-proxy-1.1.0
 CATEGORIES=	net
-MASTER_SITES=	https://github.com/downloads/opendns/dnscrypt-proxy/
+MASTER_SITES=	http://cloud.github.com/downloads/opendns/dnscrypt-proxy/
 
 MAINTAINER=	dnscrypt@pureftpd.org
 HOMEPAGE=	http://dnscrypt.org
@@ -24,6 +24,6 @@ INSTALLATION_DIRS=	share/doc/dnscrypt-proxy
 post-install:
 	cd ${WRKSRC} &&	\
 		${INSTALL_DATA} README.markdown	 \
-			${DESTDIR}${PREFIX}/share/doc/dnscrypt-proxy
+		${DESTDIR}${PREFIX}/share/doc/dnscrypt-proxy
 
 .include "../../mk/bsd.pkg.mk"
