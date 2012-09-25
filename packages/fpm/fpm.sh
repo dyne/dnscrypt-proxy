@@ -29,7 +29,9 @@ export TZ=""
 export LC_ALL="C"
 export LC_TIME="C"
 
-./configure --prefix="$INSTALL_DIR" && make -j4 install
+./configure --prefix="$INSTALL_DIR" \
+            --enable-plugins --enable-plugins-root && \
+make -j4 install
 
 mkdir -p -- $(dirname "$DEBIAN_COPYRIGHT_FILE") || exit 1
 cp -- "$COPYRIGHT_FILE" "$DEBIAN_COPYRIGHT_FILE" || exit 1
