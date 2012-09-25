@@ -3,7 +3,9 @@
 COMMENT-main=		secure communications between a DNS client and resolver
 COMMENT-plugins=	example plugins for dnscrypt-proxy
 
-DISTNAME=		dnscrypt-proxy-1.1.0
+V=			1.1.0
+
+DISTNAME=		dnscrypt-proxy-${V}
 CATEGORIES=		net
 MASTER_SITES=		https://github.com/downloads/opendns/dnscrypt-proxy/
 
@@ -11,6 +13,7 @@ HOMEPAGE=		http://dnscrypt.org
 
 MAINTAINER=		Frank Denis <dnscrypt@pureftpd.org>
 
+# BSD
 PERMIT_PACKAGE_CDROM=	Yes
 PERMIT_PACKAGE_FTP=	Yes
 PERMIT_DISTFILES_CDROM=	Yes
@@ -18,14 +21,20 @@ PERMIT_DISTFILES_FTP=	Yes
 
 MULTI_PACKAGES=		-main -plugins
 
-WANTLIB-main=		c execinfo kvm ltdl m
-WANTLIB-plugins=	c ldns m
+PKGNAME-main=		dnscrypt-proxy-${V}
+PKGNAME-plugins=	dnscrypt-proxy-plugins-${V}
 
-LIB_DEPENDS-main=	devel/libexecinfo \
-			devel/libtool,-ltdl
+commonWANTLIB=		c execinfo kvm m
+
+WANTLIB-main=		${commonWANTLIB} ltdl
+WANTLIB-plugins=	${commonWANTLIB} crypto ldns
+
+commonLIB_DEPENDS=	devel/libexecinfo
+
+LIB_DEPENDS-main=	${commonLIB_DEPENDS} devel/libtool,-ltdl
+LIB_DEPENDS-plugins=	${commonLIB_DEPENDS} net/ldns/libldns
 
 BUILD_DEPENDS-plugins=	devel/libtool
-LIB_DEPENDS-plugins=	net/ldns/libldns
 
 BUILD_DEPENDS=		archivers/gtar
 TAR=			${LOCALBASE}/bin/gtar
