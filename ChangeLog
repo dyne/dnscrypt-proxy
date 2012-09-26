@@ -1,3 +1,79 @@
+Date:   2012-09-25
+
+    Stick to PACKAGE_STRING for the version, it's easier to parse.
+
+Date:   2012-09-25
+
+    Remove the FreeBSD package.
+
+Date:   2012-09-25
+
+    Unfuck pkgsrc packages on Dragonfly BSD.
+
+Date:   2012-09-25
+
+    Update the NetBSD / Dragonfly BSD port. Plugin-less for now.
+
+Date:   2012-09-25
+
+    Factorize dependencies
+
+Date:   2012-09-25
+
+    PERMIT_PACKAGES => Yes
+
+Date:   2012-09-25
+
+    Major update to the OpenBSD package. Build plugins as a subpackage.
+
+Date:   2012-09-25
+
+    Improve the Homebrew formula after adamv@ review
+
+Date:   2012-09-25
+
+    Enable plugins in the Linux packages
+
+Date:   2012-09-25
+
+    Update fpm port
+
+Date:   2012-09-25
+
+    Switch from tar-pax to tar-ustar because OpenBSD's tar(1) is confused with
+    POSIX archives.
+
+Date:   2012-09-25
+
+    Update the OpenBSD port to 1.1.0
+
+Date:   2012-09-25
+
+    Lion -> Mountain Lion
+
+Date:   2012-09-24
+
+    Allow reading an OpenDNS device id from an environment variable named
+    OPENDNS_DEVICE_ID as an alternative to giving it as an argument to the
+    opendns_deviceid plugin. This information shouldn't be visible in the
+    process name.
+
+Date:   2012-09-24
+
+    Update the Homebrew package.
+
+Date:   2012-09-24
+
+    Use tar-pax because some plugins files names are > 99 chars long.
+
+Date:   2012-09-24
+
+    Don't use brackets in doxygen doc except for headers.
+
+Date:   2012-09-24
+
+    ChangeLog
+
 Date:   2012-09-24
 
     Enable support for plugins in Windows builds.
