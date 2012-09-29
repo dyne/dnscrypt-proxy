@@ -1,7 +1,6 @@
 #! /bin/sh
 
-export CFLAGS="-Os -fomit-frame-pointer -march=pentium4 -mtune=core2"
-export LDFLAGS="-Wl,--gc-sections"
+export CFLAGS="-Os"
 
 ./configure --disable-ssp --enable-plugins --with-included-ltdl && \
   make -j3 install-strip
