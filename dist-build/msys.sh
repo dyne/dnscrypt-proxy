@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export CFLAGS="-Os"
+export CFLAGS="-Os -march=pentium2 -mtune=nocona"
 
 ./configure --disable-ssp --enable-plugins --with-included-ltdl && \
   make -j3 install-strip
