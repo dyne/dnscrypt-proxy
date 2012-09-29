@@ -4,3 +4,4 @@ Lance Fredrickson <lance at lancethepants dot com> - for his feedback on DD-WRT/
 Sebastian Sjoholm <sebastian.sjoholm at gmail dot com> - reported and fixed a compilation issue on Debian PPC.
 David Lebel <lebel at lebel.org> - Gentoo package
 Black Roland - OpenWRT packages
+RotBlitz - Reported that Windows binary packages should work on old CPUs.
