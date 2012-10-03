@@ -1,3 +1,19 @@
+Date:   2012-09-29
+
+    Thanks, RotBlitz
+
+Date:   2012-09-29
+
+    People are still running dnscrypt on old CPUs. Compile for Pentium 2 on Windows.
+
+Date:   2012-09-29
+
+    Trim down optimization flags for Windows
+
+Date:   2012-09-26
+
+    ChangeLog updates
+
 Date:   2012-09-25
 
     Stick to PACKAGE_STRING for the version, it's easier to parse.
