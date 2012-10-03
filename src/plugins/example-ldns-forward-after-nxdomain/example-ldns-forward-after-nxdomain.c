@@ -80,7 +80,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     ldns_pkt_free(query);
     ldns_pkt2wire(&response_wire, response, &response_wire_len);
     ldns_pkt_free(response);
-    if (response_wire_len >= dcplugin_get_wire_data_max_len(dcp_packet)) {
+    if (response_wire_len > dcplugin_get_wire_data_max_len(dcp_packet)) {
         free(response_wire);
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
