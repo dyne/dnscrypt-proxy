@@ -40,7 +40,9 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     }
     ldns_resolver_new_frm_file(&forwarder->resolver, resolver_conf);
     ldns_resolver_set_retry(forwarder->resolver, 1);
-
+    ldns_resolver_set_timeout(forwarder->resolver, (struct timeval) {
+        .tv_sec = 2, .tv_usec = 0
+    });
     return 0;
 }
 
