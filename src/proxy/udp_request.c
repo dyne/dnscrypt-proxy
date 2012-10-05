@@ -72,7 +72,6 @@ udp_request_kill(UDPRequest * const udp_request)
 
 static int sendto_with_retry(SendtoWithRetryCtx * const ctx);
 
-#ifndef UDP_REQUEST_NO_RETRIES
 static void
 sendto_with_retry_timer_cb(evutil_socket_t retry_timer_handle, short ev_flags,
                            void * const ctx_)
@@ -87,7 +86,6 @@ sendto_with_retry_timer_cb(evutil_socket_t retry_timer_handle, short ev_flags,
                                      ctx->udp_request->retries);
     sendto_with_retry(ctx);
 }
-#endif
 
 static int
 sendto_with_retry(SendtoWithRetryCtx * const ctx)
@@ -118,15 +116,6 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
     logger(udp_request->proxy_context, LOG_WARNING,
            "sendto: [%s]", evutil_socket_error_to_string(err));
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
-
-#ifdef UDP_REQUEST_NO_RETRIES
-    (void) ctx_cb;
-    (void) retriable;
-    udp_request_kill(udp_request);
-
-    return -1;
-
-#else
 
 # ifdef _WIN32
     retriable = (err == WSAENOBUFS ||
@@ -174,7 +163,6 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
     DNSCRYPT_PROXY_REQUEST_UDP_RETRY_SCHEDULED(udp_request,
                                                udp_request->retries);
     return -1;
-#endif
 }
 
 static void
