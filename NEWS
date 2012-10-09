@@ -1,4 +1,8 @@
 
+* Version 1.1.1:
+ - OpenDNS-specific plugins have been removed.
+ - Example plugins requiring ldns can be compiled on Windows.
+
 * Version 1.1.0:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
    queries and responses before and after they are relayed.
