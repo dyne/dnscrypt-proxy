@@ -1,8 +1,4 @@
 
-#ifdef WIN32
-typedef unsigned int socklen_t;
-#endif
-
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
