@@ -155,3 +155,12 @@ documentation](http://dnscrypt.org/plugin-api/plugin_8h.html).
 
 The `dnscrypt-proxy` source code also ships with example plugins you
 may want to take a look at, in the `src/plugins` directory.
+
+Compiling ldns on Windows
+-------------------------
+
+- Don't use MSYS OpenSSL package. It is probably way out of date.
+- Download and extract the source code of the latest stable OpenSSL version.
+- `./config --shared --prefix=/usr/local && make && make install`
+- Download and extract the source code of the latest stable ldns version
+- `./configure && make install`
