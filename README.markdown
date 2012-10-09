@@ -37,9 +37,7 @@ Bitrig, NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a
 jailbroken device), Android (requires a rooted device), Solaris
 (SmartOS) and Windows (requires MingW).
 
-Download the
-[latest version](https://github.com/opendns/dnscrypt-proxy/downloads)
-and extract it:
+Download the [latest version](http://dnscrypt.org) and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
     $ cd dnscrypt-proxy-*
