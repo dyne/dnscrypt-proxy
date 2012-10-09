@@ -42,7 +42,10 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if (argc > 1) {
         resolver_conf = argv[1];
     }
-    ldns_resolver_new_frm_file(&forwarder->resolver, resolver_conf);
+    if (ldns_resolver_new_frm_file(&forwarder->resolver, resolver_conf)
+        != LDNS_STATUS_OK) {
+        return -1;
+    }
     ldns_resolver_set_retry(forwarder->resolver, 1);
     ldns_resolver_set_timeout(forwarder->resolver, (struct timeval) {
         .tv_sec = 2, .tv_usec = 0
