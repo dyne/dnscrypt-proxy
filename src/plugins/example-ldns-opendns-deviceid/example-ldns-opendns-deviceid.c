@@ -35,7 +35,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     char   *device_id;
     char   *edns_hex;
     size_t  edns_hex_size = sizeof EDNS_HEADER EDNS_DEV_ID;
-    
+
     edns_hex = malloc(sizeof EDNS_HEADER EDNS_DEV_ID);
     dcplugin_set_user_data(dcplugin, edns_hex);
     if (edns_hex == NULL) {
@@ -57,8 +57,8 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 int
 dcplugin_destroy(DCPlugin *dcplugin)
 {
-    free(dcplugin_get_user_data(dcplugin));    
-    
+    free(dcplugin_get_user_data(dcplugin));
+
     return 0;
 }
 
