@@ -438,6 +438,7 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/example-ldns-forward-after-nxdomain/Makefile
                  src/plugins/example-logging/Makefile
                  src/plugins/example-ldns-blocking/Makefile
+                 src/plugins/example-ldns-opendns-deviceid/Makefile
                  test/Makefile])
 
 AC_OUTPUT

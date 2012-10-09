@@ -6,3 +6,6 @@ the returned IP addresses happens to be in a list of blacklisted IPs.
 
 - example-ldns-logging: This plugin logs the client queries to the
 standard output (default) or to a file.
+
+- example-ldns-opendns-deviceid: This plugin is only useful when using
+OpenDNS with specific routers and enterprise products.
