@@ -1,3 +1,48 @@
+Date:   2012-10-08
+
+    Update NEWS
+
+Date:   2012-10-08
+
+    Update URL.
+
+Date:   2012-10-08
+
+    Off-topic, but document how to compile ldns on Windows.
+
+Date:   2012-10-08
+
+    ldns requires socklen_t but Win32 doesn't have it.
+    So, define it on Win32.
+
+Date:   2012-10-06
+
+    Remove OpenDNS-related plugins.
+
+Date:   2012-10-06
+
+    Remove some sample plugins.
+
+Date:   2012-10-05
+
+    Remove UDP_REQUEST_NO_RETRIES. Always support retries.
+
+Date:   2012-10-03
+
+    Enforce a 2 second timeout.
+
+Date:   2012-10-03
+
+    forward-after-nxdomain: allow 1 extra byte for the response if needed.
+
+Date:   2012-10-03
+
+    Initial forward-after-nxdomain plugin implementation.
+
+Date:   2012-10-02
+
+    Update ChangeLog
+
 Date:   2012-09-29
 
     Thanks, RotBlitz
