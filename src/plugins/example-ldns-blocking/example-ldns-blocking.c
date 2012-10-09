@@ -1,4 +1,8 @@
 
+#ifdef WIN32
+typedef unsigned int socklen_t;
+#endif
+
 #include <assert.h>
 #include <ctype.h>
 #include <getopt.h>

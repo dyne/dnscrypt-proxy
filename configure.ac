@@ -281,7 +281,10 @@ AC_CHECK_HEADER([ldns/ldns.h], [
   ])
 ], [ ],
 [#include <stdlib.h>
- #include <stdint.h>])
+ #include <stdint.h>
+ #ifdef WIN32
+ typedef unsigned int socklen_t;
+ #endif])
 AM_CONDITIONAL(USE_LDNS, test x$use_ldns = xyes)
 AC_SUBST([LDNS_LIBS])
 
