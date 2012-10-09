@@ -29,7 +29,8 @@ test: .done
 .c.exe:
 	nacl_lib="`pwd`/../../@NACL_PATH@/lib/local" ; \
 	nacl_include="`pwd`/../../@NACL_PATH@/include/local" ; \
-   	$(CC) $(CPPFLAGS) $(CFLAGS) -I$$nacl_include $< $$nacl_lib/randombytes.o -o $@ $(LDFLAGS) -L$$nacl_lib -lnacl $(LIBS)
+	nacl_include_extra="`pwd`/../../@NACL_PATH@/include" ; \
+	$(CC) $(CPPFLAGS) $(CFLAGS) -I$$nacl_include -I$$nacl_include_extra $< $$nacl_lib/randombytes.o -o $@ $(LDFLAGS) -L$$nacl_lib -lnacl $(LIBS)
 
 clean:
 	-rm -f   .done
