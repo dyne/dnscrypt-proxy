@@ -1,5 +1,17 @@
 Date:   2012-10-10
 
+    Document that gcc 3.4.6 with a Mips target produces broken code with -Os
+
+Date:   2012-10-10
+
+    Add missing return statement in the ldns-blocking example.
+
+Date:   2012-10-10
+
+    Update NEWS/ChangeLog
+
+Date:   2012-10-10
+
     The plugin API has changed, 1.1.1 sounds weird, so let's go 1.2.0.
 
 Date:   2012-10-10
