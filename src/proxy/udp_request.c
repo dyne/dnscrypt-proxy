@@ -343,6 +343,25 @@ client_to_proxy_cb_sendto_cb(UDPRequest * const udp_request)
     DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_START(udp_request);
 }
 
+#ifdef PLUGINS
+static void
+proxy_to_client_direct(UDPRequest * const udp_request,
+                       const uint8_t * const dns_reply,
+                       const size_t dns_reply_len)
+{
+    sendto_with_retry(& (SendtoWithRetryCtx) {
+       .udp_request = udp_request,
+       .handle = udp_request->client_proxy_handle,
+       .buffer = dns_reply,
+       .length = dns_reply_len,
+       .flags = 0,
+       .dest_addr = (struct sockaddr *) &udp_request->client_sockaddr,
+       .dest_len = udp_request->client_sockaddr_len,
+       .cb = udp_request_kill
+    });
+}
+#endif
+
 static void
 client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
                    void * const proxy_context_)
@@ -448,7 +467,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     case DCP_SYNC_FILTER_RESULT_DIRECT:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(udp_request, dns_query_len,
                                                 max_query_size_for_filter);
-        assert(0);
+        proxy_to_client_direct(udp_request, dns_query, dns_query_len);
         return;
     default:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(udp_request, res);

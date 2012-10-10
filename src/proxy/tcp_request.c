@@ -245,6 +245,21 @@ client_proxy_write_cb(struct bufferevent * const client_proxy_bev,
     tcp_request_kill(tcp_request);
 }
 
+#ifdef PLUGINS
+static void
+proxy_to_client_direct(TCPRequest * const tcp_request,
+                       const uint8_t * const dns_reply,
+                       const size_t dns_reply_len)
+{
+    uint8_t dns_reply_len_buf[2];
+
+    dns_reply_len_buf[0] = (dns_reply_len >> 8) & 0xff;
+    dns_reply_len_buf[1] = dns_reply_len & 0xff;
+
+    assert(0);
+}
+#endif
+
 static void
 client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
                      void * const tcp_request_)
@@ -329,7 +344,7 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     case DCP_SYNC_FILTER_RESULT_DIRECT:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(tcp_request, dns_query_len,
                                                 max_query_size_for_filter);
-        assert(0);
+        proxy_to_client_direct(tcp_request, dns_query, dns_query_len);
         return;
     default:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(tcp_request, res);
