@@ -358,6 +358,11 @@ plugin_support_context_get_result_from_dcps(DCPluginSyncFilterResult result,
     switch (result_dcps) {
     case DCP_SYNC_FILTER_RESULT_OK:
         break;
+    case DCP_SYNC_FILTER_RESULT_DIRECT:
+        if (result == DCP_SYNC_FILTER_RESULT_OK) {
+            result = DCP_SYNC_FILTER_RESULT_DIRECT;
+        }
+        break;
     case DCP_SYNC_FILTER_RESULT_KILL:
         if (result == DCP_SYNC_FILTER_RESULT_OK) {
             result = DCP_SYNC_FILTER_RESULT_KILL;

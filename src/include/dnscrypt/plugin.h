@@ -66,6 +66,10 @@ typedef struct DCPluginDNSPacket_ DCPluginDNSPacket;
  * DCP_SYNC_FILTER_RESULT_OK indicates that the filter was able to process
  * the data and that the next filter should be called.
  *
+ * DCP_SYNC_FILTER_RESULT_DIRECT indicates that the filter built a response
+ * that should be directly sent to the client. The content of the current
+ * packet is this response. post-filters will not be triggered.
+ *
  * DCP_SYNC_FILTER_RESULT_KILL indicates that the filter asks for the
  * query to be immediately terminated. The client will not receive any reply.
  *
@@ -76,6 +80,7 @@ typedef struct DCPluginDNSPacket_ DCPluginDNSPacket;
  */
 typedef enum DCPluginSyncFilterResult_ {
     DCP_SYNC_FILTER_RESULT_OK,
+    DCP_SYNC_FILTER_RESULT_DIRECT,
     DCP_SYNC_FILTER_RESULT_KILL,
     DCP_SYNC_FILTER_RESULT_ERROR,
     DCP_SYNC_FILTER_RESULT_FATAL
