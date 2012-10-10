@@ -1,12 +1,12 @@
 
 * Version 1.2.0:
- - Example plugins requiring ldns can be compiled on Windows.
  - A pre-filter can now totally bypass the resolver and directly send a
    reply to the client.
  - A new example plugin has been shipped: ldns-aaaa-blocking. It
    directly sends an empty response to AAAA queries in order to
    significantly speed up lookups on hosts without IPv6 connectivity
    (but with clients still asking for AAAA records anyway).
+ - Example plugins requiring ldns can be compiled on Windows.
  - Paths with a drive name are now recognized as absolute paths on
    Windows.
 
