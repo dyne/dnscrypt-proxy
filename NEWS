@@ -1,6 +1,8 @@
 
 * Version 1.1.1:
  - Example plugins requiring ldns can be compiled on Windows.
+ - A pre-filter can now totally bypass the resolver and directly send a
+   reply to the client.
 
 * Version 1.1.0:
  - dnscrypt-proxy can now use plugins in order to alter/inspect
