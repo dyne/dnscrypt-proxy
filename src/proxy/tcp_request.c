@@ -253,10 +253,21 @@ proxy_to_client_direct(TCPRequest * const tcp_request,
 {
     uint8_t dns_reply_len_buf[2];
 
+    DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_DONE(tcp_request);
+    bufferevent_free(tcp_request->proxy_resolver_bev);
+    tcp_request->proxy_resolver_bev = NULL;
+
     dns_reply_len_buf[0] = (dns_reply_len >> 8) & 0xff;
     dns_reply_len_buf[1] = dns_reply_len & 0xff;
-
-    assert(0);
+    if (bufferevent_write(tcp_request->client_proxy_bev,
+                          dns_reply_len_buf, (size_t) 2U) != 0 ||
+        bufferevent_write(tcp_request->client_proxy_bev, dns_reply,
+                          dns_reply_len) != 0) {
+        tcp_request_kill(tcp_request);
+        return;
+    }
+    bufferevent_enable(tcp_request->client_proxy_bev, EV_WRITE);
+    assert(tcp_request->proxy_resolver_bev == NULL);
 }
 #endif
 
