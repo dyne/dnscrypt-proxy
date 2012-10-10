@@ -1,3 +1,88 @@
+Date:   2012-10-09
+
+    Document the new DIRECT return code for pre-filters.
+
+Date:   2012-10-09
+
+    Well, not all plugins have been removed.
+
+Date:   2012-10-09
+
+    Document the direct mode.
+
+Date:   2012-10-09
+
+    Implement direct mode for TCP.
+
+Date:   2012-10-09
+
+    Start sending direct replies.
+
+Date:   2012-10-09
+
+    Prepare proxy code for DCP_SYNC_FILTER_RESULT_DIRECT
+
+Date:   2012-10-09
+
+    Bump API version minor.
+
+Date:   2012-10-09
+
+    Prepare for DCP_SYNC_FILTER_RESULT_DIRECT.
+
+Date:   2012-10-09
+
+    Indent
+
+Date:   2012-10-09
+
+    Include Windows quirks in NaCl test, too.
+
+Date:   2012-10-09
+
+    Spaces, blah.
+
+Merge: de7bb89 854e2c9
+Date:   2012-10-09
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      Detect things like C:/x/y and C:\x\y as absolute paths to Windows plugins.
+
+Date:   2012-10-09
+
+    Resurect the deviceid plugin, as OpenDNS folks really need it.
+
+Date:   2012-10-09
+
+    Detect things like C:/x/y and C:\x\y as absolute paths to Windows plugins.
+
+Date:   2012-10-09
+
+    Revert "ldns requires socklen_t but Win32 doesn't have it."
+    This has been fixed in ldns 1.6.14.
+
+Date:   2012-10-08
+
+    Update URL
+
+Date:   2012-10-08
+
+    Missing "the".
+
+Date:   2012-10-08
+
+    Check ldns_resolver_new_frm_file() return code.
+
+Date:   2012-10-08
+
+    If a new release ever sees the light, it will be 1.1.1.
+
+Date:   2012-10-08
+
+    Update ChangeLog
+
 Date:   2012-10-08
 
     Update NEWS
