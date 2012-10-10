@@ -1,3 +1,15 @@
+Date:   2012-10-10
+
+    The plugin API has changed, 1.1.1 sounds weird, so let's go 1.2.0.
+
+Date:   2012-10-10
+
+    Add a new plugin to return an empty response to AAAA queries.
+
+Date:   2012-10-09
+
+    Update ChangeLog
+
 Date:   2012-10-09
 
     Document the new DIRECT return code for pre-filters.
