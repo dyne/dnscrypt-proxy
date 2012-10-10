@@ -8,6 +8,7 @@ SUBDIRS = \
 
 if USE_LDNS
 SUBDIRS += \
+	example-ldns-aaaa-blocking \
 	example-ldns-blocking \
 	example-ldns-forward-after-nxdomain \
 	example-ldns-opendns-deviceid
