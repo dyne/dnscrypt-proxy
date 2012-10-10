@@ -442,7 +442,15 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
         (proxy_context->app_context->dcps_context, &dcp_packet);
     assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
            dns_query_len <= max_query_size_for_filter);
-    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+    switch (res) {
+    case DCP_SYNC_FILTER_RESULT_OK:
+        break;
+    case DCP_SYNC_FILTER_RESULT_DIRECT:
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(udp_request, dns_query_len,
+                                                max_query_size_for_filter);
+        assert(0);
+        return;
+    default:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(udp_request, res);
         udp_request_kill(udp_request);
         return;

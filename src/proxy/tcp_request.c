@@ -323,7 +323,15 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
         (proxy_context->app_context->dcps_context, &dcp_packet);
     assert(dns_query_len > (size_t) 0U && dns_query_len <= max_query_size &&
            dns_query_len <= max_query_size_for_filter);
-    if (res != DCP_SYNC_FILTER_RESULT_OK) {
+    switch (res) {
+    case DCP_SYNC_FILTER_RESULT_OK:
+        break;
+    case DCP_SYNC_FILTER_RESULT_DIRECT:
+        DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_DONE(tcp_request, dns_query_len,
+                                                max_query_size_for_filter);
+        assert(0);
+        return;
+    default:
         DNSCRYPT_PROXY_REQUEST_PLUGINS_PRE_ERROR(tcp_request, res);
         tcp_request_kill(tcp_request);
         return;
