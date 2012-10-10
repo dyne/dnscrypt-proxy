@@ -296,6 +296,7 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
         } while ((scanned = scanned->next) != NULL);
         free(answer_str);
     }
+    return DCP_SYNC_FILTER_RESULT_OK;
 }
 
 DCPluginSyncFilterResult
