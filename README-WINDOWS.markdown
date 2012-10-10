@@ -9,8 +9,8 @@ Alternatively, it can run as a Windows Service.
 Quickstart
 ----------
 
-1) Download and extract the latest [Windows package for
-dnscrypt](https://github.com/opendns/dnscrypt-proxy/downloads)
+1) Download and extract the latest
+[Windows package for dnscrypt](http://dnscrypt.org)
 
 2) Copy the `dnscrypt-proxy.exe` file to any location.
 
