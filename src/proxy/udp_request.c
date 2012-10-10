@@ -117,13 +117,13 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
            "sendto: [%s]", evutil_socket_error_to_string(err));
     DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
 
-# ifdef _WIN32
+#ifdef _WIN32
     retriable = (err == WSAENOBUFS ||
                  err == WSAEWOULDBLOCK || err == WSAEINTR);
-# else
+#else
     retriable = (err == ENOBUFS || err == ENOMEM ||
                  err == EAGAIN || err == EINTR);
-# endif
+#endif
     if (retriable == 0) {
         udp_request_kill(udp_request);
         return -1;
