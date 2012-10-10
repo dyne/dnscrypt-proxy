@@ -143,7 +143,10 @@ packet should never be larger than the size returned by
 
 The return code of a filter can be either of:
 - `DCP_SYNC_FILTER_RESULT_OK`
-- `DCP_SYNC_FILTER_RESULT_KILL` in order to drop the packet
+- `DCP_SYNC_FILTER_RESULT_DIRECT` to bypass the resolver and directly
+send the (possibly modified) packet to the client. Post-filters will
+be bypassed as well.
+- `DCP_SYNC_FILTER_RESULT_KILL` in order to drop the packet.
 - `DCP_SYNC_FILTER_RESULT_ERROR` to drop the packet and indicate that a
 non-fatal error occurred.
 
