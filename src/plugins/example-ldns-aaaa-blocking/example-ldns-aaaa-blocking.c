@@ -40,6 +40,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         ldns_rr_get_type(ldns_rr_list_rr(questions,
                                          (size_t) 0U)) == LDNS_RR_TYPE_AAAA) {
         LDNS_QR_SET(wire_data);
+        LDNS_RA_SET(wire_data);
         result = DCP_SYNC_FILTER_RESULT_DIRECT;
     }
     ldns_pkt_free(packet);
