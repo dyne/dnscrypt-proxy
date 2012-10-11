@@ -1,4 +1,6 @@
 
+#include <stdint.h>
+
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
@@ -25,10 +27,11 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
     ldns_pkt                 *packet;
     ldns_rr_list             *questions;
+    uint8_t                  *wire_data;
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
 
-    ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
-                  dcplugin_get_wire_data_len(dcp_packet));
+    wire_data = dcplugin_get_wire_data(dcp_packet);
+    ldns_wire2pkt(&packet, wire_data, dcplugin_get_wire_data_len(dcp_packet));
     if (packet == NULL) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
@@ -36,6 +39,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (ldns_rr_list_rr_count(questions) == (size_t) 1U &&
         ldns_rr_get_type(ldns_rr_list_rr(questions,
                                          (size_t) 0U)) == LDNS_RR_TYPE_AAAA) {
+        LDNS_QR_SET(wire_data);
         result = DCP_SYNC_FILTER_RESULT_DIRECT;
     }
     ldns_pkt_free(packet);
