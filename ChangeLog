@@ -1,5 +1,33 @@
 Date:   2012-10-10
 
+    Set the RA flag in direct responses.
+
+Date:   2012-10-10
+
+    Set the QR bit when sending an empty AAAA reply.
+
+Date:   2012-10-10
+
+    Log short UDP replies
+
+Date:   2012-10-10
+
+    Group Windows changes together.
+
+Date:   2012-10-10
+
+    Whitespace.
+
+Date:   2012-10-10
+
+    Update link
+
+Date:   2012-10-10
+
+    1.2.0
+
+Date:   2012-10-10
+
     Document that gcc 3.4.6 with a Mips target produces broken code with -Os
 
 Date:   2012-10-10
