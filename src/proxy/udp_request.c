@@ -213,6 +213,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     }
     if (nread < (ssize_t) (DNS_HEADER_SIZE + dnscrypt_response_header_size()) ||
         nread > (ssize_t) sizeof dns_reply) {
+        logger_noformat(proxy_context, LOG_WARNING, "Short reply received");
         udp_request_kill(udp_request);
         return;
     }
