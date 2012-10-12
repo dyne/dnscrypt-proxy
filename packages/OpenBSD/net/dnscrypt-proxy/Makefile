@@ -3,7 +3,7 @@
 COMMENT-main=		secure communications between a DNS client and resolver
 COMMENT-plugins=	example plugins for dnscrypt-proxy
 
-V=			1.1.0
+V=			1.2.0
 
 DISTNAME=		dnscrypt-proxy-${V}
 CATEGORIES=		net
@@ -35,9 +35,6 @@ LIB_DEPENDS-main=	${commonLIB_DEPENDS} devel/libtool,-ltdl
 LIB_DEPENDS-plugins=	${commonLIB_DEPENDS} net/ldns/libldns
 
 BUILD_DEPENDS-plugins=	devel/libtool
-
-BUILD_DEPENDS=		archivers/gtar
-TAR=			${LOCALBASE}/bin/gtar
 
 CONFIGURE_STYLE=	gnu
 
