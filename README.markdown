@@ -6,28 +6,21 @@ A tool for securing communications between a client and a DNS resolver.
 Description
 -----------
 
-DNSCrypt is a slight variation on [DNSCurve](http://www.dnscurve.org/).
+dnscrypt-proxy provides local service which can be used directly as
+your local resolver or as a DNS forwarder, encrypting and
+authenticating requests using the DNSCrypt protocol and passing them
+to an upstream server, by default OpenDNS who run this on their
+resolvers.
 
-DNSCurve improves the confidentiality and integrity of DNS requests using
-high-speed high-security elliptic-curve cryptography. Best of all,
-DNSCurve has very low overhead and adds virtually no latency to
-queries.
+The DNSCrypt protocol uses high-speed high-security elliptic-curve
+cryptography and is very similar to [DNSCurve](http://dnscurve.org/),
+but focuses on securing communications between a client and its first-level
+resolver.
 
-DNSCurve aims at securing the entire chain down to authoritative
-servers. However, it only works with authoritative servers that explicitly
-support the protocol. And unfortunately, DNSCurve hasn't received much
-adoption yet.
-
-The DNSCrypt protocol is very similar to DNSCurve, but focuses on
-securing communications between a client and its first-level resolver.
 While not providing end-to-end security, it protects the local
-network (which is often the weakest link in the chain) against
+network, which is often the weakest point of the chain, against
 man-in-the-middle attacks. It also provides some confidentiality to
 DNS queries.
-
-The DNSCrypt daemon acts as a DNS proxy between a regular client, like
-a DNS cache or an operating system stub resolver, and a DNSCrypt-aware
-resolver, like OpenDNS.
 
 Installation
 ------------
