@@ -61,7 +61,7 @@
  - Almost a complete rewrite, with libuv being replaced by libevent.
  - The max number of simultaneous queries is now global, not
    per-protocol.
- - As an insame amount of routers and ISPs are hijacking port 53, the default
+ - As an insane amount of routers and ISPs are hijacking port 53, the default
    server port is now 443.
  - iOS binaries are now smaller.
  - More dtrace probes.
