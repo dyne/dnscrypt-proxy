@@ -63,8 +63,9 @@ the proxy and change your DNS settings, check out the following
 projects:
 
 - [DNSCrypt OSX Client](https://github.com/opendns/dnscrypt-osx-client):
-a preferences pane, a menu bar indicator and a service to change the
-DNS settings. OSX only, written in Objective C. Experimental.
+A tool to easily use DNSCrypt with OpenDNS, configure plugins and
+define resolvers for specific domains. It has been implemented as a
+collection of shell scripts with a user interface in Objective C.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
