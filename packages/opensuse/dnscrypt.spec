@@ -18,7 +18,7 @@
 Name:           dnscrypt
 Version:	1.2.0
 Release:	0
-License:	SUSE-Permissive
+License:	BSD-3-Clause
 Summary:	A tool for securing communications between a client and a DNS resolver
 Url:	https://github.com/opendns/dnscrypt
 Group:  Productivity/Networking/DNS/Utilities
