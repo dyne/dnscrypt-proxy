@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 23 16:58:22 UTC 2012 - i@marguerite.su
+
+- fix a hang bug in dnscrypt.service
+- upstream clarify license, it's BSD.
+
+-------------------------------------------------------------------
 Sun Oct 21 18:28:26 UTC 2012 - i@marguerite.su
 
 - add systemd service.

@@ -9,7 +9,10 @@
 #              For details, refer to its documentation.
 [Unit]
 Description=Secure connection between your computer and a DNS resolver
-After=network.target
+After=network.target ntp.service
+# Ntp always has local servers, and there's nothing to encrypt for time.
+# and ntp.service isn't native systemd service, if we start before it,
+# it will take a long time to sync. just save 20000+ms on boot.
 
 [Service]
 Type=forking
