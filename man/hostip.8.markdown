@@ -39,9 +39,3 @@ The `hostip` utility exits 0 on success, and > 0 if an error occurs.
 ## SEE ALSO
 
 dnscrypt-proxy(8)
-
-## COPYRIGHT
-
-hostip is Copyright (C) 2012 OpenDNS, Inc.
-`http://www.opendns.com/`
-

@@ -86,8 +86,3 @@ string, with optional columns.
 ## SEE ALSO
 
 hostip(8)
-
-## COPYRIGHT
-
-dnscrypt-proxy is Copyright (C) 2011-2012 OpenDNS, Inc.
-`http://www.opendns.com/`
