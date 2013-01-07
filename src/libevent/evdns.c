@@ -1160,19 +1160,26 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
 			reply.have_answer = 1;
 			if (reply.data.aaaa.addrcount == MAX_V6_ADDRS) break;
 	} else if (type == TYPE_TXT) {
-		u8 txtlen;
 		if (req->request_type != TYPE_TXT) {
 			j += datalength; continue;
 		}
-		txtlen = packet[j];
-		if (txtlen > sizeof reply.data.txt.records[0].txt ||
-			datalength <= txtlen || j + txtlen >= length) {
-			goto err;
+		// merge txt strings into one
+		u8 mergedlen = 0;
+		u8 mergenum = 0;
+		while (mergedlen + mergenum < datalength) {
+			u8 txtlen;
+			txtlen = packet[j + mergedlen + mergenum];
+			if ((mergedlen + txtlen) > sizeof reply.data.txt.records[0].txt ||
+				datalength <= (mergedlen + txtlen) || j + mergedlen + txtlen >= length) {
+				goto err;
+			}
+			memcpy(reply.data.txt.records[reply.data.txt.recordscount].txt + mergedlen,
+				&packet[j + mergedlen + mergenum + 1], txtlen);
+			mergedlen += txtlen;
+			mergenum++;
 		}
-		memcpy(reply.data.txt.records[reply.data.txt.recordscount].txt,
-		    &packet[j + 1], txtlen);
 		reply.data.txt.records[reply.data.txt.recordscount].len
-		    = (size_t) txtlen;
+			= (size_t) mergedlen;
 		reply.data.txt.recordscount++;
 		ttl_r = MIN(ttl_r, ttl);
 		reply.have_answer = 1;
