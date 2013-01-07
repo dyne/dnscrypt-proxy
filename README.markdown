@@ -78,6 +78,12 @@ Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
 - dnscrypt-proxy is also available on Cydia, and it can be easily
 enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
 
+Server-side proxy
+-----------------
+
+[DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper) is a
+server-side dnscrypt proxy that works with any name resolver.
+
 Usage
 -----
 
