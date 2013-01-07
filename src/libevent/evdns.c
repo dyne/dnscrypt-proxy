@@ -1163,14 +1163,13 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
 		if (req->request_type != TYPE_TXT) {
 			j += datalength; continue;
 		}
-		// merge txt strings into one
-		u8 mergedlen = 0;
-		u8 mergenum = 0;
+		size_t mergedlen = 0U;
+		size_t mergenum = 0U;
 		while (mergedlen + mergenum < datalength) {
 			u8 txtlen;
 			txtlen = packet[j + mergedlen + mergenum];
-			if ((mergedlen + txtlen) > sizeof reply.data.txt.records[0].txt ||
-				datalength <= (mergedlen + txtlen) || j + mergedlen + txtlen >= length) {
+			if (mergedlen + txtlen > sizeof reply.data.txt.records[0].txt ||
+				datalength <= mergedlen + txtlen || j + mergedlen + txtlen >= length) {
 				goto err;
 			}
 			memcpy(reply.data.txt.records[reply.data.txt.recordscount].txt + mergedlen,
@@ -1178,8 +1177,7 @@ reply_parse(struct evdns_base *base, u8 *packet, int length) {
 			mergedlen += txtlen;
 			mergenum++;
 		}
-		reply.data.txt.records[reply.data.txt.recordscount].len
-			= (size_t) mergedlen;
+		reply.data.txt.records[reply.data.txt.recordscount].len	= mergedlen;
 		reply.data.txt.recordscount++;
 		ttl_r = MIN(ttl_r, ttl);
 		reply.have_answer = 1;
