@@ -1,9 +1,7 @@
-DNSCrypt
-========
+[DNSCrypt](http://dnscrypt.org)
+===============================
 
 A tool for securing communications between a client and a DNS resolver.
-
-Home page: [http://dnscrypt.org](DNSCrypt)
 
 Description
 -----------
