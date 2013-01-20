@@ -1,3 +1,187 @@
+Date:   2013-01-20
+
+    Update URL. Github downloads are no more.
+
+Date:   2013-01-19
+
+    Remove cpp wrappers
+
+Date:   2013-01-19
+
+    Drop PROTOTYPES.cpp
+
+Date:   2013-01-06
+
+    Fix markdown link
+
+Date:   2013-01-06
+
+    Add a link to the home page
+
+Date:   2013-01-06
+
+    Mention dnscrypt-wrapper
+
+Date:   2013-01-06
+
+    Next version will be 1.2.1, I suppose.
+
+Date:   2013-01-06
+
+    Use size_t for TXT total size, remove extra parenthesis.
+
+Merge: 0b31df8 3dc4690
+Date:   2013-01-06
+
+    Support merging txt strings into one.
+    Some dns managers split long binary data into more than one strings
+    (e.g. linode.com)
+    Merge remote-tracking branch 'cofyc/merge_txts'
+    By Yecheng Fu
+
+Date:   2013-01-06
+
+    Update OSX client link.
+
+Date:   2013-01-02
+
+    levent: configure.in files have been deprecated for a while. Rename.
+
+Date:   2013-01-02
+
+    A global COPYING file is enough
+
+Date:   2013-01-01
+
+    2013
+
+Date:   2012-12-22
+
+    levent: Avoid double-close on getsockname error in evutil_ersatz_socketpair
+    Avoid leaking fds on evconnlistener with no callback set
+
+Date:   2012-12-07
+
+    levent - Fix compilation with WIN32_HAVE_CONDITION_VARIABLES enabled.
+
+Date:   2012-11-22
+
+    improve: support merging txt strings into one
+    some dns manager split long binary data into more than one strings (e.g. linode.com)
+
+Date:   2012-11-19
+
+    Update libevent to 2.0.21-stable-dev.
+
+Date:   2012-11-15
+
+    Sync libevent2 - fix OpenSSL renegotiation test with old OpenSSL version.
+
+Merge: c128bd9 ce9b890
+Date:   2012-11-13
+
+    Merge remote-tracking branch 'origin/master'
+    
+    * origin/master:
+      Added profile/repo_name so the packages/gentoo folder can be used as a portage overlay
+      Updated Gentoo ebuild for v1.2.0
+
+Merge: 20e9dd1 57e0296
+Date:   2012-11-13
+
+    Merge pull request #38 from Strayer/gentoo_ebuild_v1.2.0
+    
+    Bumped Gentoo ebuild to v1.2.0
+
+Date:   2012-11-13
+
+    Added profile/repo_name so the packages/gentoo folder can be used as a portage overlay
+
+Date:   2012-11-13
+
+    Updated Gentoo ebuild for v1.2.0
+    
+    - updated conf and init script according to parameter changes in v1.1.0
+
+Date:   2012-11-03
+
+    Add a build script for 32-bit versions of OSX binaries.
+
+Date:   2012-11-03
+
+    levent updates, so that 64-bit versions for Windows can be built.
+
+Merge: 23eaeeb 9f7c132
+Date:   2012-10-28
+
+    Merge remote-tracking branch 'marguerite/master'
+    
+    * marguerite/master:
+      fix a hang-on-boot bug in systemd. update opensuse license
+
+Date:   2012-10-28
+
+    libevent2 updates.
+
+Date:   2012-10-24
+
+    fix a hang-on-boot bug in systemd. update opensuse license
+
+Date:   2012-10-21
+
+    Add Marguerite Su to the THANKS file.
+
+Date:   2012-10-21
+
+    Take the systemd service definition off the root directory.
+
+Date:   2012-10-21
+
+    Minor tweaks to the OpenSuSE description.
+
+Merge: f0b3120 857f0cc
+Date:   2012-10-21
+
+    Merge pull request #36 from marguerite/master
+    
+    add opensuse package, and systemd service for dnscrypt
+
+Date:   2012-10-22
+
+    add opensuse pacages, systemd servce
+
+Date:   2012-10-19
+
+    The OSX GUI is mainly a collection of shell scripts, nowadays.
+
+Date:   2012-10-17
+
+    Insame => insane
+
+Date:   2012-10-13
+
+    Remove OpenBSD port, since it is now in the official ports tree.
+
+Date:   2012-10-12
+
+    Change the blurb to something closer to the awesome summary by sthen@
+
+Date:   2012-10-11
+
+    Update the Homebrew formula to 1.2.0
+
+Date:   2012-10-11
+
+    Update the OpenBSD package to 1.2.0
+
+Date:   2012-10-11
+
+    Mention that DCP_SYNC_FILTER_RESULT_DIRECT is only for a pre-filter.
+
+Date:   2012-10-11
+
+    Update ChangeLog
+
 Date:   2012-10-10
 
     Set the RA flag in direct responses.

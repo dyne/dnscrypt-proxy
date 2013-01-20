@@ -1,4 +1,8 @@
 
+* Version 1.2.1:
+ - Add support for certificates split into multiple TXT records.
+   Contributed by Yecheng Fu, thanks!
+
 * Version 1.2.0:
  - A pre-filter can now totally bypass the resolver and directly send a
    reply to the client.
