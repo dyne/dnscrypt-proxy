@@ -1,7 +1,7 @@
 
 DISTNAME=	dnscrypt-proxy-1.1.0
 CATEGORIES=	net
-MASTER_SITES=	http://cloud.github.com/downloads/opendns/dnscrypt-proxy/
+MASTER_SITES=	http://download.dnscrypt.org/dnscrypt-proxy/
 
 MAINTAINER=	dnscrypt@pureftpd.org
 HOMEPAGE=	http://dnscrypt.org

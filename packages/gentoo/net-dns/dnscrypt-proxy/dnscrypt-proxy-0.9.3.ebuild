@@ -4,7 +4,7 @@ inherit eutils flag-o-matic
 
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver"
 HOMEPAGE="http://www.opendns.com/technology/dnscrypt/"
-SRC_URI="https://github.com/downloads/opendns/dnscrypt-proxy/${P}.tar.gz"
+SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-proxy/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"

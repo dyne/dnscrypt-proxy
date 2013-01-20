@@ -20,7 +20,7 @@ Version:	1.2.0
 Release:	0
 License:	BSD-3-Clause
 Summary:	A tool for securing communications between a client and a DNS resolver
-Url:	https://github.com/opendns/dnscrypt
+Url:	http://dnscrypt.org
 Group:  Productivity/Networking/DNS/Utilities
 Source:	%{name}-proxy-%{version}.tar.bz2
 Source1:	%{name}.service
