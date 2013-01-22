@@ -16,7 +16,7 @@
 void
 dnscrypt_memzero(void * const pnt, const size_t size)
 {
-#ifdef _WIN32
+#ifdef HAVE_SECUREZEROMEMORY
     SecureZeroMemory(pnt, size);
 #else
     volatile unsigned char *pnt_ = (volatile unsigned char *) pnt;
