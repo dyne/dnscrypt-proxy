@@ -1,3 +1,27 @@
+Date:   2013-01-28
+
+    Update iphone.sh
+
+Date:   2013-01-28
+
+    libevent c322c2077e2d16f64ed3a90f74ad714842600624
+
+Date:   2013-01-21
+
+    Add -Wsometimes-uninitialized
+
+Date:   2013-01-21
+
+    Check for HAVE_SECUREZEROMEMORY at compile-time.
+
+Date:   2013-01-21
+
+    Use SecureZeroMemory() on Windows
+
+Date:   2013-01-20
+
+    Update ChangeLog
+
 Date:   2013-01-20
 
     Update URL. Github downloads are no more.
