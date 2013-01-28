@@ -1,5 +1,17 @@
 Date:   2013-01-28
 
+    autoconf 2.68 broke $(top_srcdir) for tests
+
+Date:   2013-01-28
+
+    AM_CONFIG_HEADER -> AC_CONFIG_HEADER
+
+Date:   2013-01-28
+
+    Update ChangeLog
+
+Date:   2013-01-28
+
     Update iphone.sh
 
 Date:   2013-01-28
