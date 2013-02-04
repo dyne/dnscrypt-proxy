@@ -127,7 +127,7 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
     }
     dnscrypt_memzero(nonce, sizeof nonce);
     assert(len >= DNSCRYPT_SERVER_BOX_OFFSET + crypto_box_BOXZEROBYTES);
-    while (buf[--len] == 0U) { }
+    while (len > 0U && buf[--len] == 0U) { }
     if (buf[len] != 0x80) {
         return -1;
     }
