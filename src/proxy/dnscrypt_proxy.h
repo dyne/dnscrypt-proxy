@@ -11,10 +11,9 @@
 
 #include "app.h"
 #include "cert.h"
-#include "crypto_box.h"
-#include "crypto_sign_ed25519.h"
 #include "dnscrypt_client.h"
 #include "queue.h"
+#include "sodium.h"
 
 #ifndef DNS_QUERY_TIMEOUT
 # define DNS_QUERY_TIMEOUT 10

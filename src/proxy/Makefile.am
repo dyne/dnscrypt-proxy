@@ -27,8 +27,6 @@ dnscrypt_proxy_SOURCES = \
 	probes_no_dtrace.h \
 	safe_rw.c \
 	safe_rw.h \
-	salsa20_random.c \
-	salsa20_random.h \
 	sandboxes.c \
 	sandboxes.h \
 	stack_trace.c \
@@ -49,24 +47,20 @@ AM_CFLAGS = @CWFLAGS@
 AM_CPPFLAGS = \
 	-I../ext \
 	-I../libevent/include \
-	-I../@NACL_PATH@/include/local
+	-I../libsodium/src/include
 
 dnscrypt_proxy_LDADD = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
-	../@NACL_PATH@/lib/local/libnacl.a
+	../libsodium/src/libsodium/libsodium.la
 
 dnscrypt_proxy_DEPENDENCIES = \
 	../libevent/libevent_extra.la \
 	../libevent/libevent_core.la \
-	../libnacl/.done
+	../libsodium/src/libsodium/libsodium.la
 
 BUILT_SOURCES = \
-	../libnacl/.done \
 	probes.h
-
-../libnacl/.done:
-	cd ../libnacl && $(MAKE) $(AM_MAKEFLAGS)
 
 probes.h: @PROBES_SOURCE@
 	cat @PROBES_SOURCE@ > $@

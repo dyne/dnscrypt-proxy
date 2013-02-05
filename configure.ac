@@ -4,7 +4,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([libltdl/config])
 AC_CONFIG_SRCDIR([src/proxy/app.c])
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_SUBDIRS([src/libevent])
+AC_CONFIG_SUBDIRS([src/libevent src/libsodium])
 AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-ustar])
 AM_MAINTAINER_MODE
@@ -373,11 +373,7 @@ AC_ARG_WITH(safecode,
   ])
 ])
 
-NACL_HOSTNAME="localhost"
-NACL_PATH=libnacl/build/${NACL_HOSTNAME}
-
 AC_SUBST([MAINT])
-AC_SUBST([NACL_PATH])
 AC_SUBST([PROBES_SOURCE])
 
 dnl Libtool.
@@ -431,10 +427,6 @@ AC_CONFIG_FILES([Makefile
                  src/ext/Makefile
                  src/include/Makefile
                  src/include/dnscrypt/version.h
-                 src/libnacl/Makefile
-                 src/libnacl/tests/Makefile
-                 src/libnacl/okcompilers/c
-                 src/libnacl/okcompilers/do
                  src/plugins/Makefile
                  src/plugins/example/Makefile
                  src/plugins/example-ldns-forward-after-nxdomain/Makefile
@@ -445,6 +437,3 @@ AC_CONFIG_FILES([Makefile
                  test/Makefile])
 
 AC_OUTPUT
-
-chmod +x src/libnacl/do
-chmod +x src/libnacl/okcompilers/do

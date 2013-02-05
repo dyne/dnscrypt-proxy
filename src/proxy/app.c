@@ -2,6 +2,7 @@
 #include <config.h>
 #include <sys/types.h>
 
+#include <assert.h>
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
@@ -17,10 +18,11 @@
 #include "app.h"
 #include "dnscrypt_client.h"
 #include "dnscrypt_proxy.h"
-#include "salsa20_random.h"
 #include "logger.h"
 #include "options.h"
+#include "sodium/randombytes_salsa20_random.h"
 #include "sandboxes.h"
+#include "sodium.h"
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
@@ -171,7 +173,7 @@ revoke_privileges(ProxyContext * const proxy_context)
     init_tz();
     (void) strerror(ENOENT);
 #ifndef DEBUG
-    salsa20_random_stir();
+    randombytes_stir();
 # ifndef _WIN32
     if (proxy_context->user_dir != NULL) {
         if (chdir(proxy_context->user_dir) != 0 ||
@@ -239,6 +241,19 @@ dnscrypt_proxy_loop_break(void)
     return 0;
 }
 
+static void
+set_randombytes_implementation(void)
+{
+    assert(randombytes_set_implementation(& (randombytes_implementation) {
+        .randombytes_implementation_name = salsa20_random_implementation_name,
+        .randombytes_random = salsa20_random,
+        .randombytes_stir = salsa20_random_stir,
+        .randombytes_uniform = salsa20_random_uniform,
+        .randombytes_buf = salsa20_random_buf,
+        .randombytes_close = salsa20_random_close
+    }) == 0);
+}
+
 int
 dnscrypt_proxy_main(int argc, char *argv[])
 {
@@ -246,6 +261,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
+    set_randombytes_implementation();
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
@@ -293,7 +309,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
 #endif
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
-    salsa20_random_close();
+    randombytes_close();
 
     return 0;
 }

@@ -1,0 +1,22 @@
+
+#ifndef __SODIUM_VERSION_H__
+#define __SODIUM_VERSION_H__
+
+#define SODIUM_VERSION_STRING "@VERSION@"
+
+#define SODIUM_VERSION_MAJOR 0
+#define SODIUM_VERSION_MINOR 3
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+const char *sodium_version_string(void);
+const int   sodium_version_major(void);
+const int   sodium_version_minor(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

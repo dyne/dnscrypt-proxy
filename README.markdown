@@ -43,7 +43,7 @@ Compile and install it using the standard procedure:
 Replace `-j2` with whatever number of CPU cores you want to use for the
 compilation process.
 
-Running `make -j2 test` in the `src/libnacl` directory is also highly
+Running `make -j2 check` in the `src/libsodium` directory is also highly
 recommended.
 
 The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.

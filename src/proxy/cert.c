@@ -20,11 +20,10 @@
 
 #include "cert.h"
 #include "cert_p.h"
-#include "crypto_sign_ed25519.h"
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "probes.h"
-#include "salsa20_random.h"
+#include "sodium.h"
 #include "utils.h"
 
 static int cert_updater_update(ProxyContext * const proxy_context);
@@ -219,7 +218,7 @@ cert_reschedule_query_after_success(ProxyContext * const proxy_context)
     }
     cert_reschedule_query(proxy_context, (time_t)
                           CERT_QUERY_RETRY_DELAY_AFTER_SUCCESS_MIN_DELAY
-                          + (time_t) salsa20_random_uniform
+                          + (time_t) randombytes_uniform
                           (CERT_QUERY_RETRY_DELAY_AFTER_SUCCESS_JITTER));
 }
 
@@ -337,7 +336,7 @@ int
 cert_updater_start(ProxyContext * const proxy_context)
 {
     evdns_set_random_init_fn(NULL);
-    evdns_set_random_bytes_fn(salsa20_random_buf);
+    evdns_set_random_bytes_fn(randombytes_buf);
     cert_updater_update(proxy_context);
 
     return 0;

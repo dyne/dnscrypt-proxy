@@ -74,7 +74,6 @@ src/libevent/test/test-init
 src/libevent/test/test-ratelim
 src/libevent/test/test-time
 src/libevent/test/test-weof
-src/libnacl/okcompilers/c
-src/libnacl/okcompilers/do
+src/libsodium/src/libsodium/include/sodium/version.h
 stamp-*
 testing

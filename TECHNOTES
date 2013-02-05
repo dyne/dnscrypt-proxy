@@ -7,7 +7,8 @@ Cryptographic library
 
 - We didn't reinvent the wheel.
 
-- The crypto code is provided by NaCl: http://nacl.cr.yp.to/
+- The crypto code is provided by NaCl: http://nacl.cr.yp.to/ through
+  libsodium: https://github.com/jedisct1/libsodium
 
 - Why NaCl? Unbloated, blazing fast, and less error-prone that other libraries.
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf

@@ -14,8 +14,7 @@
 #include <event2/util.h>
 
 #include "dnscrypt.h"
-#include "salsa20_random.h"
-#include "randombytes.h"
+#include "sodium.h"
 #include "utils.h"
 
 size_t
@@ -73,7 +72,7 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
     if (max_len < len + DNSCRYPT_MIN_PAD_LEN) {
         return len;
     }
-    padded_len = len + DNSCRYPT_MIN_PAD_LEN + salsa20_random_uniform
+    padded_len = len + DNSCRYPT_MIN_PAD_LEN + randombytes_uniform
         ((uint32_t) (max_len - len - DNSCRYPT_MIN_PAD_LEN + 1U));
     padded_len += DNSCRYPT_BLOCK_SIZE - padded_len % DNSCRYPT_BLOCK_SIZE;
     if (padded_len > max_len) {
@@ -86,13 +85,6 @@ dnscrypt_pad(uint8_t *buf, const size_t len, const size_t max_len)
     assert(max_len >= padded_len);
 
     return padded_len;
-}
-
-void
-randombytes(unsigned char * const buf, const unsigned long long buf_len)
-{
-    assert(buf_len <= SIZE_MAX);
-    salsa20_random_buf(buf, buf_len);
 }
 
 void
