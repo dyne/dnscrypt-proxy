@@ -10,8 +10,11 @@ else
   LIBTOOLIZE='libtoolize'
 fi
 
-src/libevent/autogen.sh &
-cpid=$!
+src/libevent-modified/autogen.sh &
+cpid1=$!
+
+src/libsodium/autogen.sh &
+cpid2=$!
 
 $LIBTOOLIZE --ltdl && \
 aclocal && \
@@ -19,4 +22,6 @@ autoheader && \
 automake --add-missing --force-missing --include-deps && \
 autoconf
 
-wait $cpid
+wait $cpid1
+wait $cpid2
+

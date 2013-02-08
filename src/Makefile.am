@@ -1,7 +1,7 @@
 
 SUBDIRS = \
 	ext \
-	libevent \
+	libevent-modified \
 	libsodium \
 	proxy \
 	hostip
