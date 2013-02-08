@@ -1,3 +1,30 @@
+Date:   2013-02-08
+
+    Rename libevent to libevent-modified to avoid confusion.
+    Our version of libevent ships with some changes required for dnscrypt-proxy to
+    work. These will eventually be submitted upstream after libevent 2.1 gets
+    released.
+
+Date:   2013-02-04
+
+    libsodium already provides crypto_box_MACBYTES
+
+Date:   2013-02-04
+
+    Next will be 1.3.0.
+
+Date:   2013-02-04
+
+    Switch to libsodium.
+
+Date:   2013-02-04
+
+    Paranoia
+
+Date:   2013-01-28
+
+    Update ChangeLog
+
 Date:   2013-01-28
 
     autoconf 2.68 broke $(top_srcdir) for tests
