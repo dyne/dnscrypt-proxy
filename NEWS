@@ -1,4 +1,7 @@
 
+* Version 1.3.0:
+ - The bundled NaCl library has been replaced with libsodium.
+
 * Version 1.2.1:
  - Add support for certificates split into multiple TXT records.
    Contributed by Yecheng Fu, thanks!
