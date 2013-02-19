@@ -13,7 +13,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([libevent],[2.0.21-stable-dev])
 AC_CONFIG_SRCDIR([evdns.c])
 AM_INIT_AUTOMAKE
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(NUMERIC_VERSION, 0x02001501, [Numeric representation of the version])
 
 dnl Initialize prefix.
