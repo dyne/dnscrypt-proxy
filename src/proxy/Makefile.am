@@ -47,7 +47,7 @@ AM_CFLAGS = @CWFLAGS@
 AM_CPPFLAGS = \
 	-I../ext \
 	-I../libevent-modified/include \
-	-I../libsodium/src/include
+	-I../libsodium/src/libsodium/include
 
 dnscrypt_proxy_LDADD = \
 	../libevent-modified/libevent_extra.la \
