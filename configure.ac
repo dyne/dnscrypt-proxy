@@ -20,7 +20,7 @@ AC_USE_SYSTEM_EXTENSIONS
 CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
 
 AS_IF([test "$cross_compiling" != no],
-  AC_DEFINE(CROSS_COMPILING,,[define if you are cross-compiling])
+  AC_DEFINE(CROSS_COMPILING,[1],[define if you are cross-compiling])
 )
 
 AX_CHECK_COMPILE_FLAG([-fPIC], [
@@ -194,7 +194,7 @@ do {
 } while(0)
 ]])],[
   AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_SIN_LEN,,[define if you have sin_len])
+  AC_DEFINE(HAVE_SIN_LEN,[1],[define if you have sin_len])
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -214,7 +214,7 @@ do {
 } while(0)
 ]])],[
   AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE___SS_FAMILY,,[define if you have __ss_family])
+  AC_DEFINE(HAVE___SS_FAMILY,[1],[define if you have __ss_family])
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -234,7 +234,7 @@ do {
 } while(0)
 ]])],[
   AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE_SS_LEN,,[define if you have ss_len])
+  AC_DEFINE(HAVE_SS_LEN,[1],[define if you have ss_len])
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -254,7 +254,7 @@ do {
 } while(0)
 ]])],[
   AC_MSG_RESULT(yes)
-  AC_DEFINE(HAVE___SS_LEN,,[define if you have __ss_len])
+  AC_DEFINE(HAVE___SS_LEN,[1],[define if you have __ss_len])
 ],[
   AC_MSG_RESULT(no)
 ])
@@ -264,10 +264,10 @@ dnl Checks for library functions.
 AC_SEARCH_LIBS(pow, [m])
 AC_SEARCH_LIBS(dlopen, [dl])
 AC_SEARCH_LIBS(clock_gettime, [rt],
-  [AC_DEFINE(HAVE_CLOCK_GETTIME,,[define if you have clock_gettime()])])
+  [AC_DEFINE(HAVE_CLOCK_GETTIME,[1],[define if you have clock_gettime()])])
 
 AC_SEARCH_LIBS(backtrace, [execinfo],
-  [AC_DEFINE(HAVE_BACKTRACE,,[define if you have backtrace()])])
+  [AC_DEFINE(HAVE_BACKTRACE,[1],[define if you have backtrace()])])
 
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
@@ -276,7 +276,7 @@ AC_SEARCH_LIBS(kvm_open, [kvm])
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
   AC_CHECK_LIB(ldns, ldns_verify_trusted, [
-    AC_DEFINE(USE_LDNS,,[define to use the ldns library])
+    AC_DEFINE(USE_LDNS,[1],[define to use the ldns library])
     LDNS_LIBS=-lldns
     use_ldns=yes
   ])
@@ -343,7 +343,7 @@ AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
 
 AC_ARG_ENABLE(blocking-random,
 [AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
-[AC_DEFINE([USE_BLOCKING_RANDOM], [], [Use blocking random])])
+[AC_DEFINE([USE_BLOCKING_RANDOM], [1], [Use blocking random])])
 
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
