@@ -1,3 +1,79 @@
+Date:   2013-03-25
+
+    Yay for better performance
+
+Date:   2013-03-25
+
+    Sync libsodium, with the ref10 implementation of ed25519
+
+Date:   2013-03-18
+
+    sync libsodium
+
+Date:   2013-03-18
+
+    Farewell, dnscrypt_memzero(). Sodium provides sodium_memzero() to do that.
+
+Date:   2013-03-17
+
+    Add libsodium as a submodule
+
+Date:   2013-03-17
+
+    Remove libsodium copy
+
+Date:   2013-03-17
+
+    Sync libsodium
+
+Date:   2013-03-17
+
+    Add test-script.sh
+
+Date:   2013-03-17
+
+    Resurrect example-ldns-opendns-set-client-ip, it's very useful for support
+
+Date:   2013-03-11
+
+    Remove -fcatch-undefined-c99-behavior, will be replaced by -fsanitize=integer
+
+Date:   2013-03-08
+
+    Define HAVE_* and CROSS_COMPILING to 1 instead of just defining them.
+
+Date:   2013-03-01
+
+    Fix include path to libsodium
+
+Date:   2013-03-01
+
+    Bump fpm package version
+
+Date:   2013-02-19
+
+    libevent update to b618204216235d5998080c659c8ad53185fdf206
+
+Date:   2013-02-08
+
+    Back to a stable Xcode version
+
+Date:   2013-02-08
+
+    Update Android NDK to r8d
+
+Date:   2013-02-08
+
+    Update NEWS
+
+Date:   2013-02-08
+
+    Update .gitignore
+
+Date:   2013-02-08
+
+    Update ChangeLog
+
 Date:   2013-02-08
 
     Rename libevent to libevent-modified to avoid confusion.
