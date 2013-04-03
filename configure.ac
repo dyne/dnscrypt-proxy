@@ -384,7 +384,13 @@ nx_ac_configure_args=""
 for flag in $ac_configure_args; do
   case "$flag" in
     \'--build*) AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--disable-dependency-tracking*) AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--enable-blocking-random*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--disable-pie*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--disable-ssp*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
     \'--host*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--with-included-ltdl*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
+    \'--with-safecode*)  AS_VAR_APPEND([nx_ac_configure_args], [" $flag"]) ;;
     *) ;;
   esac
 done
