@@ -62,7 +62,7 @@ If you need a simple graphical user interface in order to start/stop
 the proxy and change your DNS settings, check out the following
 projects:
 
-- [DNSCrypt OSX Client](http://opendns.github.com/dnscrypt-osx-client/):
+- [DNSCrypt OSX Client](http://opendns.github.io/dnscrypt-osx-client/):
 A tool to easily use DNSCrypt with OpenDNS, configure plugins and
 define resolvers for specific domains. It has been implemented as a
 collection of shell scripts with a user interface in Objective C.
