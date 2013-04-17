@@ -98,6 +98,7 @@ typedef struct ProxyContext_ {
     unsigned int             connections_count;
     unsigned int             connections_count_max;
     int                      log_fd;
+    int                      max_log_level;
     _Bool                    daemonize;
     _Bool                    listeners_started;
     _Bool                    tcp_only;

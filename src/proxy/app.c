@@ -88,6 +88,8 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
 {
     memset(proxy_context, 0, sizeof *proxy_context);
     proxy_context->event_loop = NULL;
+    proxy_context->log_file = NULL;
+    proxy_context->max_log_level = LOG_INFO;
     proxy_context->tcp_accept_timer = NULL;
     proxy_context->tcp_conn_listener = NULL;
     proxy_context->udp_listener_event = NULL;

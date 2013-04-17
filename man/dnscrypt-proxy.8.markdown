@@ -52,6 +52,10 @@ ports.
   * `-l`, `--logfile=<file>`: log events to this file instead of the
     standard output.
 
+  * `-m`, `--loglevel=<level>`: don't log events with priority above
+    this level after the service has been started up. Default is the value
+    for `LOG_INFO`.
+
   * `-n`, `--max-active-requests=<count>`: set the maximum number of
     simultaneous active requests. The default value is 250.
 

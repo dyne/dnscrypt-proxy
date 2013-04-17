@@ -43,7 +43,7 @@ int logger_open_syslog(struct ProxyContext_ * const context);
 
 int logger(struct ProxyContext_ * const context,
            const int crit, const char * const format, ...)
-__attribute__ ((format(printf, 3, 4)));
+           __attribute__ ((format(printf, 3, 4)));
 
 int logger_noformat(struct ProxyContext_ * const context,
                     const int crit, const char * const msg);

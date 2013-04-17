@@ -114,6 +114,7 @@ address than 127.0.0.1
 * `--logfile=<file>` in order to write log data to a dedicated file. By
   default, logs are sent to stdout if the server is running in foreground,
   and to syslog if it is running in background.
+* `--loglevel=<level>` if you need less verbosity in log files.
 * `--max-active-requests=<count>` to set the maximum number of active
   requests. The default value is 250.
 * `--pid-file=<file>` in order to store the PID number to a file.

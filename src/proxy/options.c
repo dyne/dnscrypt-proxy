@@ -38,6 +38,7 @@ static struct option getopt_long_options[] = {
 #ifndef _WIN32
     { "logfile", 1, NULL, 'l' },
 #endif
+    { "loglevel", 1, NULL, 'm' },
     { "max-active-requests", 1, NULL, 'n' },
 #ifndef _WIN32
     { "pidfile", 1, NULL, 'p' },
@@ -56,9 +57,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:l:n:p:r:u:N:TVX";
+static const char *getopt_options = "a:de:hk:l:m:n:p:r:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:n:r:u:N:TVX";
+static const char *getopt_options = "a:e:hk:m:n:r:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -216,6 +217,19 @@ options_parse(AppContext * const app_context,
         case 'l':
             proxy_context->log_file = optarg;
             break;
+        case 'm': {
+            char *endptr;
+            const long max_log_level =
+                strtol(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 || max_log_level < 0) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid max log level: [%s]", optarg);
+                exit(1);
+            }
+            proxy_context->max_log_level = max_log_level;
+            break;
+        }
         case 'n': {
             char *endptr;
             const unsigned long connections_count_max =
