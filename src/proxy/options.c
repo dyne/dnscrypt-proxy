@@ -219,8 +219,7 @@ options_parse(AppContext * const app_context,
             break;
         case 'm': {
             char *endptr;
-            const long max_log_level =
-                strtol(optarg, &endptr, 10);
+            const long max_log_level = strtol(optarg, &endptr, 10);
 
             if (*optarg == 0 || *endptr != 0 || max_log_level < 0) {
                 logger(proxy_context, LOG_ERR,
