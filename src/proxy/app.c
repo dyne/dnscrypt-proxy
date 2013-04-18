@@ -249,7 +249,9 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-    sodium_init(NULL);
+    if (sodium_init() != 0) {
+        exit(1);
+    }
     randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
