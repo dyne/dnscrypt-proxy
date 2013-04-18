@@ -242,12 +242,6 @@ dnscrypt_proxy_loop_break(void)
     return 0;
 }
 
-static void
-set_randombytes_implementation(void)
-{
-    randombytes_set_implementation(&randombytes_salsa20_implementation);
-}
-
 int
 dnscrypt_proxy_main(int argc, char *argv[])
 {
@@ -256,7 +250,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
     sodium_init();
-    set_randombytes_implementation();
+    randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
