@@ -20,7 +20,6 @@
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "options.h"
-#include "sodium/randombytes_salsa20_random.h"
 #include "sandboxes.h"
 #include "sodium.h"
 #include "stack_trace.h"
@@ -246,14 +245,7 @@ dnscrypt_proxy_loop_break(void)
 static void
 set_randombytes_implementation(void)
 {
-    assert(randombytes_set_implementation(& (randombytes_implementation) {
-        .randombytes_implementation_name = salsa20_random_implementation_name,
-        .randombytes_random = salsa20_random,
-        .randombytes_stir = salsa20_random_stir,
-        .randombytes_uniform = salsa20_random_uniform,
-        .randombytes_buf = salsa20_random_buf,
-        .randombytes_close = salsa20_random_close
-    }) == 0);
+    randombytes_set_implementation(&randombytes_salsa20_implementation);
 }
 
 int
