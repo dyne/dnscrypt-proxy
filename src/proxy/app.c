@@ -255,6 +255,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
+    sodium_init();
     set_randombytes_implementation();
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
@@ -304,6 +305,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     randombytes_close();
+    sodium_shutdown();
 
     return 0;
 }
