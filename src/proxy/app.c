@@ -301,7 +301,6 @@ dnscrypt_proxy_main(int argc, char *argv[])
     proxy_context_free(&proxy_context);
     app_context.proxy_context = NULL;
     randombytes_close();
-    sodium_shutdown();
 
     return 0;
 }
