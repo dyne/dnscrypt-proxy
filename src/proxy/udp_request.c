@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
