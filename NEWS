@@ -1,7 +1,8 @@
 
 * Version 1.3.0:
- - The bundled NaCl library has been replaced with libsodium, leading
-   to better performance.
+ - The bundled NaCl library with only reference implementations has been
+   replaced with libsodium, leading to significant performance improvements.
+ - A new command-line switch, --loglevel, allows adjusting the log verbosity.
 
 * Version 1.2.1:
  - Add support for certificates split into multiple TXT records.

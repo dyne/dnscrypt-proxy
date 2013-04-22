@@ -1,3 +1,87 @@
+Date:   2013-04-22
+
+    Sync sodium
+
+Date:   2013-04-22
+
+    Sodium update
+
+Date:   2013-04-19
+
+    Sync libsodium. Now with curve25519_donna_c64
+
+Date:   2013-04-19
+
+    sodium_shutdown() is gone
+
+Date:   2013-04-19
+
+    Add missing #include <stdint.h> for SIZE_MAX
+
+Date:   2013-04-18
+
+    sodium_init() doesn't accept options any more.
+
+Date:   2013-04-18
+
+    Sync libsodium
+
+Date:   2013-04-18
+
+    Remove a useless function call
+
+Date:   2013-04-18
+
+    Call sodium_init() / sodium_shutdown()
+
+Date:   2013-04-18
+
+    Just use randombytes_salsa20_implementation
+
+Date:   2013-04-18
+
+    Pass the entire ac_config_args content to other autoconf scripts
+
+Date:   2013-04-17
+
+    Use Android toolchain 4.6
+
+Date:   2013-04-17
+
+    Save a line
+
+Date:   2013-04-17
+
+    Add a new --loglevel option to change the log verbosity.
+
+Date:   2013-04-17
+
+    Update libsodium
+
+Date:   2013-04-17
+
+    Redefine log levels for Win32
+
+Date:   2013-04-12
+
+    github.com -> github.io
+
+Date:   2013-04-02
+
+    Sync libsodium
+
+Date:   2013-04-02
+
+    Pass a few extra autoconf options form the main autoconf script to libsodium's
+
+Date:   2013-03-31
+
+    Typo
+
+Date:   2013-03-25
+
+    Update ChangeLog
+
 Date:   2013-03-25
 
     Yay for better performance
