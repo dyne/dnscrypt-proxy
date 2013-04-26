@@ -1,5 +1,6 @@
 [DNSCrypt](http://dnscrypt.org)
 ===============================
+[![Build Status](https://travis-ci.org/jedisct1/dnscrypt-proxy.png?branch=master)](https://travis-ci.org/jedisct1/dnscrypt-proxy?branch=master)
 
 A tool for securing communications between a client and a DNS resolver.
 
