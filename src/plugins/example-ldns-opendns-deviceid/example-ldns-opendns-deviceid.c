@@ -27,6 +27,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "\n"
         "If you happen to have an OpenDNS Umbrella Mobility account,\n"
         "your secret key ('device id') can be retrieved with:\n"
+        "\n"
         "$ dig txt debug.opendns.com\n"
         "\n"
         "# env OPENDNS_DEVICE_ID='<device id>' dnscrypt-proxy --plugin \\\n"
@@ -37,6 +38,7 @@ int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
     char   *device_id;
+    char   *device_id_env;
     char   *edns_hex;
     size_t  edns_hex_size = sizeof EDNS_HEADER EDNS_DEV_ID;
 
@@ -47,13 +49,16 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     }
     memcpy(edns_hex, EDNS_HEADER EDNS_DEV_ID, edns_hex_size);
     assert(sizeof EDNS_DEV_ID - 1U == (size_t) 16U);
-    device_id = getenv("OPENDNS_DEVICE_ID");
+    device_id = device_id_env = getenv("OPENDNS_DEVICE_ID");
     if (argc > 1 && strlen(argv[1]) == (size_t) 16U) {
         device_id = argv[1];
     }
     if (device_id != NULL) {
         memcpy(edns_hex + sizeof EDNS_HEADER - (size_t) 1U,
                device_id, sizeof EDNS_DEV_ID);
+    }
+    if (device_id_env != NULL) {
+        memset(device_id_env, 0, strlen(device_id_env));
     }
     return 0;
 }
