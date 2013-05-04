@@ -263,6 +263,9 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
+AC_SEARCH_LIBS(sodium_init, [sodium])
+
+AM_CONDITIONAL(USE_BUILTIN_LIBSODIUM, test x$ac_cv_search_sodium_init = xno)
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
