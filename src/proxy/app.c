@@ -249,10 +249,6 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-    if (sodium_init() != 0) {
-        exit(1);
-    }
-    randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
@@ -263,6 +259,10 @@ dnscrypt_proxy_main(int argc, char *argv[])
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
         exit(1);
     }
+    if (sodium_init() != 0) {
+        exit(1);
+    }
+    randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if (plugin_support_context_load(app_context.dcps_context) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to load plugins");
