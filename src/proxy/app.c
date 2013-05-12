@@ -259,6 +259,8 @@ dnscrypt_proxy_main(int argc, char *argv[])
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
         exit(1);
     }
+    logger_noformat(&proxy_context, LOG_INFO,
+                    "Initializing libsodium for optimal performance");
     if (sodium_init() != 0) {
         exit(1);
     }
