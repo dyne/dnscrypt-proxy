@@ -265,7 +265,7 @@ AM_CONDITIONAL(USE_BUILTIN_LIBSODIUM, test x$ac_cv_search_sodium_init = xno)
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
-  AC_CHECK_LIB(ldns, ldns_verify_trusted, [
+  AC_CHECK_LIB(ldns, ldns_wire2pkt, [
     AC_DEFINE(USE_LDNS,[1],[define to use the ldns library])
     LDNS_LIBS=-lldns
     use_ldns=yes
