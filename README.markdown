@@ -32,6 +32,8 @@ Bitrig, NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a
 jailbroken device), Android (requires a rooted device), Solaris
 (SmartOS) and Windows (requires MingW).
 
+Install [libsodium](https://github.com/jedisct1/libsodium).
+
 Download the [latest version](http://dnscrypt.org) and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
