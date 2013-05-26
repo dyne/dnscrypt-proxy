@@ -1,10 +1,10 @@
 AC_PREREQ([2.61])
-AC_INIT([dnscrypt-proxy],[1.3.0],[http://dnscrypt.org])
+AC_INIT([dnscrypt-proxy],[1.3.1],[http://dnscrypt.org])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([libltdl/config])
 AC_CONFIG_SRCDIR([src/proxy/app.c])
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_SUBDIRS([src/libevent-modified src/libsodium])
+AC_CONFIG_SUBDIRS([src/libevent-modified])
 AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-ustar])
 AM_MAINTAINER_MODE
@@ -260,8 +260,6 @@ AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
 AC_SEARCH_LIBS(sodium_init, [sodium])
-
-AM_CONDITIONAL(USE_BUILTIN_LIBSODIUM, test x$ac_cv_search_sodium_init = xno)
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
