@@ -70,17 +70,20 @@ projects:
 A tool to easily use DNSCrypt with OpenDNS, configure plugins and
 define resolvers for specific domains. It has been implemented as a
 collection of shell scripts with a user interface in Objective C.
+Designed for OpenDNS only.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
-can act as a gateway service. Windows only, written in .NET.
+can act as a gateway service. Windows only, written in .NET. Designed
+for OpenDNS only.
 
 - [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
 Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
 
 - dnscrypt-proxy is also available on Cydia, and it can be easily
 enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
+Designed for OpenDNS only.
 
 Server-side proxy
 -----------------
