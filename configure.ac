@@ -259,9 +259,7 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
-AC_SEARCH_LIBS(sodium_init, [sodium],
-  [LIBS="$LIBS -Wl,-static -lsodium -Wl,-Bdynamic"],
-  AC_ERROR([libsodium not found]))
+AC_SEARCH_LIBS(sodium_init, [sodium], [ ], AC_ERROR([libsodium not found]))
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
