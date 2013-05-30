@@ -78,9 +78,6 @@ different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET. Designed
 for OpenDNS only.
 
-- [DNSCrypt Win Client](https://github.com/opendns/dnscrypt-win-client):
-Official GUI for Windows, by OpenDNS. Also known as "OpenDNSCrypt".
-
 - dnscrypt-proxy is also available on Cydia, and it can be easily
 enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
 Designed for OpenDNS only.
