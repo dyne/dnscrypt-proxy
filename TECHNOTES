@@ -13,10 +13,6 @@ Cryptographic library
 - Why NaCl? Unbloated, blazing fast, and less error-prone that other libraries.
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf
 
-- Faster, but CPU-specific implementations have been removed, though,
-  so that portable packages can be built. CPU-specific implementations are
-  used server-side.
-
 - crypto_box_curve25519xsalsa20poly1305_*() for authenticating/encrypting
   queries and replies, crypto_sign_ed25519_*() for signing certificates, and
   crypto_stream_salsa20() as a PRNG.
