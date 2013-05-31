@@ -381,12 +381,12 @@ ac_configure_args="$ac_configure_args --disable-libevent-install"
 ac_configure_args="$ac_configure_args --disable-openssl"
 ac_configure_args="$ac_configure_args --disable-shared"
 ac_configure_args="$ac_configure_args --enable-function-sections"
-export CC
-export CFLAGS
-export CPP
-export CPPFLAGS
-export LDFLAGS
-export LIBS
+ac_configure_args="$ac_configure_args CC='$CC'"
+ac_configure_args="$ac_configure_args CFLAGS='$CFLAGS'"
+ac_configure_args="$ac_configure_args CPP='$CPP'"
+ac_configure_args="$ac_configure_args CPPFLAGS='$CPPFLAGS'"
+ac_configure_args="$ac_configure_args LDFLAGS='$LDFLAGS'"
+ac_configure_args="$ac_configure_args LIBS='$LIBS'"
 
 dnl Output.
 
