@@ -33,8 +33,11 @@ jailbroken device), Android (requires a rooted device), Solaris
 (SmartOS) and Windows (requires MingW).
 
 Install [libsodium](https://github.com/jedisct1/libsodium).
+On Linux, don't forget to run `ldconfig` if you installed it from
+source.
 
-Download the [latest version](http://dnscrypt.org) and extract it:
+Download the [latest dnscrypt-proxy version](http://dnscrypt.org)
+and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
     $ cd dnscrypt-proxy-*
@@ -46,9 +49,6 @@ Compile and install it using the standard procedure:
 
 Replace `-j2` with whatever number of CPU cores you want to use for the
 compilation process.
-
-Running `make -j2 check` in the `src/libsodium` directory is also highly
-recommended.
 
 The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
