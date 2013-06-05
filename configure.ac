@@ -118,11 +118,11 @@ AC_ARG_VAR([AR], [path to the ar utility])
 AC_CHECK_TOOL([AR], [ar], [ar])
 
 case $host_os in
-  darwin*)
+  darwin*|linux*)
     case $build_os in
-      darwin*)
+      darwin*|linux*)
         AC_ARG_VAR([DTRACE], [path to dtrace if you have it])
-        AC_PATH_PROG([DTRACE], [dtrace])
+        AC_PATH_PROG([DTRACE], [dtrace], [], [$PATH:/usr/local/sbin:/usr/sbin])
       ;;
     esac
   ;;
