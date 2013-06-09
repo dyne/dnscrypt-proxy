@@ -21,6 +21,7 @@ export PREFIX="$(pwd)/dnscrypt-proxy-android"
 
 export SODIUM_ANDROID_PREFIX="/tmp/libsodium-android"
 export CPPFLAGS="$CPPFLAGS -I${SODIUM_ANDROID_PREFIX}/include"
+export CPPFLAGS="$CPPFLAGS -DUSE_ONLY_PORTABLE_IMPLEMENTATIONS=1"
 export LDFLAGS="$LDFLAGS -L${SODIUM_ANDROID_PREFIX}/lib"
 
 ./configure --host=arm-linux-androideabi \
