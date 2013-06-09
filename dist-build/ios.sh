@@ -6,11 +6,11 @@ export PATH="${BASEDIR}/usr/bin:$BASEDIR/usr/sbin:$PATH"
 export SDK="${BASEDIR}/SDKs/iPhoneOS6.1.sdk"
 export CFLAGS="-Oz -mthumb -arch armv7 -isysroot ${SDK}"
 export LDFLAGS="-mthumb -arch armv7 -isysroot ${SDK}"
-export PREFIX="$(pwd)/dnscrypt-proxy-iphone"
+export PREFIX="$(pwd)/dnscrypt-proxy-ios"
 
-export SODIUM_IPHONE_PREFIX="/tmp/libsodium-ios"
-export CPPFLAGS="$CPPFLAGS -I${SODIUM_IPHONE_PREFIX}/include"
-export LDFLAGS="$LDFLAGS -L${SODIUM_IPHONE_PREFIX}/lib"
+export SODIUM_IOS_PREFIX="/tmp/libsodium-ios"
+export CPPFLAGS="$CPPFLAGS -I${SODIUM_IOS_PREFIX}/include"
+export LDFLAGS="$LDFLAGS -L${SODIUM_IOS_PREFIX}/lib"
 
 ./configure --host=arm-apple-darwin10 \
             --disable-shared \
