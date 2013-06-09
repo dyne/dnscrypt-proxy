@@ -26,5 +26,5 @@ export LDFLAGS="$LDFLAGS -L${SODIUM_ANDROID_PREFIX}/lib"
 ./configure --host=arm-linux-androideabi \
             --disable-shared \
             --prefix="$PREFIX" && \
-make -j3 install &&
+make -j3 install && \
 echo "dnscrypt-proxy has been installed into $PREFIX"
