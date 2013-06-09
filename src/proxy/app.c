@@ -261,9 +261,13 @@ dnscrypt_proxy_main(int argc, char *argv[])
     }
     logger_noformat(&proxy_context, LOG_INFO,
                     "Initializing libsodium for optimal performance");
+#ifdef USE_ONLY_PORTABLE_IMPLEMENTATIONS
+    randombytes_stir();
+#else
     if (sodium_init() != 0) {
         exit(1);
     }
+#endif
     randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if (plugin_support_context_load(app_context.dcps_context) != 0) {
