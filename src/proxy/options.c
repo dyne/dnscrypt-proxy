@@ -72,7 +72,8 @@ static const char *getopt_options = "a:e:hk:m:n:r:u:N:TVX";
     "A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79"
 #endif
 #ifndef DEFAULT_PROVIDER_NAME
-# define DEFAULT_PROVIDER_NAME "2.dnscrypt-cert.opendns.com."
+# define DEFAULT_PROVIDER_NAME \
+    DNSCRYPT_PROTOCOL_VERSIONS ".dnscrypt-cert.opendns.com."
 #endif
 #ifndef DEFAULT_RESOLVER_IP
 # define DEFAULT_RESOLVER_IP "208.67.220.220:443"
@@ -130,6 +131,20 @@ void options_init_with_default(AppContext * const app_context,
 }
 
 static int
+options_check_protocol_versions(const char * const provider_name)
+{
+    const size_t dnscrypt_protocol_versions_len =
+        sizeof DNSCRYPT_PROTOCOL_VERSIONS - (size_t) 1U;
+
+    if (strncmp(provider_name, DNSCRYPT_PROTOCOL_VERSIONS,
+                dnscrypt_protocol_versions_len) != 0 ||
+        provider_name[dnscrypt_protocol_versions_len] != '.') {
+        return -1;
+    }
+    return 0;
+}
+
+static int
 options_apply(ProxyContext * const proxy_context)
 {
     if (proxy_context->resolver_ip == NULL) {
@@ -139,6 +154,11 @@ options_apply(ProxyContext * const proxy_context)
     if (proxy_context->provider_name == NULL ||
         *proxy_context->provider_name == 0) {
         logger_noformat(proxy_context, LOG_ERR, "Provider name required");
+        exit(1);
+    }
+    if (options_check_protocol_versions(proxy_context->provider_name) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unsupported server protocol version");
         exit(1);
     }
     if (proxy_context->provider_publickey_s == NULL) {
