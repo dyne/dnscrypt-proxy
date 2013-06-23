@@ -17,5 +17,5 @@ export LDFLAGS="$LDFLAGS -L${SODIUM_IOS_PREFIX}/lib"
             --disable-shared \
             --prefix="$PREFIX" && \
 make -j3 install && \
-echo "dnscrypt-proxy has beein installed into $PREFIX" && \
+echo "dnscrypt-proxy has been installed into $PREFIX" && \
 echo 'Now, using codesign(1) to sign dnscrypt-proxy'
