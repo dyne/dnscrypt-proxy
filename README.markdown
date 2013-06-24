@@ -24,6 +24,28 @@ network, which is often the weakest point of the chain, against
 man-in-the-middle attacks. It also provides some confidentiality to
 DNS queries.
 
+Download and integrity check
+----------------------------
+
+DNSCrypt can be downloaded here: [dnscrypt download](http://dnscrypt.org)
+
+After having downloaded a file, compute its SHA256 digest. For example:
+
+    $ openssl dgst -sha256 dnscrypt-proxy-1.3.1.tar.bz2
+
+Verify this digest against the expected one, that can be retrieved
+using a simple DNS query:
+
+    $ drill -D TXT dnscrypt-proxy-1.3.1.tar.bz2.download.dnscrypt.org
+
+or
+
+    $ dig +dnssec TXT dnscrypt-proxy-1.3.1.tar.bz2.download.dnscrypt.org
+
+If the content of the TXT record doesn't match the SHA256 digest you
+computed, please file a bug report on Github as soon as possible and
+don't go any further.
+
 Installation
 ------------
 
@@ -36,8 +58,7 @@ Install [libsodium](https://github.com/jedisct1/libsodium).
 On Linux, don't forget to run `ldconfig` if you installed it from
 source.
 
-Download the [latest dnscrypt-proxy version](http://dnscrypt.org)
-and extract it:
+Download the latest dnscrypt-proxy version and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
     $ cd dnscrypt-proxy-*
