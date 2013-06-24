@@ -153,6 +153,51 @@ cert_open_bincert(ProxyContext * const proxy_context,
 }
 
 static void
+cert_print_bincert_info(ProxyContext * const proxy_context,
+                        const Bincert * const bincert)
+{
+    struct tm ts_begin_tm;
+    struct tm ts_end_tm;
+    time_t    ts_begin_t;
+    time_t    ts_end_t;
+    uint32_t  serial;
+    uint32_t  ts_begin;
+    uint32_t  ts_end;
+    _Bool     gm_ret;
+
+    assert(bincert != NULL);
+
+    memcpy(&ts_begin, bincert->ts_begin, sizeof ts_begin);
+    ts_begin_t = (time_t) htonl(ts_begin);
+    assert(ts_begin_t > (time_t) 0);
+
+    memcpy(&ts_end, bincert->ts_end, sizeof ts_end);
+    ts_end_t = (time_t) htonl(ts_end);
+    assert(ts_end_t > (time_t) 0);
+
+#ifdef _WIN32
+    gm_ret = (_gmtime_s(&ts_begin_tm, &ts_begin_t) == 0 &&
+              _gmtime_s(&ts_end_tm, &ts_end_t) == 0);
+#else
+    gm_ret = (gmtime_r(&ts_begin_t, &ts_begin_tm) != NULL &&
+              gmtime_r(&ts_end_t, &ts_end_tm) != NULL);
+#endif
+    assert(gm_ret != 0);
+    assert(ts_end_t >= ts_begin_t);
+
+    memcpy(&serial, bincert->serial, sizeof serial);
+
+    logger(proxy_context, LOG_INFO,
+           "Chosen certificate #%" PRIu32 " is valid "
+           "from [%d-%02d-%02d] to [%d-%02d-%02d]",
+           htonl(serial),
+           ts_begin_tm.tm_year + 1900,
+           ts_begin_tm.tm_mon + 1, ts_begin_tm.tm_mday + 1,
+           ts_end_tm.tm_year + 1900,
+           ts_end_tm.tm_mon + 1, ts_end_tm.tm_mday + 1);
+}
+
+static void
 cert_print_server_key(ProxyContext * const proxy_context)
 {
     char fingerprint[80U];
@@ -265,6 +310,7 @@ cert_query_cb(int result, char type, int count, int ttl,
                     sizeof bincert->magic_query);
     memcpy(proxy_context->dnscrypt_magic_query, bincert->magic_query,
            sizeof proxy_context->dnscrypt_magic_query);
+    cert_print_bincert_info(proxy_context, bincert);
     cert_print_server_key(proxy_context);
     dnscrypt_client_init_magic_query(&proxy_context->dnscrypt_client,
                                      bincert->magic_query);
