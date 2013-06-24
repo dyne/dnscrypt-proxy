@@ -62,6 +62,9 @@
 
 #define DNSCRYPT_PROTOCOL_VERSIONS "2"
 
+#define DNSCRYPT_EXIT_CERT_NOCERTS 2
+#define DNSCRYPT_EXIT_CERT_TIMEOUT 3
+
 typedef TAILQ_HEAD(TCPRequestQueue_, TCPRequest_) TCPRequestQueue;
 typedef TAILQ_HEAD(UDPRequestQueue_, UDPRequest_) UDPRequestQueue;
 
@@ -104,6 +107,7 @@ typedef struct ProxyContext_ {
     _Bool                    daemonize;
     _Bool                    listeners_started;
     _Bool                    tcp_only;
+    _Bool                    test_only;
 } ProxyContext;
 
 int dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context);

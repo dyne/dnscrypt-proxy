@@ -253,6 +253,10 @@ cert_reschedule_query_after_failure(ProxyContext * const proxy_context)
     }
     cert_reschedule_query(proxy_context, query_retry_delay);
     DNSCRYPT_PROXY_CERTS_UPDATE_RETRY();
+    if (proxy_context->test_only != 0 &&
+        cert_updater->query_retry_step > CERT_QUERY_TEST_RETRY_STEPS) {
+        exit(DNSCRYPT_EXIT_CERT_TIMEOUT);
+    }
 }
 
 static void
@@ -300,6 +304,9 @@ cert_query_cb(int result, char type, int count, int ttl,
                         "No useable certificates found");
         cert_reschedule_query_after_failure(proxy_context);
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
+        if (proxy_context->test_only) {
+            exit(DNSCRYPT_EXIT_CERT_NOCERTS);
+        }
         return;
     }
     COMPILER_ASSERT(sizeof proxy_context->resolver_publickey ==
@@ -316,6 +323,11 @@ cert_query_cb(int result, char type, int count, int ttl,
                                      bincert->magic_query);
     memset(bincert, 0, sizeof *bincert);
     free(bincert);
+    if (proxy_context->test_only) {
+        DNSCRYPT_PROXY_CERTS_UPDATE_DONE((unsigned char *)
+                                         proxy_context->resolver_publickey);
+        exit(0);
+    }
     dnscrypt_client_init_nmkey(&proxy_context->dnscrypt_client,
                                proxy_context->resolver_publickey);
     dnscrypt_proxy_start_listeners(proxy_context);

@@ -47,6 +47,7 @@ static struct option getopt_long_options[] = {
     { "resolver-address", 1, NULL, 'r' },
     { "user", 1, NULL, 'u' },
     { "provider-name", 1, NULL, 'N' },
+    { "test", 0, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
 #ifdef _WIN32
@@ -57,9 +58,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:l:m:n:p:r:u:N:TVX";
+static const char *getopt_options = "a:de:hk:l:m:n:p:r:tu:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:m:n:r:u:N:TVX";
+static const char *getopt_options = "a:e:hk:m:n:r:tu:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -127,6 +128,7 @@ void options_init_with_default(AppContext * const app_context,
 #endif
     proxy_context->user_dir = NULL;
     proxy_context->daemonize = 0;
+    proxy_context->test_only = 0;
     proxy_context->tcp_only = 0;
 }
 
@@ -270,6 +272,9 @@ options_parse(AppContext * const app_context,
             break;
         case 'r':
             proxy_context->resolver_ip = optarg;
+            break;
+        case 't':
+            proxy_context->test_only = 1;
             break;
 #ifdef HAVE_GETPWNAM
         case 'u': {

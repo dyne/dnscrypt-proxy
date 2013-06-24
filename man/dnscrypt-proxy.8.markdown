@@ -64,6 +64,11 @@ ports.
   * `-r`, `--resolver-address=<ip>[:port]`: a DNSCrypt-capable resolver IP
     address with an optional port. The default port is 443.
 
+  * `-t`, `--test`: don't actually start the proxy, but try binding a
+    local port, and check that a valid certificate can be retrieved from
+    the server. The exit code is 0 if a valid certificate can be used,
+    2 if no valid certificates can be used, and 3 if a timeout occurred.
+
   * `-u`, `--user=<user name>`: chroot(2) to this user's home directory
     and drop privileges.
 

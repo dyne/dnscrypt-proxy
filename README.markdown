@@ -144,6 +144,10 @@ address than 127.0.0.1
   requests. The default value is 250.
 * `--pid-file=<file>` in order to store the PID number to a file.
 * `--user=<user name>` in order to chroot()/drop privileges.
+* `--test` in order to check that the server-side proxy is properly
+configured and that a valid certificate can be used. This is useful
+for monitoring your own dnscrypt proxy. See the man page for more
+information.
 
 DNSCrypt comes pre-configured for OpenDNS, although the
 `--resolver-address=<ip>[:port]`,
