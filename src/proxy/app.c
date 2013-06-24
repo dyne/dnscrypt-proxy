@@ -280,9 +280,12 @@ dnscrypt_proxy_main(int argc, char *argv[])
     dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
     logger_noformat(&proxy_context, LOG_INFO, "Done");
 
-    if (cert_updater_init(&proxy_context) != 0 ||
-        udp_listener_bind(&proxy_context) != 0 ||
-        tcp_listener_bind(&proxy_context) != 0) {
+    if (cert_updater_init(&proxy_context) != 0) {
+        exit(1);
+    }
+    if (proxy_context.test_only == 0 &&
+        (udp_listener_bind(&proxy_context) != 0 ||
+         tcp_listener_bind(&proxy_context) != 0)) {
         exit(1);
     }
 #ifdef SIGPIPE
