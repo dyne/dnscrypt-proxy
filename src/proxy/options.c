@@ -12,6 +12,7 @@
 #include <getopt.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -58,9 +59,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:l:m:n:p:r:tu:N:TVX";
+static const char *getopt_options = "a:de:hk:l:m:n:p:r:t:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:m:n:r:tu:N:TVX";
+static const char *getopt_options = "a:e:hk:m:n:r:t:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -128,6 +129,7 @@ void options_init_with_default(AppContext * const app_context,
 #endif
     proxy_context->user_dir = NULL;
     proxy_context->daemonize = 0;
+    proxy_context->test_cert_margin = (time_t) -1;
     proxy_context->test_only = 0;
     proxy_context->tcp_only = 0;
 }
@@ -273,9 +275,21 @@ options_parse(AppContext * const app_context,
         case 'r':
             proxy_context->resolver_ip = optarg;
             break;
-        case 't':
+        case 't': {
+            char *endptr;
+            const unsigned long margin =
+                strtoul(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 ||
+                margin > UINT32_MAX / 60U) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid certificate grace period: [%s]", optarg);
+                exit(1);
+            }
+            proxy_context->test_cert_margin = (time_t) margin * (time_t) 60U;
             proxy_context->test_only = 1;
             break;
+        }
 #ifdef HAVE_GETPWNAM
         case 'u': {
             const struct passwd * const pw = getpwnam(optarg);

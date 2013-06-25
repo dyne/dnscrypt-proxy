@@ -69,7 +69,7 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     memcpy(&ts_end, bincert->ts_end, sizeof ts_end);
     ts_end = htonl(ts_end);
 
-    uint32_t now_u32 = (uint32_t) time(NULL);
+    const uint32_t now_u32 = (uint32_t) time(NULL);
 
     if (now_u32 < ts_begin) {
         logger_noformat(proxy_context, LOG_INFO,
@@ -308,6 +308,21 @@ cert_query_cb(int result, char type, int count, int ttl,
             exit(DNSCRYPT_EXIT_CERT_NOCERTS);
         }
         return;
+    }
+    if (proxy_context->test_only != 0) {
+        const uint32_t now_u32 = (uint32_t) time(NULL);
+        uint32_t       ts_end;
+
+        memcpy(&ts_end, bincert->ts_end, sizeof ts_end);
+        ts_end = htonl(ts_end);
+
+        if (ts_end < (uint32_t) proxy_context->test_cert_margin ||
+            now_u32 > ts_end - (uint32_t) proxy_context->test_cert_margin) {
+            logger_noformat(proxy_context, LOG_WARNING,
+                            "The certificate is not valid for the given safety margin");
+            DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
+            exit(DNSCRYPT_EXIT_CERT_MARGIN);
+        }
     }
     COMPILER_ASSERT(sizeof proxy_context->resolver_publickey ==
                     sizeof bincert->server_publickey);

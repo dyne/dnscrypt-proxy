@@ -5,6 +5,7 @@
 #include <sys/types.h>
 
 #include <stdint.h>
+#include <time.h>
 
 #include <event2/event.h>
 #include <event2/listener.h>
@@ -64,6 +65,7 @@
 
 #define DNSCRYPT_EXIT_CERT_NOCERTS 2
 #define DNSCRYPT_EXIT_CERT_TIMEOUT 3
+#define DNSCRYPT_EXIT_CERT_MARGIN  4
 
 typedef TAILQ_HEAD(TCPRequestQueue_, TCPRequest_) TCPRequestQueue;
 typedef TAILQ_HEAD(UDPRequestQueue_, UDPRequest_) UDPRequestQueue;
@@ -100,6 +102,7 @@ typedef struct ProxyContext_ {
     uid_t                    user_id;
     gid_t                    user_group;
 #endif
+    time_t                   test_cert_margin;
     unsigned int             connections_count;
     unsigned int             connections_count_max;
     int                      log_fd;
