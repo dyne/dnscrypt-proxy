@@ -48,7 +48,7 @@ static struct option getopt_long_options[] = {
     { "resolver-address", 1, NULL, 'r' },
     { "user", 1, NULL, 'u' },
     { "provider-name", 1, NULL, 'N' },
-    { "test", 0, NULL, 't' },
+    { "test", 1, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
 #ifdef _WIN32
