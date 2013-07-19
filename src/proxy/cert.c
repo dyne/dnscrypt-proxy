@@ -156,6 +156,10 @@ static void
 cert_print_bincert_info(ProxyContext * const proxy_context,
                         const Bincert * const bincert)
 {
+    (void) proxy_context;
+    (void) bincert;
+
+#ifdef HAVE_GMTIME_R
     struct tm ts_begin_tm;
     struct tm ts_end_tm;
     time_t    ts_begin_t;
@@ -175,13 +179,8 @@ cert_print_bincert_info(ProxyContext * const proxy_context,
     ts_end_t = (time_t) htonl(ts_end);
     assert(ts_end_t > (time_t) 0);
 
-#ifdef _WIN32
-    gm_ret = (_gmtime_s(&ts_begin_tm, &ts_begin_t) == 0 &&
-              _gmtime_s(&ts_end_tm, &ts_end_t) == 0);
-#else
     gm_ret = (gmtime_r(&ts_begin_t, &ts_begin_tm) != NULL &&
               gmtime_r(&ts_end_t, &ts_end_tm) != NULL);
-#endif
     assert(gm_ret != 0);
     assert(ts_end_t >= ts_begin_t);
 
@@ -195,6 +194,7 @@ cert_print_bincert_info(ProxyContext * const proxy_context,
            ts_begin_tm.tm_mon + 1, ts_begin_tm.tm_mday + 1,
            ts_end_tm.tm_year + 1900,
            ts_end_tm.tm_mon + 1, ts_end_tm.tm_mday + 1);
+#endif
 }
 
 static void
