@@ -1,3 +1,82 @@
+* Fri Jul 19 09:37:02 2013 -0700
+
+    rules->profile
+
+* Fri Jul 19 09:36:41 2013 -0700
+
+    Ship the AppArmor profile
+
+Merge: e70029a aa5411d
+* Sat Jul 6 19:07:57 2013 -0700
+
+    Merge pull request #11 from insanitybit/master
+    
+    xApparmor profile for DNSCrypt
+
+* Sat Jul 6 20:08:10 2013 -0400
+
+    Apparmor profile for DNSCrypt
+    
+    On systems that support apparmor this file can be dropped into /etc/apparmor.d/apparmor.profile.dnscrypt-proxy
+    
+    On reboot it should be active. aa-status to confirm,
+    aa-enforce /etc/apparmor.d/apparmor.profile.dnscrypt-proxy
+    if it doesn't enforce after reboot.
+
+* Tue Jun 25 14:25:16 2013 -0700
+
+    reword
+
+* Tue Jun 25 14:24:30 2013 -0700
+
+    Fix --test=
+
+* Tue Jun 25 14:24:00 2013 -0700
+
+    -t can now be used to specify a safety margin
+
+* Mon Jun 24 16:29:00 2013 -0700
+
+    Don't bind anything in test mode.
+
+* Mon Jun 24 16:16:39 2013 -0700
+
+    Add --test
+
+* Mon Jun 24 14:54:27 2013 -0700
+
+    Print the chosen cert validity period.
+
+* Mon Jun 24 13:48:36 2013 -0700
+
+    Update TECHNOTES
+
+* Sun Jun 23 23:33:33 2013 -0700
+
+    Explain how to check file integrity.
+
+* Sat Jun 22 21:38:21 2013 -0700
+
+    Fix typo
+
+* Sat Jun 22 21:36:46 2013 -0700
+
+    Sync Homebrew formula
+
+* Sun Jun 9 22:42:09 2013 -0700
+
+    Check that the list of supported protocol versions the client
+    advertises is actually supported.
+    The current proxy only supports version 2.
+
+* Sun Jun 9 19:10:01 2013 -0700
+
+    Use only portable implementations on iOS.
+
+* Sun Jun 9 12:45:06 2013 -0700
+
+    Update ChangeLog
+
 * Sun Jun 9 12:27:56 2013 -0700
 
     Don't print "initializing for optimal performance" if we don't.
