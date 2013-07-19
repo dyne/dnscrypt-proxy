@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	README-WINDOWS.markdown \
 	TECHNOTES \
 	THANKS \
+	apparmor.profile.dnscrypt-proxy \
 	autogen.sh \
 	org.dnscrypt.osx.DNSCryptProxy.plist
 
