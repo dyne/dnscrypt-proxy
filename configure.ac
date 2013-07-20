@@ -148,6 +148,7 @@ AC_SYS_LARGEFILE
 AC_CHECK_HEADERS([sys/cdefs.h sys/feature_tests.h])
 AC_CHECK_HEADERS([execinfo.h paths.h pwd.h uuid/uuid.h])
 AC_CHECK_HEADERS([sandbox.h])
+AC_CHECK_HEADERS([ws2tcpip.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 
@@ -157,23 +158,31 @@ AC_C_RESTRICT
 AC_CHECK_TYPE([in_port_t], , [AC_DEFINE(in_port_t, uint16_t,
 [in_port_t type])],
 [
+#include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#ifdef HAVE_WS2TCPIP_H
+# include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <netinet/in.h>
+#endif
 ])
 
 AC_MSG_CHECKING([whether sin_len is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <sys/types.h>
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#ifdef HAVE_WS2TCPIP_H
+# include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <netinet/in.h>
+#endif
 ]], [[
 do {
  struct sockaddr_in a;
@@ -188,12 +197,17 @@ do {
 
 AC_MSG_CHECKING([whether __ss_family is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <sys/types.h>
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/socket.h>
+#ifdef HAVE_WS2TCPIP_H
+# include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <netinet/in.h>
+#endif
 ]], [[
 do {
  struct sockaddr_storage a;
@@ -208,12 +222,17 @@ do {
 
 AC_MSG_CHECKING([whether ss_len is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <sys/types.h>
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/socket.h>
+#ifdef HAVE_WS2TCPIP_H
+# include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <netinet/in.h>
+#endif
 ]], [[
 do {
  struct sockaddr_storage a;
@@ -228,12 +247,17 @@ do {
 
 AC_MSG_CHECKING([whether __ss_len is defined])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <sys/types.h>
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#include <sys/types.h>
-#include <sys/socket.h>
+#ifdef HAVE_WS2TCPIP_H
+# include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <netinet/in.h>
+#endif
 ]], [[
 do {
  struct sockaddr_storage a;
@@ -269,8 +293,13 @@ AC_CHECK_HEADER([ldns/ldns.h], [
     use_ldns=yes
   ])
 ], [ ],
-[#include <stdlib.h>
- #include <stdint.h>])
+[#include <sys/types.h>
+ #include <stdlib.h>
+ #include <stdint.h>
+ #ifdef HAVE_WS2TCPIP_H
+ # include <ws2tcpip.h>
+ #endif
+])
 AM_CONDITIONAL(USE_LDNS, test x$use_ldns = xyes)
 AC_SUBST([LDNS_LIBS])
 
