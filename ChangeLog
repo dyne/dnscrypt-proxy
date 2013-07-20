@@ -1,3 +1,35 @@
+* Sat Jul 20 13:58:58 2013 -0700
+
+    ldns.h requires ws2tcpip.h on Windows
+
+* Sat Jul 20 12:39:03 2013 -0700
+
+    libevent/win32_dealloc() : fix sizeof(pointer) vs sizeof(*pointer)
+
+* Fri Jul 19 12:58:11 2013 -0700
+
+    Unfuck Windows build: MingW doesn't even seem to provide _gmtime_s()
+
+* Fri Jul 19 12:56:00 2013 -0700
+
+    Target iOS 7
+
+* Fri Jul 19 12:17:58 2013 -0700
+
+    Parallel compilation is unreliable on msys
+
+* Fri Jul 19 09:59:41 2013 -0700
+
+    Bump version
+
+* Fri Jul 19 09:52:25 2013 -0700
+
+    Update NEWS
+
+* Fri Jul 19 09:41:15 2013 -0700
+
+    Update ChangeLog
+
 * Fri Jul 19 09:37:02 2013 -0700
 
     rules->profile
