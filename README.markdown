@@ -11,8 +11,7 @@ Description
 dnscrypt-proxy provides local service which can be used directly as
 your local resolver or as a DNS forwarder, encrypting and
 authenticating requests using the DNSCrypt protocol and passing them
-to an upstream server, by default OpenDNS who run this on their
-resolvers.
+to an upstream server, by default OpenDNS.
 
 The DNSCrypt protocol uses high-speed high-security elliptic-curve
 cryptography and is very similar to [DNSCurve](http://dnscurve.org/),
@@ -23,6 +22,19 @@ While not providing end-to-end security, it protects the local
 network, which is often the weakest point of the chain, against
 man-in-the-middle attacks. It also provides some confidentiality to
 DNS queries.
+
+Current list of free, DNSCrypt-enabled resolvers
+------------------------------------------------
+
+* [OpenDNS](http://www.opendns.com)
+  - Server address: 208.67.220.220:443
+  - Provider name: 2.dnscrypt-cert.dnscrypt.org
+  - Public key: B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
+
+* [CloudNS](https://cloudns.com.au/)
+  - Server address: 113.20.6.2:443
+  - Provider name: 2.dnscrypt-cert.cloudns.com.au
+  - Public key: 1971:7C1A:C550:6C09:F09B:ACB1:1AF7:C349:6425:2676:247F:B738:1C5A:243A:C1CC:89F4
 
 Download and integrity check
 ----------------------------
