@@ -12,14 +12,17 @@ KEYWORDS="amd64 i386"
 
 RDEPEND="
 	>=dev-libs/libsodium-0.4.2"
+IUSE="-plugins"
+
 pkg_setup() {
 	enewgroup dnscrypt
 	enewuser dnscrypt -1 -1 /var/empty dnscrypt
 }
 
 src_configure() {
-	append-ldflags -Wl,-z,noexecstack || die
+#	append-ldflags -Wl,-z,noexecstack || die
 	econf --enable-nonblocking-random || die
+	econf $(use_enable plugins)
 }
 
 src_install() {
