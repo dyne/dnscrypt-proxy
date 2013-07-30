@@ -20,8 +20,6 @@ pkg_setup() {
 }
 
 src_configure() {
-#	append-ldflags -Wl,-z,noexecstack || die
-	econf --enable-nonblocking-random || die
 	econf $(use_enable plugins)
 }
 
