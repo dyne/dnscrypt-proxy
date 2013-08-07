@@ -3,7 +3,7 @@ EAPI="3"
 inherit eutils flag-o-matic
 
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver"
-HOMEPAGE="http://www.opendns.com/technology/dnscrypt/"
+HOMEPAGE="http://dnscrypt.org"
 SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-proxy-${PV}.tar.gz"
 
 LICENSE="BSD"
