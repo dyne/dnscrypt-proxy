@@ -1,4 +1,7 @@
 
+* Version 1.3.3:
+ - Always send questions as big as the response can be.
+
 * Version 1.3.2:
  - faster startup on iOS and Android
  - New command-line switch: --test, in order to check if a certificate can be
