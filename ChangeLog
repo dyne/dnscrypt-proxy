@@ -1,3 +1,15 @@
+* Mon Aug 12 22:38:54 2013 -0700
+
+    Gradually increase the supported payload size.
+
+* Mon Aug 12 20:55:07 2013 -0700
+
+    Rename DNS_MAX_PACKET_SIZE_UDP_SEND to DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND
+
+* Mon Aug 12 19:47:25 2013 -0700
+
+    Update ChangeLog
+
 * Mon Aug 12 19:44:06 2013 -0700
 
     Version bump
