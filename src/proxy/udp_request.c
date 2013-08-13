@@ -429,8 +429,8 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     edns_add_section(proxy_context, dns_query, &dns_query_len,
                      sizeof dns_query, &request_edns_payload_size);
 
-    if (request_edns_payload_size < DNS_MAX_PACKET_SIZE_UDP_SEND) {
-        max_query_size = DNS_MAX_PACKET_SIZE_UDP_SEND;
+    if (request_edns_payload_size < DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
+        max_query_size = DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND;
     } else {
         max_query_size = request_edns_payload_size;
     }

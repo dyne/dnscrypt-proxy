@@ -225,7 +225,7 @@ options_parse(AppContext * const app_context,
                        "Invalid EDNS payload size: [%s]", optarg);
                 exit(1);
             }
-            if (edns_payload_size <= DNS_MAX_PACKET_SIZE_UDP_SEND) {
+            if (edns_payload_size <= DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
                 proxy_context->edns_payload_size = (size_t) 0U;
             } else {
                 proxy_context->edns_payload_size = (size_t) edns_payload_size;
