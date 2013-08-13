@@ -1,6 +1,8 @@
 
 * Version 1.3.3:
- - Always send questions as big as the response can be.
+ - Always send questions as big as the response can be. Upgrading is
+highly recommended, as the server can refuse to respond to queries using
+UDP if the response is larger than the question.
 
 * Version 1.3.2:
  - faster startup on iOS and Android
