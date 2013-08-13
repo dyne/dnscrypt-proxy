@@ -1,6 +1,6 @@
 
 * Version 1.3.3:
- - Always send questions as big as the response can be. Upgrading is
+ - Try to send questions as big as the response can be. Upgrading is
 highly recommended, as the server can refuse to respond to queries using
 UDP if the response is larger than the question.
 

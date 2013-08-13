@@ -91,6 +91,8 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     proxy_context->max_log_level = LOG_INFO;
     proxy_context->tcp_accept_timer = NULL;
     proxy_context->tcp_conn_listener = NULL;
+    proxy_context->udp_current_max_size = DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND;
+    proxy_context->udp_max_size = proxy_context->udp_current_max_size;
     proxy_context->udp_listener_event = NULL;
     proxy_context->udp_proxy_resolver_event = NULL;
     proxy_context->udp_proxy_resolver_handle = -1;

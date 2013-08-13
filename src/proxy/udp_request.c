@@ -238,6 +238,24 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     memset(udp_request->client_nonce, 0, sizeof udp_request->client_nonce);
     assert(uncurved_len <= dns_reply_len);
     dns_reply_len = uncurved_len;
+
+    assert(dns_reply_len >= DNS_HEADER_SIZE);
+    COMPILER_ASSERT(DNS_OFFSET_FLAGS < DNS_HEADER_SIZE);
+    if ((dns_reply[DNS_OFFSET_FLAGS] & DNS_FLAGS_TC) != 0) {
+        if (proxy_context->udp_current_max_size <
+            proxy_context->udp_max_size) {
+            COMPILER_ASSERT(DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND >=
+                            DNSCRYPT_BLOCK_SIZE);
+            if (proxy_context->udp_max_size -
+                proxy_context->udp_current_max_size > DNSCRYPT_BLOCK_SIZE) {
+                proxy_context->udp_current_max_size += DNSCRYPT_BLOCK_SIZE;
+            } else {
+                proxy_context->udp_current_max_size =
+                    proxy_context->udp_max_size;
+            }
+        }
+    }
+
 #ifdef PLUGINS
     const size_t max_reply_size_for_filter = sizeof dns_reply;
     DCPluginDNSPacket dcp_packet = {
@@ -483,16 +501,10 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
            > dns_query_len);
 
     size_t max_len;
-#ifdef RANDOM_LENGTH_PADDING
-    max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
-        dnscrypt_query_header_size();
+    max_len = proxy_context->udp_current_max_size;
     if (max_len > max_query_size) {
         max_len = max_query_size;
     }
-#else
-    max_len = max_query_size;
-#endif
-
     if (dns_query_len + dnscrypt_query_header_size() > max_len) {
         proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
         return;

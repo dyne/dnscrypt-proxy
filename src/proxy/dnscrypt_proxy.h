@@ -21,7 +21,7 @@
 #endif
 
 #define DNS_MAX_PACKET_SIZE_UDP_RECV (65536U - 20U - 8U)
-#define DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND 512U
+#define DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND 256U
 
 #if DNS_MAX_PACKET_SIZE_UDP_RECV > DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND
 # define DNS_MAX_PACKET_SIZE_UDP DNS_MAX_PACKET_SIZE_UDP_RECV
@@ -96,6 +96,8 @@ typedef struct ProxyContext_ {
     ev_socklen_t             local_sockaddr_len;
     ev_socklen_t             resolver_sockaddr_len;
     size_t                   edns_payload_size;
+    size_t                   udp_current_max_size;
+    size_t                   udp_max_size;
     evutil_socket_t          udp_listener_handle;
     evutil_socket_t          udp_proxy_resolver_handle;
 #ifndef _WIN32
