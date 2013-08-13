@@ -481,11 +481,18 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
 #endif
     assert(SIZE_MAX - DNSCRYPT_MAX_PADDING - dnscrypt_query_header_size()
            > dns_query_len);
-    size_t max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
+
+    size_t max_len;
+#ifdef RANDOM_LENGTH_PADDING
+    max_len = dns_query_len + DNSCRYPT_MAX_PADDING +
         dnscrypt_query_header_size();
     if (max_len > max_query_size) {
         max_len = max_query_size;
     }
+#else
+    max_len = max_query_size;
+#endif
+
     if (dns_query_len + dnscrypt_query_header_size() > max_len) {
         proxy_client_send_truncated(udp_request, dns_query, dns_query_len);
         return;
