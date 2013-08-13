@@ -1,3 +1,105 @@
+* Mon Aug 12 19:44:06 2013 -0700
+
+    Version bump
+
+* Mon Aug 12 19:43:18 2013 -0700
+
+    Explain that upgrading to 1.3.3 is highly recommended, and why.
+
+* Mon Aug 12 19:29:47 2013 -0700
+
+    Update NEWS
+
+* Mon Aug 12 19:23:35 2013 -0700
+
+    Force questions to be as big as the response can be.
+
+* Wed Aug 7 00:31:21 2013 -0700
+
+    Link to dnscrypt.
+    Not to old GUIs.
+
+Merge: 7aba22f 9a1e8ba
+* Wed Aug 7 00:29:19 2013 -0700
+
+    Merge pull request #15 from Teknocrat/master
+    
+    Add Gentoo Ebuilds for Libsodium dependency and new dnscrypt-proxy
+
+* Mon Jul 29 23:14:47 2013 -0500
+
+    1. Remove random blocking
+    2. make default daemon use correct port number (53)
+
+* Mon Jul 29 19:24:57 2013 -0500
+
+    As per comments, removed ldflags autoconf should do this.. added use
+    flag for plugins, left random.. need to check with @strayer on that
+    one..
+
+* Mon Jul 29 03:31:30 2013 -0500
+
+    Oops, new files needed for dnscrypt-proxy ebuild and new libsodium
+    ebuild
+
+* Mon Jul 29 03:28:13 2013 -0500
+
+    Added new ebuilds for dnscrypt-proxy 1.3.2 bump
+    as well as libsodium dependency
+
+* Sun Jul 21 11:55:36 2013 -0700
+
+    Merge important fixes to levent
+    
+    * Sat Jul 20 14:02:49 2013 -0700
+    
+        libevent/win32_dealloc() : fix sizeof(pointer) vs sizeof(*pointer)
+    
+    * Mon Jun 10 10:38:12 2013 -0400
+    
+        Document that arc4random is not a great cryptographic PRNG.
+    
+    * Mon Jun 10 10:33:56 2013 -0400
+    
+        When we seed from /proc/sys/kernel/random/uuid, count it as success
+    
+        Found by Joseph Spadavecchia
+    
+    * Sat May 11 03:53:11 2013 +0400
+    
+        Fix SEGFAULT after evdns_base_resume if no nameservers installed.
+    
+        If there is no nameservers installed, using
+        evdns_base_nameserver_ip_add(), than evdns_base_resume() will SEGFAULT,
+        because of NULL dereference in evdns_requests_pump_waiting_queue()
+    
+        Conflicts:
+        	evdns.c
+    
+    * Wed May 29 13:30:56 2013 -0400
+    
+        Use windows vsnprintf fixup logic on all windows environments
+    
+        Previously I'd relied on mingw to provide a vsnprintf with a
+        conformant return value.  But it appears that some mingw
+        environments don't do that.
+    
+    * Mon May 6 18:15:03 2013 +0400
+    
+        Checking request nameserver for NULL, before using it.
+
+* Sun Jul 21 09:56:37 2013 -0700
+
+    + CloudNS
+
+* Sat Jul 20 18:14:12 2013 -0700
+
+    Enable subdir-objects
+
+* Sat Jul 20 15:45:12 2013 -0700
+
+    Update ChangeLog
+
 * Sat Jul 20 13:58:58 2013 -0700
 
     ldns.h requires ws2tcpip.h on Windows
