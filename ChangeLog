@@ -1,3 +1,15 @@
+* Tue Aug 13 20:24:25 2013 -0700
+
+    Get back to 512 bytes for DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND
+
+* Tue Aug 13 20:22:42 2013 -0700
+
+    Fix tests: apprently, www.opendns.com IPv6 address changed.
+
+* Tue Aug 13 07:30:20 2013 -0700
+
+    Update ChangeLog
+
 * Mon Aug 12 22:38:54 2013 -0700
 
     Gradually increase the supported payload size.
