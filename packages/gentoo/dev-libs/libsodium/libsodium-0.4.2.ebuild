@@ -12,10 +12,11 @@ KEYWORDS="amd64 i386"
 
 src_configure() {
 	append-ldflags -Wl,-z,noexecstack || die
+	econf || die "econf failed"
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dodoc {AUTHORS,Changelog,COPYING,NEWS,README,INSTALL,THANKS} || die "dodoc failed"
+	dodoc {AUTHORS,ChangeLog,COPYING,NEWS,README,INSTALL,THANKS} || die "dodoc failed"
 }
