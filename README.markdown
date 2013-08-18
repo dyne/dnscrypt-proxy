@@ -32,9 +32,14 @@ Current list of free, DNSCrypt-enabled resolvers
   - Public key: B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
 
 * [CloudNS](https://cloudns.com.au/)
-  - Server address: 113.20.6.2:443
-  - Provider name: 2.dnscrypt-cert.cloudns.com.au
-  - Public key: 1971:7C1A:C550:6C09:F09B:ACB1:1AF7:C349:6425:2676:247F:B738:1C5A:243A:C1CC:89F4
+  * Canberra, Australia
+    - Server address: 113.20.6.2:443 or gc2tzw6lbmeagrp3.onion:443
+    - Provider name: 2.dnscrypt-cert.cloudns.com.au
+    - Public key: 1971:7C1A:C550:6C09:F09B:ACB1:1AF7:C349:6425:2676:247F:B738:1C5A:243A:C1CC:89F4
+  * Sydney, Australia
+    - Server address: 113.20.8.17:443 or l65q62lf7wnfme7m.onion:443
+    - Provider name: 2.dnscrypt-cert-2.cloudns.com.au
+    - Public key: 67A4:323E:581F:79B9:BC54:825F:54FE:1025:8B4F:37EB:0D07:0BCE:4010:6195:D94F:E330
 
 Download and integrity check
 ----------------------------
