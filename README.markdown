@@ -75,7 +75,13 @@ Install [libsodium](https://github.com/jedisct1/libsodium).
 On Linux, don't forget to run `ldconfig` if you installed it from
 source.
 
-Download the latest dnscrypt-proxy version and extract it:
+On Fedora, RHEL and CentOS, you may need to add `/usr/local/lib` to
+the paths the dynamic linker is going to look at. Before issuing
+`ldconfig`, type:
+
+    # echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
+
+Now, download the latest dnscrypt-proxy version and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
     $ cd dnscrypt-proxy-*
