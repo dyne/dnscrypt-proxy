@@ -322,6 +322,8 @@ AC_ARG_ENABLE(pie,
 [AS_HELP_STRING(--enable-pie,Produce position independent executables @<:@default=yes@:>@)],
  enable_pie=$enableval, enable_pie="maybe")
 
+AS_CASE([$host_os], [mingw*], [enable_pie="no"])
+
 AC_ARG_ENABLE(ssp,
 [AS_HELP_STRING(--disable-ssp,Don't compile with -fstack-protector)],
 [AS_IF([test "x$enableval" = "xno"], [
