@@ -3,7 +3,7 @@
 export CFLAGS="-Os -march=pentium2 -mtune=nocona"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
 
-./configure --disable-ssp --enable-plugins --with-included-ltdl && \
+./configure --enable-plugins --with-included-ltdl && \
   make install-strip
 
 upx --best --ultra-brute /usr/local/sbin/dnscrypt-proxy.exe &
