@@ -134,6 +134,8 @@ AS_IF([test -n "$DTRACE"],[
   PROBES_SOURCE="probes_no_dtrace.h"
 ])
 
+AC_SUBST([PROBES_SOURCE])
+
 AS_IF([test -d /usr/local/include], [
   CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 ])
@@ -388,7 +390,6 @@ AC_ARG_ENABLE(plugins-root,
 AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
 
 AC_SUBST([MAINT])
-AC_SUBST([PROBES_SOURCE])
 
 dnl Libtool.
 
