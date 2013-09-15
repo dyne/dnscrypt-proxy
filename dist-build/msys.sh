@@ -16,7 +16,8 @@ rm -fr "${PREFIX}/lib"
 cp /usr/local/lib/libldns-1.dll "${PREFIX}/bin"
 cp /usr/local/lib/libsodium-4.dll "${PREFIX}/bin"
 
-upx --best --ultra-brute "${PREFIX}/dnscrypt-proxy.exe" &
-upx --best --ultra-brute "${PREFIX}/hostip.exe"
-
-wait
+if false; then
+  upx --best --ultra-brute "${PREFIX}/dnscrypt-proxy.exe" &
+  upx --best --ultra-brute "${PREFIX}/hostip.exe"
+  wait
+fi
