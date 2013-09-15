@@ -318,23 +318,51 @@ AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit putc_unlocked gmtime_r])
 
 dnl Switches.
 
+AC_ARG_ENABLE(ssp,
+[AS_HELP_STRING(--disable-ssp,Do not compile with -fstack-protector)],
+[
+  AS_IF([test "x$enableval" = "xno"], [
+    enable_ssp="no"
+  ], [
+    enable_ssp="yes"
+  ])
+],
+[
+  enable_ssp="yes"
+])
+
 AC_ARG_ENABLE(pie,
 [AS_HELP_STRING(--disable-pie,Do not produce position independent executables)],
  enable_pie=$enableval, enable_pie="maybe")
 
 AS_CASE([$host_os], [mingw*], [enable_pie="no"])
 
-AC_ARG_ENABLE(ssp,
-[AS_HELP_STRING(--disable-ssp,Don't compile with -fstack-protector)],
-[AS_IF([test "x$enableval" = "xno"], [
-    nxflags=""
-    for flag in `echo $CFLAGS`; do
-      case "$flag" in
-       -fstack-protector*) ;;
-        *) AS_VAR_APPEND([nxflags], [" $flag"]) ;;
-      esac
-    done
-    CFLAGS="$nxflags"
+AC_ARG_WITH(safecode,
+[AS_HELP_STRING(--with-safecode,For maintainers only - please do not use)],
+[AS_IF([test "x$withval" = "xyes"], [
+    AC_ARG_VAR([SAFECODE_HOME], [set to the safecode base directory])
+    : ${SAFECODE_HOME:=/opt/safecode}
+    LDFLAGS="$LDFLAGS -L${SAFECODE_HOME}/lib"
+    LIBS="$LIBS -lsc_dbg_rt -lpoolalloc_bitmap -lstdc++"
+    CFLAGS="$CFLAGS -fmemsafety"
+  ])
+])
+
+AC_ARG_ENABLE(debug,
+[AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
+[
+  AS_IF([test "x$enableval" = "xyes"], [
+    AS_IF([test "x$LX_CFLAGS" = "xNONE"], [
+      nxflags=""
+      for flag in `echo $CFLAGS`; do
+        AS_CASE([$flag],
+          [-O*], [ ],
+          [-g*], [ ],
+          [*], [AS_VAR_APPEND([nxflags], [" $flag"])])
+      done
+      CFLAGS="$nxflags -O0 -g3"
+    ])
+    CPPFLAGS="$CPPFLAGS -DDEBUG=1"
   ])
 ])
 
@@ -358,34 +386,6 @@ AC_ARG_ENABLE(plugins-root,
 [CPPFLAGS="$CPPFLAGS -DENABLE_PLUGINS_ROOT=1"
  plugins_root=enabled])
 AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
-
-AC_ARG_ENABLE(debug,
-[AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
-[
-  AS_IF([test "x$LX_CFLAGS" = "xNONE"], [
-    nxflags=""
-    for flag in `echo $CFLAGS`; do
-      case "$flag" in
-        -O*) ;;
-        -g*) ;;
-        *) AS_VAR_APPEND([nxflags], [" $flag"]) ;;
-      esac
-    done
-    CFLAGS="$nxflags -O0 -g3"
-  ])
-  CPPFLAGS="$CPPFLAGS -DDEBUG=1"
-])
-
-AC_ARG_WITH(safecode,
-[AS_HELP_STRING(--with-safecode,For maintainers only - please do not use)],
-[AS_IF([test "x$withval" = "xyes"], [
-    AC_ARG_VAR([SAFECODE_HOME], [set to the safecode base directory])
-    : ${SAFECODE_HOME:=/opt/safecode}
-    LDFLAGS="$LDFLAGS -L${SAFECODE_HOME}/lib"
-    LIBS="$LIBS -lsc_dbg_rt -lpoolalloc_bitmap -lstdc++"
-    CFLAGS="$CFLAGS -fmemsafety"
-  ])
-])
 
 AC_SUBST([MAINT])
 AC_SUBST([PROBES_SOURCE])
