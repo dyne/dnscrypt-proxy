@@ -103,28 +103,18 @@ produce broken code on Mips targets with the -Os optimization level.
 Use a different level (-O and -O2 are fine) or upgrade the compiler.
 Thanks to Adrian Kotelba for reporting this.
 
-GUIs for dnscrypt-proxy
------------------------
+GUI for dnscrypt-proxy
+----------------------
 
 If you need a simple graphical user interface in order to start/stop
 the proxy and change your DNS settings, check out the following
-projects:
-
-- [DNSCrypt OSX Client](http://opendns.github.io/dnscrypt-osx-client/):
-A tool to easily use DNSCrypt with OpenDNS, configure plugins and
-define resolvers for specific domains. It has been implemented as a
-collection of shell scripts with a user interface in Objective C.
-Designed for OpenDNS only.
+project:
 
 - [DNSCrypt WinClient](https://github.com/FivfBx2dOQTC3gc8YS4yMNo0el/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET. Designed
 for OpenDNS only.
-
-- dnscrypt-proxy is also available on Cydia, and it can be easily
-enabled using [GuizmoDNS](http://modmyi.com/cydia/com.guizmo.dns).
-Designed for OpenDNS only.
 
 Server-side proxy
 -----------------
