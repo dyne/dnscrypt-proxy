@@ -4,6 +4,7 @@ export CFLAGS="-Os -march=pentium2 -mtune=nocona"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
 
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
+  --sbindir="${PREFIX}/bin" \
   --enable-plugins \
   --with-included-ltdl && \
 make install-strip
