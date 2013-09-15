@@ -359,10 +359,6 @@ AC_ARG_ENABLE(plugins-root,
  plugins_root=enabled])
 AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
 
-AC_ARG_ENABLE(blocking-random,
-[AS_HELP_STRING(--enable-blocking-random,Use /dev/random instead of /dev/urandom)],
-[AC_DEFINE([USE_BLOCKING_RANDOM], [1], [Use blocking random])])
-
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
 [
