@@ -174,7 +174,8 @@ Installation as a service (Windows only)
 The proxy can be installed as a Windows service.
 
 Copy the `dnscrypt-proxy.exe` file to any location, as well as the
-`libsodium-4.dll` file. Both should be in the same location. Then open a
+`libsodium-4.dll` file. Both should be in the same location. If you
+are using plugins depending on ldns, copy the ldns DLL as well. Then open a
 terminal and type (eventually with the full path to `dnscrypt-proxy.exe`):
 
     dnscrypt-proxy.exe --install
