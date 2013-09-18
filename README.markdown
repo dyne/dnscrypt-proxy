@@ -114,7 +114,7 @@ project:
 Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET. Designed
-for OpenDNS only.
+for OpenDNS and CloudNS.
 
 Server-side proxy
 -----------------
