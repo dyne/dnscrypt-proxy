@@ -41,6 +41,12 @@ Current list of free, DNSCrypt-enabled resolvers
     - Provider name: 2.dnscrypt-cert-2.cloudns.com.au
     - Public key: 67A4:323E:581F:79B9:BC54:825F:54FE:1025:8B4F:37EB:0D07:0BCE:4010:6195:D94F:E330
 
+* [OpenNIC](http://www.opennicproject.org/) - No logs
+  * Japan
+    - Server address: 106.186.17.181:2053
+    - Provider name: 2.dnscrypt-cert.ns2.jp.dns.opennic.glue
+    - Public key: 8768:C3DB:F70A:FBC6:3B64:8630:8167:2FD4:EE6F:E175:ECFD:46C9:22FC:7674:A1AC:2E2A
+
 Download and integrity check
 ----------------------------
 
