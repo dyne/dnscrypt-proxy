@@ -47,6 +47,12 @@ Current list of free, DNSCrypt-enabled resolvers
     - Provider name: 2.dnscrypt-cert.ns2.jp.dns.opennic.glue
     - Public key: 8768:C3DB:F70A:FBC6:3B64:8630:8167:2FD4:EE6F:E175:ECFD:46C9:22FC:7674:A1AC:2E2A
 
+* [DNSCrypt.eu](http://dnscrypt.eu/) - No logs
+  * Holland
+    - Server address: 176.56.237.171:443
+    - Provider name: 2.dnscrypt-cert.dnscrypt.eu
+    - Public key: 67C0:0F2C:21C5:5481:45DD:7CB4:6A27:1AF2:EB96:9931:40A3:09B6:2B8D:1653:1185:9C66
+
 Download and integrity check
 ----------------------------
 
