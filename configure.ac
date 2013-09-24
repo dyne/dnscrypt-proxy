@@ -235,6 +235,7 @@ AC_CHECK_HEADERS([ws2tcpip.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 
+AC_C_INLINE
 AC_C_BIGENDIAN
 AC_C_RESTRICT
 
