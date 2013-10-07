@@ -28,7 +28,7 @@ Current list of free, DNSCrypt-enabled resolvers
 
 * [OpenDNS](http://www.opendns.com)
   - Server address: 208.67.220.220:443
-  - Provider name: 2.dnscrypt-cert.dnscrypt.org
+  - Provider name: 2.dnscrypt-cert.opendns.com
   - Public key: B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
 
 * [CloudNS](https://cloudns.com.au/) - No logs
