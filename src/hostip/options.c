@@ -11,7 +11,7 @@
 #include "options.h"
 
 #ifndef DEFAULT_RESOLVER_IP
-# define DEFAULT_RESOLVER_IP "208.67.220.220"
+# define DEFAULT_RESOLVER_IP "8.8.8.8"
 #endif
 
 static struct option getopt_long_options[] = {
