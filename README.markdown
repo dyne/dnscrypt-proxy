@@ -31,7 +31,7 @@ Current list of free, DNSCrypt-enabled resolvers
   - Provider name: 2.dnscrypt-cert.opendns.com
   - Public key: B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
 
-* [CloudNS](https://cloudns.com.au/) - No logs
+* [CloudNS](https://cloudns.com.au/) - No logs, DNSSEC
   * Canberra, Australia
     - Server address: 113.20.6.2:443 or gc2tzw6lbmeagrp3.onion:443
     - Provider name: 2.dnscrypt-cert.cloudns.com.au
@@ -47,11 +47,18 @@ Current list of free, DNSCrypt-enabled resolvers
     - Provider name: 2.dnscrypt-cert.ns2.jp.dns.opennic.glue
     - Public key: 8768:C3DB:F70A:FBC6:3B64:8630:8167:2FD4:EE6F:E175:ECFD:46C9:22FC:7674:A1AC:2E2A
 
-* [DNSCrypt.eu](http://dnscrypt.eu/) - No logs
+* [DNSCrypt.eu](http://dnscrypt.eu/) - No logs, DNSSEC
   * Holland
     - Server address: 176.56.237.171:443
     - Provider name: 2.dnscrypt-cert.dnscrypt.eu
     - Public key: 67C0:0F2C:21C5:5481:45DD:7CB4:6A27:1AF2:EB96:9931:40A3:09B6:2B8D:1653:1185:9C66
+
+* [Soltysiak.com](http://dc1.soltysiak.com/) - No logs, DNSSEC
+  * Poznan, Poland
+    - Server address: 178.216.201.222
+    - Provider name: 2.dnscrypt-cert.soltysiak.com
+    - Public key: 25C4:E188:2915:4697:8F9C:2BBD:B6A7:AFA4:01ED:A051:0508:5D53:03E7:1928:C066:8F21
+
 
 Download and integrity check
 ----------------------------
