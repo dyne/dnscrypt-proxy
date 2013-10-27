@@ -55,7 +55,7 @@ Current list of free, DNSCrypt-enabled resolvers
 
 * [Soltysiak.com](http://dc1.soltysiak.com/) - No logs, DNSSEC
   * Poznan, Poland
-    - Server address: 178.216.201.222
+    - Server address: 178.216.201.222:2053
     - Provider name: 2.dnscrypt-cert.soltysiak.com
     - Public key: 25C4:E188:2915:4697:8F9C:2BBD:B6A7:AFA4:01ED:A051:0508:5D53:03E7:1928:C066:8F21
 
