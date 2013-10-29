@@ -1,10 +1,10 @@
-EAPI="3"
+EAPI=5
 
-inherit eutils flag-o-matic
+inherit autotools-utils
 
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver"
 HOMEPAGE="http://dnscrypt.org"
-SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-proxy-${PV}.tar.gz"
+SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -14,20 +14,25 @@ RDEPEND="
 	>=dev-libs/libsodium-0.4.2"
 IUSE="-plugins"
 
+AUTOTOOLS_IN_SOURCE_BUILD=1
+
+DOCS=(AUTHORS COPYING INSTALL NEWS README README.markdown TECHNOTES THANKS)
+
 pkg_setup() {
 	enewgroup dnscrypt
 	enewuser dnscrypt -1 -1 /var/empty dnscrypt
 }
 
 src_configure() {
-	econf $(use_enable plugins)
+	local myeconfargs=(
+		$(use_enable plugins)
+	)
+	autotools-utils_src_configure
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	autotools-utils_src_install
 
 	newinitd "${FILESDIR}/dnscrypt-proxy_1_2_0.initd" dnscrypt-proxy || die "newinitd failed"
 	newconfd "${FILESDIR}/dnscrypt-proxy_1_2_0.confd" dnscrypt-proxy || die "newconfd failed"
-
-	dodoc {AUTHORS,COPYING,INSTALL,NEWS,README,README.markdown,TECHNOTES,THANKS} || die "dodoc failed"
 }
