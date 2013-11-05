@@ -18,6 +18,11 @@ AUTOTOOLS_IN_SOURCE_BUILD=1
 
 DOCS=(AUTHORS COPYING INSTALL NEWS README README.markdown TECHNOTES THANKS)
 
+PATCHES=(
+	"${FILESDIR}/0001-Handle-disable-plugins-correctly-in-configure.ac.patch"
+)
+AUTOTOOLS_AUTORECONF=1
+
 pkg_setup() {
 	enewgroup dnscrypt
 	enewuser dnscrypt -1 -1 /var/empty dnscrypt
