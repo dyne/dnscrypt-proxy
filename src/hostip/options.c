@@ -36,7 +36,7 @@ options_usage(void)
     puts("Usage: hostip [-6] [-r resolver_ip[:port]] host_name\n"
          "  -6, --ipv6: ask for AAAA records\n"
          "  -h, --help: show usage\n"
-         "  -r, --resolver-address=<ip>: the resolver IP address (default: OpenDNS)\n"
+         "  -r, --resolver-address=<ip>: the resolver IP address\n"
          "  -V, --version: show version number\n"
          "\n"
          "Example: hostip -r 208.67.222.222 www.example.com\n");
