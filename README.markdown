@@ -46,6 +46,19 @@ Current list of free, DNSCrypt-enabled resolvers
     - Server address: 106.186.17.181:2053
     - Provider name: 2.dnscrypt-cert.ns2.jp.dns.opennic.glue
     - Public key: 8768:C3DB:F70A:FBC6:3B64:8630:8167:2FD4:EE6F:E175:ECFD:46C9:22FC:7674:A1AC:2E2A
+  * UK
+    * NovaKing (ns8)
+      - Server address: 185.19.104.45:443
+      - Provider name: 2.dnscrypt-cert.ns8.uk.dns.opennic.glue
+      - Public key: A17C:06FC:BA21:F2AC:F4CD:9374:016A:684F:4F56:564A:EB30:A422:3D9D:1580:A461:B6A6
+    * NovaKing (ns9)
+      - Server address: 185.19.105.6:443
+      - Provider name: 2.dnscrypt-cert.ns9.uk.dns.opennic.glue
+      - Public key: E864:80D9:DFBD:9DB4:58EA:8063:292F:EC41:9126:8394:BC44:FAB8:4B6E:B104:8C3B:E0B4
+    * NovaKing (ns10)
+      - Server address: 185.19.105.14:443
+      - Provider name: 2.dnscrypt-cert.ns10.uk.dns.opennic.glue
+      - Public key: B1AB:7025:1119:9AEE:E42E:1B12:F2EF:12D4:53D9:CD92:E07B:9AF4:4794:F6EB:E5A4:F725
 
 * [DNSCrypt.eu](http://dnscrypt.eu/) - No logs, DNSSEC
   * Holland
