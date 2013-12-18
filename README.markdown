@@ -9,9 +9,9 @@ Description
 -----------
 
 dnscrypt-proxy provides local service which can be used directly as
-your local resolver or as a DNS forwarder, encrypting and
-authenticating requests using the DNSCrypt protocol and passing them
-to an upstream server, by default OpenDNS.
+your local resolver or as a DNS forwarder, authenticating requests
+using the DNSCrypt protocol and passing them to an upstream server, by
+default OpenDNS.
 
 The DNSCrypt protocol uses high-speed high-security elliptic-curve
 cryptography and is very similar to [DNSCurve](http://dnscurve.org/),
