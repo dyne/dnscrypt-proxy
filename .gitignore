@@ -16,6 +16,7 @@ INSTALL
 Makefile
 Makefile.in
 aclocal.m4
+android-toolchain
 autom4te.cache
 build
 compile
