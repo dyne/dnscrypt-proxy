@@ -187,7 +187,7 @@ address than 127.0.0.1
 * `--loglevel=<level>` if you need less verbosity in log files.
 * `--max-active-requests=<count>` to set the maximum number of active
   requests. The default value is 250.
-* `--pid-file=<file>` in order to store the PID number to a file.
+* `--pidfile=<file>` in order to store the PID number to a file.
 * `--user=<user name>` in order to chroot()/drop privileges.
 * `--test` in order to check that the server-side proxy is properly
 configured and that a valid certificate can be used. This is useful
