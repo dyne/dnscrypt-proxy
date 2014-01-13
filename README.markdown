@@ -154,7 +154,7 @@ can act as a gateway service. Windows only, written in .NET. Designed
 for OpenDNS and CloudNS.
 
 - [DNSCrypt Windows Service Manager](http://simonclausen.dk/projects/dnscrypt-winservicemgr/):
-Assiss in setting up DNSCrypt as a service, configure it and change network adapter DNS
+Assists in setting up DNSCrypt as a service, configure it and change network adapter DNS
 settings to use DNSCrypt. It includes the option to use TCP/UDP protocol, IPV4/IPV6
 connectivity, choice of network adapter to configure, as well as configurations for currently
 available DNSCrypt providers.
