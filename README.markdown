@@ -62,9 +62,14 @@ Current list of free, DNSCrypt-enabled resolvers
 
 * [DNSCrypt.eu](http://dnscrypt.eu/) - No logs, DNSSEC
   * Holland
-    - Server address: 176.56.237.171:443
-    - Provider name: 2.dnscrypt-cert.dnscrypt.eu
+    - Server address: 176.56.237.171:443 or [2a00:d880:3:1::a6c1:2e89]:443
+    - Provider name: 2.dnscrypt-cert.resolver1.dnscrypt.eu
     - Public key: 67C0:0F2C:21C5:5481:45DD:7CB4:6A27:1AF2:EB96:9931:40A3:09B6:2B8D:1653:1185:9C66
+
+  * Denmark
+    - Server address: 77.66.84.233:443
+    - Provider name: 2.dnscrypt-cert.resolver2.dnscrypt.eu
+    - Public key: 3748:5585:E3B9:D088:FD25:AD36:B037:01F5:520C:D648:9E9A:DD52:1457:4955:9F0A:9955
 
 * [Soltysiak.com](http://dc1.soltysiak.com/) - No logs, DNSSEC
   * Poznan, Poland
