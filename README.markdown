@@ -59,6 +59,15 @@ Current list of free, DNSCrypt-enabled resolvers
       - Server address: 185.19.105.14:443
       - Provider name: 2.dnscrypt-cert.ns10.uk.dns.opennic.glue
       - Public key: B1AB:7025:1119:9AEE:E42E:1B12:F2EF:12D4:53D9:CD92:E07B:9AF4:4794:F6EB:E5A4:F725
+  * USA
+    * Fremont, CA
+      - Server address: 173.230.156.28:443
+      - Provider name: 2.dnscrypt-cert.ns17.ca.us.dns.opennic.glue
+      - Public key: 2342:215C:409A:85A5:FB63:2A3B:42CD:5089:6BA8:551A:8BDC:2654:CF57:804F:B1B2:5019
+    * Fremont, CA #2
+      - Server address: [2600:3c01::f03c:91ff:fe6e:1f6b]:443
+      - Provider name: 2.dnscrypt-cert.ns18.ca.us.dns.opennic.glue
+      - Public key: 689B:DAF2:6A9F:DB2D:42B4:AA15:1825:89E8:6FAE:0C2C:522A:D0AA:DD2B:80B4:8D61:0A43
 
 * [DNSCrypt.eu](http://dnscrypt.eu/) - No logs, DNSSEC
   * Holland
