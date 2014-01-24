@@ -8,6 +8,9 @@ local-address=127.0.0.2:53
 pidfile=/run/dnscrypt-proxy.pid
 
 # Remote DNS(Crypt) provider settings
+# You can find a list of resolvers at https://github.com/jedisct1/dnscrypt-proxy/
+# or locally in file /usr/share/doc/dnscrypt-proxy/README.markdown.gz
+# Specifying multiple resolvers is not yet supported!
 #resolver-address=208.67.220.220:443
 #provider-name=2.dnscrypt-cert.opendns.com
 #provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 
