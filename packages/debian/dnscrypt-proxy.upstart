@@ -9,7 +9,7 @@ pre-start script
     mkdir -p /run/dnscrypt
 
     #Load the AppArmor profile, otherwise it wouldn't be applied
-    /lib/init/apparmor-profile-load usr.sbin.dnscrypt-proxy
+    /lib/init/apparmor-profile-load usr.sbin.dnscrypt-proxy || true
 end script
 
 script
