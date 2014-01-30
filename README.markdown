@@ -76,7 +76,7 @@ Current list of free, DNSCrypt-enabled resolvers
     - Public key: 67C0:0F2C:21C5:5481:45DD:7CB4:6A27:1AF2:EB96:9931:40A3:09B6:2B8D:1653:1185:9C66
 
   * Denmark
-    - Server address: 77.66.84.233:443
+    - Server address: 77.66.84.233:443 or [2001:1448:243::dc2]:443
     - Provider name: 2.dnscrypt-cert.resolver2.dnscrypt.eu
     - Public key: 3748:5585:E3B9:D088:FD25:AD36:B037:01F5:520C:D648:9E9A:DD52:1457:4955:9F0A:9955
 
