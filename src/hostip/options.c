@@ -26,8 +26,7 @@ static const char   *getopt_options = "6hr:V";
 static void
 options_version(void)
 {
-    puts("hostip v" PACKAGE_VERSION "\n"
-         "Copyright (C) 2012 OpenDNS, Inc.");
+    puts("hostip v" PACKAGE_VERSION);
 }
 
 static void
