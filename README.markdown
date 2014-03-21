@@ -25,7 +25,7 @@ DNS queries.
 Current list of free, DNSCrypt-enabled resolvers
 ------------------------------------------------
 
-* [OKTurtles](http://okturtles.com/) - No logs, DNSSEC and more - part of the [http://okturtles.com/#DNSChain](DNSChain) project
+* [OKTurtles](http://okturtles.com/) - No logs - part of the [http://okturtles.com/#DNSChain](DNSChain) project
   - Server address: 23.226.227.93:443
   - Provider name: 2.dnscrypt-cert.okturtles.com
   - Provider key: 1D85:3953:E34F:AFD0:05F9:4C6F:D1CC:E635:D411:9904:0D48:D19A:5D35:0B6A:7C81:73CB
