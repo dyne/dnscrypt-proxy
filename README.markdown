@@ -10,8 +10,7 @@ Description
 
 dnscrypt-proxy provides local service which can be used directly as
 your local resolver or as a DNS forwarder, authenticating requests
-using the DNSCrypt protocol and passing them to an upstream server, by
-default OpenDNS.
+using the DNSCrypt protocol and passing them to an upstream server.
 
 The DNSCrypt protocol uses high-speed high-security elliptic-curve
 cryptography and is very similar to [DNSCurve](http://dnscurve.org/),
@@ -184,7 +183,10 @@ for this user's uid as soon as possible.
 
 The easiest way to start the daemon is:
 
-    # dnscrypt-proxy --daemonize
+    # dnscrypt-proxy --daemonize \
+      --provider-name=2.dnscrypt-cert.opendns.com \
+      --provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \
+      --server-address=208.67.220.220:443
 
 The proxy will accept incoming requests on 127.0.0.1, tag them with an
 authentication code, forward them to OpenDNS resolvers, and validate
@@ -214,11 +216,11 @@ configured and that a valid certificate can be used. This is useful
 for monitoring your own dnscrypt proxy. See the man page for more
 information.
 
-DNSCrypt comes pre-configured for OpenDNS, although the
+The
 `--resolver-address=<ip>[:port]`,
 `--provider-name=<certificate provider FQDN>`
-and `--provider-key=<provider public key>` can be specified in
-order to change the default settings.
+and `--provider-key=<provider public key>` switches should be specified in
+order to use a specific DNSCrypt-enabled recursive DNS service.
 
 Installation as a service (Windows only)
 ----------------------------------------
