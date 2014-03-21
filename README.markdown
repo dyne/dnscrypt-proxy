@@ -158,8 +158,7 @@ project:
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
-can act as a gateway service. Windows only, written in .NET. Designed
-for OpenDNS and CloudNS.
+can act as a gateway service. Windows only, written in .NET.
 
 - [DNSCrypt Windows Service Manager](http://simonclausen.dk/projects/dnscrypt-winservicemgr/):
 Assists in setting up DNSCrypt as a service, configure it and change network adapter DNS
