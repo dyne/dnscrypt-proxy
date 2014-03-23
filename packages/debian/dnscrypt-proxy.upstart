@@ -22,5 +22,5 @@ script
         done
     fi
 
-    exec /usr/sbin/dnscrypt-proxy --user=dnscrypt $options
+    exec /usr/sbin/dnscrypt-proxy $options
 end script
