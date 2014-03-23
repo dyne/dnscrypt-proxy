@@ -16,7 +16,7 @@ script
     conffile="/etc/default/dnscrypt-proxy"
 
     if test -r "$conffile"; then
-        params="$(grep -v '^#' $conffile | cut -d '#' -f 1)"
+        params="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep -v '^resolvconf')"
         for parameter in $params; do
             test -n "$parameter" && options="$options --$parameter"
         done
