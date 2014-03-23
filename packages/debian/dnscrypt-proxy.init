@@ -51,12 +51,12 @@ case "$1" in
 	    log_end_msg 1
 	fi
 
-	params="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep -v 'resolvconf')"
+	params="$(grep -v '^#' $CONF | cut -d '#' -f 1 | grep -v 'resolvconf')"
 	for parameter in $params; do
 	    test -n "$parameter" && OPTIONS="$OPTIONS --$parameter"
 	done
 
-	if start-stop-daemon --start --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
+	if start-stop-daemon --start --background --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 		--pidfile ${PIDFILE} -- $OPTIONS; then
 	    if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
 		    echo "nameserver $(grep '^local-address' $CONF | head -n 1 \
@@ -79,29 +79,33 @@ case "$1" in
 	if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
 	    /sbin/resolvconf -d lo.dnscrypt
 	fi
-	pid=$(pgrep -f ^/usr/sbin/dnscrypt-proxy) || true
+	pid=$(pgrep --newest -f ^/usr/sbin/dnscrypt-proxy) || true
 	start-stop-daemon --stop --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 	    --pidfile ${PIDFILE} -- $OPTIONS
-	if [ -n $pid ]; then
+	if [ -n "$pid" ]; then
 	    sig=0
 	    n=1
 	    while kill -$sig $pid 2>/dev/null; do
 		if [ $n -eq 1 ]; then
-		    echo "waiting for pid $pid to die"
+		    echo -n " waiting for pid $pid to die"
 		fi
 		if [ $n -eq 11 ]; then
-		    echo "giving up on pid $pid with kill -0; trying -9"
+		    echo -n ". giving up on pid $pid with kill -0; trying -9"
 		    sig=9
 		fi
 		if [ $n -gt 20 ]; then
-		    echo "giving up on pid $pid"
+		    echo -n ". giving up on pid $pid."
 		    break
 		fi
 		n=$(($n+1))
 		sleep 1
 	    done
 	fi
-	log_end_msg 0
+	if [ $n -gt 20 ]; then
+	    log_end_msg 1
+	else
+	    log_end_msg 0
+	fi
     ;;
 
     restart|reload|force-reload)
