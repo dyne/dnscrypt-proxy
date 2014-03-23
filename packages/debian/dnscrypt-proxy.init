@@ -82,9 +82,9 @@ case "$1" in
 	pid=$(pgrep --newest -f ^/usr/sbin/dnscrypt-proxy) || true
 	start-stop-daemon --stop --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 	    --pidfile ${PIDFILE} -- $OPTIONS
+	n=0
 	if [ -n "$pid" ]; then
 	    sig=0
-	    n=1
 	    while kill -$sig $pid 2>/dev/null; do
 		if [ $n -eq 1 ]; then
 		    echo -n " waiting for pid $pid to die"
@@ -101,7 +101,7 @@ case "$1" in
 		sleep 1
 	    done
 	fi
-	if [ $n -gt 20 ]; then
+	if [ $n -gt 20 ] || [ $n -lt 1 ]; then
 	    log_end_msg 1
 	else
 	    log_end_msg 0
