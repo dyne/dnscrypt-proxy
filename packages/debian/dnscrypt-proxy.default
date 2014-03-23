@@ -10,6 +10,10 @@ resolvconf=no
 # Write PID to a file.
 pidfile=/run/dnscrypt-proxy.pid
 
+# runs dnscrypt-proxy as a dedicated user with restrict privileges
+# This is a security feature and should never be disabled.
+user=dnscrypt
+
 # Remote DNS(Crypt) provider settings
 # You can find a list of resolvers at https://github.com/jedisct1/dnscrypt-proxy/
 # or locally in file /usr/share/doc/dnscrypt-proxy/README.markdown.gz
