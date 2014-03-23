@@ -11,6 +11,7 @@ Vcs-Browser: https://github.com/jedisct1/dnscrypt-proxy
 Package: dnscrypt-proxy
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
+Suggests: resolvconf
 Description: Tool for securing communications between a client and a DNS resolver
  dnscrypt-proxy provides local service which can be used directly as your local
  resolver or as a DNS forwarder, encrypting and authenticating requests using
