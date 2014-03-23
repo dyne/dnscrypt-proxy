@@ -4,6 +4,9 @@
 # What local IP the daemon will listen to, with an optional port. The default port is 53.
 local-address=127.0.0.2:53
 
+# instructs resolvconf (if installed) to update the machine dns servers
+resolvconf=no
+
 # Write PID to a file.
 pidfile=/run/dnscrypt-proxy.pid
 
