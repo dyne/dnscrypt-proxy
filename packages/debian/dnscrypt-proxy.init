@@ -59,7 +59,7 @@ case "$1" in
 	if start-stop-daemon --start --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 		--pidfile ${PIDFILE} -- $OPTIONS; then
 	    if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
-		    echo "nameserver $(grep '^local-address' $CONF | head -n 1 
+		    echo "nameserver $(grep '^local-address' $CONF | head -n 1 \
 			| cut -d '=' -f 2 | cut -d ':' -f 1)" \
 			| /sbin/resolvconf -a lo.dnscrypt
 	    fi
