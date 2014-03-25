@@ -190,7 +190,7 @@ The easiest way to start the daemon is:
     # dnscrypt-proxy --daemonize \
       --provider-name=2.dnscrypt-cert.opendns.com \
       --provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \
-      --server-address=208.67.220.220:443
+      --resolver-address=208.67.220.220:443
 
 The proxy will accept incoming requests on 127.0.0.1, tag them with an
 authentication code, forward them to OpenDNS resolvers, and validate
