@@ -171,6 +171,10 @@ settings to use DNSCrypt. It includes the option to use TCP/UDP protocol, IPV4/I
 connectivity, choice of network adapter to configure, as well as configurations for currently
 available DNSCrypt providers.
 
+- [DNSCrypt Tools for Linux](http://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
+A set of tools for dnscrypt-proxy. Features a start and stop button as well as options to enable
+or disable from startup. Developed for Porteus Linux.
+
 Server-side proxy
 -----------------
 
