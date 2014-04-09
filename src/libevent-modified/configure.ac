@@ -92,8 +92,8 @@ AC_ARG_ENABLE([libevent-install],
      AS_HELP_STRING([--disable-libevent-install, disable installation of libevent]),
 	[], [enable_libevent_install=yes])
 AC_ARG_ENABLE([libevent-regress],
-     AS_HELP_STRING([--disable-libevent-regress, skip regress in make check]),
-	[], [enable_libevent_regress=yes])
+     AS_HELP_STRING([--enable-libevent-regress, enable regress in make check]),
+	[enable_libevent_regress=yes], [])
 AC_ARG_ENABLE([function-sections],
      AS_HELP_STRING([--enable-function-sections, make static library allow smaller binaries with --gc-sections]),
 	[], [enable_function_sections=no])
