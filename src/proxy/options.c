@@ -68,19 +68,6 @@ static const char *getopt_options = "a:e:hk:m:n:r:t:u:N:TVX";
 # define DEFAULT_CONNECTIONS_COUNT_MAX 250U
 #endif
 
-#ifndef DEFAULT_PROVIDER_PUBLICKEY
-# define DEFAULT_PROVIDER_PUBLICKEY \
-    "B735:1140:206F:225D:3E2B:D822:D7FD:691E:" \
-    "A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79"
-#endif
-#ifndef DEFAULT_PROVIDER_NAME
-# define DEFAULT_PROVIDER_NAME \
-    DNSCRYPT_PROTOCOL_VERSIONS ".dnscrypt-cert.opendns.com."
-#endif
-#ifndef DEFAULT_RESOLVER_IP
-# define DEFAULT_RESOLVER_IP "208.67.220.220:443"
-#endif
-
 static void
 options_version(void)
 {
@@ -120,9 +107,9 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->log_fd = -1;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
-    proxy_context->provider_name = DEFAULT_PROVIDER_NAME;
-    proxy_context->provider_publickey_s = DEFAULT_PROVIDER_PUBLICKEY;
-    proxy_context->resolver_ip = DEFAULT_RESOLVER_IP;
+    proxy_context->provider_name = NULL;
+    proxy_context->provider_publickey_s = NULL;
+    proxy_context->resolver_ip = NULL;
 #ifndef _WIN32
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
@@ -151,8 +138,16 @@ options_check_protocol_versions(const char * const provider_name)
 static int
 options_apply(ProxyContext * const proxy_context)
 {
-    if (proxy_context->resolver_ip == NULL) {
-        options_usage();
+    if (proxy_context->resolver_ip == NULL ||
+        *proxy_context->resolver_ip == 0) {
+        logger_noformat(proxy_context, LOG_ERR, "Resolver IP address required");
+#ifdef _WIN32
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Consult http://dnscrypt.org for details.");
+#else
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Please consult the dnscrypt-proxy(8) man page for details.");
+#endif
         exit(1);
     }
     if (proxy_context->provider_name == NULL ||
