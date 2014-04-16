@@ -101,9 +101,11 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
                ctx->dest_addr, ctx->dest_len) == (ssize_t) ctx->length) {
         cb = ctx->cb;
         if (udp_request->sendto_retry_timer != NULL) {
-            assert(event_get_callback_arg(udp_request->sendto_retry_timer)
-                   == ctx);
-            free(ctx);
+            ctx_cb = event_get_callback_arg(udp_request->sendto_retry_timer);
+            assert(ctx_cb != NULL);
+            assert(ctx_cb->udp_request == ctx->udp_request);
+            assert(ctx_cb->buffer == ctx->buffer);
+            free(ctx_cb);
             event_free(udp_request->sendto_retry_timer);
             udp_request->sendto_retry_timer = NULL;
         }
@@ -139,13 +141,15 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
         assert(ctx_cb != NULL);
         assert(ctx_cb->udp_request == ctx->udp_request);
         assert(ctx_cb->buffer == ctx->buffer);
-        assert(ctx_cb->cb == ctx->cb);
     } else {
         if ((ctx_cb = malloc(sizeof *ctx_cb)) == NULL) {
             logger_error(udp_request->proxy_context, "malloc");
             udp_request_kill(udp_request);
             return -1;
         }
+        assert(ctx_cb ==
+               event_get_callback_arg(udp_request->sendto_retry_timer));
+        *ctx_cb = *ctx;
         if ((udp_request->sendto_retry_timer =
              evtimer_new(udp_request->proxy_context->event_loop,
                          sendto_with_retry_timer_cb, ctx_cb)) == NULL) {
@@ -153,9 +157,6 @@ sendto_with_retry(SendtoWithRetryCtx * const ctx)
             udp_request_kill(udp_request);
             return -1;
         }
-        assert(ctx_cb ==
-               event_get_callback_arg(udp_request->sendto_retry_timer));
-        *ctx_cb = *ctx;
     }
     const struct timeval tv = {
         .tv_sec = (time_t) UDP_DELAY_BETWEEN_RETRIES, .tv_usec = 0
