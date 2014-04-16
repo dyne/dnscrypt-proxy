@@ -5,13 +5,6 @@
 
 #include "minicsv.h"
 
-#ifndef MINICSV_DELIM
-# define MINICSV_DELIM ','
-#endif
-#ifndef MINICSV_QUOTE
-# define MINICSV_QUOTE '"'
-#endif
-
 static inline void
 _minicsv_out_col(char * const col_start, char ** const cols,
                  size_t * const cols_count_p, const size_t cols_max)
