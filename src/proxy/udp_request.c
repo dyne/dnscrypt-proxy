@@ -196,7 +196,7 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
     if (evutil_sockaddr_cmp((const struct sockaddr *) &resolver_sockaddr,
                             (const struct sockaddr *)
                             &proxy_context->resolver_sockaddr, 1) != 0) {
-        logger_noformat(proxy_context, LOG_WARNING,
+        logger_noformat(proxy_context, LOG_DEBUG,
                         "Received a resolver reply from a different resolver");
         return;
     }
