@@ -18,6 +18,8 @@ dnscrypt_proxy_SOURCES = \
 	getpwnam.h \
 	logger.c \
 	logger.h \
+	minicsv.c \
+	minicsv.h \
 	options.c \
 	options.h \
 	pathnames.h \
