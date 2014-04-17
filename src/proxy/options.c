@@ -147,7 +147,7 @@ options_read_file(const char * const file_name)
     size_t  file_size = (size_t) 0U;
 
     assert(file_name != NULL);
-    if ((fp = fopen(file_name, "r")) == NULL) {
+    if ((fp = fopen(file_name, "rb")) == NULL) {
         return NULL;
     }
     while (fgetc(fp) != EOF && file_size < SIZE_MAX) {
