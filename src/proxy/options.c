@@ -315,14 +315,34 @@ options_apply(ProxyContext * const proxy_context)
         }
     }
     if (proxy_context->resolver_ip == NULL ||
-        *proxy_context->resolver_ip == 0) {
-        logger_noformat(proxy_context, LOG_ERR, "Resolver name or IP address required");
+        *proxy_context->resolver_ip == 0 ||
+        proxy_context->provider_name == NULL ||
+        *proxy_context->provider_name == 0 ||
+        proxy_context->provider_publickey_s == NULL ||
+        *proxy_context->provider_publickey_s == 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Resolver information required.");
+        logger_noformat(proxy_context, LOG_ERR,
+                        "The easiest way to do so is to provide a resolver name.");
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Example: dnscrypt-proxy -R mydnsprovider");
+        logger(proxy_context, LOG_ERR,
+               "See the file [%s] for a list of compatible public resolvers",
+               proxy_context->resolvers_list);
+        logger_noformat(proxy_context, LOG_ERR,
+                        "The name is the first column in this table.");
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Alternatively, an IP address, a provider name "
+                        "and a provider key can be supplied.");
 #ifdef _WIN32
         logger_noformat(proxy_context, LOG_ERR,
-                        "Consult http://dnscrypt.org for details.");
+                        "Consult http://dnscrypt.org "
+                        "and https://github.com/jedisct1/dnscrypt-proxy/blob/master/README-WINDOWS.markdown "
+                        "for details.");
 #else
         logger_noformat(proxy_context, LOG_ERR,
-                        "Please consult the dnscrypt-proxy(8) man page for details.");
+                        "Please consult http://dnscrypt.org "
+                        "and the dnscrypt-proxy(8) man page for details.");
 #endif
         exit(1);
     }
