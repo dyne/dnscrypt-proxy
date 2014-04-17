@@ -61,9 +61,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:l:m:n:p:r:t:u:N:TVX";
+static const char *getopt_options = "a:de:hk:L:l:m:n:p:r:R:t:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:m:n:r:t:u:N:TVX";
+static const char *getopt_options = "a:e:hk:L:m:n:r:R:t:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -139,12 +139,68 @@ options_check_protocol_versions(const char * const provider_name)
     return 0;
 }
 
+static char *
+options_read_file(const char * const file_name)
+{
+    FILE   *fp;
+    char   *file_buf;
+    size_t  file_size = (size_t) 0U;
+
+    assert(file_name != NULL);
+    if ((fp = fopen(file_name, "r")) == NULL) {
+        return NULL;
+    }
+    while (fgetc(fp) != EOF && file_size < SIZE_MAX) {
+        file_size++;
+    }
+    if (feof(fp) == 0) {
+        fclose(fp);
+        return NULL;
+    }
+    rewind(fp);
+    if ((file_buf = malloc(file_size)) == NULL) {
+        fclose(fp);
+        return NULL;
+    }
+    if (fread(file_buf, file_size, (size_t) 1U, fp) != 1U) {
+        fclose(fp);
+        free(file_buf);
+        return NULL;
+    }
+    (void) fclose(fp);
+
+    return file_buf;
+}
+
+static int
+options_use_resolver_name(ProxyContext * const proxy_context)
+{
+    char *file_buf;
+
+    file_buf = options_read_file(proxy_context->resolvers_list);
+    if (file_buf == NULL) {
+        logger(proxy_context, LOG_ERR, "Unable to read [%s]",
+               proxy_context->resolvers_list);
+        exit(1);
+    }
+    free(file_buf);
+
+    return 0;
+}
+
 static int
 options_apply(ProxyContext * const proxy_context)
 {
+    if (proxy_context->resolver_name != NULL) {
+        if (proxy_context->resolvers_list == NULL) {
+            logger_noformat(proxy_context, LOG_ERR, "Resolvers list required");
+            exit(1);
+        }
+        options_use_resolver_name(proxy_context);
+    }
     if (proxy_context->resolver_ip == NULL ||
         *proxy_context->resolver_ip == 0) {
-        logger_noformat(proxy_context, LOG_ERR, "Resolver IP address required");
+        logger_noformat(proxy_context, LOG_ERR, "Resolver name or IP address required");
 #ifdef _WIN32
         logger_noformat(proxy_context, LOG_ERR,
                         "Consult http://dnscrypt.org for details.");
