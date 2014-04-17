@@ -35,7 +35,8 @@ static struct option getopt_long_options[] = {
 #endif
     { "edns-payload-size", 1, NULL, 'e' },
     { "help", 0, NULL, 'h' },
-    { "provider-key", 1, NULL, 'k' },
+    { "resolvers-list", 1, NULL, 'L' },
+    { "resolver-name", 1, NULL, 'R' },
 #ifndef _WIN32
     { "logfile", 1, NULL, 'l' },
 #endif
@@ -45,9 +46,10 @@ static struct option getopt_long_options[] = {
     { "pidfile", 1, NULL, 'p' },
 #endif
     { "plugin", 1, NULL, 'X' },
+    { "provider-name", 1, NULL, 'N' },
+    { "provider-key", 1, NULL, 'k' },
     { "resolver-address", 1, NULL, 'r' },
     { "user", 1, NULL, 'u' },
-    { "provider-name", 1, NULL, 'N' },
     { "test", 1, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
     { "version", 0, NULL, 'V' },
@@ -107,6 +109,8 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->log_fd = -1;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
+    proxy_context->resolvers_list = DEFAULT_RESOLVERS_LIST;
+    proxy_context->resolver_name = NULL;
     proxy_context->provider_name = NULL;
     proxy_context->provider_publickey_s = NULL;
     proxy_context->resolver_ip = NULL;
@@ -241,6 +245,12 @@ options_parse(AppContext * const app_context,
             break;
         case 'l':
             proxy_context->log_file = optarg;
+            break;
+        case 'L':
+            proxy_context->resolvers_list = optarg;
+            break;
+        case 'R':
+            proxy_context->resolver_name = optarg;
             break;
         case 'm': {
             char *endptr;

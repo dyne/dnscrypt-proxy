@@ -237,6 +237,8 @@ AS_IF([test -d /usr/local/lib], [
   LDFLAGS="$LDFLAGS -L/usr/local/lib"
 ])
 
+CPPFLAGS="$CPPFLAGS -DCONFDIR=\\\"$sysconfdir\\\""
+
 dnl Checks for header files.
 
 AC_SYS_LARGEFILE

@@ -39,6 +39,14 @@
 # define DNS_DEFAULT_RESOLVER_PORT "443"
 #endif
 
+#ifndef DEFAULT_RESOLVER_NAME
+# define DEFAULT_RESOLVER_NAME "opendns"
+#endif
+
+#ifndef DEFAULT_RESOLVERS_LIST
+# define DEFAULT_RESOLVERS_LIST CONFDIR "/dnscrypt-resolvers.csv"
+#endif
+
 #define DNS_HEADER_SIZE  12U
 #define DNS_FLAGS_TC      2U
 #define DNS_FLAGS_QR    128U
@@ -87,6 +95,8 @@ typedef struct ProxyContext_ {
     const char              *pid_file;
     const char              *provider_name;
     const char              *provider_publickey_s;
+    const char              *resolvers_list;
+    const char              *resolver_name;
     const char              *resolver_ip;
     struct evconnlistener   *tcp_conn_listener;
     struct event            *tcp_accept_timer;
