@@ -17,10 +17,13 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <event2/util.h>
+
 #include "dnscrypt_proxy.h"
 #include "getpwnam.h"
 #include "options.h"
 #include "logger.h"
+#include "minicsv.h"
 #include "pid_file.h"
 #include "utils.h"
 #include "windows_service.h"
@@ -110,7 +113,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
     proxy_context->resolvers_list = DEFAULT_RESOLVERS_LIST;
-    proxy_context->resolver_name = NULL;
+    proxy_context->resolver_name = DEFAULT_RESOLVER_NAME;
     proxy_context->provider_name = NULL;
     proxy_context->provider_publickey_s = NULL;
     proxy_context->resolver_ip = NULL;
@@ -172,6 +175,106 @@ options_read_file(const char * const file_name)
     return file_buf;
 }
 
+static const char *
+options_get_col(char * const * const headers, const size_t headers_count,
+                char * const * const cols, const size_t cols_count,
+                const char * const header)
+{
+    size_t i = (size_t) 0U;
+
+    while (i < headers_count) {
+        if (strcmp(header, headers[i]) == 0) {
+            if (i < cols_count) {
+                return cols[i];
+            }
+            break;
+        }
+        i++;
+    }
+    return NULL;
+}
+
+static int
+options_parse_resolver(ProxyContext * const proxy_context,
+                       char * const * const headers, const size_t headers_count,
+                       char * const * const cols, const size_t cols_count)
+{
+    const char *provider_name;
+    const char *provider_publickey_s;
+    const char *resolver_ip;
+    const char *resolver_name;
+
+    resolver_name = options_get_col(headers, headers_count,
+                                    cols, cols_count, "Name");
+    if (evutil_ascii_strcasecmp(resolver_name,
+                                proxy_context->resolver_name) != 0) {
+        return 0;
+    }
+    provider_name = options_get_col(headers, headers_count,
+                                    cols, cols_count, "Provider name");
+    provider_publickey_s = options_get_col(headers, headers_count,
+                                           cols, cols_count,
+                                           "Provider public key");
+    resolver_ip = options_get_col(headers, headers_count,
+                                  cols, cols_count, "Resolver address");
+    if (provider_name == NULL || *provider_name == 0) {
+        logger(proxy_context, LOG_ERR,
+               "Resolvers list is missing a provider name for [%s]",
+               resolver_name);
+        return -1;
+    }
+    if (provider_publickey_s == NULL || *provider_publickey_s == 0) {
+        logger(proxy_context, LOG_ERR,
+               "Resolvers list is missing a public key for [%s]",
+               resolver_name);
+        return -1;
+    }
+    if (resolver_ip == NULL || *resolver_ip == 0) {
+        logger(proxy_context, LOG_ERR,
+               "Resolvers list is missing a resolver address for [%s]",
+               resolver_name);
+        return -1;
+    }
+    proxy_context->provider_name = strdup(provider_name);
+    proxy_context->provider_publickey_s = strdup(provider_publickey_s);
+    proxy_context->resolver_ip = strdup(resolver_ip);
+    if (proxy_context->provider_name == NULL ||
+        proxy_context->provider_publickey_s == NULL ||
+        proxy_context->resolver_ip == NULL) {
+        logger_noformat(proxy_context, LOG_EMERG, "Out of memory");
+        exit(1);
+    }
+    return 1;
+}
+
+static int
+options_parse_resolvers_list(ProxyContext * const proxy_context, char *buf)
+{
+    char   *cols[OPTIONS_RESOLVERS_LIST_MAX_COLS];
+    char   *headers[OPTIONS_RESOLVERS_LIST_MAX_COLS];
+    size_t  cols_count;
+    size_t  headers_count;
+
+    assert(proxy_context->resolver_name != NULL);
+    buf = minicsv_parse_line(buf, headers, &headers_count,
+                             sizeof headers / sizeof headers[0]);
+    if (headers_count < 4U) {
+        return -1;
+    }
+    while (*(buf = minicsv_parse_line(buf, cols, &cols_count,
+                                      sizeof cols / sizeof cols[0])) != 0) {
+        minicsv_trim_cols(cols, cols_count);
+        if (cols_count < 4U || *cols[0] == 0 || *cols[0] == '#') {
+            continue;
+        }
+        if (options_parse_resolver(proxy_context, headers, headers_count,
+                                   cols, cols_count) > 0) {
+            return 0;
+        }
+    }
+    return -1;
+}
+
 static int
 options_use_resolver_name(ProxyContext * const proxy_context)
 {
@@ -183,6 +286,12 @@ options_use_resolver_name(ProxyContext * const proxy_context)
                proxy_context->resolvers_list);
         exit(1);
     }
+    assert(proxy_context->resolver_name != NULL);
+    if (options_parse_resolvers_list(proxy_context, file_buf) < 0) {
+        logger(proxy_context, LOG_ERR,
+               "No resolver named [%s] found in the [%s] list",
+               proxy_context->resolver_name, proxy_context->resolvers_list);
+    }
     free(file_buf);
 
     return 0;
@@ -193,10 +302,17 @@ options_apply(ProxyContext * const proxy_context)
 {
     if (proxy_context->resolver_name != NULL) {
         if (proxy_context->resolvers_list == NULL) {
-            logger_noformat(proxy_context, LOG_ERR, "Resolvers list required");
+            logger_noformat(proxy_context, LOG_ERR,
+                            "Resolvers list (-L command-line switch) required");
             exit(1);
         }
-        options_use_resolver_name(proxy_context);
+        if (options_use_resolver_name(proxy_context) != 0) {
+            logger(proxy_context, LOG_ERR,
+                   "Resolver name (-R command-line switch) required. "
+                   "See [%s] for a list of public resolvers.",
+                   proxy_context->resolvers_list);
+            exit(1);
+        }
     }
     if (proxy_context->resolver_ip == NULL ||
         *proxy_context->resolver_ip == 0) {
