@@ -48,7 +48,8 @@ AM_CFLAGS = @CWFLAGS@
 
 AM_CPPFLAGS = \
 	-I../ext \
-	-I../libevent-modified/include
+	-I../libevent-modified/include \
+	-DPKGDATADIR='"${pkgdatadir}"'
 
 dnscrypt_proxy_LDADD = \
 	../libevent-modified/libevent_extra.la \

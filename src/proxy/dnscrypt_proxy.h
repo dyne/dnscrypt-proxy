@@ -40,7 +40,7 @@
 #endif
 
 #ifndef DEFAULT_RESOLVERS_LIST
-# define DEFAULT_RESOLVERS_LIST CONFDIR "/dnscrypt-resolvers.csv"
+# define DEFAULT_RESOLVERS_LIST PKGDATADIR "/dnscrypt-resolvers.csv"
 #endif
 
 #ifndef DEFAULT_RESOLVER_NAME
