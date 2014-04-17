@@ -39,12 +39,12 @@
 # define DNS_DEFAULT_RESOLVER_PORT "443"
 #endif
 
-#ifndef DEFAULT_RESOLVER_NAME
-# define DEFAULT_RESOLVER_NAME "opendns"
-#endif
-
 #ifndef DEFAULT_RESOLVERS_LIST
 # define DEFAULT_RESOLVERS_LIST CONFDIR "/dnscrypt-resolvers.csv"
+#endif
+
+#ifndef DEFAULT_RESOLVER_NAME
+# define DEFAULT_RESOLVER_NAME NULL
 #endif
 
 #define DNS_HEADER_SIZE  12U
