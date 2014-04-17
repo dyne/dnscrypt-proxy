@@ -47,6 +47,8 @@ The following subkeys are recognized and should be self-explanatory:
     ProviderKey       (REG_SZ)
     ProviderName      (REG_SZ)
     ResolverAddress   (REG_SZ)
+    ResolverName      (REG_SZ)
+    ResolversList     (REG_SZ)
     EDNSPayloadSize   (DWORD)
     MaxActiveRequests (DWORD)
     TCPOnly           (DWORD)
@@ -54,6 +56,11 @@ The following subkeys are recognized and should be self-explanatory:
 For example, in order to listen to local address `127.0.0.7` instead
 of `127.0.0.1`, the string value `127.0.0.7` should be set for the key
 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters\LocalAddress`.
+
+Mandatory entries to run `dnscrypt-proxy` as a Windows service are:
+- `ResolversList`: has to be set to the full path to the `dnscrypt-resolvers.csv` file.
+- `ResolverName`: has to be set to the resolver name to be used. See
+the `dnscrypt-resolvers.csv` file for a list of compatible public resolvers.
 
 Plugins should be listed as full paths to .DLL files, optionally
 followed by a coma and plugin-specific arguments.

@@ -244,6 +244,18 @@ windows_build_command_line_from_registry(int * const argc_p,
         exit(1);
     }
     if (windows_service_registry_read_string
+        ("ResolversList", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--resolvers-list");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if (windows_service_registry_read_string
+        ("ResolverName", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--resolver-name");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
+    if (windows_service_registry_read_string
         ("LocalAddress", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--local-address");
         err += cmdline_add_option(argc_p, argv_p, string_value);
