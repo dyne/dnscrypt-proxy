@@ -68,7 +68,7 @@ AC_ARG_ENABLE(debug,
 
 plugins=disabled
 AC_ARG_ENABLE(plugins,
-[AS_HELP_STRING(--enable-plugins,Enable support for plugins - experimental)],
+[AS_HELP_STRING(--enable-plugins,Enable support for plugins)],
 [
 	AS_IF([test "x$enableval" != "xno"], [
 		CPPFLAGS="$CPPFLAGS -DPLUGINS=1"
