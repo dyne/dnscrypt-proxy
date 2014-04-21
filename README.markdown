@@ -304,10 +304,11 @@ Any number of plugins can be combined (chained) by repeating the
 
 The default distribution ships with some example plugins:
 
-* libdcplugin_example_ldns_aaaa_blocking: Directly return an empty
+* `libdcplugin_example_ldns_aaaa_blocking`: Directly return an empty
 response to AAAA queries
 
 Example usage:
+
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example_ldns_aaaa_blocking.la
 
@@ -315,7 +316,7 @@ If IPv6 connectivity is not available on your network, this plugin
 avoids waiting for responses about IPv6 addresses from upstream
 resolvers. This can improve your web browsing experience.
 
-* libdcplugin_example_ldns_blocking: Block specific domains and IP
+* `libdcplugin_example_ldns_blocking`: Block specific domains and IP
 addresses.
 
 This plugin returns a REFUSED response if the query name is in a
@@ -323,19 +324,20 @@ llist of blacklisted names, or if at least one of the returned
 IP addresses happens to be in a list of blacklisted IPs.
 
 Recognized switches are:
+
     --domains=<file>
     --ips=<file>
 
 A file should list one entry per line.
 
 IPv4 and IPv6 addresses are supported.
-For names, leading and trailing wildcards (*) are also supported
+For names, leading and trailing wildcards (`*`) are also supported
 (e.g. `*xxx*`, `*.example.com`, `ads.*`)
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names
 
-* libdcplugin_example-logging: Log client queries
+* `libdcplugin_example-logging`: Log client queries
 
 This plugin logs the client queries to the standard output (default)
 or to a file.
