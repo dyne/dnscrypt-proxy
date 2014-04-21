@@ -344,3 +344,9 @@ or to a file.
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example_logging,/var/log/dns.log
+
+* Extra plugins
+
+Additional plugins can be found on Github:
+[Masquerade plugin](https://github.com/gchehab/dnscrypt-plugin-masquerade),
+[GeoIP plugin](https://github.com/jedisct1/dnscrypt-plugin-geoip-block).
