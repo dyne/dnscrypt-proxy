@@ -22,75 +22,6 @@ network, which is often the weakest point of the chain, against
 man-in-the-middle attacks. It also provides some confidentiality to
 DNS queries.
 
-Current list of free, DNSCrypt-enabled resolvers
-------------------------------------------------
-
-* [OKTurtles](http://okturtles.com/) - No logs - part of the [http://okturtles.com/#DNSChain](DNSChain) project
-  - Server address: 23.226.227.93:443
-  - Provider name: 2.dnscrypt-cert.okturtles.com
-  - Provider key: 1D85:3953:E34F:AFD0:05F9:4C6F:D1CC:E635:D411:9904:0D48:D19A:5D35:0B6A:7C81:73CB
-
-* [OpenDNS](http://www.opendns.com)
-  - Server address: 208.67.220.220:443
-  - Provider name: 2.dnscrypt-cert.opendns.com
-  - Public key: B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79
-
-* [CloudNS](https://cloudns.com.au/) - No logs, DNSSEC
-  * Canberra, Australia
-    - Server address: 113.20.6.2:443 or gc2tzw6lbmeagrp3.onion:443
-    - Provider name: 2.dnscrypt-cert.cloudns.com.au
-    - Public key: 1971:7C1A:C550:6C09:F09B:ACB1:1AF7:C349:6425:2676:247F:B738:1C5A:243A:C1CC:89F4
-  * Sydney, Australia
-    - Server address: 113.20.8.17:443 or l65q62lf7wnfme7m.onion:443
-    - Provider name: 2.dnscrypt-cert-2.cloudns.com.au
-    - Public key: 67A4:323E:581F:79B9:BC54:825F:54FE:1025:8B4F:37EB:0D07:0BCE:4010:6195:D94F:E330
-
-* [OpenNIC](http://www.opennicproject.org/) - No logs
-  * Japan
-    - Server address: 106.186.17.181:2053
-    - Provider name: 2.dnscrypt-cert.ns2.jp.dns.opennic.glue
-    - Public key: 8768:C3DB:F70A:FBC6:3B64:8630:8167:2FD4:EE6F:E175:ECFD:46C9:22FC:7674:A1AC:2E2A
-  * UK
-    * NovaKing (ns8)
-      - Server address: 185.19.104.45:443
-      - Provider name: 2.dnscrypt-cert.ns8.uk.dns.opennic.glue
-      - Public key: A17C:06FC:BA21:F2AC:F4CD:9374:016A:684F:4F56:564A:EB30:A422:3D9D:1580:A461:B6A6
-    * NovaKing (ns9)
-      - Server address: 185.19.105.6:443
-      - Provider name: 2.dnscrypt-cert.ns9.uk.dns.opennic.glue
-      - Public key: E864:80D9:DFBD:9DB4:58EA:8063:292F:EC41:9126:8394:BC44:FAB8:4B6E:B104:8C3B:E0B4
-    * NovaKing (ns10)
-      - Server address: 185.19.105.14:443
-      - Provider name: 2.dnscrypt-cert.ns10.uk.dns.opennic.glue
-      - Public key: B1AB:7025:1119:9AEE:E42E:1B12:F2EF:12D4:53D9:CD92:E07B:9AF4:4794:F6EB:E5A4:F725
-  * USA
-    * Fremont, CA
-      - Server address: 173.230.156.28:443
-      - Provider name: 2.dnscrypt-cert.ns17.ca.us.dns.opennic.glue
-      - Public key: 2342:215C:409A:85A5:FB63:2A3B:42CD:5089:6BA8:551A:8BDC:2654:CF57:804F:B1B2:5019
-    * Fremont, CA #2
-      - Server address: [2600:3c01::f03c:91ff:fe6e:1f6b]:443
-      - Provider name: 2.dnscrypt-cert.ns18.ca.us.dns.opennic.glue
-      - Public key: 689B:DAF2:6A9F:DB2D:42B4:AA15:1825:89E8:6FAE:0C2C:522A:D0AA:DD2B:80B4:8D61:0A43
-
-* [DNSCrypt.eu](http://dnscrypt.eu/) - No logs, DNSSEC
-  * Holland
-    - Server address: 176.56.237.171:443 or [2a00:d880:3:1::a6c1:2e89]:443
-    - Provider name: 2.dnscrypt-cert.resolver1.dnscrypt.eu
-    - Public key: 67C0:0F2C:21C5:5481:45DD:7CB4:6A27:1AF2:EB96:9931:40A3:09B6:2B8D:1653:1185:9C66
-
-  * Denmark
-    - Server address: 77.66.84.233:443 or [2001:1448:243::dc2]:443
-    - Provider name: 2.dnscrypt-cert.resolver2.dnscrypt.eu
-    - Public key: 3748:5585:E3B9:D088:FD25:AD36:B037:01F5:520C:D648:9E9A:DD52:1457:4955:9F0A:9955
-
-* [Soltysiak.com](http://dc1.soltysiak.com/) - No logs, DNSSEC
-  * Poznan, Poland
-    - Server address: 178.216.201.222:2053
-    - Provider name: 2.dnscrypt-cert.soltysiak.com
-    - Public key: 25C4:E188:2915:4697:8F9C:2BBD:B6A7:AFA4:01ED:A051:0508:5D53:03E7:1928:C066:8F21
-
-
 Download and integrity check
 ----------------------------
 
@@ -175,10 +106,15 @@ available DNSCrypt providers.
 A set of tools for dnscrypt-proxy. Features a start and stop button as well as options to enable
 or disable from startup. Developed for Porteus Linux.
 
-Server-side proxy
------------------
+DNSCrypt-enabled resolvers
+--------------------------
 
-[DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper) is a
+To get started, you can use any of the
+[public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
+
+If you want to add DNSCrypt support to your own public or private
+resolver, check out
+[DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper), a
 server-side dnscrypt proxy that works with any name resolver.
 
 Usage
@@ -191,14 +127,14 @@ for this user's uid as soon as possible.
 
 The easiest way to start the daemon is:
 
-    # dnscrypt-proxy --daemonize \
-      --provider-name=2.dnscrypt-cert.opendns.com \
-      --provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 \
-      --resolver-address=208.67.220.220:443
+    # dnscrypt-proxy --daemonize --resolver-name=<resolver name>
+
+Replace `<resolver name>` with the name of the resolver you want to
+use (the first column in the list of public resolvers).
 
 The proxy will accept incoming requests on 127.0.0.1, tag them with an
-authentication code, forward them to OpenDNS resolvers, and validate
-each answer before passing it to the client.
+authentication code, forward them to the resolver, and validate each
+answer before passing it to the client.
 
 Given such a setup, in order to actually start using DNSCrypt, you
 need to update your `/etc/resolv.conf` file and replace your current
@@ -219,6 +155,8 @@ address than 127.0.0.1
   requests. The default value is 250.
 * `--pidfile=<file>` in order to store the PID number to a file.
 * `--user=<user name>` in order to chroot()/drop privileges.
+* --resolvers-list=<file>: to specity the path to the CSV file containing
+  the list of available resolvers, and the parameters to use them.
 * `--test` in order to check that the server-side proxy is properly
 configured and that a valid certificate can be used. This is useful
 for monitoring your own dnscrypt proxy. See the man page for more
@@ -352,3 +290,55 @@ This tool can be useful for starting some services before
 `dnscrypt-proxy`.
 
 Queries made by `hostip` are not authenticated.
+
+Plugins
+-------
+
+`dnscrypt-proxy` can be extended with plugins. A plugin acts as a
+filter that can locally inspect and modify queries and responses.
+
+The plugin API is documented in the `README-PLUGINS.markdown` file.
+
+Any number of plugins can be combined (chained) by repeating the
+`--plugin` command-line switch.
+
+The default distribution ships with some example plugins:
+
+* libdcplugin_example_ldns_aaaa_blocking: Directly return an empty
+response to AAAA queries
+
+Example usage:
+    # dnscrypt-proxy ... \
+    --plugin libdcplugin_example_ldns_aaaa_blocking.la
+
+If IPv6 connectivity is not available on your network, this plugin
+avoids waiting for responses about IPv6 addresses from upstream
+resolvers. This can improve your web browsing experience.
+
+* libdcplugin_example_ldns_blocking: Block specific domains and IP
+addresses.
+
+This plugin returns a REFUSED response if the query name is in a
+llist of blacklisted names, or if at least one of the returned
+IP addresses happens to be in a list of blacklisted IPs.
+
+Recognized switches are:
+    --domains=<file>
+    --ips=<file>
+
+A file should list one entry per line.
+
+IPv4 and IPv6 addresses are supported.
+For names, leading and trailing wildcards (*) are also supported
+(e.g. `*xxx*`, `*.example.com`, `ads.*`)
+
+    # dnscrypt-proxy ... \
+    --plugin libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names
+
+* libdcplugin_example-logging: Log client queries
+
+This plugin logs the client queries to the standard output (default)
+or to a file.
+
+    # dnscrypt-proxy ... \
+    --plugin libdcplugin_example_logging,/var/log/dns.log

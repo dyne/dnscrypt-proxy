@@ -16,10 +16,13 @@ Quickstart
 `libsodium-4.dll` file. Both should be in the same location. If you
 are using plugins depending on ldns, copy the ldns DLL as well.
 
-3) Open a terminal (run `cmd.exe`) and type (you may need to specify
+3) Open an elevated command prompt and type (you may need to specify
 the full path to the file):
 
-    dnscrypt-proxy.exe --install
+    dnscrypt-proxy.exe --install --resolver-name=<name>
+
+Replace `name` with one of the resolvers from this list:
+[public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
 
 4) Change your DNS settings to `127.0.0.1`
 
