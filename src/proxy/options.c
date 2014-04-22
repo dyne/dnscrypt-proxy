@@ -261,8 +261,9 @@ options_parse_resolvers_list(ProxyContext * const proxy_context, char *buf)
     if (headers_count < 4U) {
         return -1;
     }
-    while (*(buf = minicsv_parse_line(buf, cols, &cols_count,
-                                      sizeof cols / sizeof cols[0])) != 0) {
+    do {
+        buf = minicsv_parse_line(buf, cols, &cols_count,
+                                 sizeof cols / sizeof cols[0]);
         minicsv_trim_cols(cols, cols_count);
         if (cols_count < 4U || *cols[0] == 0 || *cols[0] == '#') {
             continue;
@@ -271,7 +272,8 @@ options_parse_resolvers_list(ProxyContext * const proxy_context, char *buf)
                                    cols, cols_count) > 0) {
             return 0;
         }
-    }
+    } while (*buf != 0);
+
     return -1;
 }
 
