@@ -56,11 +56,10 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "  libdcplugin_example_ldns_opendns_set_client_ip.la,192.30.252.130";
 }
 
-#ifndef HAVE_INET_PTON
 static int
-inet_pton(const int af, const char * const src, void * const dst)
+_inet_pton(const int af, const char * const src, void * const dst)
 {
-    struct in_addr *addr = dst;
+    unsigned char  *dstc;
     unsigned int    a, b, c, d;
     char            more;
 
@@ -74,11 +73,15 @@ inet_pton(const int af, const char * const src, void * const dst)
     if (a > 0xff || b > 0xff || c > 0xff || d > 0xff) {
         return 0;
     }
-    addr->s_addr = htonl(a * 0x1000000 + b * 0x10000 +
-                         c * 0x100 + d);
+    dstc = (unsigned char *) dst;
+    assert(sizeof(struct in_addr) >= 4U);
+    dstc[0] = (unsigned char) a;
+    dstc[1] = (unsigned char) b;
+    dstc[2] = (unsigned char) c;
+    dstc[3] = (unsigned char) d;
+
     return 1;
 }
-#endif
 
 static int
 parse_client_ip(const char *ip_s, char * const edns_hex)
@@ -89,7 +92,7 @@ parse_client_ip(const char *ip_s, char * const edns_hex)
     const size_t    ip_s_len = strlen(ip_s);
 
     if (ip_s_len <= INET_ADDRSTRLEN && strchr(ip_s, '.') != NULL &&
-        inet_pton(AF_INET, ip_s, &ip_in_addr) > 0) {
+        _inet_pton(AF_INET, ip_s, &ip_in_addr) > 0) {
         sa = (unsigned char *) &ip_in_addr.s_addr;
         snprintf(ip_hex, sizeof ip_hex, "%02X%02X%02X%02X",
                  sa[0], sa[1], sa[2], sa[3]);
