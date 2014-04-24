@@ -8,7 +8,7 @@ A tool for securing communications between a client and a DNS resolver.
 Description
 -----------
 
-dnscrypt-proxy provides local service which can be used directly as
+`dnscrypt-proxy` provides local service which can be used directly as
 your local resolver or as a DNS forwarder, authenticating requests
 using the DNSCrypt protocol and passing them to an upstream server.
 
@@ -62,7 +62,7 @@ the paths the dynamic linker is going to look at. Before issuing
 
     # echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 
-Now, download the latest dnscrypt-proxy version and extract it:
+Now, download the latest `dnscrypt-proxy` version and extract it:
 
     $ bunzip2 -cd dnscrypt-proxy-*.tar.bz2 | tar xvf -
     $ cd dnscrypt-proxy-*
@@ -106,7 +106,7 @@ available DNSCrypt providers.
 Mac OSX application to control the DNSCrypt Proxy.
 
 - [DNSCrypt Tools for Linux](http://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
-A set of tools for dnscrypt-proxy. Features a start and stop button as well as options to enable
+A set of tools for `dnscrypt-proxy`. Features a start and stop button as well as options to enable
 or disable from startup. Developed for Porteus Linux.
 
 DNSCrypt-enabled resolvers
@@ -240,7 +240,7 @@ As a workaround, the port number can be changed using
 the `--resolver-port=<port>` option. For example, OpenDNS servers
 reply to queries sent to ports 53, 443 and 5353.
 
-By default, dnscrypt-proxy sends outgoing queries to UDP port 443.
+By default, `dnscrypt-proxy` sends outgoing queries to UDP port 443.
 
 In addition, the DNSCrypt proxy can force outgoing queries to be
 sent over TCP. For example, TCP port 443, which is commonly used for
