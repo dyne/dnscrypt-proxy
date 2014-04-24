@@ -7,6 +7,7 @@
 #endif
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -54,6 +55,30 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "# dnscrypt-proxy --plugin \\\n"
         "  libdcplugin_example_ldns_opendns_set_client_ip.la,192.30.252.130";
 }
+
+#ifndef HAVE_INET_PTON
+static int
+inet_pton(const int af, const char * const src, void * const dst)
+{
+    struct in_addr *addr = dst;
+    unsigned int    a, b, c, d;
+    char            more;
+
+    if (af != AF_INET) {
+        errno = EAFNOSUPPORT;
+        return -1;
+    }
+    if (sscanf(src, "%u.%u.%u.%u%c", &a, &b, &c, &d, &more) != 4) {
+        return 0;
+    }
+    if (a > 0xff || b > 0xff || c > 0xff || d > 0xff) {
+        return 0;
+    }
+    addr->s_addr = htonl(a * 0x1000000 + b * 0x10000 +
+                         c * 0x100 + d);
+    return 1;
+}
+#endif
 
 static int
 parse_client_ip(const char *ip_s, char * const edns_hex)
