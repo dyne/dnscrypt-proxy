@@ -64,7 +64,7 @@ parse_client_ip(const char *ip_s, char * const edns_hex)
     const size_t    ip_s_len = strlen(ip_s);
 
     if (ip_s_len <= INET_ADDRSTRLEN && strchr(ip_s, '.') != NULL &&
-        inet_aton(ip_s, &ip_in_addr) > 0) {
+        inet_pton(AF_INET, ip_s, &ip_in_addr) > 0) {
         sa = (unsigned char *) &ip_in_addr.s_addr;
         snprintf(ip_hex, sizeof ip_hex, "%02X%02X%02X%02X",
                  sa[0], sa[1], sa[2], sa[3]);
