@@ -232,6 +232,32 @@ windows_service_registry_read_dword(const char * const key,
 }
 
 static int
+windows_service_registry_write_string(const char * const key,
+				      const char * const value)
+{
+    HKEY   hk = NULL;
+    size_t value_len;
+    int    ret = 0;
+
+    value_len = strlen(value);
+    if (value_len > 0x7fffffff) {
+	return -1;
+    }
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     (DWORD) 0, KEY_WRITE, &hk) != ERROR_SUCCESS) {
+        return -1;
+    }
+    if (RegSetValueEx(hk, key, NULL, REG_SZ, (const BYTE *) value,
+		      (DWORD) value_len) != ERROR_SUCCESS) {
+	ret = -1;
+    }
+    RegCloseKey(hk);
+
+    return 0;
+}
+
+static int
 windows_build_command_line_from_registry(int * const argc_p,
                                          char *** const argv_p)
 {
