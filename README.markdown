@@ -168,26 +168,18 @@ information.
 The
 `--resolver-address=<ip>[:port]`,
 `--provider-name=<certificate provider FQDN>`
-and `--provider-key=<provider public key>` switches should be specified in
-order to use a specific DNSCrypt-enabled recursive DNS service.
+and `--provider-key=<provider public key>` switches can be specified in
+order to use a DNSCrypt-enabled recursive DNS service not listed in
+the configuration file.
 
 Installation as a service (Windows only)
 ----------------------------------------
 
 The proxy can be installed as a Windows service.
 
-Copy the `dnscrypt-proxy.exe` file to any location, as well as the
-`libsodium-4.dll` file. Both should be in the same location. If you
-are using plugins depending on ldns, copy the ldns DLL as well. Then open a
-terminal and type (eventually with the full path to `dnscrypt-proxy.exe`):
-
-    dnscrypt-proxy.exe --install
-
-It will install a new service named `dnscrypt-proxy`.
-
-After being stopped, the service can be removed with:
-
-    dnscrypt-proxy.exe --uninstall
+See
+[README-WINDOWS.markdown](https://github.com/jedisct1/dnscrypt-proxy/blob/master/README-WINDOWS.markdown)
+for more information on DNSCrypt on Windows.
 
 Using DNSCrypt in combination with a DNS cache
 ----------------------------------------------
