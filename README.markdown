@@ -29,16 +29,16 @@ DNSCrypt can be downloaded here: [dnscrypt download](http://dnscrypt.org)
 
 After having downloaded a file, compute its SHA256 digest. For example:
 
-    $ openssl dgst -sha256 dnscrypt-proxy-1.3.3.tar.bz2
+    $ openssl dgst -sha256 dnscrypt-proxy-1.4.0.tar.bz2
 
 Verify this digest against the expected one, that can be retrieved
 using a simple DNS query:
 
-    $ drill -D TXT dnscrypt-proxy-1.3.3.tar.bz2.download.dnscrypt.org
+    $ drill -D TXT dnscrypt-proxy-1.4.0.tar.bz2.download.dnscrypt.org
 
 or
 
-    $ dig +dnssec TXT dnscrypt-proxy-1.3.3.tar.bz2.download.dnscrypt.org
+    $ dig +dnssec TXT dnscrypt-proxy-1.4.0.tar.bz2.download.dnscrypt.org
 
 If the content of the TXT record doesn't match the SHA256 digest you
 computed, please file a bug report on Github as soon as possible and
