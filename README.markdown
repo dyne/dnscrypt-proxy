@@ -151,15 +151,15 @@ Other common command-line switches include:
 * `--local-address=<ip>[:port]` in order to locally bind a different IP
 address than 127.0.0.1
 * `--logfile=<file>` in order to write log data to a dedicated file. By
-  default, logs are sent to stdout if the server is running in foreground,
-  and to syslog if it is running in background.
+default, logs are sent to stdout if the server is running in foreground,
+and to syslog if it is running in background.
 * `--loglevel=<level>` if you need less verbosity in log files.
 * `--max-active-requests=<count>` to set the maximum number of active
-  requests. The default value is 250.
+requests. The default value is 250.
 * `--pidfile=<file>` in order to store the PID number to a file.
 * `--user=<user name>` in order to chroot()/drop privileges.
-* --resolvers-list=<file>: to specity the path to the CSV file containing
-  the list of available resolvers, and the parameters to use them.
+* `--resolvers-list=<file>`: to specity the path to the CSV file containing
+the list of available resolvers, and the parameters to use them.
 * `--test` in order to check that the server-side proxy is properly
 configured and that a valid certificate can be used. This is useful
 for monitoring your own dnscrypt proxy. See the man page for more
