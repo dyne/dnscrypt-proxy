@@ -48,7 +48,6 @@ The Windows build of `dnscrypt-proxy` adds the following command-line
 options:
 
 - `--install`: install the proxy as a service.
-- `--reinstall`: ditto.
 - `--uninstall`: uninstall the service.
 
 Startup options should specified as subkeys from this registry key:
