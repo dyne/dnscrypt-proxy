@@ -113,7 +113,7 @@ DNSCrypt-enabled resolvers
 --------------------------
 
 To get started, you can use any of the
-[public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
+[public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv).
 
 If you want to add DNSCrypt support to your own public or private
 resolver, check out
