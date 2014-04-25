@@ -219,7 +219,7 @@ IPv6 support
 IPv6 is fully supported. IPv6 addresses with a port number should be
 specified as [ip]:port
 
-    # dnscrypt-proxy --local-address='[::1]:40' --daemonize
+    # dnscrypt-proxy --local-address='[::1]:40' ...
 
 Queries using nonstandard ports / over TCP
 ------------------------------------------
