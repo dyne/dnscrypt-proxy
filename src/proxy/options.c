@@ -394,8 +394,11 @@ int
 options_parse(AppContext * const app_context,
               ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    int opt_flag;
-    int option_index = 0;
+    int   opt_flag;
+    int   option_index = 0;
+#ifdef _WIN32
+    _Bool option_install = 0;
+#endif
 
     options_init_with_default(app_context, proxy_context);
     while ((opt_flag = getopt_long(argc, argv,
@@ -533,11 +536,17 @@ options_parse(AppContext * const app_context,
             break;
 #ifdef _WIN32
         case WIN_OPTION_INSTALL:
+        case WIN_OPTION_REINSTALL:
+            option_install = 1;
+            break;
         case WIN_OPTION_UNINSTALL:
-            if (windows_service_option(opt_flag, argc,
-                                       (const char **) argv) != 0) {
-                options_usage();
+            if (windows_service_uninstall() != 0) {
+                logger_noformat(NULL, LOG_ERR, "Unable to uninstall the service");
                 exit(1);
+            } else {
+                logger_noformat(NULL, LOG_INFO, "The " WINDOWS_SERVICE_NAME
+                                " service has been removed from this system");
+                exit(0);
             }
             break;
 #endif
@@ -549,6 +558,24 @@ options_parse(AppContext * const app_context,
     if (options_apply(proxy_context) != 0) {
         return -1;
     }
+#ifdef _WIN32
+    if (option_install != 0) {
+        if (windows_service_install(proxy_context) != 0) {
+            logger_noformat(NULL, LOG_ERR, "Unable to install the service");
+            logger_noformat(NULL, LOG_ERR,
+                            "Make sure that you are using an elevated command prompt "
+                            "and that the service hasn't been already installed");
+            exit(1);
+        }
+        logger_noformat(NULL, LOG_INFO, "The " WINDOWS_SERVICE_NAME
+                        " service has been installed and started");
+        logger_noformat(NULL, LOG_INFO, "The registry key used for this "
+                        "service is " WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY);
+        logger(NULL, LOG_INFO, "Now, change your resolver settings to %s",
+               proxy_context->local_ip);
+        exit(0);
+    }
+#endif
     return 0;
 }
 

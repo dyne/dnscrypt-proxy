@@ -13,16 +13,23 @@ Quickstart
 [Windows package for dnscrypt](http://dnscrypt.org)
 
 2) Copy the `dnscrypt-proxy.exe` file to any location, as well as the
-`libsodium-4.dll` file. Both should be in the same location. If you
-are using plugins depending on ldns, copy the ldns DLL as well.
+dnscrypt-resolvers.csv file and the DLL files.
+All the files should be in the same location.
 
 3) Open an elevated command prompt and type (you may need to specify
 the full path to the file):
 
-    dnscrypt-proxy.exe --install --resolver-name=<name>
+    dnscrypt-proxy.exe --resolver-name=<name> --resolvers-list=<full path to the dnscrypt-resolvers.csv file> --test=0
 
-Replace `name` with one of the resolvers from this list:
+Replace `name` with one of the resolvers from CSV file. The (possibly
+updated) file can also be viewed online:
 [public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
+
+This command should display the server key fingerprint and exit. If
+this is not the case, try a different server. If this is the case,
+install the service:
+
+    dnscrypt-proxy.exe --resolver-name=<name> --resolvers-list=<full path to the dnscrypt-resolvers.csv file> --install
 
 4) Change your DNS settings to `127.0.0.1`
 
@@ -64,6 +71,8 @@ Mandatory entries to run `dnscrypt-proxy` as a Windows service are:
 - `ResolversList`: has to be set to the full path to the `dnscrypt-resolvers.csv` file.
 - `ResolverName`: has to be set to the resolver name to be used. See
 the `dnscrypt-resolvers.csv` file for a list of compatible public resolvers.
+
+These entries are automatically created/updated when installing the service.
 
 Plugins should be listed as full paths to .DLL files, optionally
 followed by a coma and plugin-specific arguments.
