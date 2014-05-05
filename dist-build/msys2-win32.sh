@@ -5,6 +5,9 @@ export PREFIX="$(pwd)/dnscrypt-proxy-win32"
 export LDNS_PREFIX='/usr/mingw32'
 export SODIUM_PREFIX='/tmp/libsodium-win32'
 
+export CPPFLAGS="-I${SODIUM_PREFIX}/include"
+export LDFLAGS="-L${SODIUM_PREFIX}/lib"
+
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
   --host=i686-w64-mingw32 \
   --sbindir="${PREFIX}/bin" \
