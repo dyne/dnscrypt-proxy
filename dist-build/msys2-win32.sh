@@ -22,6 +22,8 @@ rm -fr "${PREFIX}/lib"
 cp "${LDNS_PREFIX}/bin/libldns-1.dll" "${PREFIX}/bin/"
 cp "${SODIUM_PREFIX}/bin/libsodium-4.dll" "${PREFIX}/bin/"
 
+cp dnscrypt-resolvers.csv "${PREFIX}/bin/"
+
 if false; then
   upx --best --ultra-brute "${PREFIX}/dnscrypt-proxy.exe" &
   upx --best --ultra-brute "${PREFIX}/hostip.exe"
