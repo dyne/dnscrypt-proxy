@@ -1,9 +1,12 @@
 #! /bin/sh
 
-export CFLAGS="-Os -march=pentium2 -mtune=nocona"
+export CFLAGS="-Os -m32 -march=pentium2 -mtune=nocona"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
+export LDNS_PREFIX='/usr/mingw32'
+export SODIUM_PREFIX='/tmp/libsodium-win32'
 
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
+  --host=i686-w64-mingw32 \
   --sbindir="${PREFIX}/bin" \
   --enable-plugins \
   --with-included-ltdl && \
@@ -13,8 +16,8 @@ rm -fr "${PREFIX}/share"
 rm -fr "${PREFIX}/lib/pkgconfig"
 mv "${PREFIX}/lib/dnscrypt-proxy" "${PREFIX}/plugins"
 rm -fr "${PREFIX}/lib"
-cp /usr/local/lib/libldns-1.dll "${PREFIX}/bin"
-cp /usr/local/lib/libsodium-4.dll "${PREFIX}/bin"
+cp "${LDNS_PREFIX}/bin/libldns-1.dll" "${PREFIX}/bin"
+cp "${SODIUM_PREFIX}/bin/libsodium-4.dll" "${PREFIX}/bin"
 
 if false; then
   upx --best --ultra-brute "${PREFIX}/dnscrypt-proxy.exe" &
