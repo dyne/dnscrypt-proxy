@@ -10,7 +10,8 @@ Quickstart
 ----------
 
 1) Download and extract the latest
-[Windows package for dnscrypt](http://dnscrypt.org)
+[Windows package for dnscrypt](http://dnscrypt.org) and open the `bin`
+directory.
 
 2) Copy the `dnscrypt-proxy.exe` file to any location, as well as the
 dnscrypt-resolvers.csv file and the DLL files.
