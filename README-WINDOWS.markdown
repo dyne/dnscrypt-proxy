@@ -6,6 +6,9 @@ as on other operating systems.
 
 Alternatively, it can run as a Windows Service.
 
+Note: Also check out Dominus Temporis' excellent tutorial on
+[DNSCrypt on Windows](http://dominustemporis.com/2014/05/dnscrypt-on-windows-update/)
+
 Quickstart
 ----------
 
