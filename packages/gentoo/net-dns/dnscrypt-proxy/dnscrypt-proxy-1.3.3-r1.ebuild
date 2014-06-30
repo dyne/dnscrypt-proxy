@@ -1,7 +1,6 @@
 EAPI=5
 
-inherit autotools-utils
-
+inherit autotools-utils user
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver"
 HOMEPAGE="http://dnscrypt.org"
 SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/${P}.tar.gz"
