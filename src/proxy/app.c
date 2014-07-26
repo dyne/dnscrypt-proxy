@@ -15,13 +15,14 @@
 #include <event2/event.h>
 #include <event2/util.h>
 
+#include <sodium.h>
+
 #include "app.h"
 #include "dnscrypt_client.h"
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "options.h"
 #include "sandboxes.h"
-#include "sodium.h"
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"

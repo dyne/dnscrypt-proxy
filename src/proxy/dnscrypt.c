@@ -12,9 +12,9 @@
 #include <string.h>
 
 #include <event2/util.h>
+#include <sodium.h>
 
 #include "dnscrypt.h"
-#include "sodium.h"
 #include "utils.h"
 
 size_t

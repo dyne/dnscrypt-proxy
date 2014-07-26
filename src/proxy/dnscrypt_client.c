@@ -15,10 +15,10 @@
 #include <string.h>
 
 #include <event2/event.h>
+#include <sodium.h>
 
 #include "dnscrypt.h"
 #include "dnscrypt_client.h"
-#include "sodium.h"
 #include "utils.h"
 
 static void
