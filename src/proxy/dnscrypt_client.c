@@ -164,14 +164,6 @@ dnscrypt_client_init_nmkey(DNSCryptClient * const client,
 }
 
 int
-dnscrypt_client_wipe_secretkey(DNSCryptClient * const client)
-{
-    randombytes_buf(client->secretkey, crypto_box_SECRETKEYBYTES);
-
-    return 0;
-}
-
-int
 dnscrypt_client_init_with_key_pair(DNSCryptClient * const client,
                                    const uint8_t client_publickey[crypto_box_PUBLICKEYBYTES],
                                    const uint8_t client_secretkey[crypto_box_SECRETKEYBYTES])
