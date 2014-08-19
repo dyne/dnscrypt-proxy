@@ -7,6 +7,7 @@
 *.scan
 *.status
 *.tar.*
+*.trs
 *~
 .DS_Store
 .deps
@@ -71,9 +72,9 @@ src/libevent-modified/test/test-changelist
 src/libevent-modified/test/test-eof
 src/libevent-modified/test/test-init
 src/libevent-modified/test/test-ratelim
+src/libevent-modified/test/test-script.sh
 src/libevent-modified/test/test-time
 src/libevent-modified/test/test-weof
-src/libevent-modified/test/test.sh.trs
 src/libevent/*.la
 src/libevent/*.lo
 src/libevent/*.pc
