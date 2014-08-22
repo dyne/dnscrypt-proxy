@@ -22,7 +22,7 @@ the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
 Event-notification library
 --------------------------
 
-- Uses libevent. Unbound's boilerplate is also excellent, but it hasn't been
+- Uses libevent2. Unbound's boilerplate is also excellent, but it hasn't been
   packaged as a standalone library yet.
 
 - Because it is totally awesome for writing portable software.
