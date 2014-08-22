@@ -81,7 +81,7 @@ pre-signed certificates.
 Queries
 -------
 
-Queries and replies are basically using djb's dnscurve protocol:
+Queries and replies are based on djb's dnscurve protocol:
 http://www.dnscurve.org/
 
 The proxy always generates a new, in-memory only key pair at startup.
@@ -110,7 +110,7 @@ Miscellaneous
 -------------
 
 If you need extra monitoring/profiling, the proxy provides a bunch of
-DTrace probes on OSX, as the dnscrypt-proxy provider.
+dtrace probes on OSX, as the dnscrypt-proxy provider.
 See src/dnscrypt-proxy/probes_dnscrypt_proxy.d
 
 The proxy doesn't cache replies. Neither does it perform any DNSSEC
