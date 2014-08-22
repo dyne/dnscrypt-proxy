@@ -127,7 +127,7 @@ the --tcp-port switch has been turned on.
 an EDNS section was already present or unless --payload-size with a
 < 512 bytes size has been specified.
 
-OSX Mountain Lion, OpenBSD/amd64 and Dragonfly BSD/amd64 are the primary
+OSX Yosemite, OpenBSD/amd64 and Dragonfly BSD/amd64 are the primary
 development platforms, but the code has been designed to be as
 portable as possible, and patches to support other operating systems
 and architectures are more than welcome.
