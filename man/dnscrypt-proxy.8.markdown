@@ -11,8 +11,8 @@ dnscrypt-proxy(8) -- A DNSCrypt forwarder
 them using dnscrypt and forwards them to a remote dnscrypt-enabled
 resolver.
 
-Replies from the resolver are expected to be authenticated and
-encrypted or else they will be discarded.
+Replies from the resolver are expected to be authenticated or else
+they will be discarded.
 
 The proxy verifies the replies, decrypts them, and transparently
 forwards them to the local stub resolver.
