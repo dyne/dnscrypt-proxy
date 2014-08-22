@@ -97,6 +97,8 @@ string, with optional columns.
 
     $ dnscrypt-proxy --daemonize --resolver-name=...
 
+The resolver name is the first column (Name) in the CSV file.
+
 ## USAGE EXAMPLE WITH A PRIVATE SERVER
 
     $ dnscrypt-proxy --daemonize --provider-key=... --provider-name=... --resolver-address=...
