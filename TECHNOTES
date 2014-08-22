@@ -7,8 +7,8 @@ Cryptographic library
 
 - The wheel hasn't been reinvented.
 
-- The crypto code is provided by NaCl: http://nacl.cr.yp.to/ through
-  libsodium: https://github.com/jedisct1/libsodium
+- The crypto constructions come from [NaCl](http://nacl.cr.yp.to/) and
+the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
 
 - Why NaCl? Unbloated, blazing fast, and less error-prone that other libraries.
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf
@@ -17,7 +17,7 @@ Cryptographic library
   queries and replies, crypto_sign_ed25519_*() for signing certificates, and
   crypto_stream_salsa20() as a PRNG.
 
-  See the NaCl documentation for details.
+  See the [libsodium documentation](http://www.libsodium.org/doc/) for details.
 
 Event-notification library
 --------------------------
