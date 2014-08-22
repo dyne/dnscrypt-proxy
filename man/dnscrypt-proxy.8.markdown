@@ -93,13 +93,17 @@ ports.
 A public key is 256-bit long, and it has to be specified as a hexadecimal
 string, with optional columns.
 
-## SIMPLE USAGE EXAMPLE
+## COMMON USAGE EXAMPLE
 
     $ dnscrypt-proxy --daemonize --resolver-name=...
 
-## ADVANCED USAGE EXAMPLE
+## USAGE EXAMPLE WITH A PRIVATE SERVER
 
-    $ dnscrypt-proxy --provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 --provider-name=2.dnscrypt-cert.dnscrypt.org. --resolver-address=208.67.220.220:53 --daemonize
+    $ dnscrypt-proxy --daemonize --provider-key=... --provider-name=... --resolver-address=...
+
+## BUGS AND SUPPORT
+
+Please report issues with DNSCrypt itself to https://github.com/jedisct1/dnscrypt-proxy/issues
 
 ## SEE ALSO
 
