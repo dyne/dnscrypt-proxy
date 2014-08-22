@@ -105,7 +105,7 @@ The resolver name is the first column (Name) in the CSV file.
 
 ## BUGS AND SUPPORT
 
-Please report issues with DNSCrypt itself to https://github.com/jedisct1/dnscrypt-proxy/issues
+Please report issues with DNSCrypt itself to http://dnscrypt.org/issues
 
 ## SEE ALSO
 
