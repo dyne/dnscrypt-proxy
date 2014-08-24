@@ -17,13 +17,4 @@ override_dh_auto_configure:
 
 # Tests may fail on build servers and aren't useful in release builds anyway
 override_dh_auto_test:
-	
 
-# Install the AppArmor profile. Override dh_compress since it is
-# sufficiently late in the package creation to do what we want.
-# This method is copied from telepathy-mission-control-5 package.
-override_dh_compress:
-	dh_compress
-	mkdir -p debian/dnscrypt-proxy/etc/apparmor.d
-	cp apparmor.profile.dnscrypt-proxy debian/dnscrypt-proxy/etc/apparmor.d/usr.sbin.dnscrypt-proxy
-	dh_apparmor --profile-name=usr.sbin.dnscrypt-proxy -pdnscrypt-proxy
