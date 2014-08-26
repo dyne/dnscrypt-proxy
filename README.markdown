@@ -89,8 +89,8 @@ produce broken code on Mips targets with the -Os optimization level.
 Use a different level (-O and -O2 are fine) or upgrade the compiler.
 Thanks to Adrian Kotelba for reporting this.
 
-GUI for dnscrypt-proxy
-----------------------
+GUIs for dnscrypt-proxy
+-----------------------
 
 If you need a simple graphical user interface in order to start/stop
 the proxy and change your DNS settings, check out the following
@@ -113,6 +113,12 @@ Mac OSX application to control the DNSCrypt Proxy.
 - [DNSCrypt Tools for Linux](http://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
 A set of tools for `dnscrypt-proxy`. Features a start and stop button as well as options to enable
 or disable from startup. Developed for Porteus Linux.
+
+Docker images
+-------------
+
+@mengbo maintains a [dnscrypt-proxy Docker image](https://github.com/mengbo/docker-dnscrypt)
+as well as a [dnscrypt-wrapper Docker image](https://github.com/mengbo/docker-dnscrypt-wrapper).
 
 DNSCrypt-enabled resolvers
 --------------------------
