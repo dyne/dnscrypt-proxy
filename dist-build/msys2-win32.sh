@@ -21,7 +21,7 @@ mv "${PREFIX}/lib/dnscrypt-proxy" "${PREFIX}/plugins/"
 rm -fr "${PREFIX}/lib"
 cp "${MINGW_PREFIX}/bin/libwinpthread-1.dll" "${PREFIX}/bin/"
 cp "${MINGW_PREFIX}/bin/libldns-1.dll" "${PREFIX}/bin/"
-cp "${SODIUM_PREFIX}/bin/libsodium-4.dll" "${PREFIX}/bin/"
+cp "${SODIUM_PREFIX}/bin/libsodium-13.dll" "${PREFIX}/bin/"
 
 cp dnscrypt-resolvers.csv "${PREFIX}/bin/"
 
