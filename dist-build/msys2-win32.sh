@@ -2,7 +2,7 @@
 
 export CFLAGS="-Os -m32 -march=pentium2 -mtune=nocona"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
-export MINGW_PREFIX='/usr/mingw32'
+export MINGW_PREFIX='/mingw32'
 export SODIUM_PREFIX='/tmp/libsodium-win32'
 
 export CPPFLAGS="-I${SODIUM_PREFIX}/include"
@@ -20,6 +20,7 @@ rm -fr "${PREFIX}/lib/pkgconfig"
 mv "${PREFIX}/lib/dnscrypt-proxy" "${PREFIX}/plugins/"
 rm -fr "${PREFIX}/lib"
 cp "${MINGW_PREFIX}/bin/libwinpthread-1.dll" "${PREFIX}/bin/"
+cp "${MINGW_PREFIX}/bin/libgcc_s_dw2-1.dll" "${PREFIX}/bin/"
 cp "${MINGW_PREFIX}/bin/libldns-1.dll" "${PREFIX}/bin/"
 cp "${SODIUM_PREFIX}/bin/libsodium-13.dll" "${PREFIX}/bin/"
 
