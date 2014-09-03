@@ -1,3 +1,113 @@
+* Tue Sep 2 14:53:24 2014 -0700
+
+    libevent: Consistently check for failure from evbuffer_pullup()
+
+* Wed Aug 27 22:50:37 2014 -0700
+
+    Ship libgcc_s_dw2-1.dll in the Windows package
+
+* Tue Aug 26 19:14:37 2014 -0700
+
+    Bump libsodium DLL version
+
+* Tue Aug 26 11:45:14 2014 -0700
+
+    Mention Docker images
+
+* Fri Aug 22 11:48:53 2014 -0700
+
+    libevent2
+
+* Fri Aug 22 11:48:19 2014 -0700
+
+    DTrace -> dtrace
+
+* Fri Aug 22 11:47:32 2014 -0700
+
+    Update documentation
+
+* Fri Aug 22 11:43:17 2014 -0700
+
+    I am not running Mountain Lion any more.
+
+* Fri Aug 22 11:43:02 2014 -0700
+
+    Doc update
+
+* Thu Aug 21 23:05:59 2014 -0700
+
+    More permanent issues URL
+
+* Thu Aug 21 22:58:04 2014 -0700
+
+    -encrypted
+
+* Thu Aug 21 22:55:33 2014 -0700
+
+    Clarify what the Resolver Name is
+
+* Thu Aug 21 22:54:05 2014 -0700
+
+    Regen documentation
+
+* Thu Aug 21 22:47:22 2014 -0700
+
+    Make it clear that most people just need to run dnscrypt-proxy -R <provider name>
+
+* Tue Aug 19 10:18:04 2014 -0700
+
+    Add a few files created by "make verify" to .gitignore.
+
+* Tue Aug 19 08:28:49 2014 -0700
+
+    Note about dnscrypt.org being blocked
+
+* Sat Aug 16 22:31:53 2014 -0700
+
+    Revert "No more resolvers in Japan :("
+    
+
+* Thu Aug 14 12:13:23 2014 -0700
+
+    Remove unused function.
+
+* Tue Aug 12 22:43:43 2014 -0700
+
+    Revert "Bring back clang on Travis"
+    
+
+Merge: ef06bdb 1eb7a00
+* Tue Aug 12 22:43:32 2014 -0700
+
+    Merge branch 'master' of github.com:jedisct1/dnscrypt-proxy
+    
+    * 'master' of github.com:jedisct1/dnscrypt-proxy:
+      Bring back clang on Travis
+
+* Tue Aug 12 22:41:55 2014 -0700
+
+    No more resolvers in Japan :(
+
+* Mon Aug 11 16:47:26 2014 -0700
+
+    Bring back clang on Travis
+
+* Thu Aug 7 20:14:01 2014 -0700
+
+    clang seems to be broken on Travis
+
+* Thu Aug 7 19:45:22 2014 -0700
+
+    Document that some plugins need additional DLLs on Windows
+
+* Mon Jul 28 13:02:56 2014 -0700
+
+    Don't even try to parse an empty file.
+
+* Sat Jul 26 12:12:17 2014 -0700
+
+    Bump version to 1.4.1
+
 * Sat Jul 26 12:07:19 2014 -0700
 
     mlock() the proxy context
