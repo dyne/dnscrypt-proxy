@@ -1,3 +1,15 @@
+* Thu Sep 4 15:00:35 2014 -0700
+
+    Add a few comments to the .plist file
+
+* Thu Sep 4 14:57:28 2014 -0700
+
+    Mention that the path to the CSV file is also required
+
+* Tue Sep 2 20:09:22 2014 -0700
+
+    ChangeLog update
+
 * Tue Sep 2 14:53:24 2014 -0700
 
     libevent: Consistently check for failure from evbuffer_pullup()
