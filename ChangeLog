@@ -1,3 +1,30 @@
+Merge: 3c960ad 1e2eb46
+* Thu Sep 18 23:23:45 2014 -0700
+
+    Merge branch 'master' of github.com:jedisct1/dnscrypt-proxy
+    
+    * 'master' of github.com:jedisct1/dnscrypt-proxy:
+      Do not use the same description for 2 different configurations
+      Update ChangeLog
+      libevent - [Bugfix] fix bufferevent setwatermark suspend_read
+      libevent - regress_buffer: fix 'memcmp' compare size
+
+* Thu Sep 18 23:18:23 2014 -0700
+
+    1.4.0 -> 1.4.1
+
+* Thu Sep 18 22:55:23 2014 -0700
+
+    timing -> timing out
+
+* Thu Sep 18 18:56:25 2014 -0700
+
+    Do not use the same description for 2 different configurations
+
+* Thu Sep 18 17:25:37 2014 -0700
+
+    Update ChangeLog
+
 * Thu Sep 18 17:24:03 2014 -0700
 
     libevent - [Bugfix] fix bufferevent setwatermark suspend_read
