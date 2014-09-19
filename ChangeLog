@@ -1,3 +1,33 @@
+* Thu Sep 18 17:24:03 2014 -0700
+
+    libevent - [Bugfix] fix bufferevent setwatermark suspend_read
+
+* Thu Sep 18 17:23:22 2014 -0700
+
+    libevent - regress_buffer: fix 'memcmp' compare size
+
+Merge: 5d55fee 4a3a23c
+* Thu Sep 11 20:22:14 2014 -0700
+
+    Merge remote-tracking branch 'Shnatsel/master'
+    
+    * Shnatsel/master:
+      Bump compat to 9, standards version to 3.9.5
+      Drop AppArmor installation from Debian/Ubuntu package
+      Since we could not resolve the AppArmor shutdown issue so far, at least add a warning about it
+
+* Sun Sep 7 17:49:19 2014 -0700
+
+    Target iOS 7.1 since iOS 8 hasn't been jailbroken yet
+
+* Sat Sep 6 13:58:09 2014 -0700
+
+    Use Sodium 0.7.0
+
+* Thu Sep 4 15:05:58 2014 -0700
+
+    ChangeLog update
+
 * Thu Sep 4 15:00:35 2014 -0700
 
     Add a few comments to the .plist file
@@ -25,6 +55,18 @@
 * Tue Aug 26 11:45:14 2014 -0700
 
     Mention Docker images
+
+* Sun Aug 24 19:03:35 2014 +0400
+
+    Bump compat to 9, standards version to 3.9.5
+
+* Sun Aug 24 18:48:36 2014 +0400
+
+    Drop AppArmor installation from Debian/Ubuntu package
+
+* Sun Aug 24 18:40:29 2014 +0400
+
+    Since we could not resolve the AppArmor shutdown issue so far, at least add a warning about it
 
 * Fri Aug 22 11:48:53 2014 -0700
 
