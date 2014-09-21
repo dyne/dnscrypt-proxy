@@ -61,6 +61,9 @@ Install [libsodium](https://github.com/jedisct1/libsodium).
 On Linux, don't forget to run `ldconfig` if you installed it from
 source.
 
+A "minimal" build of libsodium (`--enable-minimal`) works equally well
+as a full build with this proxy.
+
 On Fedora, RHEL and CentOS, you may need to add `/usr/local/lib` to
 the paths the dynamic linker is going to look at. Before issuing
 `ldconfig`, type:
