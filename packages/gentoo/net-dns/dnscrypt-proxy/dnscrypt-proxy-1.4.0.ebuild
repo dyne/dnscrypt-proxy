@@ -18,9 +18,6 @@ AUTOTOOLS_IN_SOURCE_BUILD=1
 
 DOCS=(AUTHORS COPYING INSTALL NEWS README README.markdown TECHNOTES THANKS)
 
-PATCHES=(
-	"${FILESDIR}/0001-Handle-disable-plugins-correctly-in-configure.ac.patch"
-)
 AUTOTOOLS_AUTORECONF=1
 
 pkg_setup() {
@@ -38,6 +35,6 @@ src_configure() {
 src_install() {
 	autotools-utils_src_install
 
-	newinitd "${FILESDIR}/dnscrypt-proxy_1_2_0.initd" dnscrypt-proxy || die "newinitd failed"
-	newconfd "${FILESDIR}/dnscrypt-proxy_1_2_0.confd" dnscrypt-proxy || die "newconfd failed"
+	newinitd "${FILESDIR}/dnscrypt-proxy_1_4_0.initd" dnscrypt-proxy || die "newinitd failed"
+	newconfd "${FILESDIR}/dnscrypt-proxy_1_4_0.confd" dnscrypt-proxy || die "newconfd failed"
 }

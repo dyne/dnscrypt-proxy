@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>teknocratdefunct@riseup.net</email>
+		<name>Harvey Mittens</name>
+	</maintainer>
+	<use>
+		<flag name="plugins">Add support for plugins interface</flag>
+	</use>
+</pkgmetadata>
