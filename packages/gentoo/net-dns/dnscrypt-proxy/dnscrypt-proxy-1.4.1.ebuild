@@ -1,3 +1,6 @@
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
 EAPI=5
 
 inherit autotools-utils user
@@ -8,10 +11,10 @@ SRC_URI="http://download.dnscrypt.org/dnscrypt-proxy/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 i386"
+KEYWORDS="~amd64 ~x86"
 
-RDEPEND="
-	>=dev-libs/libsodium-0.4.2"
+DEPEND=">=dev-libs/libsodium-1.0.0"
+
 IUSE="-plugins"
 
 AUTOTOOLS_IN_SOURCE_BUILD=1
