@@ -94,14 +94,14 @@ Encrypted queries are prefixed with the following header structure:
 - A 256 bit client public key
 - A 96 bit client nonce (64 bit monotically increasing timestamp +
   32 random bits)
-- A 128 bit Poly1305-AES MAC
+- A 128 bit Poly1305 MAC
 
 Replies are prefixed with the following header structure:
 
 - 8 byte static magic header r6fnvWJ8
 - A 192 bit nonce: the 96 bit client-supplied nonce + a 96 bit server
 nonce extension.
-- A 128 bit Poly1305-AES MAC.
+- A 128 bit Poly1305 MAC.
 
 The proxy immediately discards replies to queries made more than 10
 second ago and replies that don't match the client-supplied nonce.
