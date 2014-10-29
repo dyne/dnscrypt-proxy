@@ -8,14 +8,13 @@ Cryptographic library
 - The wheel hasn't been reinvented.
 
 - The crypto constructions come from [NaCl](http://nacl.cr.yp.to/) and
-the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
+  the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
 
 - Why NaCl? Unbloated, blazing fast, and less error-prone that other libraries.
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf
 
 - crypto_box() for authenticating/encrypting queries and replies,
-crypto_sign() for signing certificates, randombytes_*() for random numbers.
-
+  crypto_sign() for signing certificates, randombytes_*() for random numbers.
   See the [libsodium documentation](http://www.libsodium.org/doc/) for details.
 
 Event-notification library
