@@ -8,15 +8,13 @@ Cryptographic library
 - The wheel hasn't been reinvented.
 
 - The crypto constructions come from [NaCl](http://nacl.cr.yp.to/) and
-the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
+  the proxy leverages [libsodium](https://github.com/jedisct1/libsodium).
 
 - Why NaCl? Unbloated, blazing fast, and less error-prone that other libraries.
   See http://cr.yp.to/highspeed/coolnacl-20111201.pdf
 
-- crypto_box_curve25519xsalsa20poly1305_*() for authenticating/encrypting
-  queries and replies, crypto_sign_ed25519_*() for signing certificates, and
-  crypto_stream_salsa20() as a PRNG.
-
+- crypto_box() for authenticating/encrypting queries and replies,
+  crypto_sign() for signing certificates, randombytes_*() for random numbers.
   See the [libsodium documentation](http://www.libsodium.org/doc/) for details.
 
 Event-notification library
@@ -94,14 +92,14 @@ Encrypted queries are prefixed with the following header structure:
 - A 256 bit client public key
 - A 96 bit client nonce (64 bit monotically increasing timestamp +
   32 random bits)
-- A 128 bit Poly1305-AES MAC
+- A 128 bit Poly1305 MAC
 
 Replies are prefixed with the following header structure:
 
 - 8 byte static magic header r6fnvWJ8
 - A 192 bit nonce: the 96 bit client-supplied nonce + a 96 bit server
 nonce extension.
-- A 128 bit Poly1305-AES MAC.
+- A 128 bit Poly1305 MAC.
 
 The proxy immediately discards replies to queries made more than 10
 second ago and replies that don't match the client-supplied nonce.
