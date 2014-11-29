@@ -99,6 +99,24 @@ AC_ARG_ENABLE(plugins-root,
 ])
 AM_CONDITIONAL(ENABLE_PLUGINS_ROOT, test x$plugins_root = xenabled)
 
+AC_ARG_WITH([systemd],
+  AS_HELP_STRING([--with-systemd], [build with support for systemd]),
+  [], [with_systemd=check]
+)
+
+have_systemd=no
+AS_IF([test "x$with_systemd" != xno], [
+  # new version -- all libsystemd-* libs merged into libsystemd
+  PKG_CHECK_MODULES([SYSTEMD], [libsystemd], [have_systemd=yes], [have_systemd=no])
+  AS_CASE([$with_systemd:$have_systemd],
+    [yes:no],
+      [AC_MSG_ERROR([systemd expected but libsystemd not found])],
+    [*:yes],
+       AC_DEFINE([HAVE_LIBSYSTEMD], [1], [Define if libsystemd is available])
+  )
+])
+AM_CONDITIONAL([HAVE_SYSTEMD], [test "x$have_systemd" = xyes])	
+
 AC_SUBST([MAINT])
 
 dnl Checks

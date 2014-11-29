@@ -112,6 +112,7 @@ typedef struct ProxyContext_ {
     size_t                   edns_payload_size;
     size_t                   udp_current_max_size;
     size_t                   udp_max_size;
+    evutil_socket_t          tcp_listener_handle;
     evutil_socket_t          udp_listener_handle;
     evutil_socket_t          udp_proxy_resolver_handle;
 #ifndef _WIN32

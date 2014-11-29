@@ -550,17 +550,29 @@ tcp_listener_bind(ProxyContext * const proxy_context)
 #ifndef LEV_OPT_DEFERRED_ACCEPT
 # define LEV_OPT_DEFERRED_ACCEPT 0
 #endif
-    proxy_context->tcp_conn_listener =
-        evconnlistener_new_bind(proxy_context->event_loop,
-                                tcp_connection_cb, proxy_context,
-                                LEV_OPT_CLOSE_ON_FREE |
-                                LEV_OPT_CLOSE_ON_EXEC |
-                                LEV_OPT_REUSEABLE |
-                                LEV_OPT_DEFERRED_ACCEPT,
-                                TCP_REQUEST_BACKLOG,
-                                (struct sockaddr *)
-                                &proxy_context->local_sockaddr,
-                                (int) proxy_context->local_sockaddr_len);
+    if (proxy_context->tcp_listener_handle < 0) {
+        proxy_context->tcp_conn_listener =
+            evconnlistener_new_bind(proxy_context->event_loop,
+                                    tcp_connection_cb, proxy_context,
+                                    LEV_OPT_CLOSE_ON_FREE |
+                                    LEV_OPT_CLOSE_ON_EXEC |
+                                    LEV_OPT_REUSEABLE |
+                                    LEV_OPT_DEFERRED_ACCEPT,
+                                    TCP_REQUEST_BACKLOG,
+                                    (struct sockaddr *)
+                                    &proxy_context->local_sockaddr,
+                                    (int) proxy_context->local_sockaddr_len);
+    } else {
+        proxy_context->tcp_conn_listener =
+            evconnlistener_new(proxy_context->event_loop,
+                               tcp_connection_cb, proxy_context,
+                               LEV_OPT_CLOSE_ON_FREE |
+                               LEV_OPT_CLOSE_ON_EXEC |
+                               LEV_OPT_REUSEABLE |
+                               LEV_OPT_DEFERRED_ACCEPT,
+                               TCP_REQUEST_BACKLOG,
+                               proxy_context->tcp_listener_handle);
+    }
     if (proxy_context->tcp_conn_listener == NULL) {
         logger(NULL, LOG_ERR, "Unable to bind (TCP)");
         return -1;
