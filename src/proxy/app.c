@@ -235,6 +235,10 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 
     proxy_context->listeners_started = 1;
 
+#ifdef HAVE_LIBSYSTEMD
+    sd_notify(0, "READY=1");
+#endif
+
     return 0;
 }
 
@@ -348,7 +352,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
     }
 
 #ifdef HAVE_LIBSYSTEMD
-    sd_notifyf(0, "READY=1\nMAINPID=%lu", (unsigned long) getpid());
+    sd_notifyf(0, "MAINPID=%lu", (unsigned long) getpid());
 #endif
 
     if (skip_dispatch == 0) {
