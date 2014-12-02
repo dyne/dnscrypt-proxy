@@ -265,8 +265,8 @@ init_descriptors_from_systemd(ProxyContext * const proxy_context)
         return 0;
     }
     if (num_sd_fds != 2) {
-        logger(proxy_context, LOG_ERR, "Wrong number of systemd sockets: %d"
-               "Should be 2", num_sd_fds);
+        logger(proxy_context, LOG_ERR, "Wrong number of systemd sockets: %d - "
+               "should be 2", num_sd_fds);
         return -1;
     }
     assert(num_sd_fds <= INT_MAX - SD_LISTEN_FDS_START);
