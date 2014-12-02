@@ -5,7 +5,7 @@ before_script:
  - sudo apt-get install libldns-dev
  - git clone git://github.com/jedisct1/libsodium.git
  - cd libsodium
- - git checkout 0.7.0
+ - git checkout 1.0.1
  - ./autogen.sh
  - ./configure --disable-dependency-tracking
  - sudo make install
