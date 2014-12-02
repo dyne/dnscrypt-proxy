@@ -276,8 +276,8 @@ init_descriptors_from_systemd(ProxyContext * const proxy_context)
            sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 1) > 0) {
            proxy_context->udp_listener_handle = sock;
        }
-       if (sd_is_socket(sock, AF_INET, SOCK_DGRAM, 1) > 0 ||
-           sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 1) > 0) {
+       if (sd_is_socket(sock, AF_INET, SOCK_STREAM, 1) > 0 ||
+           sd_is_socket(sock, AF_INET6, SOCK_STREAM, 1) > 0) {
            proxy_context->tcp_listener_handle = sock;
        }
     }
