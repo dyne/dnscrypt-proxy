@@ -8,7 +8,9 @@ EXTRA_DIST = \
 	THANKS \
 	apparmor.profile.dnscrypt-proxy \
 	autogen.sh \
-	org.dnscrypt.osx.DNSCryptProxy.plist
+	org.dnscrypt.osx.DNSCryptProxy.plist \
+	dnscrypt-proxy.service \
+	dnscrypt-proxy.socket
 
 SUBDIRS = \
 	dist-build \
