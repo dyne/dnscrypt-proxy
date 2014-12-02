@@ -477,7 +477,7 @@ udp_listener_kill_oldest_request(ProxyContext * const proxy_context)
 int
 udp_listener_bind(ProxyContext * const proxy_context)
 {
-    if (proxy_context->udp_listener_handle < 0) {
+    if (proxy_context->udp_listener_handle == -1) {
         if ((proxy_context->udp_listener_handle = socket
              (proxy_context->local_sockaddr.ss_family,
                  SOCK_DGRAM, IPPROTO_UDP)) == -1) {

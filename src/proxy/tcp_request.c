@@ -550,7 +550,7 @@ tcp_listener_bind(ProxyContext * const proxy_context)
 #ifndef LEV_OPT_DEFERRED_ACCEPT
 # define LEV_OPT_DEFERRED_ACCEPT 0
 #endif
-    if (proxy_context->tcp_listener_handle < 0) {
+    if (proxy_context->tcp_listener_handle == -1) {
         proxy_context->tcp_conn_listener =
             evconnlistener_new_bind(proxy_context->event_loop,
                                     tcp_connection_cb, proxy_context,
