@@ -153,6 +153,11 @@ The proxy will accept incoming requests on 127.0.0.1, tag them with an
 authentication code, forward them to the resolver, and validate each
 answer before passing it to the client.
 
+The proxy also accepts sockets via systemd socket activation when
+compiled with libsystemd. The proxy acccepts only one TCP socket and 
+one UDP socket. The proxy will also notify systemd on successful 
+startup.
+
 Given such a setup, in order to actually start using DNSCrypt, you
 need to update your `/etc/resolv.conf` file and replace your current
 set of resolvers with:

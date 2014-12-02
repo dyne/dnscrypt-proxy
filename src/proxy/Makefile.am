@@ -72,6 +72,13 @@ CLEANFILES = \
 	probes.h \
 	probes_dnscrypt_proxy.h
 
+if HAVE_SYSTEMD
+
+dnscrypt_proxy_CFLAGS = $(SYSTEMD_CFLAGS)
+dnscrypt_proxy_LDADD += $(SYSTEMD_LIBS)
+
+endif
+
 if PLUGINS
 
 AM_CPPFLAGS += \

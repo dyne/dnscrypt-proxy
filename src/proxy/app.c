@@ -17,6 +17,10 @@
 
 #include <sodium.h>
 
+#ifdef HAVE_LIBSYSTEMD
+#include <systemd/sd-daemon.h>
+#endif
+
 #include "app.h"
 #include "dnscrypt_client.h"
 #include "dnscrypt_proxy.h"
@@ -98,6 +102,7 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     proxy_context->udp_proxy_resolver_event = NULL;
     proxy_context->udp_proxy_resolver_handle = -1;
     proxy_context->udp_listener_handle = -1;
+    proxy_context->tcp_listener_handle = -1;
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
@@ -230,6 +235,10 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
 
     proxy_context->listeners_started = 1;
 
+#ifdef HAVE_LIBSYSTEMD
+    sd_notify(0, "READY=1");
+#endif
+
     return 0;
 }
 
@@ -290,6 +299,44 @@ dnscrypt_proxy_main(int argc, char *argv[])
     if (cert_updater_init(&proxy_context) != 0) {
         exit(1);
     }
+
+#ifdef HAVE_LIBSYSTEMD
+
+    int num_sd_fds = sd_listen_fds(0);
+    if (num_sd_fds != 0 || num_sd_fds != 2) {
+        logger(&proxy_context, LOG_ERR, "Wrong number of systemd sockets: %d. "
+               "Should be 2", num_sd_fds);
+        exit(1);
+    }
+
+    int sock;
+    for (sock = SD_LISTEN_FDS_START; sock < SD_LISTEN_FDS_START + num_sd_fds;
+         ++sock) {
+       if (sd_is_socket(sock, AF_INET, SOCK_DGRAM, 1) > 0 ||
+           sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 1) > 0) {
+           proxy_context.udp_listener_handle = sock;
+       }
+       if (sd_is_socket(sock, AF_INET, SOCK_DGRAM, 1) > 0 || 
+           sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 1) > 0) {
+           proxy_context.tcp_listener_handle = sock;
+       }
+    }
+
+    if (num_sd_fds > 0) {
+        if (proxy_context.udp_listener_handle < 0) {
+            logger_noformat(&proxy_context, LOG_ERR,
+                            "No systemd UDP socket passed in.");
+            exit(1);
+        }
+        if (proxy_context.tcp_listener_handle < 0) {
+            logger_noformat(&proxy_context, LOG_ERR, 
+                            "No systemd TCP socket passed in.");
+            exit(1);
+        }
+    }
+
+#endif
+
     if (proxy_context.test_only == 0 &&
         (udp_listener_bind(&proxy_context) != 0 ||
          tcp_listener_bind(&proxy_context) != 0)) {
@@ -303,10 +350,20 @@ dnscrypt_proxy_main(int argc, char *argv[])
     if (cert_updater_start(&proxy_context) != 0) {
         exit(1);
     }
+
+#ifdef HAVE_LIBSYSTEMD
+    sd_notifyf(0, "MAINPID=%lu", (unsigned long) getpid());
+#endif
+
     if (skip_dispatch == 0) {
         event_base_dispatch(proxy_context.event_loop);
     }
     logger_noformat(&proxy_context, LOG_NOTICE, "Stopping proxy");
+    
+#ifdef HAVE_LIBSYSTEMD
+    sd_notify(0, "STOPPING=1");
+#endif
+
     cert_updater_free(&proxy_context);
     udp_listener_stop(&proxy_context);
     tcp_listener_stop(&proxy_context);
