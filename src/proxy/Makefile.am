@@ -74,8 +74,8 @@ CLEANFILES = \
 
 if HAVE_SYSTEMD
 
-dnscrypt_proxy_CFLAGS = $(SYSTEMD_CFLAGS)
-dnscrypt_proxy_LDADD += $(SYSTEMD_LIBS)
+dnscrypt_proxy_CFLAGS = $(SYSTEMD_CFLAGS) $(SYSTEMD_DAEMON_CFLAGS)
+dnscrypt_proxy_LDADD += $(SYSTEMD_LIBS) $(SYSTEMD_DAEMON_LIBS)
 
 endif
 
