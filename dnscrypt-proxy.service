@@ -8,5 +8,6 @@ WantedBy=multi-user.target
 
 [Service]
 Type=simple
+NonBlocking=true
 ExecStart=/usr/local/sbin/dnscrypt-proxy \
 	  -R dnscrypt.eu-nl
