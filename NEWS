@@ -1,4 +1,11 @@
 
+* Version 1.4.2:
+ - New compilation switch: --with-systemd, to enable socket activation
+support when using systemd.
+ - New DNS provider: cypherpunk.lu (Luxembourg). The record for
+PhilipSoutham's server was also updated.
+ - Libevent2 updates.
+
 * Version 1.4.1:
  - Alternative ports to dnscrypt.eu servers have been added
  - Android build scripts are now part of the package
