@@ -19,6 +19,7 @@
 #include <sodium.h>
 
 #ifdef HAVE_LIBSYSTEMD
+# include <sys/socket.h>
 # include <systemd/sd-daemon.h>
 #endif
 
@@ -231,12 +232,8 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
     evutil_format_sockaddr_port((const struct sockaddr *)
                                 &proxy_context->resolver_sockaddr,
                                 resolver_addr_s, sizeof resolver_addr_s);
-#ifdef HAVE_LIBSYSTEMD
-    logger(proxy_context, LOG_NOTICE, "Proxying to %s", resolver_addr_s);
-#else
     logger(proxy_context, LOG_NOTICE, "Proxying from %s to %s",
            local_addr_s, resolver_addr_s);
-#endif
     proxy_context->listeners_started = 1;
 #ifdef HAVE_LIBSYSTEMD
     sd_notify(0, "READY=1");
@@ -292,6 +289,13 @@ init_descriptors_from_systemd(ProxyContext * const proxy_context)
     if (proxy_context->tcp_listener_handle < 0) {
         logger_noformat(proxy_context, LOG_ERR,
                         "No systemd TCP socket passed in");
+        return -1;
+    }
+    if (getsockname(proxy_context->udp_listener_handle,
+                    (struct sockaddr *) &proxy_context->local_sockaddr,
+                    &proxy_context->local_sockaddr_len) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unable to get the local systemd UDP socket address");
         return -1;
     }
     return 0;
