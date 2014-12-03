@@ -563,6 +563,8 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                                     &proxy_context->local_sockaddr,
                                     (int) proxy_context->local_sockaddr_len);
     } else {
+        evutil_make_socket_closeonexec(proxy_context->tcp_listener_handle);
+        evutil_make_socket_nonblocking(proxy_context->tcp_listener_handle);
         proxy_context->tcp_conn_listener =
             evconnlistener_new(proxy_context->event_loop,
                                tcp_connection_cb, proxy_context,
