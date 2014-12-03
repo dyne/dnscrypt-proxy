@@ -3,7 +3,7 @@
 [DNSCrypt](http://dnscrypt.org)
 ===============================
 
-A tool for securing communications between a client and a DNS resolver.
+A protocol for securing communications between a client and a DNS resolver.
 
 Description
 -----------
@@ -186,8 +186,8 @@ and `--provider-key=<provider public key>` switches can be specified in
 order to use a DNSCrypt-enabled recursive DNS service not listed in
 the configuration file.
 
-Running dnscrypt using systemd
-------------------------------
+Running dnscrypt-proxy using systemd
+------------------------------------
 
 On a system using systemd, and when compiled with `--with-systemd`,
 the proxy can take advantage of systemd's socket activation instead of
