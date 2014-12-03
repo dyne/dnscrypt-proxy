@@ -272,8 +272,8 @@ init_descriptors_from_systemd(ProxyContext * const proxy_context)
     assert(num_sd_fds <= INT_MAX - SD_LISTEN_FDS_START);
     for (sock = SD_LISTEN_FDS_START; sock < SD_LISTEN_FDS_START + num_sd_fds;
          ++sock) {
-       if (sd_is_socket(sock, AF_INET, SOCK_DGRAM, 1) > 0 ||
-           sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 1) > 0) {
+       if (sd_is_socket(sock, AF_INET, SOCK_DGRAM, 0) > 0 ||
+           sd_is_socket(sock, AF_INET6, SOCK_DGRAM, 0) > 0) {
            proxy_context->udp_listener_handle = sock;
        }
        if (sd_is_socket(sock, AF_INET, SOCK_STREAM, 1) > 0 ||
