@@ -481,7 +481,8 @@ udp_listener_bind(ProxyContext * const proxy_context)
         if ((proxy_context->udp_listener_handle = socket
              (proxy_context->local_sockaddr.ss_family,
                  SOCK_DGRAM, IPPROTO_UDP)) == -1) {
-            logger(NULL, LOG_ERR, "Unable to create a socket (UDP)");
+            logger_noformat(proxy_context, LOG_ERR,
+                            "Unable to create a socket (UDP)");
             return -1;
         }
         if (bind(proxy_context->udp_listener_handle,

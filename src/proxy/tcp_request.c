@@ -574,7 +574,7 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                                proxy_context->tcp_listener_handle);
     }
     if (proxy_context->tcp_conn_listener == NULL) {
-        logger(NULL, LOG_ERR, "Unable to bind (TCP)");
+        logger_noformat(proxy_context, LOG_ERR, "Unable to bind (TCP)");
         return -1;
     }
     if (evconnlistener_disable(proxy_context->tcp_conn_listener) != 0) {
