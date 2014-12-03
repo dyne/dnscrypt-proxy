@@ -1,3 +1,275 @@
+* Wed Dec 3 15:01:09 2014 -0800
+
+    Remove OpenNIC UK resolvers
+
+* Tue Dec 2 23:23:29 2014 -0800
+
+    Bump fpm package version up
+
+* Tue Dec 2 23:22:49 2014 -0800
+
+    Use resolver-name
+
+* Tue Dec 2 23:07:55 2014 -0800
+
+    dnscrypt-wrapper doesn't support socket activation (yet?)
+
+* Tue Dec 2 23:07:03 2014 -0800
+
+    Document how to run dnscrypt-proxy with systemd
+
+* Tue Dec 2 19:15:44 2014 -0800
+
+    Remove offline d0wn servers
+
+* Tue Dec 2 19:00:11 2014 -0800
+
+    open dns supports https now
+
+* Tue Dec 2 18:57:21 2014 -0800
+
+    Update d0wn IPs, add new d0wn servers, update open dns catchline
+
+* Tue Dec 2 17:51:11 2014 -0800
+
+    Bump version number
+
+* Tue Dec 2 17:27:05 2014 -0800
+
+    When using a systemd socket, retrieve its local address.
+
+* Tue Dec 2 17:13:02 2014 -0800
+
+    The systemd service needs NonBlocking=true
+
+* Tue Dec 2 17:08:58 2014 -0800
+
+    Socket inherited from systemd must be set to nonblocking.
+
+* Tue Dec 2 16:46:27 2014 -0800
+
+    When using systemd, the local address may not reflect the reality.
+
+* Tue Dec 2 16:39:50 2014 -0800
+
+    UDP sockets sent by systemd are not listening
+
+* Tue Dec 2 15:52:58 2014 -0800
+
+    Fix error message
+
+* Tue Dec 2 15:40:42 2014 -0800
+
+    Add a simple sample systemd service file.
+
+* Tue Dec 2 15:15:06 2014 -0800
+
+    Add SYSTEMD_DAEMON_ flags
+
+* Tue Dec 2 14:54:05 2014 -0800
+
+    The TCP socket is of type SOCK_STREAM.
+
+* Tue Dec 2 14:53:47 2014 -0800
+
+    Outline systemd descriptors initialization
+
+* Tue Dec 2 14:51:35 2014 -0800
+
+    Check for libsystemd-daemon in addition to libsystemd.
+    Do not pick systemd unless --with-systemd is explicitly used.
+
+* Tue Dec 2 14:18:15 2014 -0800
+
+    A file descriptor doesn't have to be >= 0
+
+* Tue Dec 2 14:16:52 2014 -0800
+
+    Indent
+
+* Tue Dec 2 16:42:19 2014 -0800
+
+    logger() -> logger_noformat()
+
+* Tue Dec 2 15:43:22 2014 -0800
+
+    Use sodium 1.0.1
+
+* Tue Dec 2 14:56:50 2014 -0800
+
+    libevent2: Fix race caused by event_active
+    There is a race between manual event_active and natural event activation.
+    
+    If both happen at the same time on the same FD, they would both be protected by the same event base lock except for 1 LoC where the fields of struct event are read without any kind of lock.
+    
+    
+    In 2.0-stable, none of this is inside the lock; in HEAD, only the callback is read inside the lock. This gets the callback and all 3 arguments inside the lock before calling it outside the lock.
+
+* Tue Dec 2 14:55:57 2014 -0800
+
+    Sodium 0.5.0 is the bare minimum.
+
+Merge: 6d3a902 7a8b8e8
+* Tue Dec 2 14:12:37 2014 -0800
+
+    Merge pull request #165 from zedinosaur/systemd
+    
+    Add socket activation to dnscrypt-proxy.
+
+* Sat Nov 29 22:56:40 2014 -0500
+
+    Add documentation about systemd integration.
+
+* Sat Nov 29 22:27:23 2014 -0500
+
+    Move READY notify to when listeners start.
+
+* Sat Nov 29 14:47:26 2014 -0500
+
+    Add socket activation to dnscrypt-proxy.
+    
+    Conditional systemd support for socket activation and startup and shutdown
+    notification.
+
+Merge: 3c605e7 24efbde
+* Tue Nov 25 16:41:48 2014 -0800
+
+    Merge branch 'master' of github.com:jedisct1/dnscrypt-proxy
+    
+    * 'master' of github.com:jedisct1/dnscrypt-proxy:
+      iOS: add -miphoneos-version-min
+      Add the cypherpunk.lu server
+      Update dnscrypt-resolvers.csv.sig
+      Sort resolvers list
+      Added a DNSCrypt server in Luxembourg
+      Indent
+      High-level functions are enough
+      Not Poly1305-AES.
+
+* Tue Nov 25 16:41:29 2014 -0800
+
+    Don't use -fwrapv if it's redundant.
+
+* Thu Nov 20 14:01:46 2014 -0800
+
+    iOS: add -miphoneos-version-min
+
+* Fri Oct 31 13:02:14 2014 -0700
+
+    Add the cypherpunk.lu server
+
+* Fri Oct 31 09:01:55 2014 -0700
+
+    Update dnscrypt-resolvers.csv.sig
+
+* Fri Oct 31 09:01:35 2014 -0700
+
+    Sort resolvers list
+
+Merge: 4ab8308 1f3d58e
+* Fri Oct 31 08:58:52 2014 -0700
+
+    Merge pull request #157 from virii/master
+    
+    Added a DNSCrypt server in Luxembourg
+
+* Fri Oct 31 16:51:27 2014 +0100
+
+    Added a DNSCrypt server in Luxembourg
+
+* Wed Oct 29 02:13:20 2014 -0700
+
+    Indent
+
+* Wed Oct 29 02:12:30 2014 -0700
+
+    High-level functions are enough
+
+* Wed Oct 29 02:09:37 2014 -0700
+
+    Not Poly1305-AES.
+
+Merge: 41c667e ca47395
+* Mon Oct 13 10:17:52 2014 -0700
+
+    Merge pull request #150 from rob/patch-1
+    
+    Update dnscrypt-resolvers.csv
+
+* Mon Oct 13 09:33:50 2014 -0400
+
+    Update dnscrypt-resolvers.csv
+    
+    According to the OpenNIC wiki [1], the correct IPv6 address for PhilipSoutham's server is ns18.ca.us, not ns17.ca.us. The provider key was also wrong.
+    
+    [1] http://wiki.opennicproject.org/Tier2
+
+* Fri Oct 10 19:17:23 2014 -0700
+
+    Libevent2 -     Fix a typo in a doxygen comment. Reported by äå.
+
+* Tue Sep 30 16:05:35 2014 -0700
+
+    d0wn servers support Namecoin - Prodded by @bugreport0
+
+Merge: 9ec8509 5a9a96d
+* Mon Sep 29 15:42:05 2014 -0700
+
+    Merge remote-tracking branch 'teknocrat/master'
+    
+    * teknocrat/master:
+      * New ebuild for 1.4.0 * New ebuild for 1.4.1 * Configuration change to support providers * Drop libsodium from overlay (is not in portage tree) * Dnscrypt-Proxy 1.4.x requires libsodium 1.0.0 or newer
+    
+    Conflicts:
+    	packages/gentoo/net-dns/dnscrypt-proxy/Manifest
+    	packages/gentoo/net-dns/dnscrypt-proxy/dnscrypt-proxy-1.4.0.ebuild
+    	packages/gentoo/net-dns/dnscrypt-proxy/dnscrypt-proxy-1.4.1.ebuild
+
+* Wed Sep 24 11:17:38 2014 -0400
+
+    * New ebuild for 1.4.0
+    * New ebuild for 1.4.1
+    * Configuration change to support providers
+    * Drop libsodium from overlay (is not in portage tree)
+    * Dnscrypt-Proxy 1.4.x requires libsodium 1.0.0 or newer
+
+* Sun Sep 28 01:42:11 2014 -0700
+
+    and -> and/or
+
+Merge: 1578efb 4cd37f7
+* Sat Sep 27 12:13:32 2014 -0700
+
+    Merge branch 'master' of github.com:jedisct1/dnscrypt-proxy
+    
+    * 'master' of github.com:jedisct1/dnscrypt-proxy:
+      * New ebuild for 1.4.0 * New ebuild for 1.4.1 * Configuration change to support providers
+
+* Sat Sep 27 12:13:10 2014 -0700
+
+    Fix the tests, update Gemfile by the way
+
+Merge: 4991aa3 c21c3c1
+* Wed Sep 24 08:56:40 2014 -0700
+
+    Merge pull request #145 from Teknocrat/master
+    
+    New Gentoo ebuilds for 1.4.0 and 1.4.1
+
+* Wed Sep 24 11:17:38 2014 -0400
+
+    * New ebuild for 1.4.0
+    * New ebuild for 1.4.1
+    * Configuration change to support providers
+
+* Sat Sep 20 23:05:44 2014 -0700
+
+    Mention that a minimal build of libsodium is fine.
+
+* Fri Sep 19 00:02:26 2014 -0700
+
+    Update ChangeLog
+
 Merge: 3c960ad 1e2eb46
 * Thu Sep 18 23:23:45 2014 -0700
 
