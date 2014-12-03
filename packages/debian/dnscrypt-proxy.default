@@ -14,13 +14,16 @@ pidfile=/run/dnscrypt-proxy.pid
 # This is a security feature and should never be disabled.
 user=dnscrypt
 
-# Remote DNS(Crypt) provider settings
-# You can find a list of resolvers at https://github.com/jedisct1/dnscrypt-proxy/
-# or locally in file /usr/share/doc/dnscrypt-proxy/README.markdown.gz
+# Remote DNSCrypt resolvers name
+# You can find a list of resolvers names at
+# https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv
 # Specifying multiple resolvers is not yet supported!
-resolver-address=208.67.220.220:443
-provider-name=2.dnscrypt-cert.opendns.com
-provider-key=B735:1140:206F:225D:3E2B:D822:D7FD:691E:A1C3:3CC8:D666:8D0C:BE04:BFAB:CA43:FB79 
+resolver-name=opendns
+
+# Custom DNSCrypt settings, if you are running you own DNSCrypt server (dnscrypt-wrapper)
+#resolver-address=10.1.1.53:443
+#provider-name=2.dnscrypt-cert.example.com
+#provider-key=CE57:A439:58B0:7685:6960:044B:EA64:A64D:AECA:A8AA:EB54:9D70:E31D:3896:8A93:1D96
 
 # Transparently add an OPT pseudo-RR to outgoing queries in order to enable the EDNS0 extension mechanism.
 # This feature is enabled by default, with a payload size of 1252 bytes. Any value below 512 disables it.
