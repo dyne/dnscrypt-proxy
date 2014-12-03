@@ -153,11 +153,6 @@ The proxy will accept incoming requests on 127.0.0.1, tag them with an
 authentication code, forward them to the resolver, and validate each
 answer before passing it to the client.
 
-The proxy also accepts sockets via systemd socket activation when
-compiled with libsystemd. The proxy acccepts only one TCP socket and 
-one UDP socket. The proxy will also notify systemd on successful 
-startup.
-
 Given such a setup, in order to actually start using DNSCrypt, you
 need to update your `/etc/resolv.conf` file and replace your current
 set of resolvers with:
@@ -190,6 +185,20 @@ The
 and `--provider-key=<provider public key>` switches can be specified in
 order to use a DNSCrypt-enabled recursive DNS service not listed in
 the configuration file.
+
+Running dnscrypt using systemd
+------------------------------
+
+On a system using systemd, and when compiled with `--with-systemd`,
+the proxy can take advantage of systemd's socket activation instead of
+creating the sockets itself. The proxy will also notify systemd on successful
+startup.
+
+Two sockets need to be configured: a UDP socket (`ListenStream`) and a
+TCP socket (`ListenDatagram`) sharing the same port.
+
+The source distribution includes the `dnscrypt-proxy.socket` and
+`dnscrypt-proxy.service` files that can be used as a starting point.
 
 Installation as a service (Windows only)
 ----------------------------------------
