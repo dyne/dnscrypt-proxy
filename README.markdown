@@ -343,7 +343,7 @@ resolvers. This can improve your web browsing experience.
 addresses.
 
 This plugin returns a REFUSED response if the query name is in a
-llist of blacklisted names, or if at least one of the returned
+list of blacklisted names, or if at least one of the returned
 IP addresses happens to be in a list of blacklisted IPs.
 
 Recognized switches are:
