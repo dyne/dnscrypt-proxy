@@ -1052,7 +1052,7 @@ Merge: 6e646ad 9ee793f
 
 * Sun Mar 23 16:52:09 2014 +1100
 
-    added 'resolvconf' variablee for the init script
+    added 'resolvconf' variable for the init script
 
 * Sun Mar 23 11:56:48 2014 +1100
 
