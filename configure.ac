@@ -133,10 +133,16 @@ AX_CHECK_COMPILE_FLAG([-fPIC], [
 
 AS_IF([test "$enable_pie" != "no"],[
   AX_CHECK_COMPILE_FLAG([-fPIE], [
-    AX_CHECK_LINK_FLAG([-fPIE],
-      [AX_CHECK_LINK_FLAG([-pie],
-        [CFLAGS="$CFLAGS -fPIE"
-         LDFLAGS="$LDFLAGS -pie"])
+    AX_CHECK_LINK_FLAG([-fPIE], [
+        AX_CHECK_LINK_FLAG([-Wl,-pie], [
+            CFLAGS="$CFLAGS -fPIE"
+            LDFLAGS="$LDFLAGS -Wl,-pie"
+        ], [
+            AX_CHECK_LINK_FLAG([-pie], [
+                CFLAGS="$CFLAGS -fPIE"
+                LDFLAGS="$LDFLAGS -pie"
+            ])
+        ])
     ])
   ])
 ])
