@@ -123,12 +123,16 @@ dnl Checks
 
 AC_PROG_CC_C99
 AC_USE_SYSTEM_EXTENSIONS
-CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
 
-AX_CHECK_COMPILE_FLAG([-fPIC], [
-  AX_CHECK_LINK_FLAG([-fPIC],
-    [CFLAGS="$CFLAGS -fPIC"]
-  )
+AX_CHECK_COMPILE_FLAG([-D_FORTIFY_SOURCE=2],
+  [CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"])
+
+AS_CASE([$host_os], [cygwin*|mingw*|msys|pw32*|cegcc*], [ ], [
+  AX_CHECK_COMPILE_FLAG([-fPIC], [
+    AX_CHECK_LINK_FLAG([-fPIC],
+      [CFLAGS="$CFLAGS -fPIC"]
+    )
+  ])
 ])
 
 AS_IF([test "$enable_pie" != "no"],[
