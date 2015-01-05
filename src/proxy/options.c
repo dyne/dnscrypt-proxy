@@ -423,9 +423,10 @@ options_parse(AppContext * const app_context,
             }
             if (edns_payload_size <= DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
                 proxy_context->edns_payload_size = (size_t) 0U;
+                proxy_context->udp_max_size = DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND;
             } else {
                 proxy_context->edns_payload_size = (size_t) edns_payload_size;
-                assert(proxy_context->udp_max_size ==
+                assert(proxy_context->udp_max_size >=
                        DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND);
                 if (proxy_context->edns_payload_size > DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
                     proxy_context->udp_max_size =
