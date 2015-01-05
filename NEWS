@@ -1,4 +1,11 @@
 
+* Version 1.4.3:
+ - libevent update, including a fix for CVE-2014-6272
+ - Two new public dnscrypt resolvers were added: opennic-us-wa-ns1 and
+dnscrypt.org-fr.
+ - d0wn servers in France IP have changed.
+ - Compilation fixes.
+
 * Version 1.4.2:
  - New compilation switch: --with-systemd, to enable socket activation
 support when using systemd.
