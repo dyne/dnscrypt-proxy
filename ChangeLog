@@ -1,3 +1,87 @@
+* Mon Jan 5 17:07:25 2015 +0100
+
+    libevent 2.0.22
+
+* Mon Jan 5 17:04:17 2015 +0100
+
+    libevent: fix CVE-2014-6272
+
+* Mon Jan 5 17:03:44 2015 +0100
+
+    libevent: Fix evbuffer_peek() with len==-1 and start_at non-NULL.
+
+* Wed Dec 31 19:09:00 2014 +0100
+
+    2015
+
+* Mon Dec 29 18:29:18 2014 +0100
+
+    Check if -D_FORTIFY_SOURCE=2 works
+
+* Mon Dec 29 18:22:22 2014 +0100
+
+    Add IPv6 IP for ns1-wa-us
+
+Merge: 14d2932 783edbf
+* Mon Dec 29 18:19:23 2014 +0100
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      Check if -Wl,-pie should be used instead of -pie in LDFLAGS
+      Reflecting 'd0wn-fr-ns1' server IP address change.
+
+* Mon Dec 29 18:19:05 2014 +0100
+
+    Add a new OpenNIC server in Washington
+
+* Mon Dec 29 01:29:11 2014 +0100
+
+    Check if -Wl,-pie should be used instead of -pie in LDFLAGS
+
+Merge: 8bb1599 579c596
+* Fri Dec 26 14:10:13 2014 +0100
+
+    Merge pull request #171 from DistantThunder/master
+    
+    Updating d0wn french servers.
+
+* Fri Dec 26 02:32:29 2014 +0100
+
+    Reflecting 'd0wn-fr-ns1' server IP address change.
+    
+    Changing 'd0wn-fr-ns2' listening port to a working one.
+
+Merge: 3f7dbf5 32794a0
+* Sun Dec 21 14:08:23 2014 +0100
+
+    Merge pull request #169 from pataquets/patch-1
+    
+    Fix typos
+
+* Sun Dec 21 12:05:07 2014 +0100
+
+    Fix typo
+
+* Sun Dec 21 12:03:01 2014 +0100
+
+    Fix typo
+
+Merge: 57d3072 562ddd4
+* Thu Dec 4 17:40:14 2014 -0800
+
+    Merge pull request #166 from xuzhen/master
+    
+    fixed issue #104
+
+* Thu Dec 4 21:31:28 2014 +0800
+
+    fixed issue #104
+
+* Wed Dec 3 15:02:27 2014 -0800
+
+    Update ChangeLog
+
 * Wed Dec 3 15:01:09 2014 -0800
 
     Remove OpenNIC UK resolvers
@@ -1052,7 +1136,7 @@ Merge: 6e646ad 9ee793f
 
 * Sun Mar 23 16:52:09 2014 +1100
 
-    added 'resolvconf' variable for the init script
+    added 'resolvconf' variablee for the init script
 
 * Sun Mar 23 11:56:48 2014 +1100
 
