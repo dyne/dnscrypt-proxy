@@ -13,7 +13,7 @@ export LDFLAGS="-L${SODIUM_PREFIX}/lib"
   --sbindir="${PREFIX}/bin" \
   --enable-plugins \
   --with-included-ltdl && \
-make install-strip
+make install
 
 rm -fr "${PREFIX}/share"
 rm -fr "${PREFIX}/lib/pkgconfig"
