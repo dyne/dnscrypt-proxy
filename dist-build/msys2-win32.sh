@@ -24,10 +24,8 @@ cp "${MINGW_PREFIX}/bin/libgcc_s_dw2-1.dll" "${PREFIX}/bin/"
 cp "${MINGW_PREFIX}/bin/libldns-1.dll" "${PREFIX}/bin/"
 cp "${SODIUM_PREFIX}/bin/libsodium-13.dll" "${PREFIX}/bin/"
 
-cp dnscrypt-resolvers.csv "${PREFIX}/bin/"
+nm "${MINGW_PREFIX}/bin/libldns-1.dll" | \
+  fgrep -i libeay &&
+  cp "${MINGW_PREFIX}/bin/"libeay*.dll "${PREFIX}/bin/"
 
-if false; then
-  upx --best --ultra-brute "${PREFIX}/dnscrypt-proxy.exe" &
-  upx --best --ultra-brute "${PREFIX}/hostip.exe"
-  wait
-fi
+cp dnscrypt-resolvers.csv "${PREFIX}/bin/"
