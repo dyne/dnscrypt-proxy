@@ -36,8 +36,7 @@ $MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-18}" \
             --with-sysroot="${TOOLCHAIN_DIR}/sysroot" \
             --prefix="${PREFIX}" \
             --disable-soname-versions \
-            --disable-shared \
-            --disable-pie && \
+            --disable-shared && \
 make clean && \
 make -j3 install && \
 echo "dnscrypt-proxy has been installed into $PREFIX"
