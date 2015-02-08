@@ -29,7 +29,7 @@ export LDFLAGS="$LDFLAGS -L${SODIUM_ANDROID_PREFIX}/lib"
 
 rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
 
-$MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-14}" \
+$MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-18}" \
                 --arch="$TARGET_ARCH" \
                 --install-dir="$TOOLCHAIN_DIR" && \
 ./configure --host="${HOST_COMPILER}" \
