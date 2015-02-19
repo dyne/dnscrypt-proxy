@@ -1,11 +1,11 @@
 language: c
 compiler:
  - gcc
+ - clang
 before_script:
  - sudo apt-get install libldns-dev
- - git clone git://github.com/jedisct1/libsodium.git
+ - git clone https://github.com/jedisct1/libsodium.git --branch=1.0.2
  - cd libsodium
- - git checkout 1.0.2
  - ./autogen.sh
  - ./configure --disable-dependency-tracking
  - sudo make install
@@ -14,4 +14,6 @@ before_script:
  - ./autogen.sh
  - ./configure --disable-dependency-tracking --enable-plugins
 script:
- - make
+ - make -j$(nproc)
+matrix:
+ - fast_finish: true
