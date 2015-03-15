@@ -13,6 +13,11 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef HAVE_LIBSYSTEMD
+# include <sys/socket.h>
+# include <systemd/sd-daemon.h>
+#endif
+
 #include <event2/util.h>
 
 #include "dnscrypt_proxy.h"
@@ -132,6 +137,16 @@ logger_error(struct ProxyContext_ * const context,
     const char *const err_msg = strerror(errno);
 
     return logger(context, LOG_ERR, "%s: %s", msg, err_msg);
+}
+
+void systemd_notify(struct ProxyContext_ * const context,
+                    const char * msg) {
+#ifdef HAVE_LIBSYSTEMD
+    int err = sd_notify(0, msg);
+    if (err < 0) {
+        logger(context, LOG_DEBUG, "sd_notify failed: %s", strerror(-err));
+    }
+#endif
 }
 
 int

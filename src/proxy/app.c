@@ -235,9 +235,7 @@ dnscrypt_proxy_start_listeners(ProxyContext * const proxy_context)
     logger(proxy_context, LOG_NOTICE, "Proxying from %s to %s",
            local_addr_s, resolver_addr_s);
     proxy_context->listeners_started = 1;
-#ifdef HAVE_LIBSYSTEMD
-    sd_notify(0, "READY=1");
-#endif
+    systemd_notify(proxy_context, "READY=1");
     return 0;
 }
 
@@ -373,9 +371,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
         event_base_dispatch(proxy_context.event_loop);
     }
     logger_noformat(&proxy_context, LOG_NOTICE, "Stopping proxy");
-#ifdef HAVE_LIBSYSTEMD
-    sd_notify(0, "STOPPING=1");
-#endif
+    systemd_notify(0, "STOPPING=1");
 
     cert_updater_free(&proxy_context);
     udp_listener_stop(&proxy_context);

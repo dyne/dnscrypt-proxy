@@ -51,6 +51,9 @@ int logger_noformat(struct ProxyContext_ * const context,
 int logger_error(struct ProxyContext_ * const context,
                  const char * const msg);
 
+void systemd_notify(struct ProxyContext_ * const context,
+                    const char * const msg);
+
 int logger_close(struct ProxyContext_ * const context);
 
 #endif
