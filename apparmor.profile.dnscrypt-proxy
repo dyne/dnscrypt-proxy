@@ -22,8 +22,14 @@
   /etc/nsswitch.conf r,
   /etc/passwd r,
 
+# Resolvers list
+  /usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv r,
+
+# In case of custom libldns installation
+  /usr/local/lib/{@{multiarch}/,}libldns.so* mr,  
+
 # In case of custom libsodium installation
-  /usr/local/lib/{@{multiarch}/,}libsodium.so* mr,
+  /usr/local/lib/{@{multiarch}/,}libsodium.so* mr,  
 
 # Reasonable pidfile location - tweak this if you prefer a different one
   /run/dnscrypt-proxy.pid rw,
