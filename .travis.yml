@@ -9,7 +9,7 @@ compiler:
 
 before_script:
  - sudo apt-get install libldns-dev
- - git clone https://github.com/jedisct1/libsodium.git --branch=1.0.2
+ - git clone https://github.com/jedisct1/libsodium.git --branch=1.0.3
  - cd libsodium
  - ./autogen.sh
  - ./configure --disable-dependency-tracking
