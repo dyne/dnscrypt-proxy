@@ -31,6 +31,12 @@ post-start script
     resolvconf="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep '^resolvconf'| cut -d '=' -f 2-)"
     if test "X$resolvconf" != "Xno" && test -x /sbin/resolvconf && test -L /etc/resolv.conf; then
         local_address="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep '^local-address'| cut -d '=' -f 2-)"
+        # Strip the port from local address; different codepath for IPv6
+        if (echo "$local_address" | grep -q ']'); then
+            local_address=$(echo "$local_address" | cut -d ']' -f 1)']'
+        else
+            local_address=$(echo "$local_address" | cut -d ':' -f 1)
+        fi
         # if no local address specified, fall back to 127.0.0.1:53 (internal dnscrypt default)
         echo "nameserver ${local_address:-127.0.0.1}" | /sbin/resolvconf -a lo.dnscrypt
     fi
