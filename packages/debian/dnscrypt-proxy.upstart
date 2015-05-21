@@ -14,15 +14,30 @@ end script
 
 script
     conffile="/etc/default/dnscrypt-proxy"
-
-    if test -r "$conffile"; then
+    if [ ! -r "$conffile" ]; then
+        echo "Could not read config file at $conffile"'!' > &2
+        exit 1
+    else
         params="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep -v '^resolvconf')"
         for parameter in $params; do
             test -n "$parameter" && options="$options --$parameter"
         done
         exec /usr/sbin/dnscrypt-proxy $options
-    else
-        echo "Could not read config file at $conffile"'!'
-        exit 1
+    fi
+end script
+
+post-start script
+    conffile="/etc/default/dnscrypt-proxy"
+    resolvconf="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep '^resolvconf'| cut -d '=' -f 2-)"
+    if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] && [ -L /etc/resolv.conf ]; then
+        local_address="$(grep -v '^#' $conffile | cut -d '#' -f 1 | grep '^local-address'| cut -d '=' -f 2-)"
+        # if no local address specified, fall back to 127.0.0.1:53 (internal dnscrypt default)
+        echo "nameserver ${local_address:-127.0.0.1}" | /sbin/resolvconf -a lo.dnscrypt
+    fi
+end script
+
+post-stop script
+    if [ -x /sbin/resolvconf ]; then
+        /sbin/resolvconf -d lo.dnscrypt
     fi
 end script
