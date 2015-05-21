@@ -20,7 +20,7 @@ License: ISC
 Files: debian/*
 Copyright: 2013 MrTux <mrtux@ubuntu-vn.org>
            2013 Xu Zhen <xuzhen666@gmail.com>
-           2013-2014 Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>
+           2013-2015 Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
