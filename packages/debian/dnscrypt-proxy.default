@@ -5,6 +5,7 @@
 local-address=127.0.0.2:53
 
 # instructs resolvconf (if installed) to update the machine dns servers
+# Not supported on Ubuntu.
 resolvconf=no
 
 # Write PID to a file.

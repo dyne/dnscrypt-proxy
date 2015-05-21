@@ -20,7 +20,9 @@ script
         for parameter in $params; do
             test -n "$parameter" && options="$options --$parameter"
         done
+        exec /usr/sbin/dnscrypt-proxy $options
+    else
+        echo "Could not read config file at $conffile"'!'
+        exit 1
     fi
-
-    exec /usr/sbin/dnscrypt-proxy $options
 end script
