@@ -1,3 +1,13 @@
+dnscrypt-proxy (1.4.3-1) unstable; urgency=low
+
+  * New upstream release
+  * Add support for automatically updating resolvconf on Upstart-based Ubuntu
+  * Add support for 1.4.x config format in /etc/default/dnscrypt-proxy.default
+  * sysvinit script is now able to autoconfigure DNSCrypt bound to IPv6 address
+  * Drop AppArmor policy file that causes issues on Ubuntu 14.04 LTS
+
+ -- Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>  Sun, 03 Nov 2013 18:20:39 +0400
+
 dnscrypt-proxy (1.3.3-1) unstable; urgency=low
 
   * New upstream release

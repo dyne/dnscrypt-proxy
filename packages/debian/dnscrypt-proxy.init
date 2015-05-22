@@ -58,9 +58,15 @@ case "$1" in
 
 	if start-stop-daemon --start --background --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 		--pidfile ${PIDFILE} -- $OPTIONS; then
-	    if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
-		    echo "nameserver $(grep '^local-address' $CONF | head -n 1 \
-			| cut -d '=' -f 2 | cut -d ':' -f 1)" \
+		if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
+			local_address=$(grep '^local-address' $CONF | head -n 1 | cut -d '=' -f 2)
+			# Strip the port from local address; different codepath for IPv6
+			if (echo "$local_address" | grep -q ']'); then
+				local_address=$(echo "$local_address" | cut -d ']' -f 1)']'
+			else
+				local_address=$(echo "$local_address" | cut -d ':' -f 1)
+			fi
+			echo "nameserver ${local_address:-127.0.0.1}"
 			| /sbin/resolvconf -a lo.dnscrypt
 	    fi
 	    log_end_msg 0

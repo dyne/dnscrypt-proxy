@@ -4,23 +4,20 @@
 # What local IP the daemon will listen to, with an optional port. The default port is 53.
 local-address=127.0.0.2:53
 
-# instructs resolvconf (if installed) to update the machine dns servers
+# Instructs resolvconf (if installed) to automatically update the machine dns settings
+# This will make dnscrypt the default, but NOT the only DNS server configured.
+# When using it an attacker can downgrade you to plain DNS by blocking your DNSCrypt server!
 resolvconf=no
 
-# Write PID to a file.
-pidfile=/run/dnscrypt-proxy.pid
+# List of known DNSCrypt-enabled resolvers
+resolvers-list=/usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv
 
-# runs dnscrypt-proxy as a dedicated user with restrict privileges
-# This is a security feature and should never be disabled.
-user=dnscrypt
-
-# Remote DNSCrypt resolvers name
-# You can find a list of resolvers names at
-# https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv
-# Specifying multiple resolvers is not yet supported!
+# Name of preferred resolver from the above list;
+# specifying several resolvers is not yet supported.
 resolver-name=opendns
 
-# Custom DNSCrypt settings, if you are running you own DNSCrypt server (dnscrypt-wrapper)
+# Alternatively, you can specify custom DNSCrypt settings,
+# in case you are running you own DNSCrypt server (dnscrypt-wrapper)
 #resolver-address=10.1.1.53:443
 #provider-name=2.dnscrypt-cert.example.com
 #provider-key=CE57:A439:58B0:7685:6960:044B:EA64:A64D:AECA:A8AA:EB54:9D70:E31D:3896:8A93:1D96
@@ -36,3 +33,10 @@ resolver-name=opendns
 # except when bypassing a filter is actually required.
 # Moreover, multiple queries over a single TCP connections aren't supported yet.
 #tcp-only
+
+# Write PID to a file
+pidfile=/run/dnscrypt-proxy.pid
+
+# runs dnscrypt-proxy as a dedicated user with restrict privileges
+# This is a security feature and should never be disabled.
+user=dnscrypt
