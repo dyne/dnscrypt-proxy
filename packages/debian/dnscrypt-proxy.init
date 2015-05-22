@@ -51,6 +51,9 @@ case "$1" in
 	    log_end_msg 1
 	fi
 
+	# Pre-start setup shared across all init systems
+	/usr/lib/dnscrypt-proxy/init-system-wrappers/pre-start-hooks
+
 	params="$(grep -v '^#' $CONF | cut -d '#' -f 1 | grep -v 'resolvconf')"
 	for parameter in $params; do
 	    test -n "$parameter" && OPTIONS="$OPTIONS --$parameter"
@@ -58,22 +61,13 @@ case "$1" in
 
 	if start-stop-daemon --start --background --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 		--pidfile ${PIDFILE} -- $OPTIONS; then
-		if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
-			local_address=$(grep '^local-address' $CONF | head -n 1 | cut -d '=' -f 2)
-			# Strip the port from local address; different codepath for IPv6
-			if (echo "$local_address" | grep -q ']'); then
-				local_address=$(echo "$local_address" | cut -d ']' -f 1)']'
-			else
-				local_address=$(echo "$local_address" | cut -d ':' -f 1)
-			fi
-			echo "nameserver ${local_address:-127.0.0.1}" \
-			| /sbin/resolvconf -a lo.dnscrypt
-	    fi
-	    log_end_msg 0
+		/usr/lib/dnscrypt-proxy/init-system-wrappers/update-resolvconf-on-start
+		# the script is smart and will figure out whether resolvconf is enabled on its own
+		log_end_msg 0
 	else
-	    log_end_msg 1
+		log_end_msg 1
 	fi
-    ;;
+	;;
 
     stop)
 	log_daemon_msg "Stopping domain name proxy service..." "dnscrypt-proxy"
@@ -82,9 +76,8 @@ case "$1" in
 	    log_end_msg 1
 	fi
 
-	if [ "X$resolvconf" != "Xno" ] && [ -x /sbin/resolvconf ] ; then
-	    /sbin/resolvconf -d lo.dnscrypt
-	fi
+	/usr/lib/dnscrypt-proxy/init-system-wrappers/update-resolvconf-on-stop
+	# the script is smart and will figure out whether resolvconf is enabled on its own
 	pid=$(pgrep --newest -f ^/usr/sbin/dnscrypt-proxy) || true
 	start-stop-daemon --stop --oknodo --quiet --exec /usr/sbin/dnscrypt-proxy \
 	    --pidfile ${PIDFILE} -- $OPTIONS
