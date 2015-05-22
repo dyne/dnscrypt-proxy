@@ -1,0 +1,19 @@
+[Unit]
+Description=DNSCrypt client proxy
+Wants=network.target
+After=network.target
+ExecStartPre=/usr/lib/dnscrypt-proxy/init-system-wrappers/pre-start-hooks
+ExecStartPost=/usr/lib/dnscrypt-proxy/init-system-wrappers/update-resolvconf-on-start
+ExecStopPost=/usr/lib/dnscrypt-proxy/init-system-wrappers/update-resolvconf-on-stop
+
+[Service]
+Type=simple
+Restart=always
+RestartPreventExitStatus=1
+PermissionsStartOnly=true
+ProtectHome=true
+ProtectSystem=full
+ExecStart=/usr/lib/dnscrypt-proxy/init-system-wrappers/read-config-and-start
+
+[Install]
+WantedBy=multi-user.target
