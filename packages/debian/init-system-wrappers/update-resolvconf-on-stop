@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+if test -x /sbin/resolvconf; then
+    /sbin/resolvconf -d lo.dnscrypt
+fi

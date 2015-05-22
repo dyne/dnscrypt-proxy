@@ -10,7 +10,9 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@  --with autotools-dev
+	dh $@  --with autotools-dev --with systemd
+	#for legacy systems without dh-systemd package use this instead:
+	#dh $@  --with autotools-dev
 
 override_dh_auto_configure:
 	dh_auto_configure -- --disable-ltdl-install --without-included-ltdl
