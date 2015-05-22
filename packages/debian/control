@@ -2,7 +2,8 @@ Source: dnscrypt-proxy
 Section: net
 Priority: optional
 Maintainer: Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>
-Build-Depends: debhelper (>= 9), automake, autotools-dev, libsodium-dev
+Build-Depends: debhelper (>= 9), automake, autotools-dev, libsodium-dev,
+               dh-systemd (>= 1.5)
 Standards-Version: 3.9.5
 Homepage: http://dnscrypt.org
 Vcs-Git: git://github.com/jedisct1/dnscrypt-proxy.git
