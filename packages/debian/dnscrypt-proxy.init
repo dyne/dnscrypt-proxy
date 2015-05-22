@@ -66,7 +66,7 @@ case "$1" in
 			else
 				local_address=$(echo "$local_address" | cut -d ':' -f 1)
 			fi
-			echo "nameserver ${local_address:-127.0.0.1}"
+			echo "nameserver ${local_address:-127.0.0.1}" \
 			| /sbin/resolvconf -a lo.dnscrypt
 	    fi
 	    log_end_msg 0
