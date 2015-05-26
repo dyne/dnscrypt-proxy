@@ -1,16 +1,17 @@
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = \
-	README.markdown \
 	README-PLUGINS.markdown \
 	README-WINDOWS.markdown \
+	README.markdown \
 	TECHNOTES \
 	THANKS \
 	apparmor.profile.dnscrypt-proxy \
 	autogen.sh \
-	org.dnscrypt.osx.DNSCryptProxy.plist \
 	dnscrypt-proxy.service \
-	dnscrypt-proxy.socket
+	dnscrypt-proxy.socket \
+	org.dnscrypt.osx.DNSCryptProxy.plist \
+	resolvers-check.sh
 
 SUBDIRS = \
 	dist-build \
