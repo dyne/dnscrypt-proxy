@@ -1,3 +1,337 @@
+* Tue Jun 2 21:39:04 2015 +0200
+
+    Use buffered writes for logging. For Windows compat.
+
+* Tue Jun 2 21:14:56 2015 +0200
+
+    Align
+
+* Tue Jun 2 21:00:02 2015 +0200
+
+    Next version will be 1.5.0
+
+* Tue Jun 2 20:53:29 2015 +0200
+
+    Stop pretending it provides confidentiality.
+
+* Tue Jun 2 20:50:56 2015 +0200
+
+    Done in 1.4.4
+
+* Tue Jun 2 20:42:49 2015 +0200
+
+    Nits
+
+Merge: 875004f 950ca2b
+* Tue Jun 2 20:41:39 2015 +0200
+
+    Merge pull request #194 from zedinosaur/logger-notify
+    
+    Add systemd_notify wrapper on sd_notify.
+
+* Tue Jun 2 20:29:42 2015 +0200
+
+    -E
+
+* Tue Jun 2 20:25:21 2015 +0200
+
+    dnscrypt-proxy can now use ephemeral keys
+
+* Tue Jun 2 18:12:39 2015 +0200
+
+    Display provider features
+
+* Tue Jun 2 15:00:07 2015 +0200
+
+    Disclaimer
+
+* Wed May 27 00:23:43 2015 +0200
+
+    Add a script to check providers health
+
+* Wed May 27 00:19:03 2015 +0200
+
+    Remove dead resolvers
+    Udpate signature
+
+* Wed May 27 00:06:03 2015 +0200
+
+    Reduce the number of retries to fetch the cert in test mode
+
+Merge: de235dd 16f4880
+* Fri May 22 18:09:01 2015 +0200
+
+    Merge pull request #214 from Shnatsel/master
+    
+    Add systemd unit to debian package
+
+* Fri May 22 18:25:38 2015 +0300
+
+    fscking systemd requires custom scripting on top of .service file, as if dh doesn't automatically know .service files go to systemd. bollocks
+
+* Fri May 22 17:34:38 2015 +0300
+
+    Documentation lied to me!
+
+* Fri May 22 17:26:08 2015 +0300
+
+    add missing 'automake' build dependency. Apparently 'autotools-dev' is not sufficient on Ubuntu 15.04
+
+* Fri May 22 16:33:29 2015 +0300
+
+    Add a systemd service file for use in Ubuntu 15.04 and Debian Jessie. Not tested yet.
+
+* Fri May 22 15:45:10 2015 +0300
+
+    Drop duplicated resolvconf code from sysvinit script, use shared init system wrappers instead
+
+* Fri May 22 15:35:36 2015 +0300
+
+    Fix fallout from IPv6 enablement in sysvinit script
+
+* Fri May 22 15:34:24 2015 +0300
+
+    add respawn stanza to upstart script so that dnscrypt-proxy will be respawned on crashes, but no more than 3 crashes in 60 seconds are allowed
+
+* Fri May 22 15:33:18 2015 +0300
+
+    Split all scripting out of Upstart config so it can be reused for systemd config and potentially sysvinit
+
+Merge: e1a8073 cb74a72
+* Fri May 22 08:53:02 2015 +0200
+
+    Merge pull request #209 from Shnatsel/master
+    
+    Add resolvconf support on Ubuntu + minor packaging fixes
+
+* Fri May 22 02:35:19 2015 +0300
+
+    add another item to changelog
+
+* Fri May 22 02:29:25 2015 +0300
+
+    Upstart's resolvconf auto-configuration now works with ports explicitly specified in the config
+
+* Fri May 22 02:27:41 2015 +0300
+
+    Fixed sysvinit script to work with IPv6 local addresses and made it default to 127.0.0.1 for resolvconf if no address is specified explicitly in the config file
+
+* Fri May 22 02:02:15 2015 +0300
+
+    replace [] with test in upstart-embedded shell scripts; doesn't work otherwise
+
+* Fri May 22 01:26:13 2015 +0300
+
+    update Debian copyright file
+
+* Fri May 22 01:24:30 2015 +0300
+
+    update Debian packaging changelog
+
+* Fri May 22 01:21:12 2015 +0300
+
+    Add support for specifying a custom location for .csv file in dnscrypt-proxy.default and reorganize the .default for readability
+
+* Fri May 22 01:19:07 2015 +0300
+
+    Add support for resolvconf to Upstart script
+
+* Fri May 22 00:18:05 2015 +0300
+
+    More useful error reporting in case of missing config file
+
+* Sat May 9 17:20:30 2015 +0200
+
+    libevent resync
+
+* Sat May 9 16:36:29 2015 +0200
+
+    Relibtoolize libevent-modified
+
+* Sat May 9 16:30:54 2015 +0200
+
+    Have dcplugin_get_client_address_len access the right struct member name
+
+* Sat May 9 16:16:06 2015 +0200
+
+    Use libsodium 1.0.3
+
+* Mon Apr 20 22:18:45 2015 +0200
+
+    Don't compile with Clang on Travis
+
+* Sat Apr 18 19:10:54 2015 +0200
+
+    Test on OSX
+
+* Thu Feb 19 14:49:16 2015 +0200
+
+    .travis.yml: multiple fixes
+    
+    * test with clang too
+    * move to correct tag when cloning
+    * use as many jobs as CPUs available when running make
+    * notify if job fails immediately without waiting for a long time
+
+* Sat Apr 11 11:12:21 2015 +0200
+
+    Do not use 127.0.0.7 as an example.
+
+* Thu Apr 9 09:54:10 2015 +0200
+
+    Update sig
+
+* Thu Apr 9 09:53:48 2015 +0200
+
+    Fix country for d0wn-ch-ns1
+
+* Tue Apr 7 21:10:20 2015 +0200
+
+    Online.net -> Scaleway.com
+
+* Sun Apr 5 20:20:22 2015 +0200
+
+    The AppArmor profile needs to access the resolvers list and ldns.
+    Not sure that this profile ever worked.
+
+* Thu Mar 19 23:32:55 2015 +0100
+
+    Remove config.guess patch for Bitrig
+
+* Sat Mar 14 22:56:43 2015 -0400
+
+    Add systemd_notify wrapper on sd_notify.
+    
+    Move the logic for calling sd_notify into its own function and do better
+    logging of errors returned.
+
+Merge: 71a07c1 b5edbb4
+* Sun Mar 8 23:43:17 2015 +0100
+
+    Merge pull request #191 from dartraiden/master
+    
+    corrected Fusl server addresses
+
+* Mon Mar 9 01:31:00 2015 +0300
+
+    corrected Fusl server addresses
+
+* Sun Mar 8 20:30:20 2015 +0100
+
+    Resign dnscrypt-resolvers.csv
+
+* Sun Mar 8 20:29:21 2015 +0100
+
+    Add Fusl servers
+
+* Sat Mar 7 16:18:46 2015 +0100
+
+    2015
+
+* Sat Feb 14 01:39:57 2015 +0100
+
+    Use libsodium 1.0.2
+
+* Fri Feb 13 20:49:51 2015 +0100
+
+    Update signature
+
+* Thu Feb 12 08:24:30 2015 +0100
+
+    Update d0wn public key
+
+* Sun Feb 8 17:08:12 2015 +0100
+
+    Sync android build scripts with libsodium
+
+* Sun Feb 8 17:00:10 2015 +0100
+
+    Remove --disable-pie on Android
+
+* Sun Feb 8 16:53:30 2015 +0100
+
+    Bump default platform version to 18
+
+Merge: 31b8e3f d1a5dc7
+* Sat Feb 7 15:58:27 2015 +0100
+
+    Merge pull request #183 from mosin/patch-1
+    
+    android ndk requires arch to be arm not armv7
+
+* Sat Feb 7 09:48:17 2015 -0500
+
+    android ndk requires arch to be arm not armv7
+    
+    In the android-build.sh script, the call the ${ANDROID_NDK_HOME}/build/tools/make-standalone-toolchain.sh passes TARGET_ARCH as armv7 where as around line 117 of make-standalone-toolchain.sh requires ARCH to be {arm,x86,mips,arm64,x86_64,mips64}
+
+* Wed Jan 28 07:52:09 2015 +0100
+
+    Use different short descriptions for ipredator and ipredator6
+
+* Wed Jan 28 07:50:56 2015 +0100
+
+    Order lexically
+
+Merge: 7abdc99 9f9e555
+* Wed Jan 28 07:48:08 2015 +0100
+
+    Merge pull request #181 from d31m0/patch-1
+    
+    1 new resolver
+
+* Wed Jan 28 05:56:29 2015 +0100
+
+    1 new resolver
+    
+    IPV4 / IPV6 resolver by Ipredator.se VPN anonymizer service.
+
+* Mon Jan 19 09:47:33 2015 +0100
+
+    libtool and autotools are not enough; pkg-config is now also required
+
+* Mon Jan 19 09:36:55 2015 +0100
+
+    Don't strip binaries on Win32.
+
+* Mon Jan 19 09:01:55 2015 +0100
+
+    Copy libeay32.dll if required by ldns
+
+* Fri Jan 16 09:29:18 2015 +0100
+
+    Revert "Add a new OpenNIC server in Washington"
+
+* Thu Jan 15 17:21:59 2015 +0100
+
+    Add pre-generated man pages
+
+* Thu Jan 15 16:58:39 2015 +0100
+
+    Revert "Check if -Wl,-pie should be used instead of -pie in LDFLAGS"
+    
+
+* Thu Jan 15 09:49:18 2015 +0100
+
+    No need to log when recvfrom() returns EAGAIN or EINTR
+    On Linux, recvfrom() returns EAGAIN when the packet has an invalid checksum.
+
+* Fri Jan 9 08:36:59 2015 +0100
+
+    Remove OpenNIC JP servers
+
+* Tue Jan 6 10:57:05 2015 +0100
+
+    + DNSSEC signed public key for fr-dnscrypt.org
+
+* Mon Jan 5 21:36:22 2015 +0100
+
+    We use edns by default, so set udp_max_size to the default max payload size
+
+* Mon Jan 5 18:07:55 2015 +0100
+
+    Update ChangeLog
+
 * Mon Jan 5 17:55:36 2015 +0100
 
     +dnscrypt.org-fr
