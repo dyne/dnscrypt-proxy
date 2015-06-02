@@ -42,8 +42,7 @@ resolver.
 
 While not providing end-to-end security, it protects the local
 network, which is often the weakest point of the chain, against
-man-in-the-middle attacks. It also provides some confidentiality to
-DNS queries.
+man-in-the-middle attacks.
 
 Download and integrity check
 ----------------------------
