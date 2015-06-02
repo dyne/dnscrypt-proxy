@@ -41,12 +41,12 @@ logger(struct ProxyContext_ * const context,
     static char         previous_line[MAX_LOG_LINE];
     static time_t       last_log_ts = (time_t) 0;
     static unsigned int burst_counter = 0U;
-    char        line[MAX_LOG_LINE];
-    va_list     va;
-    const char *urgency;
-    time_t      now = time(NULL);
-    size_t      len;
-    int         log_fd;
+    char                line[MAX_LOG_LINE];
+    const char         *urgency;
+    va_list             va;
+    time_t              now = time(NULL);
+    size_t              len;
+    int                 log_fd;
 
     if (context != NULL) {
         if (crit > context->max_log_level) {
