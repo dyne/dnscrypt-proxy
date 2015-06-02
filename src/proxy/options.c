@@ -199,6 +199,9 @@ options_parse_resolver(ProxyContext * const proxy_context,
                        char * const * const headers, const size_t headers_count,
                        char * const * const cols, const size_t cols_count)
 {
+    const char *dnssec;
+    const char *namecoin;
+    const char *nologs;
     const char *provider_name;
     const char *provider_publickey_s;
     const char *resolver_ip;
@@ -235,6 +238,38 @@ options_parse_resolver(ProxyContext * const proxy_context,
                resolver_name);
         return -1;
     }
+    dnssec = options_get_col(headers, headers_count,
+                             cols, cols_count, "DNSSEC validation");
+    if (dnssec != NULL && strcasecmp(dnssec, "yes") != 0) {
+        logger(proxy_context, LOG_INFO,
+               "- [%s] does not support DNS Security Extensions",
+               resolver_name);
+    } else {
+        logger(proxy_context, LOG_INFO,
+               "+ DNS Security Extensions are supported");
+    }
+    namecoin = options_get_col(headers, headers_count,
+                               cols, cols_count, "Namecoin");
+    if (namecoin != NULL && strcasecmp(namecoin, "yes") != 0) {
+        logger(proxy_context, LOG_INFO,
+               "- [%s] does not support Namecoin domains",
+               resolver_name);
+    } else {
+        logger(proxy_context, LOG_INFO,
+               "+ Namecoin domains can be resolved");
+    }
+    nologs = options_get_col(headers, headers_count,
+                             cols, cols_count, "No logs");
+    if (nologs != NULL && strcasecmp(nologs, "no") == 0) {
+        logger(proxy_context, LOG_WARNING,
+               "- [%s] logs your activity - "
+               "a different provider might be better a choice if privacy is a concern",
+               resolver_name);
+    } else {
+        logger(proxy_context, LOG_INFO,
+               "+ Provider supposedly doesn't keep logs");
+    }
+
     proxy_context->provider_name = strdup(provider_name);
     proxy_context->provider_publickey_s = strdup(provider_publickey_s);
     proxy_context->resolver_ip = strdup(resolver_ip);
