@@ -24,8 +24,6 @@ companies openly monetizing the data they collect.
 
 In any case, the dnscrypt protocol itself cannot do anything to
 prevent that, and it wasn’t designed to. It’s about authentication.
-Future versions may use ephemeral keys for each query in order to add
-to secrecy, but it’s not the case yet.
 
 It is not a VPN. And if you are using a VPN, you don’t need it
 (would you rather give all your data to one company or two?).
