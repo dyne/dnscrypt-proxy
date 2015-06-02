@@ -16,7 +16,7 @@ It verifies that responses you get from a DNS provider have been
 actually sent by that provider. But providers receive queries that
 include your public key, and can use it to track you even if your
 public IP changes. This can be mitigated by enabling the Ephemeral Keys
-feature (`-E`) introduced in dnscrypt-proxy 1.4.4.
+feature (`-E`) introduced in dnscrypt-proxy 1.5.0.
 
 It also doesn’t prevent them from logging, sharing and selling the
 data. Some dnscrypt-enabled providers say they don’t log, others are
