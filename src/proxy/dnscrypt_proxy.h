@@ -125,6 +125,7 @@ typedef struct ProxyContext_ {
     int                      log_fd;
     int                      max_log_level;
     _Bool                    daemonize;
+    _Bool                    ephemeral_keys;
     _Bool                    listeners_started;
     _Bool                    tcp_only;
     _Bool                    test_only;

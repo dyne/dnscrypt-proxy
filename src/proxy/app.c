@@ -105,6 +105,10 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     proxy_context->udp_proxy_resolver_handle = -1;
     proxy_context->udp_listener_handle = -1;
     proxy_context->tcp_listener_handle = -1;
+#ifdef HAVE_SODIUM_MLOCK
+    sodium_mlock(&proxy_context->dnscrypt_client,
+                 sizeof proxy_context->dnscrypt_client);
+#endif
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
@@ -340,8 +344,15 @@ dnscrypt_proxy_main(int argc, char *argv[])
     }
 #endif
     app_context.proxy_context = &proxy_context;
-    logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
-    dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
+    proxy_context.dnscrypt_client.ephemeral_keys =
+        proxy_context.ephemeral_keys;
+    if (proxy_context.dnscrypt_client.ephemeral_keys != 0) {
+        logger_noformat(&proxy_context, LOG_INFO, "Generating a new session key");
+        dnscrypt_client_init_with_new_session_key(&proxy_context.dnscrypt_client);
+    } else {
+        logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
+        dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
+    }
     logger_noformat(&proxy_context, LOG_INFO, "Done");
 
     if (cert_updater_init(&proxy_context) != 0) {

@@ -38,6 +38,12 @@ ports.
   * `-d`, `--daemonize`: detach from the current terminal and run the server
     in background.
 
+  * `-E`, `--ephemeral-keys`: By default, queries are always sent with the
+    same public key, allowing providers to link this public key to the
+    different IP addresses you are using. This option requires extra
+    CPU cycles, but mitigates this by computing an ephemeral key pair for
+    every query.
+
   * `-e`, `--edns-payload-size=<bytes>`: transparently add an OPT
     pseudo-RR to outgoing queries in order to enable the EDNS0
     extension mechanism. The payload size is the size of the largest

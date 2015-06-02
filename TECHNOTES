@@ -79,10 +79,17 @@ pre-signed certificates.
 Queries
 -------
 
-Queries and replies are based on djb's dnscurve protocol:
+Queries and replies are inspired from djb's dnscurve protocol:
 http://www.dnscurve.org/
 
-The proxy always generates a new, in-memory only key pair at startup.
+Legacy mode:
+- The proxy generates a new, in-memory key pair at startup, and reuses
+it for all queries.
+
+Ephemeral key pair mode:
+- The proxy always generates a new, in-memory session key at startup.
+- This session key and the client nonce are used to derive an ephemeral key
+pair for each query.
 
 Random padding is added to queries and replies, using a 64 byte block size.
 

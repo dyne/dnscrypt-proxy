@@ -37,6 +37,7 @@ static struct option getopt_long_options[] = {
     { "daemonize", 0, NULL, 'd' },
 #endif
     { "edns-payload-size", 1, NULL, 'e' },
+    { "ephemeral-keys", 0, NULL, 'E' },
     { "help", 0, NULL, 'h' },
     { "resolvers-list", 1, NULL, 'L' },
     { "resolver-name", 1, NULL, 'R' },
@@ -64,9 +65,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:hk:L:l:m:n:p:r:R:t:u:N:TVX";
+static const char *getopt_options = "a:de:Ehk:L:l:m:n:p:r:R:t:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:hk:L:m:n:r:R:t:u:N:TVX";
+static const char *getopt_options = "a:e:Ehk:L:m:n:r:R:t:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -126,6 +127,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->test_cert_margin = (time_t) -1;
     proxy_context->test_only = 0;
     proxy_context->tcp_only = 0;
+    proxy_context->ephemeral_keys = 0;
 }
 
 static int
@@ -470,6 +472,9 @@ options_parse(AppContext * const app_context,
             }
             break;
         }
+        case 'E':
+            proxy_context->ephemeral_keys = 1;
+            break;
         case 'h':
             options_usage();
             exit(0);

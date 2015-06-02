@@ -1,4 +1,7 @@
 
+* Version 1.4.4:
+ - New option: -E, to use an ephemeral key pair for each query.
+
 * Version 1.4.3:
  - libevent update, including a fix for CVE-2014-6272
  - Two new public dnscrypt resolvers were added: opennic-us-wa-ns1 and
