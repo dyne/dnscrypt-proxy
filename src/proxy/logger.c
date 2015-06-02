@@ -140,9 +140,10 @@ logger_error(struct ProxyContext_ * const context,
 }
 
 void systemd_notify(struct ProxyContext_ * const context,
-                    const char * msg) {
+                    const char * const msg) {
 #ifdef HAVE_LIBSYSTEMD
-    int err = sd_notify(0, msg);
+    const int err = sd_notify(0, msg);
+
     if (err < 0) {
         logger(context, LOG_DEBUG, "sd_notify failed: %s", strerror(-err));
     }
