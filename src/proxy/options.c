@@ -41,9 +41,7 @@ static struct option getopt_long_options[] = {
     { "help", 0, NULL, 'h' },
     { "resolvers-list", 1, NULL, 'L' },
     { "resolver-name", 1, NULL, 'R' },
-#ifndef _WIN32
     { "logfile", 1, NULL, 'l' },
-#endif
     { "loglevel", 1, NULL, 'm' },
     { "max-active-requests", 1, NULL, 'n' },
 #ifndef _WIN32
@@ -67,7 +65,7 @@ static struct option getopt_long_options[] = {
 #ifndef _WIN32
 static const char *getopt_options = "a:de:Ehk:L:l:m:n:p:r:R:t:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:Ehk:L:m:n:r:R:t:u:N:TVX";
+static const char *getopt_options = "a:e:Ehk:L:l:m:n:r:R:t:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -110,7 +108,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
     proxy_context->local_ip = "127.0.0.1:53";
-    proxy_context->log_fd = -1;
+    proxy_context->log_fp = NULL;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
     proxy_context->resolvers_list = DEFAULT_RESOLVERS_LIST;
@@ -415,13 +413,11 @@ options_apply(ProxyContext * const proxy_context)
     }
 #endif
     if (proxy_context->log_file != NULL &&
-        (proxy_context->log_fd = open(proxy_context->log_file,
-                                      O_WRONLY | O_APPEND | O_CREAT,
-                                      (mode_t) 0600)) == -1) {
+        (proxy_context->log_fp = fopen(proxy_context->log_file, "a")) == NULL) {
         logger_error(proxy_context, "Unable to open log file");
         exit(1);
     }
-    if (proxy_context->log_fd == -1 && proxy_context->daemonize) {
+    if (proxy_context->log_fp == NULL && proxy_context->daemonize) {
         logger_open_syslog(proxy_context);
     }
     return 0;

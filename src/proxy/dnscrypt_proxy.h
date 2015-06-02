@@ -5,6 +5,7 @@
 #include <sys/types.h>
 
 #include <stdint.h>
+#include <stdio.h>
 #include <time.h>
 
 #include <event2/event.h>
@@ -94,6 +95,7 @@ typedef struct ProxyContext_ {
     UDPRequestQueue          udp_request_queue;
     AppContext              *app_context;
     struct event_base       *event_loop;
+    FILE                    *log_fp;
     const char              *local_ip;
     const char              *log_file;
     const char              *pid_file;
@@ -122,7 +124,6 @@ typedef struct ProxyContext_ {
     time_t                   test_cert_margin;
     unsigned int             connections_count;
     unsigned int             connections_count_max;
-    int                      log_fd;
     int                      max_log_level;
     _Bool                    daemonize;
     _Bool                    ephemeral_keys;
