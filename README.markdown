@@ -5,6 +5,30 @@
 
 A protocol for securing communications between a client and a DNS resolver.
 
+Disclaimer
+----------
+
+DNSCrypt is about *authentication*, not secrecy. If you are using it
+for privacy, it might do the opposite of what you are trying to
+achieve.
+
+It verifies that responses you get from a DNS provider have been
+actually sent by that provider. But providers receive queries that
+include your public key, and can use it to track you even if your
+public IP changes.
+
+It also doesn’t prevent them from logging, sharing and selling the
+data. Some dnscrypt-enabled providers say they don’t log, others are
+companies openly monetizing the data they collect.
+
+In any case, the dnscrypt protocol itself cannot do anything to
+prevent that, and it wasn’t designed to. It’s about authentication.
+Future versions may use ephemeral keys for each query in order to add
+to secrecy, but it’s not the case yet.
+
+It is not a VPN. And if you are using a VPN, you don’t need it
+(would you rather give all your data to one company or two?).
+
 Description
 -----------
 
