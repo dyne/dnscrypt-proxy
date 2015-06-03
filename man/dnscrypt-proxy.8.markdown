@@ -62,8 +62,12 @@ ports.
     standard output.
 
   * `-m`, `--loglevel=<level>`: don't log events with priority above
-    this level after the service has been started up. Default is the value
-    for `LOG_INFO`.
+    this level after the service has been started up. Default is `6`,
+    the value for `LOG_INFO`. Valid values are `0` (system is unusable),
+    `1` (action must be taken immediately), `2` (critical conditions),
+    `3` (error conditions), `4` (warning conditions),
+    `5` (normal but significant condition), `6` (informational) and
+    `7` (debug-level messages).
 
   * `-n`, `--max-active-requests=<count>`: set the maximum number of
     simultaneous active requests. The default value is 250.

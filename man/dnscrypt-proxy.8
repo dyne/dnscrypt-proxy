@@ -54,7 +54,7 @@ Intead, run a DNS cache like \fBUnbound\fR, and configure it to use \fBdnscrypt\
 \fB\-l\fR, \fB\-\-logfile=<file>\fR: log events to this file instead of the standard output\.
 .
 .IP "\(bu" 4
-\fB\-m\fR, \fB\-\-loglevel=<level>\fR: don\'t log events with priority above this level after the service has been started up\. Default is the value for \fBLOG_INFO\fR\.
+\fB\-m\fR, \fB\-\-loglevel=<level>\fR: don\'t log events with priority above this level after the service has been started up\. Default is \fB6\fR, the value for \fBLOG_INFO\fR\. Valid values are \fB0\fR (system is unusable), \fB1\fR (action must be taken immediately), \fB2\fR (critical conditions), \fB3\fR (error conditions), \fB4\fR (warning conditions), \fB5\fR (normal but significant condition), \fB6\fR (informational) and \fB7\fR (debug\-level messages)\.
 .
 .IP "\(bu" 4
 \fB\-n\fR, \fB\-\-max\-active\-requests=<count>\fR: set the maximum number of simultaneous active requests\. The default value is 250\.
