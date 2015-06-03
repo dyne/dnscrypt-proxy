@@ -204,7 +204,7 @@ plugin_support_expand_plugin_file(const char * const plugin_file)
     size_t  sizeof_expanded_plugin_file;
 
 #ifdef ENABLE_PLUGINS_ROOT
-    if (strstr(plugin_file, "..") != NULL || *plugin_file == '/') {
+    if (strstr(plugin_file, "..") != NULL) {
         return NULL;
     }
     if (strncmp(plugin_file, PLUGINS_ROOT, plugins_root_len) == 0) {
@@ -227,6 +227,12 @@ plugin_support_expand_plugin_file(const char * const plugin_file)
         return strdup(plugin_file);
     }
 # endif
+#endif
+#ifdef _WIN32
+    assert(PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '/' ||
+           PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '\\');
+#else
+    assert(PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '/');
 #endif
     plugin_file_len = strlen(plugin_file);
     assert(SIZE_MAX - plugins_root_len > plugin_file_len);
