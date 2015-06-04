@@ -76,8 +76,8 @@ Installation
 
 The daemon is known to work on recent versions of OSX, OpenBSD,
 Bitrig, NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a
-jailbroken device), Android (requires a rooted device), Solaris
-(SmartOS) and Windows (requires MingW).
+jailbroken device), Android (requires a rooted device), and
+Windows (requires MingW).
 
 Install [libsodium](https://github.com/jedisct1/libsodium).
 On Linux, don't forget to run `ldconfig` if you installed it from
