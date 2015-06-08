@@ -152,7 +152,8 @@ To get started, you can use any of the
 [public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv).
 
 This file is constantly updated, and its [https://github.com/jedisct1/minisign](minisign)
-signature can be verified with the following public key:
+[https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig](signature)
+can be verified with the following public key:
 ```
 untrusted comment: minisign public key E7620F1842B4E81F
 RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3
