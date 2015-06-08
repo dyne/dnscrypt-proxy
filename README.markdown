@@ -286,8 +286,7 @@ transparently redirect them to their own resolver. This especially
 happens on public Wifi hotspots, such as coffee shops.
 
 As a workaround, the port number can be changed using
-the `--resolver-port=<port>` option. For example, OpenDNS servers
-reply to queries sent to ports 53, 443 and 5353.
+the `--resolver-port=<port>` option.
 
 By default, `dnscrypt-proxy` sends outgoing queries to UDP port 443.
 
