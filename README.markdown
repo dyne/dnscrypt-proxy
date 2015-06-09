@@ -153,11 +153,10 @@ To get started, you can use any of the
 
 This file is constantly updated, and its [https://github.com/jedisct1/minisign](minisign)
 [https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig](signature)
-can be verified with the following public key:
-```
-untrusted comment: minisign public key E7620F1842B4E81F
-RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3
-```
+can be verified with the following command:
+
+    minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-resolvers.csv
+
 If you want to add DNSCrypt support to your own public or private
 resolver, check out
 [DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper), a
