@@ -30,7 +30,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "that the OpenDNS Umbrella service uses to identify users.\n"
         "\n"
         "If you happen to have an OpenDNS Umbrella account,\n"
-        "your secret key ('device id') can be retrieved with:\n"
+        "your secret key ('device') can be retrieved with:\n"
         "\n"
         "$ dig txt debug.opendns.com\n"
         "\n"
