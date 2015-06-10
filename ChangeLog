@@ -1,3 +1,97 @@
+* Wed Jun 10 16:54:56 2015 +0200
+
+    Add a new Windows registry key: EphemeralKeys
+
+* Wed Jun 10 15:38:16 2015 +0200
+
+    Rephrase
+
+* Wed Jun 10 13:12:02 2015 +0200
+
+    Enable TFO on Linux
+
+* Wed Jun 10 11:23:11 2015 +0200
+
+    Useless update to test the dnscrypt.org mirror
+
+* Tue Jun 9 18:15:12 2015 +0200
+
+    dnscrypt.org-fr now supports Namecoin domains
+
+* Tue Jun 9 14:05:40 2015 +0200
+
+    Easier
+
+* Tue Jun 9 01:47:16 2015 +0200
+
+    Not relevant any more since the switch to port 443.
+
+* Mon Jun 8 18:59:48 2015 +0200
+
+    Regen sig
+
+* Mon Jun 8 18:58:58 2015 +0200
+
+    Revert "CloudNS Canberra is down"
+    
+
+* Mon Jun 8 18:56:26 2015 +0200
+
+    Add a link to the signature
+
+* Mon Jun 8 16:57:05 2015 +0200
+
+    + dnscrypt-resolvers.csv.minisig
+
+* Mon Jun 8 16:50:06 2015 +0200
+
+    The minisign public key
+
+* Mon Jun 8 16:39:25 2015 +0200
+
+    Update signature
+
+* Mon Jun 8 16:37:48 2015 +0200
+
+    CloudNS Canberra is down
+
+* Thu Jun 4 19:29:40 2015 +0200
+
+    Sorry, I haven't tried Solaris for a while
+
+* Wed Jun 3 13:05:05 2015 +0200
+
+    If compiled with --enable-plugins-root, allow absolute paths starting with
+    the root, and always prepends the root if another absolute path is given.
+
+* Wed Jun 3 12:30:37 2015 +0200
+
+    "Mobility" doesn't seem to be called like that any more.
+
+* Wed Jun 3 12:16:57 2015 +0200
+
+    Remove WARNING
+
+* Wed Jun 3 12:16:37 2015 +0200
+
+    The IP address doesn't have to be in hexadecimal any more
+
+* Wed Jun 3 12:11:34 2015 +0200
+
+    Reduce the allowed burst of identical log messages and increase the time window
+
+* Wed Jun 3 12:07:12 2015 +0200
+
+    Document log levels
+
+* Tue Jun 2 21:44:28 2015 +0200
+
+    Bump
+
+* Tue Jun 2 21:44:05 2015 +0200
+
+    Update ChangeLog
+
 * Tue Jun 2 21:39:04 2015 +0200
 
     Use buffered writes for logging. For Windows compat.
