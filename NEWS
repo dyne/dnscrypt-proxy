@@ -2,6 +2,7 @@
 * Version 1.5.0:
  - New option: -E, to use an ephemeral key pair for each query.
  - Logging to files is supported on Windows.
+ - TCP FASTOPEN is now enabled on Linux.
 
 * Version 1.4.3:
  - libevent update, including a fix for CVE-2014-6272
