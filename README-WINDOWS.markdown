@@ -71,6 +71,7 @@ The following subkeys are recognized and should be self-explanatory:
     EDNSPayloadSize   (DWORD)
     MaxActiveRequests (DWORD)
     TCPOnly           (DWORD)
+    EphemeralKeys     (DWORD)
 
 For example, in order to listen to local address that is not the default
 `127.0.0.1`, the key to put the custom IP address is
