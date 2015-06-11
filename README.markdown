@@ -144,7 +144,7 @@ DNSCrypt-enabled resolvers
 To get started, you can use any of the
 [public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv).
 
-This file is constantly updated, and its [https://github.com/jedisct1/minisign](minisign)
+This file is constantly updated, and its [https://jedisct1.github.io/minisign/](minisign)
 [https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig](signature)
 can be verified with the following command:
 
