@@ -566,7 +566,8 @@ tcp_listener_bind(ProxyContext * const proxy_context)
         evutil_make_socket_closeonexec(proxy_context->tcp_listener_handle);
         evutil_make_socket_nonblocking(proxy_context->tcp_listener_handle);
 #ifdef TCP_FASTOPEN
-        setsockopt(fd, IPPROTO_TCP, TCP_FASTOPEN,
+        setsockopt(proxy_context->tcp_listener_handle,
+                   IPPROTO_TCP, TCP_FASTOPEN,
                    (void *) (int[]) { TCP_FASTOPEN_QUEUES }, sizeof (int));
 #endif
         proxy_context->tcp_conn_listener =
