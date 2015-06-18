@@ -132,12 +132,6 @@ Mac OSX application to control the DNSCrypt Proxy.
 A set of tools for `dnscrypt-proxy`. Features a start and stop button as well as options to enable
 or disable from startup. Developed for Porteus Linux.
 
-Docker images
--------------
-
-@mengbo maintains a [dnscrypt-proxy Docker image](https://github.com/mengbo/docker-dnscrypt)
-as well as a [dnscrypt-wrapper Docker image](https://github.com/mengbo/docker-dnscrypt-wrapper).
-
 DNSCrypt-enabled resolvers
 --------------------------
 
