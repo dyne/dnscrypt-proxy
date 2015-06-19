@@ -114,9 +114,9 @@ This function is evaluated when the proxy starts, and can optionally
 parse a list of arguments:
 
     #include <dnscrypt/plugin.h>
-    
+
     DCPLUGIN_MAIN(__FILE__);
-    
+
     int
     dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     {
