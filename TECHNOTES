@@ -59,7 +59,8 @@ Certificates have the following header:
 
 Followed by signed content (the signature adds 512 bits to the payload):
 - server 256-bit public key
-- 8 byte magic header to use for queries using this specific key
+- 8 byte magic header to use for queries using this specific key, possibly
+derived from the public key
 - 4 byte serial number
 - 4 + 4 byte validity period (two timestamps)
 
