@@ -150,6 +150,11 @@ resolver, check out
 [DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper), a
 server-side dnscrypt proxy that works with any name resolver.
 
+A [DNSCrypt server](https://github.com/jedisct1/dnscrypt-server-docker) Docker
+image is also available to deploy a non-logging, DNSSEC and
+DNSCrypt-capable resolver without having to manually compile or
+configure anything.
+
 Usage
 -----
 
