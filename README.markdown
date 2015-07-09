@@ -40,7 +40,8 @@ man-in-the-middle attacks.
 Download and integrity check
 ----------------------------
 
-DNSCrypt can be downloaded here: [dnscrypt download](http://dnscrypt.org)
+dnscrypt-proxy can be downloaded here:
+[dnscrypt-proxy download](http://download.dnscrypt.org/dnscrypt-proxy/)
 
 Note: dnscrypt.org is now blocked by the Great Firewall of China. But
 the site can be accessed at dnscrypt.bit instead (requires a resolver
