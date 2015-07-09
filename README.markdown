@@ -8,7 +8,7 @@ A protocol for securing communications between a client and a DNS resolver.
 Disclaimer
 ----------
 
-DNSCrypt verifies that responses you get from a DNS provider have been
+`dnscrypt-proxy` verifies that responses you get from a DNS provider have been
 actually sent by that provider, and haven't been tampered with.
 
 This is not a VPN. It doesn't mask your IP address, and if you are
