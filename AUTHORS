@@ -4,6 +4,6 @@ libevent
 see https://http://libevent.org/ for more info about this library
 and the src/libevent/README file for the list of contributors.
 
-dnscrypt
---------
+dnscrypt-proxy
+--------------
 Frank Denis <j at pureftpd dot org>
