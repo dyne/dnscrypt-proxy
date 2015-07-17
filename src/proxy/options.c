@@ -321,6 +321,7 @@ options_use_resolver_name(ProxyContext * const proxy_context)
     if ((resolvers_list_rebased =
          path_from_app_folder(proxy_context->resolvers_list)) == NULL) {
         logger_noformat(proxy_context, LOG_EMERG, "Out of memory");
+        exit(1);
     }
     file_buf = options_read_file(resolvers_list_rebased);
     if (file_buf == NULL) {

@@ -24,6 +24,7 @@
 #include "plugin_support.h"
 #include "plugin_support_p.h"
 #include "queue.h"
+#include "utils.h"
 
 int
 plugin_support_add_option(DCPluginSupport * const dcps, char * const arg)
@@ -229,11 +230,15 @@ plugin_support_expand_plugin_file(const char * const plugin_file)
 # endif
 #endif
 #ifdef _WIN32
-    assert(PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '/' ||
-           PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '\\');
+    if ((expanded_plugin_file =
+         path_from_app_folder(plugin_file)) == NULL) {
+        logger_noformat(NULL, LOG_EMERG, "Out of memory");
+        exit(1);
+    }
+    (void) plugin_file_len;
+    (void) sizeof_expanded_plugin_file;
 #else
     assert(PLUGINS_ROOT[plugins_root_len - (size_t) 1U] == '/');
-#endif
     plugin_file_len = strlen(plugin_file);
     assert(SIZE_MAX - plugins_root_len > plugin_file_len);
     sizeof_expanded_plugin_file = plugins_root_len + plugin_file_len + 1U;
@@ -243,6 +248,7 @@ plugin_support_expand_plugin_file(const char * const plugin_file)
     memcpy(expanded_plugin_file, PLUGINS_ROOT, plugins_root_len);
     memcpy(expanded_plugin_file + plugins_root_len, plugin_file,
            plugin_file_len + 1U);
+#endif
 
     return expanded_plugin_file;
 }
