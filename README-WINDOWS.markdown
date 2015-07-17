@@ -82,6 +82,9 @@ the `dnscrypt-resolvers.csv` file for a list of compatible public resolvers.
 These entries are automatically created/updated when installing the service.
 
 Plugins should be listed as paths to the `.DLL` files, optionally
-followed by a coma and plugin-specific arguments.
+followed by a coma and plugin-specific arguments:
+
+    dnscrypt-proxy -R name --plugin=libdcplugin_example_ldns_aaaa_blocking.dll
+    dnscrypt-proxy -R name --plugin=libdcplugin_example_ldns_blocking.dll,--domains=C:/blacklisted-domains.txt
 
 The service should be restarted after the registry has been updated.
