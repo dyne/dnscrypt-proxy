@@ -115,7 +115,18 @@ do_daemonize(void)
 
 #endif
 
-#ifdef _WIN32
+#ifndef _WIN32
+char *
+path_from_app_folder(const char *file_name)
+{
+    char *copy;
+    
+    if ((copy = strdup(file_name)) == NULL) {
+        abort();
+    }
+    return copy;
+}
+#else
 char *
 path_from_app_folder(const char *file_name)
 {

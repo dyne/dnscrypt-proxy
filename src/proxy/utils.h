@@ -10,9 +10,6 @@
 uint64_t dnscrypt_hrtime(void);
 int closedesc_all(const int closestdin);
 int do_daemonize(void);
-
-#ifdef _WIN32
 char * path_from_app_folder(const char *file_name);
-#endif
 
 #endif
