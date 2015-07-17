@@ -13,12 +13,11 @@ Quickstart
 ----------
 
 1) Download and extract the latest
-[Windows package for dnscrypt](http://download.dnscrypt.org/dnscrypt-proxy/LATEST-win32-full.zip)
-and open the `bin` directory.
+[Windows package for dnscrypt](http://download.dnscrypt.org/dnscrypt-proxy/LATEST-win32-full.zip).
 
-2) Copy the `dnscrypt-proxy` folder anywhere.
+2) Copy the `dnscrypt-proxy-win32` folder anywhere.
 
-3) Open an elevated command prompt, enter the `dnscrypt-proxy` folder
+3) Open an elevated command prompt, enter the `dnscrypt-proxy-win32` folder
 and type:
 
     dnscrypt-proxy.exe -R "name" --test=0
@@ -82,7 +81,7 @@ the `dnscrypt-resolvers.csv` file for a list of compatible public resolvers.
 
 These entries are automatically created/updated when installing the service.
 
-Plugins should be listed as full paths to .DLL files, optionally
+Plugins should be listed as paths to the `.DLL` files, optionally
 followed by a coma and plugin-specific arguments.
 
 The service should be restarted after the registry has been updated.
