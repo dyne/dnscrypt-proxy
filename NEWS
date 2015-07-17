@@ -1,4 +1,9 @@
 
+* Version 1.5.1:
+ - On Windows, the path to the list of resolvers (CSV file) is now
+relative to the application path. Which means that using -L <path to csv>
+is not required any more in most cases.
+
 * Version 1.5.0:
  - New option: -E, to use an ephemeral key pair for each query.
  - Logging to files is supported on Windows.
