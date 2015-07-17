@@ -242,7 +242,7 @@ windows_service_registry_write_string(const char * const key,
                        NULL, &hk, NULL) != ERROR_SUCCESS) {
         return -1;
     }
-    if (RegSetValueEx(hk, key, NULL, REG_SZ, (const BYTE *) value,
+    if (RegSetValueEx(hk, key, (DWORD) 0, REG_SZ, (const BYTE *) value,
                       (DWORD) value_len) != ERROR_SUCCESS) {
         ret = -1;
     }
@@ -301,13 +301,15 @@ windows_build_command_line_from_registry(int * const argc_p,
     }
     if (windows_service_registry_read_dword
         ("EDNSPayloadSize", &dword_value) == 0) {
-        snprintf(dword_string, sizeof dword_string, "%ld", (long) dword_value);
+        evutil_snprintf(dword_string, sizeof dword_string, "%ld",
+                        (long) dword_value);
         err += cmdline_add_option(argc_p, argv_p, "--edns-payload-size");
         err += cmdline_add_option(argc_p, argv_p, dword_string);
     }
     if (windows_service_registry_read_dword
         ("MaxActiveRequests", &dword_value) == 0) {
-        snprintf(dword_string, sizeof dword_string, "%ld", (long) dword_value);
+        evutil_snprintf(dword_string, sizeof dword_string, "%ld",
+                        (long) dword_value);
         err += cmdline_add_option(argc_p, argv_p, "--max-active-requests");
         err += cmdline_add_option(argc_p, argv_p, dword_string);
     }
