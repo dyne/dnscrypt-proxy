@@ -316,20 +316,26 @@ static int
 options_use_resolver_name(ProxyContext * const proxy_context)
 {
     char *file_buf;
+    char *resolvers_list_rebased;
 
-    file_buf = options_read_file(proxy_context->resolvers_list);
+    if ((resolvers_list_rebased =
+         path_from_app_folder(proxy_context->resolvers_list)) == NULL) {
+        logger_noformat(proxy_context, LOG_EMERG, "Out of memory");
+    }
+    file_buf = options_read_file(resolvers_list_rebased);
     if (file_buf == NULL) {
         logger(proxy_context, LOG_ERR, "Unable to read [%s]",
-               proxy_context->resolvers_list);
+               resolvers_list_rebased);
         exit(1);
     }
     assert(proxy_context->resolver_name != NULL);
     if (options_parse_resolvers_list(proxy_context, file_buf) < 0) {
         logger(proxy_context, LOG_ERR,
                "No resolver named [%s] found in the [%s] list",
-               proxy_context->resolver_name, proxy_context->resolvers_list);
+               proxy_context->resolver_name, resolvers_list_rebased);
     }
     free(file_buf);
+    free(resolvers_list_rebased);
 
     return 0;
 }
