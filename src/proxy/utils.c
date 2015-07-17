@@ -119,12 +119,9 @@ do_daemonize(void)
 char *
 path_from_app_folder(const char *file_name)
 {
-    char *copy;
-    
-    if ((copy = strdup(file_name)) == NULL) {
-        abort();
-    }
-    return copy;
+    assert(file_name != NULL);
+
+    return strdup(file_name);
 }
 #else
 char *
@@ -140,6 +137,7 @@ path_from_app_folder(const char *file_name)
     DWORD       utf16_buf_len = (DWORD) sizeof utf16_buf;
     int         utf8_buf_len = (int) sizeof utf8_buf;
 
+    assert(file_name != NULL);
     if (((chr_pathsep = strchr(file_name, '/')) != NULL ||
          (chr_pathsep = strchr(file_name, '\\')) != NULL) &&
         (chr_pathsep == file_name ||
@@ -149,13 +147,13 @@ path_from_app_folder(const char *file_name)
     }
     if ((utf16_buf_len =
          GetModuleFileNameW(NULL, utf16_buf, utf16_buf_len - 1)) <= (DWORD) 0) {
-        abort();
+        return NULL;
     }
     utf16_buf[utf16_buf_len] = (WCHAR) 0;
     utf8_buf_len = WideCharToMultiByte(CP_UTF8, 0, utf16_buf, -1, utf8_buf,
                                        utf8_buf_len, NULL, NULL);
     if (utf8_buf_len <= 0) {
-        abort();
+        return NULL;
     }
     assert(utf8_buf[utf8_buf_len - 1] == 0);
     if ((chr_revpathsep = strrchr(utf8_buf, '/')) == NULL &&
@@ -165,12 +163,11 @@ path_from_app_folder(const char *file_name)
     *(chr_revpathsep + 1U) = 0;
     utf8_buf_copy_len = strlen(utf8_buf) + strlen(file_name) + (size_t) 1U;
     if ((utf8_buf_copy = malloc(utf8_buf_copy_len)) == NULL) {
-        abort();
+        return NULL;
     }
     evutil_snprintf(utf8_buf_copy, utf8_buf_copy_len, "%s%s",
                     utf8_buf, file_name);
 
     return utf8_buf_copy;
 }
-
 #endif
