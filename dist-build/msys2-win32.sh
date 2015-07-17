@@ -17,7 +17,8 @@ make install
 
 rm -fr "${PREFIX}/share"
 rm -fr "${PREFIX}/lib/pkgconfig"
-mv "${PREFIX}/lib/dnscrypt-proxy" "${PREFIX}/plugins/"
+mv "${PREFIX}/lib/dnscrypt-proxy/"*.dll "${PREFIX}/bin/"
+mv "${PREFIX}/lib/dnscrypt-proxy/"*.la "${PREFIX}/bin/"
 rm -fr "${PREFIX}/lib"
 cp "${MINGW_PREFIX}/bin/libwinpthread-1.dll" "${PREFIX}/bin/"
 cp "${MINGW_PREFIX}/bin/libgcc_s_dw2-1.dll" "${PREFIX}/bin/"

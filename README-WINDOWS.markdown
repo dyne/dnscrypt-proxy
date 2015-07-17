@@ -16,12 +16,10 @@ Quickstart
 [Windows package for dnscrypt](http://download.dnscrypt.org/dnscrypt-proxy/LATEST-win32-full.zip)
 and open the `bin` directory.
 
-2) Copy the `dnscrypt-proxy.exe` file to any location, as well as the
-dnscrypt-resolvers.csv file and the DLL files.
-All the files should be in the same location.
+2) Copy the `dnscrypt-proxy` folder anywhere.
 
-3) Open an elevated command prompt and type (you may need to specify
-the full path to the file):
+3) Open an elevated command prompt, enter the `dnscrypt-proxy` folder
+and type:
 
     dnscrypt-proxy.exe -R "name" --test=0
 
