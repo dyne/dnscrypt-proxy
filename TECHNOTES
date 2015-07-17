@@ -65,8 +65,8 @@ derived from the public key
 - 4 + 4 byte validity period (two timestamps)
 
 This is the current structure of the second version of the protocol.
-Don't assume anything about its length, it is very likely to change
-after a version bump.
+The structure length can be increased in a future minor revision, while
+remaining backward compatible.
 
 The proxy drops invalid certificates for the current date, and picks the one
 with the highest serial number.
