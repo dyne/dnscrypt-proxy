@@ -1,6 +1,18 @@
+* Sat Jul 18 01:34:11 2015 +0200
+
+    Remove redundant check on Windows
+
+* Sat Jul 18 01:28:51 2015 +0200
+
+    Rebase the plugin path onto the application directory on Windows
+
+* Sat Jul 18 01:24:43 2015 +0200
+
+    No more "plugins" folder - Put everything at the same place on Windows.
+
 * Sat Jul 18 00:26:36 2015 +0200
 
-    Version bump
+    Next will be 1.5.1
 
 Merge: 6fb2dd9 b676f8f
 * Sat Jul 18 00:17:21 2015 +0200

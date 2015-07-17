@@ -1,8 +1,12 @@
 
-* Version 1.5.1 (not released yet):
+* Version 1.6.0 (not released yet):
  - On Windows, the path to the list of resolvers (CSV file) is now
 relative to the application path. Which means that using -L <path to csv>
 is not required any more in most cases.
+ - On Windows, the path to the plugins is now also relative to the
+application path. Pre-compiled packages now ship the plugins in the
+"bin" directory. Therefore, full path to plugins is usually not
+required any more.
 
 * Version 1.5.0:
  - New option: -E, to use an ephemeral key pair for each query.
