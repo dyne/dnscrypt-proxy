@@ -211,23 +211,10 @@ plugin_support_expand_plugin_file(const char * const plugin_file)
     if (strncmp(plugin_file, PLUGINS_ROOT, plugins_root_len) == 0) {
         return strdup(plugin_file);
     }
-#else
-# ifdef _WIN32
-    const char *chr_column;
-    const char *chr_pathsep;
-
-    if (((chr_pathsep = strchr(plugin_file, '/')) != NULL ||
-         (chr_pathsep = strchr(plugin_file, '\\')) != NULL) &&
-        (chr_pathsep == plugin_file ||
-            ((chr_column = strchr(plugin_file, ':')) != NULL &&
-                chr_column - plugin_file < chr_pathsep - plugin_file))) {
-        return strdup(plugin_file);
-    }
-# else
+#elif !defined(_WIN32)
     if (*plugin_file == '/') {
         return strdup(plugin_file);
     }
-# endif
 #endif
 #ifdef _WIN32
     if ((expanded_plugin_file =
