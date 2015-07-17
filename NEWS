@@ -1,5 +1,5 @@
 
-* Version 1.5.1:
+* Version 1.5.1 (not released yet):
  - On Windows, the path to the list of resolvers (CSV file) is now
 relative to the application path. Which means that using -L <path to csv>
 is not required any more in most cases.

@@ -1,3 +1,202 @@
+* Sat Jul 18 00:26:36 2015 +0200
+
+    Version bump
+
+Merge: 6fb2dd9 b676f8f
+* Sat Jul 18 00:17:21 2015 +0200
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      clarify
+      Bail out in autogen.sh if pkg-config is not available. Printing the error is not enough; people don't read error messages.
+      Update aclocal
+      Correct URL for libevent
+      It's dnscrypt-proxy. dnscrypt-wrapper wasn't written by me.
+      A copy of NaCl is not bundled any more.
+
+* Sat Jul 18 00:15:39 2015 +0200
+
+    Windows users, rejoice!
+    (plugins do not benefit from this yet, though)
+
+* Sat Jul 18 00:09:13 2015 +0200
+
+    On Windows, rebase the path to the list of resolvers to the application directory
+
+* Sat Jul 18 00:02:14 2015 +0200
+
+    Return NULL on OOM
+
+* Fri Jul 17 23:58:22 2015 +0200
+
+    Export path_from_app_folder() even on !WIN32
+
+* Fri Jul 17 23:00:49 2015 +0200
+
+    On Windows, add a helper to rebase a path to the application directory
+
+* Fri Jul 17 09:22:02 2015 +0200
+
+    clarify
+
+* Tue Jul 14 11:50:23 2015 +0200
+
+    Bail out in autogen.sh if pkg-config is not available.
+    Printing the error is not enough; people don't read error messages.
+
+* Sun Jul 12 02:12:31 2015 +0200
+
+    Update aclocal
+
+* Sun Jul 12 02:00:44 2015 +0200
+
+    Correct URL for libevent
+
+* Sun Jul 12 01:59:48 2015 +0200
+
+    It's dnscrypt-proxy. dnscrypt-wrapper wasn't written by me.
+
+* Sun Jul 12 01:58:27 2015 +0200
+
+    A copy of NaCl is not bundled any more.
+
+* Sat Jul 11 12:04:38 2015 +0200
+
+    Remove unreliable OpenNIC Fuze servers
+
+* Thu Jul 9 20:59:29 2015 +0200
+
+    Link the tarballs
+
+* Thu Jul 9 20:53:10 2015 +0200
+
+    dnscrypt -> dnscrypt-proxy
+
+* Tue Jul 7 10:33:26 2015 +0200
+
+    Point to LATEST-win32-full.zip for the Windows package
+
+* Mon Jul 6 16:25:10 2015 +0200
+
+    update signatures
+
+* Mon Jul 6 16:21:28 2015 +0200
+
+    + nawala
+
+* Mon Jul 6 02:07:00 2015 +0200
+
+    Add a link to the server Docker image
+
+* Sat Jul 4 21:28:20 2015 +0200
+
+    The server MAGIC can be derived from public keys
+
+* Wed Jul 1 13:07:17 2015 +0200
+
+    sign
+
+* Wed Jul 1 13:06:15 2015 +0200
+
+    ovpn.to is part of OpenNIC
+
+* Wed Jul 1 13:04:18 2015 +0200
+
+    + ovpn.to Sweden and Romania
+
+* Tue Jun 30 16:52:53 2015 +0200
+
+    Update signatures
+
+* Tue Jun 30 16:52:36 2015 +0200
+
+    Reorder
+
+* Tue Jun 30 16:07:41 2015 +0200
+
+    OpenDNS company has been acquired by Cisco
+
+* Tue Jun 30 10:39:47 2015 +0200
+
+    Remove unresponsive fvz resolvers
+
+* Tue Jun 30 10:17:56 2015 +0200
+
+    Revert "dnscrypt.eu servers were renamed"
+    
+
+* Mon Jun 29 15:04:55 2015 +0200
+
+    dnscrypt.eu servers were renamed
+
+* Tue Jun 23 22:19:28 2015 +0200
+
+    Restore dnscrypt.eu-nl-port5353
+
+* Mon Jun 22 16:42:40 2015 +0200
+
+    + ovpnto-lat
+
+Merge: d459d12 f0d097c
+* Sun Jun 21 11:30:13 2015 +0200
+
+    Merge pull request #226 from lhoBas/patch-1
+    
+    Fix markdown link syntax for minisign + minisig
+
+* Sun Jun 21 10:22:29 2015 +0200
+
+    Fix markdown link syntax for minisign + minisig
+
+* Fri Jun 19 16:56:23 2015 +0200
+
+    Remove spaces
+
+* Fri Jun 19 16:53:24 2015 +0200
+
+    dnscrypt.eu-nl-port5353 and d0wn-nl-ns2 are currently down
+
+* Fri Jun 19 16:52:37 2015 +0200
+
+    Obviously .bit requires namecoin
+
+* Thu Jun 18 17:43:40 2015 +0200
+
+    Unfortunately, the Docker images are not maintained any more
+
+* Tue Jun 16 18:28:37 2015 +0200
+
+    Not relevant any more with msys2
+
+Merge: a66823e d49c7da
+* Thu Jun 11 09:41:46 2015 +0200
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      New link to Minisign
+
+* Thu Jun 11 09:25:27 2015 +0200
+
+    New link to Minisign
+
+* Thu Jun 11 07:44:02 2015 +0200
+
+    Pasto
+
+* Wed Jun 10 21:49:19 2015 +0200
+
+    The shared key is apparently called "device" now.
+
+* Wed Jun 10 18:17:44 2015 +0200
+
+    1.5.0
+
+* Wed Jun 10 16:55:28 2015 +0200
+
+    Update ChangeLog
+
 * Wed Jun 10 16:54:56 2015 +0200
 
     Add a new Windows registry key: EphemeralKeys
