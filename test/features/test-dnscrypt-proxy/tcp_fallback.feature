@@ -6,7 +6,7 @@ and the proxy should handle TCP just fine.
   
   Scenario: query an existing name over UDP, expect fallback to TCP.
   
-    Given a working opendnscache on 208.67.220.220
-    And a running dnscrypt proxy with options "--edns-payload-size=0 -R cisco"
-    When a client asks dnscrypt-proxy for "test-tcp.stdc.org"
+    Given a working server proxy on 212.47.228.136
+    And a running dnscrypt proxy with options "--edns-payload-size=0 -R dnscrypt.org-fr"
+    When a client asks dnscrypt-proxy for "test-tcp.dnscrypt.org"
     Then dnscrypt-proxy returns "127.0.0.1"
