@@ -29,7 +29,7 @@ and pick the one you want to use. Note its name, in the first column
 4) Open an elevated command prompt (see below), enter the
 `dnscrypt-proxy-win32` folder and type:
 
-    dnscrypt-proxy.exe -R <name> --test=0
+    dnscrypt-proxy -R <name> --test=0
 
 Replace `<name>` with name of the resolver you chose.
 
@@ -42,7 +42,7 @@ If an error is displayed, retry with a different server.
 5) So far, so good? Now, enable the service for real, by replacing the
 `--test=0` part of the previous command with `--install`.
 
-    dnscrypt-proxy.exe -R <name> --install
+    dnscrypt-proxy -R <name> --install
 
 6) Open the network preferences, TCP/IP settings, and use `127.0.0.1`
 instead of the default DNS resolver address to enable DNSCrypt on this
