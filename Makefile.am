@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = \
+	README-iOS.markdown \
 	README-PLUGINS.markdown \
 	README-WINDOWS.markdown \
 	README.markdown \
