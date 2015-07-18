@@ -1,4 +1,4 @@
-untrusted comment: verify with https://github.com/jedisct1/minisign
-RWQf6LRCGA9i53zF8ULTq3buPXyJbMtd+zfQmwBuwePeknwXx9bUlle9gy6wOlpbjh3xTXT4LrUu4ISx1hW/sZl+RtVQF6MEvQo=
-trusted comment: timestamp:1436609064	file:dnscrypt-resolvers.csv
-NIHUZDEC2baO08NsNeie7nMPuKrUANFaqenHQsChL88OjGbWpPo8L0ArOljclt7c85Cu0MO0KY+mTedlX7VgAQ==
+untrusted comment: signature from minisign secret key
+RWQf6LRCGA9i55QQij+Sq8+39+n3UlcDIfh8sTSkyI0i0zM+KMM7Jalm69uoPdSb7Z+qNP9Oz0CXcvUzROtf0ZpQHc1ddkDbswI=
+trusted comment: timestamp:1437228877	file:dnscrypt-resolvers.csv
+2H2kUYMfatZPXe+26xq1N2ZsjQAvd37Vj+ntfZl206AfqONu0vlI1JKmwKyyjfSs3iquhE8C8eHkcum7TQ/yDA==
