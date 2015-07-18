@@ -94,7 +94,7 @@ dnscrypt_client_curve(DNSCryptClient * const client,
                crypto_box_HALF_NONCEBYTES);
         crypto_stream(eph_secretkey, sizeof eph_secretkey,
                       eph_nonce, client->secretkey);
-        crypto_scalarmult_curve25519_base(eph_publickey, eph_secretkey);
+        crypto_scalarmult_base(eph_publickey, eph_secretkey);
         publickey = eph_publickey;
         res = crypto_box(boxed - crypto_box_BOXZEROBYTES,
                          boxed - crypto_box_BOXZEROBYTES,
@@ -158,7 +158,7 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
                crypto_box_HALF_NONCEBYTES);
         crypto_stream(eph_secretkey, sizeof eph_secretkey,
                       eph_nonce, client->secretkey);
-        crypto_scalarmult_curve25519_base(eph_publickey, eph_secretkey);
+        crypto_scalarmult_base(eph_publickey, eph_secretkey);
         res = crypto_box_open
             (buf + DNSCRYPT_SERVER_BOX_OFFSET - crypto_box_BOXZEROBYTES,
              buf + DNSCRYPT_SERVER_BOX_OFFSET - crypto_box_BOXZEROBYTES,
@@ -199,8 +199,8 @@ dnscrypt_client_init_resolver_publickey(DNSCryptClient * const client,
 # error crypto_box_BEFORENMBYTES != crypto_box_PUBLICKEYBYTES
 #endif
     if (client->ephemeral_keys == 0) {
-        memcpy(client->nmkey, resolver_publickey, crypto_box_PUBLICKEYBYTES);
-        crypto_box_beforenm(client->nmkey, client->nmkey, client->secretkey);
+        crypto_box_beforenm(client->nmkey, resolver_publickey,
+                            client->secretkey);
     } else {
         memcpy(client->publickey, resolver_publickey, sizeof client->publickey);
     }
