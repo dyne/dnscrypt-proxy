@@ -39,8 +39,8 @@ Congratulations, you're now using DNSCrypt!
 How to open an elevated command prompt
 --------------------------------------
 
-On Windows 8.1, press the Windows key + the X key and select "Windows
-Command Prompt (Admin)" or "Windows PowerShell (Admin)".
+On Windows 8.1 and Windows 10, press the Windows key + the X key and
+select "Windows Command Prompt (Admin)" or "Windows PowerShell (Admin)".
 
 Advanced usage
 --------------
