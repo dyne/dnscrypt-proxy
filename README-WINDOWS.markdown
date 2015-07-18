@@ -1,13 +1,18 @@
-Using DNSCrypt on Windows
-=========================
+Using the DNSCrypt client on Windows
+====================================
 
-On Windows, `dnscrypt-proxy` can be started from the command-line the same way
-as on other operating systems.
+`dnscrypt-proxy` is DNSCrypt client that works on many platforms,
+including Windows.
 
-Alternatively, it can run as a Windows Service.
+It doesn't provide any user interface, and has to be set up using the
+command-line.
 
-Note: Also check out Dominus Temporis' excellent tutorial on
-[DNSCrypt on Windows](http://dominustemporis.com/2014/05/dnscrypt-on-windows-update/)
+Independent projects such as [DNSCrypt Windows Service Manager](https://simonclausen.dk/projects/dnscrypt-winservicemgr/)
+provide a user interface on top of `dnscrypt-proxy`, so that the core
+client code can always be up-to-date, and the same as other platforms.
+
+However, using `dnscrypt-proxy` directly is fairly simple and opens a
+lot of options.
 
 Quickstart
 ----------
@@ -17,22 +22,31 @@ Quickstart
 
 2) Copy the `dnscrypt-proxy-win32` folder anywhere.
 
-3) Open an elevated command prompt, enter the `dnscrypt-proxy-win32` folder
-and type:
+3) Look at the list of [public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
+and pick the one you want to use. Note its name, in the first column
+(for example: `dnscrypt.org-fr`).
 
-    dnscrypt-proxy.exe -R "name" --test=0
+4) Open an elevated command prompt (see below), enter the
+`dnscrypt-proxy-win32` folder and type:
 
-Replace `name` with one of the resolvers from CSV file. The (possibly
-updated) file can also be viewed online:
-[public DNS resolvers supporting DNSCrypt](https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv)
+    dnscrypt-proxy.exe -R <name> --test=0
 
-This command should display the server key fingerprint and exit. If
-this is not the case, try a different server. If this is the case,
-install the service:
+Replace `<name>` with name of the resolver you chose.
 
-    dnscrypt-proxy.exe -R "name" --install
+This command just tests if everything is properly installed on your
+end, and if the resolver is properly working. If everything looks fine,
+the command should display the server key fingerprint and exit right away.
 
-4) Change your DNS settings to `127.0.0.1`
+If an error is displayed, retry with a different server.
+
+5) So far, so good? Now, enable the service for real, by replacing the
+`--test=0` part of the previous command with `--install`.
+
+    dnscrypt-proxy.exe -R <name> --install
+
+6) Open the network preferences, TCP/IP settings, and use `127.0.0.1`
+instead of the default DNS resolver address to enable DNSCrypt on this
+interface.
 
 Congratulations, you're now using DNSCrypt!
 
@@ -42,14 +56,45 @@ How to open an elevated command prompt
 On Windows 8.1 and Windows 10, press the Windows key + the X key and
 select "Windows Command Prompt (Admin)" or "Windows PowerShell (Admin)".
 
-Advanced usage
---------------
+Temporarily disabling DNSCrypt
+------------------------------
 
-The Windows build of `dnscrypt-proxy` adds the following command-line
-options:
+`dnscrypt-proxy` receives DNS queries from your applications on
+`127.0.0.1` (by default), wraps them into DNSCrypt queries, forwards
+them to the real DNS resolver, securely receives and verifies the
+responses, and forwards the legitimate ones to your client applications.
+
+If you changed the DNS settings for a given network interface to
+`127.0.0.1`, you can revert these settings to what they used to be (or
+to any non-DNSCrypt resolver) anytime in order to stop using DNSCrypt.
+Changing the address back to `127.0.0.1` makes the network interface
+use the DNSCrypt proxy again.
+
+The Windows service
+-------------------
+
+On Windows, `dnscrypt-proxy` can run as a Windows service, and this is how it
+was set up in the quickstart section above.
+
+In addition to the command-line switches available on other platforms,
+the Windows builds of the proxy add the following switches:
 
 - `--install`: install the proxy as a service.
-- `--uninstall`: uninstall the service.
+- `--uninstall`: uninstall the service (but not the software - the
+service can be restarted later)
+
+Example: how to try a different DNSCrypt resolver:
+
+Step 1 - Uninstall the previous service:
+
+    dnscrypt-proxy --uninstall
+    
+Step 2 - Reinstall/restart the service, with the new settings:
+
+    dnscrypt-proxy -R <new name> --install
+
+Advanced usage
+--------------
 
 Startup options should specified as subkeys from this registry key:
 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters`
