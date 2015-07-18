@@ -1,9 +1,0 @@
-#!/bin/sh
-set -e
-
-# This is the home dir of user "dnscrypt"
-# dnscrypt-proxy will chroot there for security reasons
-mkdir -p /run/dnscrypt
-
-#Load the AppArmor profile, otherwise it wouldn't be applied
-/lib/init/apparmor-profile-load usr.sbin.dnscrypt-proxy || true
