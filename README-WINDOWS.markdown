@@ -88,10 +88,51 @@ Example: how to try a different DNSCrypt resolver:
 Step 1 - Uninstall the previous service:
 
     dnscrypt-proxy --uninstall
-    
+
 Step 2 - Reinstall/restart the service, with the new settings:
 
     dnscrypt-proxy -R <new name> --install
+
+Sharing the proxy with the local network
+----------------------------------------
+
+By default, only the Windows machine running the proxy can use it.
+
+However, it can be convenient to make it accessible from any device on
+the local network. For example, smartphones and tablets can use the
+Windows machine as a DNS resolver (which will actually be the DNSCrypt
+proxy) instead of running DNSCrypt themselves.
+
+In order to do so, just add the following option to the command-line:
+`--local-address=0.0.0.0`.
+
+That is:
+
+    dnscrypt-proxy -R <name> --install --local-address=0.0.0.0
+
+And use the IP address of the Windows machine in the DNS settings of
+any devices of the local network.
+
+Removing the software from the system
+-------------------------------------
+
+If this DNSCrypt client doesn't fit your needs, we are very sorry for
+this, and we'd love to hear about how we could make it better.
+
+So, go to the "Support" section of the
+[DNSCrypt](http://dnscrypt.org/) site and tell us your story.
+
+Removing `dnscrypt-proxy` from your system is straightforward.
+
+Before doing so, make sure that the DNS settings of your network
+interfaces have been restored to what they were before (which, most of
+the time, is just "DHCP").
+
+Then, uninstall the service:
+
+    dnscrypt-proxy --uninstall
+
+And delete the directory.
 
 Advanced usage
 --------------
@@ -130,7 +171,7 @@ These entries are automatically created/updated when installing the service.
 Plugins should be listed as paths to the `.DLL` files, optionally
 followed by a coma and plugin-specific arguments:
 
-    dnscrypt-proxy -R name --plugin=libdcplugin_example_ldns_aaaa_blocking.dll
-    dnscrypt-proxy -R name --plugin=libdcplugin_example_ldns_blocking.dll,--domains=C:/blacklisted-domains.txt
+    dnscrypt-proxy -R <name> --plugin=libdcplugin_example_ldns_aaaa_blocking.dll
+    dnscrypt-proxy -R <name> --plugin=libdcplugin_example_ldns_blocking.dll,--domains=C:/blacklisted-domains.txt
 
 The service should be restarted after the registry has been updated.
