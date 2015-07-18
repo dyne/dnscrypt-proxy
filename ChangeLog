@@ -1,3 +1,43 @@
+* Sat Jul 18 18:22:56 2015 +0200
+
+    Install a sample .plist file on iOS
+
+* Sat Jul 18 18:11:35 2015 +0200
+
+    Obviously in the plist file, the path to the app has o be first.
+
+* Sat Jul 18 17:29:58 2015 +0200
+
+    fpm package version bump
+
+* Sat Jul 18 17:29:04 2015 +0200
+
+    Remove local gentoo ebuilds; not maintained any more.
+
+* Sat Jul 18 17:28:29 2015 +0200
+
+    Remove Debian package. Doesn't seem to be maintained any more.
+
+* Sat Jul 18 17:26:44 2015 +0200
+
+    + minisign.pub
+
+* Sat Jul 18 17:12:39 2015 +0200
+
+    New OpenNIC server: Tumabox, courtesy of TumaBox.org
+
+* Sat Jul 18 16:52:06 2015 +0200
+
+    Test that plugins are at least loadable
+
+* Sat Jul 18 16:27:05 2015 +0200
+
+    Update signature comment
+
+* Sat Jul 18 16:25:35 2015 +0200
+
+    Update ChangeLog
+
 * Sat Jul 18 16:15:40 2015 +0200
 
     Remove unreliable FUZE servers again.
