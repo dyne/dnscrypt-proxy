@@ -345,10 +345,10 @@ dnscrypt_proxy_main(int argc, char *argv[])
     proxy_context.dnscrypt_client.ephemeral_keys =
         proxy_context.ephemeral_keys;
     if (proxy_context.dnscrypt_client.ephemeral_keys != 0) {
-        logger_noformat(&proxy_context, LOG_INFO, "Generating a new session key");
+        logger_noformat(&proxy_context, LOG_INFO, "Ephemeral keys enabled - generating a new seed");
         dnscrypt_client_init_with_new_session_key(&proxy_context.dnscrypt_client);
     } else {
-        logger_noformat(&proxy_context, LOG_INFO, "Generating a new key pair");
+        logger_noformat(&proxy_context, LOG_INFO, "Generating a new session key pair");
         dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
     }
     logger_noformat(&proxy_context, LOG_INFO, "Done");
