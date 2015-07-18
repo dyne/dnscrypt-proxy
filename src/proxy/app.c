@@ -105,10 +105,8 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     proxy_context->udp_proxy_resolver_handle = -1;
     proxy_context->udp_listener_handle = -1;
     proxy_context->tcp_listener_handle = -1;
-#ifdef HAVE_SODIUM_MLOCK
     sodium_mlock(&proxy_context->dnscrypt_client,
                  sizeof proxy_context->dnscrypt_client);
-#endif
     if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
         return -1;
     }
@@ -311,6 +309,9 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
+    if (sodium_init() != 0) {
+        exit(1);
+    }
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
@@ -322,18 +323,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
         exit(1);
     }
     logger_noformat(&proxy_context, LOG_NOTICE, "Starting " PACKAGE_STRING);
-#ifdef USE_ONLY_PORTABLE_IMPLEMENTATIONS
-    randombytes_stir();
-#else
-    logger_noformat(&proxy_context, LOG_INFO,
-                    "Initializing libsodium for optimal performance");
-    if (sodium_init() != 0) {
-        exit(1);
-    }
-#endif
-#ifdef HAVE_SODIUM_MLOCK
     sodium_mlock(&proxy_context, sizeof proxy_context);
-#endif
     randombytes_set_implementation(&randombytes_salsa20_implementation);
 #ifdef PLUGINS
     if (plugin_support_context_load(app_context.dcps_context) != 0) {
@@ -347,6 +337,9 @@ dnscrypt_proxy_main(int argc, char *argv[])
     if (proxy_context.dnscrypt_client.ephemeral_keys != 0) {
         logger_noformat(&proxy_context, LOG_INFO, "Ephemeral keys enabled - generating a new seed");
         dnscrypt_client_init_with_new_session_key(&proxy_context.dnscrypt_client);
+    } else if (proxy_context.client_key_file != NULL) {
+        logger_noformat(&proxy_context, LOG_INFO, "Using a user-supplied client secret key");
+        dnscrypt_client_init_with_client_key(&proxy_context.dnscrypt_client);
     } else {
         logger_noformat(&proxy_context, LOG_INFO, "Generating a new session key pair");
         dnscrypt_client_init_with_new_key_pair(&proxy_context.dnscrypt_client);
@@ -392,9 +385,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
     plugin_support_context_free(app_context.dcps_context);
 #endif
     proxy_context_free(&proxy_context);
-#ifdef HAVE_SODIUM_MLOCK
     sodium_munlock(&proxy_context, sizeof proxy_context);
-#endif
     app_context.proxy_context = NULL;
     randombytes_close();
 

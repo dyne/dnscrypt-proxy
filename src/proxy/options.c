@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <event2/util.h>
+#include <sodium.h>
 
 #include "dnscrypt_proxy.h"
 #include "getpwnam.h"
@@ -38,6 +39,7 @@ static struct option getopt_long_options[] = {
 #endif
     { "edns-payload-size", 1, NULL, 'e' },
     { "ephemeral-keys", 0, NULL, 'E' },
+    { "client-key", 1, NULL, 'K' },
     { "help", 0, NULL, 'h' },
     { "resolvers-list", 1, NULL, 'L' },
     { "resolver-name", 1, NULL, 'R' },
@@ -63,9 +65,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:Ehk:L:l:m:n:p:r:R:t:u:N:TVX";
+static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:t:u:N:TVX";
 #else
-static const char *getopt_options = "a:e:Ehk:L:l:m:n:r:R:t:u:N:TVX";
+static const char *getopt_options = "a:e:Ehk:K:L:l:m:n:r:R:t:u:N:TVX";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -107,6 +109,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count = 0U;
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
+    proxy_context->client_key_file = NULL;
     proxy_context->local_ip = "127.0.0.1:53";
     proxy_context->log_fp = NULL;
     proxy_context->log_file = NULL;
@@ -342,8 +345,58 @@ options_use_resolver_name(ProxyContext * const proxy_context)
 }
 
 static int
+options_use_client_key_file(ProxyContext * const proxy_context)
+{
+    unsigned char *key;
+    char          *key_s;
+    const size_t   header_len = (sizeof OPTIONS_CLIENT_KEY_HEADER) - 1U;
+    size_t         key_s_len;
+
+    if ((key_s = options_read_file(proxy_context->client_key_file)) == NULL) {
+        logger_error(proxy_context, "Unable to read the client key file");
+        return -1;
+    }
+    if ((key = sodium_malloc(header_len + crypto_box_SECRETKEYBYTES)) == NULL) {
+        logger_noformat(proxy_context, LOG_EMERG, "Out of memory");
+        free(key_s);
+        return -1;
+    }
+    if (sodium_hex2bin(key, header_len + crypto_box_SECRETKEYBYTES,
+                       key_s, strlen(key_s), ": -", &key_s_len, NULL) != 0 ||
+        key_s_len < (header_len + crypto_box_SECRETKEYBYTES) ||
+        memcmp(key, OPTIONS_CLIENT_KEY_HEADER, header_len) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "The client key file doesn't seem to contain a supported key format");
+        sodium_free(key);
+        free(key_s);
+        return -1;
+    }
+    sodium_memzero(key_s, strlen(key_s));
+    free(key_s);
+    assert(sizeof proxy_context->dnscrypt_client.secretkey <=
+           key_s_len - header_len);
+    memcpy(proxy_context->dnscrypt_client.secretkey, key + header_len,
+           sizeof proxy_context->dnscrypt_client.secretkey);
+    sodium_free(key);
+
+    return 0;
+}
+
+static int
 options_apply(ProxyContext * const proxy_context)
 {
+    if (proxy_context->client_key_file != NULL) {
+        if (proxy_context->ephemeral_keys != 0) {
+            logger_noformat(proxy_context, LOG_ERR,
+                            "--client-key and --ephemeral-keys are mutually exclusive");
+            exit(1);
+        }
+        if (options_use_client_key_file(proxy_context) != 0) {
+            logger(proxy_context, LOG_ERR,
+                   "Client key file [%s] could not be used", proxy_context->client_key_file);
+            exit(1);
+        }
+    }
     if (proxy_context->resolver_name != NULL) {
         if (proxy_context->resolvers_list == NULL) {
             logger_noformat(proxy_context, LOG_ERR,
@@ -417,6 +470,7 @@ options_apply(ProxyContext * const proxy_context)
         pid_file_create(proxy_context->pid_file,
                         proxy_context->user_id != (uid_t) 0) != 0) {
         logger_error(proxy_context, "Unable to create pid file");
+        exit(1);
     }
 #endif
     if (proxy_context->log_file != NULL &&
@@ -483,6 +537,9 @@ options_parse(AppContext * const app_context,
             exit(0);
         case 'k':
             proxy_context->provider_publickey_s = optarg;
+            break;
+        case 'K':
+            proxy_context->client_key_file = optarg;
             break;
         case 'l':
             proxy_context->log_file = optarg;

@@ -37,10 +37,11 @@ int dnscrypt_client_init_with_new_session_key(DNSCryptClient * const client);
 
 int dnscrypt_client_init_with_new_key_pair(DNSCryptClient * const client);
 
+int dnscrypt_client_init_with_client_key(DNSCryptClient * const client);
+
 int dnscrypt_client_init_magic_query(DNSCryptClient * const client,
                                      const uint8_t magic_query[DNSCRYPT_MAGIC_QUERY_LEN]);
 
 int dnscrypt_client_init_resolver_publickey(DNSCryptClient * const client,
                                             const uint8_t resolver_publickey[crypto_box_PUBLICKEYBYTES]);
-
 #endif

@@ -297,6 +297,37 @@ to the resolver.
 TCP connections aren't supported yet, and this workaround should
 never be used except when bypassing a filter is actually required.
 
+Public-key client authentication
+--------------------------------
+
+By default, dnscrypt-proxy generates non-deterministic client keys
+every time it starts, or for every query (when the ephemeral keys
+feature is turned on).
+
+However, commercial DNS services may want to use DNSCrypt to
+authenticate the sender of a query using public-key cryptography, i.e.
+know what customer sent a query without altering the DNS query itself,
+and without using shared secrets.
+
+Resolvers that should be accessible from any IP address, but that are
+supposed to be used only by specific users, can also take advantage of
+DNSCrypt to only respond to queries sent using a given list of public keys.
+
+In order to do so, dnscrypt-proxy 1.6.0 introduced the `--client-key`
+(or `-K`) switch. This loads a secret client key from a file instead
+of generating random keys:
+
+    # dnscrypt-proxy --client-key=/private/client-secret.key
+
+This file has to remain private, and its content doesn't have to be
+known by the DNS service provider.
+
+Versions 1 and 2 of the DNSCrypt protocol use Curve25519 keys, and the
+format of this file for Curve25519 keys is a hexadecimal string, with
+optional :, [space] and - delimiters, decoding to 34 bytes:
+
+    01 01 || 32-byte Curve25519 secret key
+
 EDNS payload size
 -----------------
 

@@ -55,6 +55,9 @@ ports.
 
   * `-k`, `--provider-key=<key>`: specify the provider public key (see below).
 
+  * `-K`, `--client-key=<file>`: use a static client secret key stored in
+    `<file>`.
+
   * `-L`, `--resolvers-list=<file>`: path to the CSV file containing
     the list of available resolvers, and the parameters to use them.
 

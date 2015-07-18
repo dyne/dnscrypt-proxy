@@ -96,6 +96,7 @@ typedef struct ProxyContext_ {
     AppContext              *app_context;
     struct event_base       *event_loop;
     FILE                    *log_fp;
+    const char              *client_key_file;
     const char              *local_ip;
     const char              *log_file;
     const char              *pid_file;

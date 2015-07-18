@@ -227,3 +227,12 @@ dnscrypt_client_init_with_new_key_pair(DNSCryptClient * const client)
 
     return 0;
 }
+
+int
+dnscrypt_client_init_with_client_key(DNSCryptClient * const client)
+{
+    if (crypto_scalarmult_base(client->publickey, client->secretkey) != 0) {
+        return -1;
+    }
+    return 0;
+}

@@ -1,3 +1,37 @@
+* Sat Jul 18 14:15:15 2015 +0200
+
+    Require at least Sodium 0.7.0
+
+* Sat Jul 18 14:13:20 2015 +0200
+
+    Do not check for sodium_mlock() presence any more.
+    This has been available in libsodium for a long time.
+
+* Sat Jul 18 13:21:12 2015 +0200
+
+    Update tests
+
+* Sat Jul 18 12:33:38 2015 +0200
+
+    Make it less confusing that ephemeral keys have been enabled (or not)
+
+* Sat Jul 18 12:30:52 2015 +0200
+
+    Avoid a pointless memcpy()
+
+* Sat Jul 18 01:57:20 2015 +0200
+
+    A few examples
+
+* Sat Jul 18 01:41:39 2015 +0200
+
+    Keep making Windows users happy
+
+* Sat Jul 18 01:39:15 2015 +0200
+
+    Move pretty much everything in the same directory on Windows
+    This is a breaking change, so bump major version.
+
 * Sat Jul 18 01:34:11 2015 +0200
 
     Remove redundant check on Windows

@@ -68,6 +68,7 @@ The following subkeys are recognized and should be self-explanatory:
     EDNSPayloadSize   (DWORD)
     MaxActiveRequests (DWORD)
     TCPOnly           (DWORD)
+    ClientKeyFile     (REG_SZ)
     EphemeralKeys     (DWORD)
 
 For example, in order to listen to local address that is not the default

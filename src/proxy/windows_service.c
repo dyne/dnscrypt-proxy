@@ -321,6 +321,12 @@ windows_build_command_line_from_registry(int * const argc_p,
         ("EphemeralKeys", &dword_value) == 0 && dword_value > (DWORD) 0) {
         err += cmdline_add_option(argc_p, argv_p, "--ephemeral-keys");
     }
+    if (windows_service_registry_read_string
+        ("ClientKeyFile", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--client-key");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
     windows_service_registry_read_multi_sz
         ("Plugins", & (WindowsServiceParseMultiSzCb) {
             .cb = windows_service_parse_multi_sz_cb,
@@ -417,15 +423,19 @@ windows_registry_install(ProxyContext * const proxy_context)
 {
     if (proxy_context->resolvers_list != NULL) {
         windows_service_registry_write_string("ResolversList",
-                                             proxy_context->resolvers_list);
+                                              proxy_context->resolvers_list);
     }
     if (proxy_context->resolver_name != NULL) {
         windows_service_registry_write_string("ResolverName",
-                                             proxy_context->resolver_name);
+                                              proxy_context->resolver_name);
     }
     if (proxy_context->local_ip != NULL) {
         windows_service_registry_write_string("LocalAddress",
-                                             proxy_context->local_ip);
+                                              proxy_context->local_ip);
+    }
+    if (proxy_context->client_key_file != NULL) {
+        windows_service_registry_write_string("ClientKeyFile",
+                                              proxy_context->client_key_file);
     }
     return 0;
 }
