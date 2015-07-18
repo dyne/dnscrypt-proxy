@@ -1,5 +1,5 @@
 
-* Version 1.6.0 (not released yet):
+* Version 1.6.0:
  - On Windows, the path to the list of resolvers (CSV file) is now
 relative to the application path. Which means that using -L <path to csv>
 is not required any more in most cases.
@@ -7,9 +7,10 @@ is not required any more in most cases.
 application path. Pre-compiled packages now ship the plugins in the
 "bin" directory. Therefore, full path to plugins is usually not
 required any more.
- - New feature: static client keys (-K), for private and commercial DNS
-services to securely authenticate the sender of a query no matter what
-the source IP address is, and without altering the original query.
+ - New feature: public-key based client authentication (-K), for
+private and commercial DNS services to securely authenticate the
+sender of a query no matter what the source IP address is, without
+altering the original query.
 
 * Version 1.5.0:
  - New option: -E, to use an ephemeral key pair for each query.
