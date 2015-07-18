@@ -27,4 +27,5 @@ SUBDIRS += \
 	test
 
 dist_pkgdata_DATA = \
-	dnscrypt-resolvers.csv
+	dnscrypt-resolvers.csv \
+	minisign.pub
