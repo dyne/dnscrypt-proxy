@@ -324,7 +324,7 @@ known by the DNS service provider.
 
 Versions 1 and 2 of the DNSCrypt protocol use Curve25519 keys, and the
 format of this file for Curve25519 keys is a hexadecimal string, with
-optional :, [space] and - delimiters, decoding to 34 bytes:
+optional `:`, `[space]` and `-` delimiters, decoding to 34 bytes:
 
     01 01 || 32-byte Curve25519 secret key
 
