@@ -18,7 +18,7 @@ Quickstart
 ----------
 
 1) Download and extract the latest
-[Windows package for dnscrypt](http://download.dnscrypt.org/dnscrypt-proxy/LATEST-win32-full.zip).
+[Windows package for dnscrypt](https://download.dnscrypt.org/dnscrypt-proxy/LATEST-win32-full.zip).
 
 2) Copy the `dnscrypt-proxy-win32` folder anywhere.
 
