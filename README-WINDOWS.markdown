@@ -172,6 +172,6 @@ Plugins should be listed as paths to the `.DLL` files, optionally
 followed by a coma and plugin-specific arguments:
 
     dnscrypt-proxy -R <name> --plugin=libdcplugin_example_ldns_aaaa_blocking.dll
-    dnscrypt-proxy -R <name> --plugin=libdcplugin_example_ldns_blocking.dll,--domains=C:/blacklisted-domains.txt
+    dnscrypt-proxy -R <name> --plugin=libdcplugin_example_ldns_blocking.dll,--domains=C:\blacklisted-domains.txt
 
 The service should be restarted after the registry has been updated.
