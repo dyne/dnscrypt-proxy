@@ -10,6 +10,7 @@ export LDFLAGS="-L${SODIUM_PREFIX}/lib"
 
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
   --host=i686-w64-mingw32 \
+  --bindir="$PREFIX" \
   --sbindir="$PREFIX" \
   --enable-plugins \
   --with-included-ltdl && \
