@@ -44,11 +44,28 @@ If an error is displayed, retry with a different server.
 
     dnscrypt-proxy -R <name> --install
 
-6) Open the network preferences, TCP/IP settings, and use `127.0.0.1`
-instead of the default DNS resolver address to enable DNSCrypt on this
-interface.
+6) Open the network preferences ("Network connections", then select
+your network adapter and hit "Properties"). Then in the "Internet Protocol
+Version 4 (TCP/IPv4)" settings use `127.0.0.1` instead of the default DNS
+resolver address.
 
 Congratulations, you're now using DNSCrypt!
+
+IPv6
+----
+
+Do you have IPv6 connectivity? No problem!
+
+In the preferences pane for a given network connection, Windows has
+IPv6-specific settings under "Internet Protocol Version 6 (TCP/IPv6)".
+
+The DNS server addresses have to be IPv6 addresses, so enter the
+IPv6 representation of `127.0.0.1`:
+
+    ::FFFF:127.0.0.1
+
+Done. You can now enjoy the DNSCrypt proxy both for IPv4 and IPv6
+connections.
 
 How to open an elevated command prompt
 --------------------------------------
