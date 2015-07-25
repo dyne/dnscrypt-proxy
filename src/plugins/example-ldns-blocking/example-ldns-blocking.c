@@ -49,10 +49,52 @@ str_list_free(StrList * const str_list)
     }
 }
 
+static char *
+skip_spaces(char *line)
+{
+    while (*line != 0 && isspace((int) (unsigned char) *line)) {
+        line++;
+    }
+    return line;
+}
+
+static char *
+skip_chars(char *line)
+{
+    while (*line != 0 && !isspace((int) (unsigned char) *line)) {
+        line++;
+    }
+    return line;
+}
+
+static char *
+host_only(char *line)
+{
+    char *s1;
+    char *s2;
+
+    line = skip_spaces(line);
+    if (*line == 0 || *line == '#') {
+        return NULL;
+    }
+    s1 = skip_chars(line);
+    if (*(s2 = skip_spaces(s1)) == 0) {
+        *s1 = 0;
+        return line;
+    }
+    if (*s2 == '#') {
+        return NULL;
+    }
+    *skip_chars(s2) = 0;
+
+    return s2;
+}
+
 static StrList *
 parse_str_list(const char * const file)
 {
-    char     line[300U];
+    char     line[512U];
+    char    *host;
     FILE    *fp;
     char    *ptr;
     StrList *str_list = NULL;
@@ -67,11 +109,11 @@ parse_str_list(const char * const file)
                (ptr = strchr(line, '\r')) != NULL) {
             *ptr = 0;
         }
-        if (*line == 0 || *line == '#') {
+        if ((host = host_only(line)) == NULL) {
             continue;
         }
         if ((str_list_item = calloc(1U, sizeof *str_list_item)) == NULL ||
-            (str_list_item->str = strdup(line)) == NULL) {
+            (str_list_item->str = strdup(host)) == NULL) {
             break;
         }
         str_list_item->next = NULL;
