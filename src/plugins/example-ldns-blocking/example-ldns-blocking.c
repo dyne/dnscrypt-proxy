@@ -109,7 +109,7 @@ parse_str_list(const char * const file)
                (ptr = strchr(line, '\r')) != NULL) {
             *ptr = 0;
         }
-        if ((host = host_only(line)) == NULL) {
+        if ((host = host_only(line)) == NULL || *host == 0) {
             continue;
         }
         if ((str_list_item = calloc(1U, sizeof *str_list_item)) == NULL ||
