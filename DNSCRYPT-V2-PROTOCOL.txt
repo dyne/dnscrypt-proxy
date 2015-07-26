@@ -436,7 +436,7 @@ queries on the same port would defeat this mechanism.
 14. Implementations
 -------------------
 
-Known open source implementations of the DNSCrypt protocol are:
+Known open source implementations of the DNSCrypt version 2 protocol are:
 
 - dnscrypt-wrapper - server-side implementation in C
 - dnscrypt-proxy - client-side implementation in C
