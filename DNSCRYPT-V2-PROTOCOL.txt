@@ -432,3 +432,13 @@ numbers do not completely prevent collisions with legitimate unauthenticated
 DNS queries. In addition, DNSCrypt offers some mitigation against
 abusing resolvers to conduct DDoS attacks. Accepting unauthenticated
 queries on the same port would defeat this mechanism.
+
+14. Implementations
+-------------------
+
+Known open source implementations of the DNSCrypt protocol are:
+
+- dnscrypt-wrapper - server-side implementation in C
+- dnscrypt-proxy - client-side implementation in C
+- pcap_dnsproxy - client-side implementation in C++
+- dnscrypt-python - client-side implementation in Python
