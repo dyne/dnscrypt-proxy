@@ -117,8 +117,8 @@ After having received a query, the resolver can either ignore the query
 or reply with a DNSCrypt-encapsulated response.
 
 The client must verify and decrypt the response using the resolver's
-public key and the received nonce. If the response cannot be verified,
-the response must be discarded.
+public key, the shared secret and the received nonce. If the response
+cannot be verified, the response must be discarded.
 
 If the response has the TC flag set, the client must:
 1) send the query again using TCP
@@ -159,8 +159,8 @@ or
 Client queries over TCP only differ from queries sent over UDP by the
 padding length computation.
 
-Unlike UDP queries, a query sent over TCP does not have to be at least
-as large as the response.
+Unlike UDP queries, a query sent over TCP can be shorter than the
+response.
 
 After having received a response from the resolver, the client and the
 resolver must close the TCP connection. Multiple transactions over the
@@ -168,8 +168,6 @@ same TCP connections are not allowed by this revision of the protocol.
 
 7. Common definitions for resolver responses
 --------------------------------------------
-
-r6fnvWJ8
 
 <dnscrypt-response> ::= <resolver-magic> <nonce> <encrypted-response>
 
@@ -196,9 +194,10 @@ AE ::= the authenticated encryption algorithm.
 <client-pk>, using the key exchange algorithm defined in the chosen
 certificate.
 
-<resolver-response> ::= the unencrypted resolver response. The response is not
-modified; in particular, the query flags are not altered and the
-response length must be kept in responses prepared to be sent over TCP.
+<resolver-response> ::= the unencrypted resolver response. The
+response is not modified; in particular, the query flags are not
+altered and the response length must be kept in responses prepared to
+be sent over TCP.
 
 <resolver-response-pad> ::= variable-length padding.
 
@@ -229,10 +228,10 @@ ignore or refuse queries encrypted using untrusted public keys.
 Responses must be padded using the algorithm described in section 8
 and encrypted as described in section 7.
 
-If the full client query length is less than 256 bytes, or less than the
-full response length, the resolver may truncate the response and set
-the TC flag prior to encrypting it. The response length should always be
-equal to or shorter than the initial client query length.
+If the full client query length is shorter than 256 bytes, or shorter
+than the full response length, the resolver may truncate the response
+and set the TC flag prior to encrypting it. The response length should
+always be equal to or shorter than the initial client query length.
 
 10. Resolver responses over TCP
 -------------------------------
@@ -262,7 +261,7 @@ elliptic curve in Montgomery form and the hsalsa20 hash function for key
 exchange, the XSalsa20 stream cipher, and Poly1305 for message
 authentication.
 
-The public and secret keys are 32 bytes long. The MAC is 16 bytes
+The public and secret keys are 32 bytes long in storage. The MAC is 16 bytes
 long, and is prepended to the ciphertext.
 
 This construction requires a 24 bytes nonce, that must not be reused
@@ -296,7 +295,7 @@ The name in the question must follow this scheme:
 
 <provider name> ::= <protocol-major-version> . dnscrypt-cert . <zone>
 
-A major protocol version only has one certificate format.
+A major protocol version has only one certificate format.
 
 A DNSCrypt client implementing the second version of the protocol must
 send a query with the TXT type and a name of the form:
@@ -310,8 +309,9 @@ A single provider name can be shared by multiple resolvers operated by
 the same entity, and a resolver can respond to multiple provider
 names, especially to support multiple protocol versions simultaneously.
 
-In order to use a DNSCrypt-enabled resolver, a client must be given
-the following information:
+In order to use a DNSCrypt-enabled resolver, a client must know the
+following information:
+
 - The resolver IP address and port
 - The provider name
 - The provider public key
