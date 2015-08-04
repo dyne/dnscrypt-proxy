@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/jedisct1/dnscrypt-proxy.png?branch=master)](https://travis-ci.org/jedisct1/dnscrypt-proxy?branch=master)
 
-[DNSCrypt](http://dnscrypt.org)
-===============================
+[![DNSCrypt](https://raw.github.com/jedisct1/dnscrypt-proxy/master/dnscrypt-small.png)](https://dnscrypt.org)
+============
 
 A protocol for securing communications between a client and a DNS resolver.
 
