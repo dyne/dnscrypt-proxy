@@ -1,5 +1,5 @@
 
-ui_print("Installing the DNSCrypt client proxy- https://dnscrypt.org");
+ui_print("Installing the DNSCrypt client proxy - https://dnscrypt.org");
 show_progress(1.000000, 0);
 
 ui_print("Mounting system...");

@@ -46,5 +46,9 @@ make -j3 install && \
 rm -fr "${PREFIX}/system/include" "${PREFIX}/system/share" "${PREFIX}/system/man" && \
 mkdir -p "${PREFIX}/system/lib" && \
 cp "${SODIUM_ANDROID_PREFIX}/lib/libsodium.so" "${PREFIX}/system/lib" && \
-(cd dist-build/android-files && tar cpf - *) | (cd "$PREFIX" && tar xpvf -) && \
-echo "dnscrypt-proxy has been installed into ${PREFIX}"
+(cd dist-build/android-files && tar cpf - *) | (cd "$PREFIX" && tar xpvf -) &&
+(cd "$PREFIX"; zip -9 -r "${PREFIX}.zip" *) && \
+echo "dnscrypt-proxy has been installed here:" && \
+echo "${PREFIX}" && \
+echo "The dnscrypt-proxy ZIP file has been placed here:" && \
+echo "${PREFIX}.zip"
