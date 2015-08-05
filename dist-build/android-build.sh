@@ -18,7 +18,7 @@ fi
 
 export MAKE_TOOLCHAIN="${ANDROID_NDK_HOME}/build/tools/make-standalone-toolchain.sh"
 
-export PREFIX="$(pwd)/dnscrypt-proxy-android-${TARGET_ARCH}/system"
+export PREFIX="$(pwd)/dnscrypt-proxy-android-${TARGET_ARCH}"
 export TOOLCHAIN_DIR="$(pwd)/android-toolchain-${TARGET_ARCH}"
 export PATH="${PATH}:${TOOLCHAIN_DIR}/bin"
 
@@ -31,17 +31,20 @@ rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
 bash $MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-21}" \
     --arch="$ARCH" --install-dir="$TOOLCHAIN_DIR" && \
 ./configure \
-    --bindir="${PREFIX}/xbin" \
-    --datadir="${PREFIX}/etc" \
-    --disable-shared \
+    --bindir="${PREFIX}/system/xbin" \
+    --datadir="${PREFIX}/system/etc" \
     --disable-soname-versions \
-    --enable-plugins \
+    --disable-plugins \
     --enable-relaxed-plugins-permissions \
     --host="${HOST_COMPILER}" \
-    --prefix="${PREFIX}" \
-    --sbindir="${PREFIX}/xbin" \
-    --sysconfdir="${PREFIX}/etc" \
+    --prefix="${PREFIX}/system" \
+    --sbindir="${PREFIX}/system/xbin" \
+    --sysconfdir="${PREFIX}/system/etc" \
     --with-sysroot="${TOOLCHAIN_DIR}/sysroot" && \
 make clean && \
 make -j3 install && \
-echo "dnscrypt-proxy has been installed into $PREFIX"
+rm -fr "${PREFIX}/system/include" "${PREFIX}/system/share" "${PREFIX}/system/man" && \
+mkdir -p "${PREFIX}/system/lib" && \
+cp "${SODIUM_ANDROID_PREFIX}/lib/libsodium.so" "${PREFIX}/system/lib" && \
+(cd dist-build/android-files && tar cpf - *) | (cd "$PREFIX" && tar xpvf -) && \
+echo "dnscrypt-proxy has been installed into ${PREFIX}"
