@@ -31,7 +31,7 @@ public key, known as the resolver public key.
 
 A resolver can support multiple algorithms and advertise multiple
 resolver public keys simultaneously. The client picks the one with the
-highest serial number among the currently valid ones that matche a
+highest serial number among the currently valid ones that match a
 supported protocol version.
 
 Each certificate includes a magic number that the client must prefix its
