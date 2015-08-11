@@ -28,7 +28,7 @@ export LDFLAGS="$LDFLAGS -L${SODIUM_ANDROID_PREFIX}/lib"
 
 rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
 
-bash $MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-21}" \
+bash $MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-16}" \
     --arch="$ARCH" --install-dir="$TOOLCHAIN_DIR" && \
 ./configure \
     --bindir="${PREFIX}/system/xbin" \
