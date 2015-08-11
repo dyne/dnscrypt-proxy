@@ -73,6 +73,13 @@ How to open an elevated command prompt
 On Windows 8.1 and Windows 10, press the Windows key + the X key and
 select "Windows Command Prompt (Admin)" or "Windows PowerShell (Admin)".
 
+If you get the message:
+
+    [ERROR] Unable to bind (UDP) [Address already in use [WSAEADDRINUSE]]
+
+chances are that you tried to start the proxy from a limited
+(non-elevated) command prompt.
+
 Temporarily disabling DNSCrypt
 ------------------------------
 
