@@ -481,6 +481,7 @@ udp_listener_kill_oldest_request(ProxyContext * const proxy_context)
 int
 udp_listener_bind(ProxyContext * const proxy_context)
 {
+    int optval = 1;
     if (proxy_context->udp_listener_handle == -1) {
         if ((proxy_context->udp_listener_handle = socket
              (proxy_context->local_sockaddr.ss_family,
@@ -489,6 +490,7 @@ udp_listener_bind(ProxyContext * const proxy_context)
                             "Unable to create a socket (UDP)");
             return -1;
         }
+        setsockopt(proxy_context->udp_listener_handle, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
         if (bind(proxy_context->udp_listener_handle,
                  (struct sockaddr *) &proxy_context->local_sockaddr,
                  proxy_context->local_sockaddr_len) != 0) {

@@ -236,6 +236,10 @@ evconnlistener_new_bind(struct event_base *base, evconnlistener_cb cb,
 			return NULL;
 		}
 	}
+	if (flags & LEV_OPT_REUSEABLE_PORT) {
+		if (evutil_make_listen_socket_reuseable_port(fd) < 0)
+			return NULL;
+	}
 
 	if (sa) {
 		if (bind(fd, sa, socklen)<0) {
