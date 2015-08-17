@@ -350,7 +350,11 @@ default, a conservative payload size of 1252 bytes is advertised.
 
 This size can be made larger by starting the proxy with the
 `--edns-payload-size=<bytes>` command-line switch. Values up to 4096
-are usually safe.
+are usually safe, but some routers/firewall/NAT boxes block IP fragments.
+
+If you can resolve `test-tcp.dnscrypt.org`, increasing the maximum
+payload size is probably fine. If you can't, or just to stay on the
+safe side, do not tweak this; stick to the default value.
 
 A value below or equal to 512 will disable this mechanism, unless a
 client sends a packet with an OPT section providing a payload size.
