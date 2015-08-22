@@ -239,7 +239,7 @@ queries will **not** be cached and every single query will require a
 round-trip to the upstream resolver.
 
 For optimal performance, the recommended way of running DNSCrypt is to
-run it as a forwarder for a local DNS cache, like `unbound` or
+run it as a forwarder for a local DNS cache, such as `unbound` or
 `powerdns-recursor`.
 
 Both can safely run on the same machine as long as they are listening
