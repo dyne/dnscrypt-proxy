@@ -341,6 +341,7 @@ options_use_resolver_name(ProxyContext * const proxy_context)
         logger(proxy_context, LOG_ERR,
                "No resolver named [%s] found in the [%s] list",
                proxy_context->resolver_name, resolvers_list_rebased);
+        exit(1);
     }
     free(file_buf);
     free(resolvers_list_rebased);
