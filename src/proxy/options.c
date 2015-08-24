@@ -247,7 +247,7 @@ options_parse_resolver(ProxyContext * const proxy_context,
     }
     dnssec = options_get_col(headers, headers_count,
                              cols, cols_count, "DNSSEC validation");
-    if (dnssec != NULL && strcasecmp(dnssec, "yes") != 0) {
+    if (dnssec != NULL && evutil_ascii_strcasecmp(dnssec, "yes") != 0) {
         logger(proxy_context, LOG_INFO,
                "- [%s] does not support DNS Security Extensions",
                resolver_name);
@@ -257,7 +257,7 @@ options_parse_resolver(ProxyContext * const proxy_context,
     }
     namecoin = options_get_col(headers, headers_count,
                                cols, cols_count, "Namecoin");
-    if (namecoin != NULL && strcasecmp(namecoin, "yes") != 0) {
+    if (namecoin != NULL && evutil_ascii_strcasecmp(namecoin, "yes") != 0) {
         logger(proxy_context, LOG_INFO,
                "- [%s] does not support Namecoin domains",
                resolver_name);
@@ -267,7 +267,7 @@ options_parse_resolver(ProxyContext * const proxy_context,
     }
     nologs = options_get_col(headers, headers_count,
                              cols, cols_count, "No logs");
-    if (nologs != NULL && strcasecmp(nologs, "no") == 0) {
+    if (nologs != NULL && evutil_ascii_strcasecmp(nologs, "no") == 0) {
         logger(proxy_context, LOG_WARNING,
                "- [%s] logs your activity - "
                "a different provider might be better a choice if privacy is a concern",

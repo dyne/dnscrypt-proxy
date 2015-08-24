@@ -14,6 +14,11 @@
 #include <dnscrypt/plugin.h>
 #include <ldns/ldns.h>
 
+#ifdef _MSC_VER
+# define strncasecmp _strnicmp
+# define strcasecmp _stricmp
+#endif
+
 DCPLUGIN_MAIN(__FILE__);
 
 typedef struct StrList_ {
