@@ -216,6 +216,15 @@ options_parse_resolver(ProxyContext * const proxy_context,
 
     resolver_name = options_get_col(headers, headers_count,
                                     cols, cols_count, "Name");
+    if (resolver_name == NULL) {
+        logger(proxy_context, LOG_ERR,
+               "Invalid resolvers list file: missing 'Name' column");
+        exit(1);
+    }
+    if (*resolver_name == 0) {
+        logger(proxy_context, LOG_ERR, "Resolver with an empty name");
+        return -1;
+    }
     if (evutil_ascii_strcasecmp(resolver_name,
                                 proxy_context->resolver_name) != 0) {
         return 0;
