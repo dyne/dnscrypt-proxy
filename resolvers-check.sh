@@ -13,6 +13,8 @@ exec < "$RESOLVERS_LIST"
 exec > "$tmpfile"
 
 read header
+echo "$header" | egrep -q '^Name,' || echo "*** Invalid CSV file ***" >&2
+
 echo "$header"
 
 while read line; do
