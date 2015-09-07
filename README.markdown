@@ -43,11 +43,8 @@ Download and integrity check
 dnscrypt-proxy can be downloaded here:
 [dnscrypt-proxy download](http://download.dnscrypt.org/dnscrypt-proxy/)
 
-Note: dnscrypt.org is now blocked by the Great Firewall of China. But
-the site can be accessed at dnscrypt.bit instead (requires a resolver
-with Namecoin support). Or if your current DNS resolver doesn't
-support Namecoin yet, the source code can also be downloaded on
-Github, in the "releases" section.
+Note: dnscrypt.org is now blocked by the Great Firewall of China. But the
+source code can also be downloaded on Github, in the "releases" section.
 
 After having downloaded a file, compute its SHA256 digest. For example:
 
