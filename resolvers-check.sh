@@ -3,7 +3,7 @@
 RESOLVERS_LIST=dnscrypt-resolvers.csv
 ONLINE_RESOLVERS_LIST=dnscrypt-online-resolvers.csv
 DNSCRYPT_PROXY=dnscrypt-proxy
-MARGIN=1440
+MARGIN=720
 CSV_FILE="$(dirname $0)/${RESOLVERS_LIST}"
 
 tmpfile=$(mktemp .${ONLINE_RESOLVERS_LIST}.XXXXXXXXXXXX) || exit 1
