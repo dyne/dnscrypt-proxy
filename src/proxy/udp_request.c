@@ -333,7 +333,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     if (nread < (ssize_t) 0) {
         const int err = evutil_socket_geterror(client_proxy_handle);
         if (!EVUTIL_ERR_RW_RETRIABLE(err)) {
-            logger(proxy_context, LOG_WARNING,
+            logger(proxy_context, LOG_DEBUG,
                    "recvfrom(client): [%s]", evutil_socket_error_to_string(err));
         }
         DNSCRYPT_PROXY_REQUEST_UDP_NETWORK_ERROR(udp_request);
