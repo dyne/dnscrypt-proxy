@@ -275,9 +275,9 @@ A response to this question must be encrypted using the shared secret,
 and a nonce constructed as follows: the 12 bytes originally chosen by
 the client, followed by 12 bytes chosen by the resolver.
 
-The resolver half of the nonce should be randomly chosen.
+The resolver's half of the nonce should be randomly chosen.
 
-The client half of the nonce can include a timestamp in addition to a
+The client's  half of the nonce can include a timestamp in addition to a
 counter or to random bytes, so that when a response is received, the
 client can use this timestamp to immediately discard responses to
 queries that have been sent too long ago, or dated in the future.
