@@ -2,6 +2,7 @@
 #include <config.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #ifdef HAVE_SANDBOX_H
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -24,6 +25,10 @@ sandboxes_pidproc(void)
 
     if (sandbox_init != NULL &&
         sandbox_init(kSBXProfileNoNetwork, SANDBOX_NAMED, &errmsg) != 0) {
+        return -1;
+    }
+#elif defined(HAVE_PLEDGE)
+    if (pledge("cpath proc", NULL) != 0) {
         return -1;
     }
 #endif

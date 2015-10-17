@@ -433,7 +433,7 @@ esac
 AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
 
-AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit putc_unlocked gmtime_r])
+AC_CHECK_FUNCS([getpwnam sandbox_init pledge setrlimit putc_unlocked gmtime_r])
 
 dnl Libtool.
 
