@@ -1,3 +1,5 @@
+sudo: required
+
 language: c
 
 os:
@@ -8,7 +10,7 @@ compiler:
 
 before_script:
  - sudo apt-get install libldns-dev
- - git clone https://github.com/jedisct1/libsodium.git --branch=1.0.3
+ - git clone https://github.com/jedisct1/libsodium.git --branch=stable
  - cd libsodium
  - ./autogen.sh
  - ./configure --disable-dependency-tracking
