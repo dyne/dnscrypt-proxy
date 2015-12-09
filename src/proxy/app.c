@@ -309,12 +309,6 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
-#ifdef HAVE_PLEDGE
-    if (pledge("stdio rpath wpath cpath tmppath inet dns getpw ioctl proc",
-               NULL) != 0) {
-        exit(1);
-    }
-#endif
     if (sodium_init() != 0) {
         exit(1);
     }
