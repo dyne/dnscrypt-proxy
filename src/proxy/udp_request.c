@@ -559,6 +559,9 @@ udp_listener_start(ProxyContext * const proxy_context)
 void
 udp_listener_stop(ProxyContext * const proxy_context)
 {
+    if (proxy_context->udp_proxy_resolver_event == NULL) {
+        return;
+    }
     event_free(proxy_context->udp_proxy_resolver_event);
     proxy_context->udp_proxy_resolver_event = NULL;
     while (udp_listener_kill_oldest_request(proxy_context) != 0) { }

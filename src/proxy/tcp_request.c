@@ -615,6 +615,9 @@ tcp_listener_start(ProxyContext * const proxy_context)
 void
 tcp_listener_stop(ProxyContext * const proxy_context)
 {
+    if (proxy_context->tcp_conn_listener == NULL) {
+        return;
+    }
     evconnlistener_free(proxy_context->tcp_conn_listener);
     proxy_context->tcp_conn_listener = NULL;
     while (tcp_listener_kill_oldest_request(proxy_context) != 0) { }
