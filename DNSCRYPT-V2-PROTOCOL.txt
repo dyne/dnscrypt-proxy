@@ -344,7 +344,7 @@ certificate. For Curve25519-XSalsa20Poly1305, <es-version> must be 0x00 0x01.
 
 <protocol-minor-version> ::= 0x00 0x00
 
-<signature> ::= a 32-bit signature of (<resolver-pk> <client-magic>
+<signature> ::= a 64-byte signature of (<resolver-pk> <client-magic>
 <serial> <ts-start> <ts-end> <extensions>) using the Ed25519 algorithm and the
 provider secret key. Ed25519 must be used in this version of the
 protocol.
@@ -373,7 +373,8 @@ extensions. An implementation not supporting these extensions must
 ignore them.
 
 Certificates made of these information, without extensions, are 116 bytes
-long.
+long. With the addition of the cert-magic, es-version and
+protocol-minor-version, the record is 124 bytes long.
 
 After having received a set of certificates, the client checks their
 validity based on the current date, filters out the ones designed for
