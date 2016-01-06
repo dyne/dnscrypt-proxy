@@ -178,8 +178,8 @@ resolver_proxy_read_cb(struct bufferevent * const proxy_resolver_bev,
                                 dns_reply, &uncurved_len) != 0) {
         DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR(tcp_request);
         DNSCRYPT_PROXY_REQUEST_TCP_PROXY_RESOLVER_GOT_INVALID_REPLY(tcp_request);
-        logger_noformat(tcp_request->proxy_context, LOG_WARNING,
-                        "Received a suspicious reply from the resolver");
+        logger_noformat(tcp_request->proxy_context, LOG_INFO,
+                        "Received a corrupted reply from the resolver");
         tcp_request_kill(tcp_request);
         return;
     }

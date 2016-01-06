@@ -148,8 +148,8 @@ resolver_to_proxy_cb(evutil_socket_t proxy_resolver_handle, short ev_flags,
             udp_request->client_nonce, dns_reply, &uncurved_len) != 0) {
         DNSCRYPT_PROXY_REQUEST_UNCURVE_ERROR(udp_request);
         DNSCRYPT_PROXY_REQUEST_UDP_PROXY_RESOLVER_GOT_INVALID_REPLY(udp_request);
-        logger_noformat(udp_request->proxy_context, LOG_WARNING,
-                        "Received a suspicious reply from the resolver");
+        logger_noformat(udp_request->proxy_context, LOG_INFO,
+                        "Received a corrupted reply from the resolver");
         udp_request_kill(udp_request);
         return;
     }
