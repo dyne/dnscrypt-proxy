@@ -266,11 +266,7 @@ options_parse_resolver(ProxyContext * const proxy_context,
     }
     namecoin = options_get_col(headers, headers_count,
                                cols, cols_count, "Namecoin");
-    if (namecoin != NULL && evutil_ascii_strcasecmp(namecoin, "yes") != 0) {
-        logger(proxy_context, LOG_INFO,
-               "- [%s] does not support Namecoin domains",
-               resolver_name);
-    } else {
+    if (namecoin != NULL && evutil_ascii_strcasecmp(namecoin, "yes") == 0) {
         logger(proxy_context, LOG_INFO,
                "+ Namecoin domains can be resolved");
     }
