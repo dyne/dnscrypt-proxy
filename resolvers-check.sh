@@ -9,6 +9,10 @@ CSV_FILE="$(dirname $0)/${RESOLVERS_LIST}"
 tmpfile=$(mktemp .${ONLINE_RESOLVERS_LIST}.XXXXXXXXXXXX) || exit 1
 trap "rm -f ${tmpfile}" EXIT
 
+if which csvlint > /dev/null; then
+  csvlint "$RESOLVERS_LIST" || echo "*** Invalid CSV file ***" >&2
+fi
+
 exec < "$RESOLVERS_LIST"
 exec > "$tmpfile"
 
