@@ -251,33 +251,33 @@ length of the client query.
 11. Authenticated encryption and key exchange algorithm
 -------------------------------------------------------
 
-The Curve25519-XSalsa20Poly1305 construction, and the way to use it
+The X25519-XSalsa20Poly1305 construction, and the way to use it
 described in this section, must be referenced in certificates as
 version 1 of the public-key authenticated encryption system.
 
-The construction, originally implemented in the NaCl cryptographic
-library and exposed under the name "crypto_box", uses the Curve25119
-elliptic curve in Montgomery form and the hsalsa20 hash function for key
-exchange, the XSalsa20 stream cipher, and Poly1305 for message
-authentication.
+In the current version, the construction, originally implemented in
+the NaCl cryptographic library and exposed under the name
+"crypto_box", uses the Curve25119 elliptic curve in Montgomery form
+and the hsalsa20 hash function for key exchange, the XSalsa20 stream
+cipher, and Poly1305 for message authentication.
 
 The public and secret keys are 32 bytes long in storage. The MAC is 16 bytes
 long, and is prepended to the ciphertext.
 
-This construction requires a 24 bytes nonce, that must not be reused
-for a given shared secret.
+When using X25519-XSalsa20Poly1305, this construction requires a 24 bytes
+nonce, that must not be reused for a given shared secret.
 
-A question sent by a DNSCrypt client must be encrypted using the shared
-secret, and a nonce constructed as follows: 12 bytes chosen by the client
-followed by 12 NUL (0) bytes.
+With a 24 bytes nonce, a question sent by a DNSCrypt client must be
+encrypted using the shared secret, and a nonce constructed as follows:
+12 bytes chosen by the client followed by 12 NUL (0) bytes.
 
 A response to this question must be encrypted using the shared secret,
-and a nonce constructed as follows: the 12 bytes originally chosen by
-the client, followed by 12 bytes chosen by the resolver.
+and a nonce constructed as follows: the bytes originally chosen by
+the client, followed by bytes chosen by the resolver.
 
 The resolver's half of the nonce should be randomly chosen.
 
-The client's  half of the nonce can include a timestamp in addition to a
+The client's half of the nonce can include a timestamp in addition to a
 counter or to random bytes, so that when a response is received, the
 client can use this timestamp to immediately discard responses to
 queries that have been sent too long ago, or dated in the future.
@@ -340,7 +340,9 @@ records, each record containing a certificate encoded as follows:
 <cert-magic> ::= 0x44 0x4e 0x53 0x43
 
 <es-version> ::= the cryptographic construction to use with this
-certificate. For Curve25519-XSalsa20Poly1305, <es-version> must be 0x00 0x01.
+certificate.
+For X25519-XSalsa20Poly1305, <es-version> must be 0x00 0x01.
+For X25519-Chacha20Poly1305, <es-version> must be 0x00 0x02.
 
 <protocol-minor-version> ::= 0x00 0x00
 
@@ -349,8 +351,8 @@ certificate. For Curve25519-XSalsa20Poly1305, <es-version> must be 0x00 0x01.
 provider secret key. Ed25519 must be used in this version of the
 protocol.
 
-<resolver-pk> ::= the resolver short-term public key, which is 32
-bytes when using Curve25519-XSalsa20Poly1305.
+<resolver-pk> ::= the resolver short-term public key, which is 32 bytes when
+using X25519.
 
 <client-magic> ::= the first 8 bytes of a client query that was built
 using the information from this certificate. It may be a truncated
