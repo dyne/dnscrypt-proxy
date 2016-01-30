@@ -82,7 +82,7 @@ cert_parse_bincert(ProxyContext * const proxy_context,
                         "This certificate has expired");
         return -1;
     }
-    logger_noformat(proxy_context, LOG_INFO, "This certificate looks valid");
+    logger_noformat(proxy_context, LOG_INFO, "This certificate is valid");
     if (previous_bincert == NULL) {
         return 0;
     }
