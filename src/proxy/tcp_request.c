@@ -335,9 +335,11 @@ client_proxy_read_cb(struct bufferevent * const client_proxy_bev,
     assert(max_query_size < DNS_MAX_PACKET_SIZE_TCP);
 #ifdef PLUGINS
     size_t max_query_size_for_filter = dns_query_len;
-    if (max_query_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
+    const size_t header_size = dnscrypt_query_header_size();
+    if (max_query_size > DNSCRYPT_MAX_PADDING + header_size &&
+        max_query_size - (DNSCRYPT_MAX_PADDING + header_size) > dns_query_len) {
         max_query_size_for_filter = max_query_size -
-            (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
+            (DNSCRYPT_MAX_PADDING + header_size);
     }
     DCPluginDNSPacket dcp_packet = {
         .client_sockaddr = &tcp_request->client_sockaddr,

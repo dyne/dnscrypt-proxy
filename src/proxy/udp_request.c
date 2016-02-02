@@ -385,9 +385,11 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     }
 #ifdef PLUGINS
     size_t max_query_size_for_filter = dns_query_len;
-    if (max_query_size > DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size()) {
+    const size_t header_size = dnscrypt_query_header_size();
+    if (max_query_size > DNSCRYPT_MAX_PADDING + header_size &&
+        max_query_size - (DNSCRYPT_MAX_PADDING + header_size) > dns_query_len) {
         max_query_size_for_filter = max_query_size -
-            (DNSCRYPT_MAX_PADDING + dnscrypt_query_header_size());
+            (DNSCRYPT_MAX_PADDING + header_size);
     }
     DCPluginDNSPacket dcp_packet = {
         .client_sockaddr = &udp_request->client_sockaddr,
