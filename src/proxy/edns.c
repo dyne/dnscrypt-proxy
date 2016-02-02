@@ -24,8 +24,11 @@ _skip_name(const uint8_t * const dns_packet, const size_t dns_packet_len,
         offset >= dns_packet_len - (size_t) 1U) {
         return -1;
     }
-    do {
+    for (;;) {
         name_component_len = dns_packet[offset];
+        if (name_component_len == 0U) {
+            break;
+        }
         if ((name_component_len & 0xC0) == 0xC0) {
             name_component_len = 1U;
         }
@@ -37,7 +40,7 @@ _skip_name(const uint8_t * const dns_packet, const size_t dns_packet_len,
             return -1;
         }
         offset += name_component_len + 1U;
-    } while (name_component_len != 0U);
+    }
     if (offset >= dns_packet_len) {
         return -1;
     }
