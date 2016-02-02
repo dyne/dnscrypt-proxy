@@ -354,7 +354,7 @@ DCPluginSyncFilterResult
 dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
     Blocking                 *blocking = dcplugin_get_user_data(dcplugin);
-    ldns_pkt                 *packet;
+    ldns_pkt                 *packet = NULL;
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
 
     if (blocking->domains == NULL && blocking->ips == NULL) {

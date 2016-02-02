@@ -154,7 +154,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     uint8_t  *new_packet;
     ldns_rdf *edns_data;
     char     *edns_data_str;
-    ldns_pkt *packet;
+    ldns_pkt *packet = NULL;
     size_t    new_packet_size;
 
     if (ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
