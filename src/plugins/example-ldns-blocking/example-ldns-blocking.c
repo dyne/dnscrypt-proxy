@@ -360,9 +360,9 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (blocking->domains == NULL && blocking->ips == NULL) {
         return DCP_SYNC_FILTER_RESULT_OK;
     }
-    ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
-                  dcplugin_get_wire_data_len(dcp_packet));
-    if (packet == NULL) {
+    if (ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
+                      dcplugin_get_wire_data_len(dcp_packet))
+        != LDNS_STATUS_OK) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
     if (blocking->domains != NULL &&
