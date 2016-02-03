@@ -29,7 +29,7 @@ your local resolver or as a DNS forwarder, authenticating requests
 using the DNSCrypt protocol and passing them to an upstream server.
 
 The DNSCrypt protocol uses high-speed high-security elliptic-curve
-cryptography and is very similar to [DNSCurve](http://dnscurve.org/),
+cryptography and is very similar to [DNSCurve](https://dnscurve.org/),
 but focuses on securing communications between a client and its first-level
 resolver.
 
@@ -41,7 +41,7 @@ Download and integrity check
 ----------------------------
 
 dnscrypt-proxy can be downloaded here:
-[dnscrypt-proxy download](http://download.dnscrypt.org/dnscrypt-proxy/)
+[dnscrypt-proxy download](https://download.dnscrypt.org/dnscrypt-proxy/)
 
 Note: dnscrypt.org is now blocked by the Great Firewall of China. But the
 source code can also be downloaded on Github, in the "releases" section.
@@ -118,7 +118,7 @@ Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET.
 
-- [DNSCrypt Windows Service Manager](http://simonclausen.dk/projects/dnscrypt-winservicemgr/):
+- [DNSCrypt Windows Service Manager](https://simonclausen.dk/projects/dnscrypt-winservicemgr/):
 Assists in setting up DNSCrypt as a service, configure it and change network adapter DNS
 settings to use DNSCrypt. It includes the option to use TCP/UDP protocol, IPV4/IPV6
 connectivity, choice of network adapter to configure, as well as configurations for currently
@@ -127,7 +127,7 @@ available DNSCrypt providers.
 - [DNSCrypt OSXClient](https://github.com/alterstep/dnscrypt-osxclient):
 Mac OSX application to control the DNSCrypt Proxy.
 
-- [DNSCrypt Tools for Linux](http://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
+- [DNSCrypt Tools for Linux](https://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
 A set of tools for `dnscrypt-proxy`. Features a start and stop button as well as options to enable
 or disable from startup. Developed for Porteus Linux.
 

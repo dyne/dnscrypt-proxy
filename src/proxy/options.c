@@ -443,12 +443,12 @@ options_apply(ProxyContext * const proxy_context)
                         "and a provider key can be supplied.");
 #ifdef _WIN32
         logger_noformat(proxy_context, LOG_ERR,
-                        "Consult http://dnscrypt.org "
+                        "Consult https://dnscrypt.org "
                         "and https://github.com/jedisct1/dnscrypt-proxy/blob/master/README-WINDOWS.markdown "
                         "for details.");
 #else
         logger_noformat(proxy_context, LOG_ERR,
-                        "Please consult http://dnscrypt.org "
+                        "Please consult https://dnscrypt.org "
                         "and the dnscrypt-proxy(8) man page for details.");
 #endif
         exit(1);

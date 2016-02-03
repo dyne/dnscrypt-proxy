@@ -144,7 +144,7 @@ If this DNSCrypt client doesn't fit your needs, we are very sorry for
 this, and we'd love to hear about how we could make it better.
 
 So, go to the "Support" section of the
-[DNSCrypt](http://dnscrypt.org/) site and tell us your story.
+[DNSCrypt](https://dnscrypt.org/) site and tell us your story.
 
 Removing `dnscrypt-proxy` from your system is straightforward.
 

@@ -121,7 +121,7 @@ The resolver name is the first column (Name) in the CSV file.
 
 ## BUGS AND SUPPORT
 
-Please report issues with DNSCrypt itself to http://dnscrypt.org/issues
+Please report issues with DNSCrypt itself to https://dnscrypt.org/issues
 
 ## SEE ALSO
 

@@ -3,7 +3,7 @@
 VERSION="1.6.1"
 MAINTAINER="Frank Denis <dnscrypt@pureftpd.org>"
 CATEGORY="net"
-URL="http://dnscrypt.org"
+URL="https://dnscrypt.org"
 VENDOR="Frank Denis"
 DESCRIPTION="A tool for securing communications between a client and a DNS resolver
 The DNSCrypt protocol is very similar to DNSCurve, but focuses on
