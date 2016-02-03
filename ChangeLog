@@ -1,3 +1,19 @@
+* Wed Feb 3 12:13:42 2016 +0100
+
+    Regen man pages
+
+* Wed Feb 3 12:03:21 2016 +0100
+
+    https everywhere
+
+* Wed Feb 3 11:57:07 2016 +0100
+
+    Update libevent ChangeLog, especially for CVE-2014-6272
+
+* Wed Feb 3 11:50:42 2016 +0100
+
+    Version bump (not released yet)
+
 * Wed Feb 3 11:46:38 2016 +0100
 
     (bad) NEWS
