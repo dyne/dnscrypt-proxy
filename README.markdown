@@ -16,7 +16,7 @@ using it with a public DNS service, be aware that it will (and has to)
 decrypt your queries.
 
 If you are using it for privacy, it might do the opposite of what you are
-trying to achieve. It you are using it to prevent VPN "leaks", this
+trying to achieve. If you are using it to prevent VPN "leaks", this
 isn't the right tool either: the proper way to prevent VPN "leaks" is
 to avoid sending data to yet another third party: use a VPN service that
 operates its own DNS resolvers.
