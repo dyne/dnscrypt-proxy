@@ -41,6 +41,7 @@ if [ ! -f "$UPDATE_BINARYx" ]; then
     mv -f "${UPDATE_BINARY}.tmp.minisig" "${UPDATE_BINARY}.minisig"
   fi
   mv -f "${UPDATE_BINARY}.tmp" "$UPDATE_BINARY"
+  chmod 755 "$UPDATE_BINARY"
 fi
 
 bash $MAKE_TOOLCHAIN --platform="${NDK_PLATFORM:-android-16}" \
