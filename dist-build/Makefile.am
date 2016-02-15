@@ -4,7 +4,6 @@ EXTRA_DIST = \
 	android-armv8-a.sh \
 	android-build.sh \
 	android-files/META-INF/com/google/android/update-binary \
-	android-files/META-INF/com/google/android/updater-script \
 	android-files/system/addon.d/75-dnscrypt.sh \
 	android-files/system/etc/init.d/99dnscrypt \
 	android-mips32.sh \
