@@ -25,6 +25,7 @@ confdefs.h
 config.*
 configure
 depcomp
+dnscrypt-update-resolvers.sh
 install-sh
 libltdl
 libtool
