@@ -33,7 +33,7 @@ export UPDATE_BINARY_PUBKEY="RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y
 
 rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
 
-if [ ! -f "$UPDATE_BINARYx" ]; then
+if [ ! -f "$UPDATE_BINARY" ]; then
   curl -v -L -o "${UPDATE_BINARY}.tmp" "$UPDATE_BINARY_URL" || exit 1
   if $(which minisign > /dev/null 2>&1); then
     curl -v -L -o "${UPDATE_BINARY}.tmp.minisig" "$UPDATE_BINARY_SIG_URL" || exit 1
