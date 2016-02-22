@@ -27,7 +27,11 @@ _skip_name(const uint8_t * const dns_packet, const size_t dns_packet_len,
     for (;;) {
         name_component_len = dns_packet[offset];
         if ((name_component_len & 0xC0) == 0xC0) {
-            name_component_len = 1U;
+            if (2U > dns_packet_len - offset) {
+                return -1;
+            }
+            offset += 2U;
+            break;
         }
         if (name_component_len >= dns_packet_len - offset - 1U) {
             return -1;
