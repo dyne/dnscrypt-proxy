@@ -37,6 +37,10 @@ While not providing end-to-end security, it protects the local
 network, which is often the weakest point of the chain, against
 man-in-the-middle attacks.
 
+`dnscrypt-proxy` is only a client-implementation of the protocol. It
+requires a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on
+the other end.
+
 Download and integrity check
 ----------------------------
 
