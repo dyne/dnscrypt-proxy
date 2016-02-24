@@ -113,6 +113,10 @@ If you need a simple graphical user interface in order to start/stop
 the proxy and change your DNS settings, check out the following
 project:
 
+- [Simple DNSCrypt](https://simplednscrypt.org/):
+an all-in-one, standalone client - using DNSCrypt on Windows has never
+been so simple.
+
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
