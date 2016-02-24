@@ -101,11 +101,6 @@ The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
 Command-line switches are documented in the `dnscrypt-proxy(8)` man page.
 
-*Note:* gcc 3.4.6 (and probably other similar versions) is known to
-produce broken code on Mips targets with the -Os optimization level.
-Use a different level (-O and -O2 are fine) or upgrade the compiler.
-Thanks to Adrian Kotelba for reporting this.
-
 GUIs for dnscrypt-proxy
 -----------------------
 
