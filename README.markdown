@@ -161,7 +161,7 @@ Usage
 
 Having a dedicated system user, with no privileges and with an empty
 home directory, is highly recommended. For extra security, DNSCrypt
-will chroot() to this user's home directory and drop root privileges
+will `chroot()` to this user's home directory and drop root privileges
 for this user's uid as soon as possible.
 
 The easiest way to start the daemon is:
@@ -171,7 +171,7 @@ The easiest way to start the daemon is:
 Replace `<resolver name>` with the name of the resolver you want to
 use (the first column in the list of public resolvers).
 
-The proxy will accept incoming requests on 127.0.0.1, tag them with an
+The proxy will accept incoming requests on `127.0.0.1`, tag them with an
 authentication code, forward them to the resolver, and validate each
 answer before passing it to the client.
 
