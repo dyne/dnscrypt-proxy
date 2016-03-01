@@ -57,7 +57,7 @@ After having downloaded a file, compute its SHA256 digest. For example:
 Verify this digest against the expected one, that can be retrieved
 using a simple DNS query:
 
-    $ drill -D TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
+    $ drill -aD TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
 
 or
 
