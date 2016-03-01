@@ -1,7 +1,6 @@
 #!/system/bin/sh
 
-while true
-do
+while :; do
 #check first server
         RESOLVER_NAME=dnscrypt.org-fr
         dnscrypt-proxy \
