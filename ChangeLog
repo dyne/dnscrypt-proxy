@@ -1,3 +1,196 @@
+* Wed Feb 24 08:14:32 2016 +0100
+
+    Windows: quote `self_path` when installing the Windows service
+    Prodded by @bitbeans
+
+* Mon Feb 22 15:54:17 2016 +0100
+
+    name_component => label
+
+* Mon Feb 22 15:53:23 2016 +0100
+
+    Correctly parse compressed names
+
+* Sun Feb 21 08:47:14 2016 +0100
+
+    Sign
+
+Merge: 7d540ca 7f295a2
+* Sun Feb 21 08:46:18 2016 +0100
+
+    Merge pull request #369 from brian5hea/master
+    
+    Add shea-us-noads-ip6
+
+* Sat Feb 20 21:06:42 2016 -0500
+
+    Add shea-us-noads-ip6
+
+* Sat Feb 20 19:48:56 2016 +0100
+
+    Two d0wn servers that appear to be d0wn
+
+* Sat Feb 20 13:54:04 2016 +0100
+
+    Add a sample script to update the resolvers list
+
+* Sat Feb 20 12:28:55 2016 +0100
+
+    Pasto
+
+* Fri Feb 19 07:29:50 2016 +0100
+
+    sign
+
+* Wed Feb 17 21:45:07 2016 +0100
+
+    Sign
+
+Merge: 52f112e 3862b07
+* Wed Feb 17 21:33:00 2016 +0100
+
+    Merge pull request #367 from tealcavalon/patch-2
+    
+    Updating all https://dns.d0wn.biz/
+
+* Wed Feb 17 17:05:54 2016 +0100
+
+    Updating all https://dns.d0wn.biz/
+    
+    + Added new servers
+    + Removed old servers
+    + Changed providers keys and names
+    + Full list of d0wn servers now updated!
+
+* Wed Feb 17 16:31:07 2016 +0100
+
+    Updating all https://dns.d0wn.biz/
+    
+    + Several changes in provider key/name
+    + Added new random server
+
+* Wed Feb 17 10:26:05 2016 +0100
+
+    V2
+
+* Tue Feb 16 16:57:25 2016 +0100
+
+    sign
+
+* Tue Feb 16 16:57:14 2016 +0100
+
+    Sort
+
+Merge: aa98a4f 2cf490c
+* Tue Feb 16 16:56:32 2016 +0100
+
+    Merge pull request #365 from mausspb/patch-1
+    
+    Update dnscrypt-resolvers.csv
+
+* Tue Feb 16 18:44:09 2016 +0300
+
+    Update dnscrypt-resolvers.csv
+    
+    Update keys for the last news from here https://dns.d0wn.biz/
+    
+    > News:
+    - ns1.za.dns.d0wn.biz will be removed on 03-01-2016
+    - ns1.mx.dns.d0wn.biz will be removed on 03-01-2016
+    - ns1.es.dns.d0wn.biz will be removed on 03-01-2016
+    
+    >- There are many servers with old keys which expired at 02-12-2016. This will be fixed today.
+      Please take a look here for the new keys.
+      Each server with the key "9970:E22D:7F6C:967F:8AED:CEEB:FBC1:94B9:AF54:376E:2BF7:39F1:F466:CBC9:AFDB:2A62" won't work anymore!
+    
+    >- ns2.fr.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.sg.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.nl.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns2.nl.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.ru.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.ua.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.bg.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+    - ns1.random.dns.d0wn.biz got a new Provider-Key and Provider-Name!
+
+* Mon Feb 15 10:59:00 2016 +0100
+
+    Make the Android update binary executable
+
+* Mon Feb 15 10:57:43 2016 +0100
+
+    Remove updater-script from the tarball
+
+* Mon Feb 15 10:53:24 2016 +0100
+
+    Load update-binary from Github, check its signature
+
+* Fri Feb 12 08:29:08 2016 +0100
+
+    sign
+
+Merge: a44a4c7 4a4c4c9
+* Fri Feb 12 08:28:16 2016 +0100
+
+    Merge pull request #361 from dacarrs/patch-1
+    
+    Added OpenNIC Resolver Spain 01
+
+* Fri Feb 12 06:45:28 2016 +0100
+
+    Added OpenNIC Resolver Spain 01
+    
+    Added by d0wn-es-ns1 provided by Martin 'd0wn' Albus.
+
+Merge: 41c6d8b c7eb66b
+* Wed Feb 10 20:23:54 2016 +0100
+
+    Merge branch 'master' of https://github.com/jedisct1/dnscrypt-proxy
+    
+    * 'master' of https://github.com/jedisct1/dnscrypt-proxy:
+      Update README.markdown
+
+* Wed Feb 10 20:23:41 2016 +0100
+
+    Remove offline resolvers
+
+Merge: bdb26cf 46df5e7
+* Tue Feb 9 23:28:35 2016 +0100
+
+    Merge pull request #359 from jakezeal/master
+    
+    Update README.markdown
+
+* Tue Feb 9 17:11:22 2016 -0500
+
+    Update README.markdown
+
+* Sun Feb 7 09:39:15 2016 +0100
+
+    Sign after shea-us-noads addition
+
+Merge: a193c6f 297ced2
+* Sun Feb 7 09:35:06 2016 +0100
+
+    Merge pull request #358 from brian5hea/master
+    
+    Add new resolver
+
+* Sun Feb 7 02:03:29 2016 -0500
+
+    Add new resolver
+
+* Wed Feb 3 23:23:59 2016 +0100
+
+    Repair edns0 support
+
+* Wed Feb 3 14:22:15 2016 +0100
+
+    Link libsodium-18.dll on msys2
+
+* Wed Feb 3 12:13:56 2016 +0100
+
+    Update ChangeLog
+
 * Wed Feb 3 12:13:42 2016 +0100
 
     Regen man pages

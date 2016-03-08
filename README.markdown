@@ -37,6 +37,10 @@ While not providing end-to-end security, it protects the local
 network, which is often the weakest point of the chain, against
 man-in-the-middle attacks.
 
+`dnscrypt-proxy` is only a client-implementation of the protocol. It
+requires a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on
+the other end.
+
 Download and integrity check
 ----------------------------
 
@@ -53,7 +57,7 @@ After having downloaded a file, compute its SHA256 digest. For example:
 Verify this digest against the expected one, that can be retrieved
 using a simple DNS query:
 
-    $ drill -D TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
+    $ drill -aD TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
 
 or
 
@@ -62,6 +66,10 @@ or
 If the content of the TXT record doesn't match the SHA256 digest you
 computed, please file a bug report on Github as soon as possible and
 don't go any further.
+
+Signatures can also be verified with the [Minisign](https://jedisct1.github.io/minisign/) tool:
+
+    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.6.1.tar.bz2
 
 Installation
 ------------
@@ -101,17 +109,16 @@ The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
 Command-line switches are documented in the `dnscrypt-proxy(8)` man page.
 
-*Note:* gcc 3.4.6 (and probably other similar versions) is known to
-produce broken code on Mips targets with the -Os optimization level.
-Use a different level (-O and -O2 are fine) or upgrade the compiler.
-Thanks to Adrian Kotelba for reporting this.
-
 GUIs for dnscrypt-proxy
 -----------------------
 
 If you need a simple graphical user interface in order to start/stop
 the proxy and change your DNS settings, check out the following
 project:
+
+- [Simple DNSCrypt](https://simplednscrypt.org/):
+an all-in-one, standalone client - using DNSCrypt on Windows has never
+been so simple.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
 Easily enable/disable DNSCrypt on multiple adapters. Supports
@@ -158,7 +165,7 @@ Usage
 
 Having a dedicated system user, with no privileges and with an empty
 home directory, is highly recommended. For extra security, DNSCrypt
-will chroot() to this user's home directory and drop root privileges
+will `chroot()` to this user's home directory and drop root privileges
 for this user's uid as soon as possible.
 
 The easiest way to start the daemon is:
@@ -168,7 +175,7 @@ The easiest way to start the daemon is:
 Replace `<resolver name>` with the name of the resolver you want to
 use (the first column in the list of public resolvers).
 
-The proxy will accept incoming requests on 127.0.0.1, tag them with an
+The proxy will accept incoming requests on `127.0.0.1`, tag them with an
 authentication code, forward them to the resolver, and validate each
 answer before passing it to the client.
 
