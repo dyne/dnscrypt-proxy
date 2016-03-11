@@ -398,6 +398,14 @@ cert_updater_update(ProxyContext * const proxy_context)
     if (proxy_context->tcp_only != 0) {
         (void) evdns_base_nameserver_ip_add(cert_updater->evdns_base,
                                             proxy_context->resolver_ip);
+#ifdef WIN32
+        (void) evdns_base_config_windows_nameservers(cert_updater->evdns_base);
+#else
+        (void) evdns_base_resolv_conf_parse(cert_updater->evdns_base,
+                                            DNS_OPTION_NAMESERVERS,
+                                            "/etc/resolv.conf");
+#endif
+        (void) evdns_set_option(cert_updater->evdns_base, "attempts", "5", 0);
     }
     if (evdns_base_resolve_txt(cert_updater->evdns_base,
                                proxy_context->provider_name,
