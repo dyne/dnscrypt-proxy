@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 if [ "x${1}" = "xenable" -o "x${1}" = "xENABLE" ]; then
-        echo "Enbling dnscrypt-proxy..."
+        echo "Enabling dnscrypt-proxy..."
         iptables -t nat -D OUTPUT -p udp --dport 53 -j DNAT --to-destination 127.0.0.1
         iptables -t nat -D OUTPUT -p tcp --dport 53 -j DNAT --to-destination 127.0.0.1
     ps ax | grep 'dnscrypt-proxy' | while read pid _; do kill "$pid" ; done
