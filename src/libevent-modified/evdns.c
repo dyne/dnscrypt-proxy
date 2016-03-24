@@ -4052,6 +4052,7 @@ evdns_base_free_and_unlock(struct evdns_base *base, int fail_requests)
 
 	for (server = base->server_head; server; server = server_next) {
 		server_next = server->next;
+        server->probe_request = NULL;
 		evdns_nameserver_free(server);
 		if (server_next == base->server_head)
 			break;
