@@ -125,7 +125,7 @@ Easily enable/disable DNSCrypt on multiple adapters. Supports
 different ports and protocols, IPv6, parental controls and the proxy
 can act as a gateway service. Windows only, written in .NET.
 
-- [DNSCrypt Windows Service Manager](https://simonclausen.dk/projects/dnscrypt-winservicemgr/):
+- [DNSCrypt Windows Service Manager](https://github.com/simonclausen/dnscrypt-winservicemgr):
 Assists in setting up DNSCrypt as a service, configure it and change network adapter DNS
 settings to use DNSCrypt. It includes the option to use TCP/UDP protocol, IPV4/IPV6
 connectivity, choice of network adapter to configure, as well as configurations for currently
