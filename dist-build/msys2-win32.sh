@@ -1,6 +1,6 @@
 #! /bin/sh
 
-export CFLAGS="-Os -m32 -march=pentium2 -mtune=nocona"
+export CFLAGS="-Os -m32 -march=pentium3 -mtune=core2"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
 export MINGW_PREFIX='/mingw32'
 export SODIUM_PREFIX='/tmp/libsodium-win32'
