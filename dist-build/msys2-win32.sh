@@ -1,12 +1,13 @@
 #! /bin/sh
 
-export CFLAGS="-Os -m32 -march=pentium3 -mtune=core2"
+export CFLAGS="-Os -m32 -march=pentium3 -mtune=core2 -flto"
+export LDFLAGS="-march=pentium3 -flto"
 export PREFIX="$(pwd)/dnscrypt-proxy-win32"
 export MINGW_PREFIX='/mingw32'
 export SODIUM_PREFIX='/tmp/libsodium-win32'
 
-export CPPFLAGS="-I${SODIUM_PREFIX}/include"
-export LDFLAGS="-L${SODIUM_PREFIX}/lib"
+export CPPFLAGS="${CPPFLAGS} -I${SODIUM_PREFIX}/include"
+export LDFLAGS="${LDFLAGS} -L${SODIUM_PREFIX}/lib"
 
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
   --host=i686-w64-mingw32 \
