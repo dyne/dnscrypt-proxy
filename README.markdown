@@ -152,8 +152,9 @@ can be verified with the following command:
 
 If you want to add DNSCrypt support to your own public or private
 resolver, check out
-[DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper), a
-server-side dnscrypt proxy that works with any name resolver.
+[DNSCrypt-Wrapper](https://github.com/Cofyc/dnscrypt-wrapper) and
+[dnsdist](https://github.com/PowerDNS/pdns/blob/master/pdns/README-dnsdist.md#dnscrypt).
+These are server-side proxies that work with any name resolver.
 
 A [DNSCrypt server](https://github.com/jedisct1/dnscrypt-server-docker) Docker
 image is also available to deploy a non-logging, DNSSEC and
