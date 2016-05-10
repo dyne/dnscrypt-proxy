@@ -322,6 +322,9 @@ of this file for Curve25519 keys is a hexadecimal string, with optional `:`,
 
     01 01 || 32-byte Curve25519 secret key
 
+Server-side, a short TTL for certificates is recommended when using this
+system.
+
 EDNS payload size
 -----------------
 
