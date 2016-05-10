@@ -16,30 +16,29 @@ using it with a public DNS service, be aware that it will (and has to)
 decrypt your queries.
 
 If you are using it for privacy, it might do the opposite of what you are
-trying to achieve. If you are using it to prevent VPN "leaks", this
-isn't the right tool either: the proper way to prevent VPN "leaks" is
-to avoid sending data to yet another third party: use a VPN service that
-operates its own DNS resolvers.
+trying to achieve. If you are using it to prevent VPN "leaks", this isn't the
+right tool either: the proper way to prevent VPN "leaks" is to avoid sending
+data to yet another third party: use a VPN service that operates its own DNS
+resolvers.
 
 Description
 -----------
 
-`dnscrypt-proxy` provides local service which can be used directly as
-your local resolver or as a DNS forwarder, authenticating requests
-using the DNSCrypt protocol and passing them to an upstream server.
+`dnscrypt-proxy` provides local service which can be used directly as your
+local resolver or as a DNS forwarder, authenticating requests using the
+DNSCrypt protocol and passing them to an upstream server.
 
 The DNSCrypt protocol uses high-speed high-security elliptic-curve
-cryptography and is very similar to [DNSCurve](https://dnscurve.org/),
-but focuses on securing communications between a client and its first-level
+cryptography and is very similar to [DNSCurve](https://dnscurve.org/), but
+focuses on securing communications between a client and its first-level
 resolver.
 
-While not providing end-to-end security, it protects the local
-network, which is often the weakest point of the chain, against
-man-in-the-middle attacks.
+While not providing end-to-end security, it protects the local network, which
+is often the weakest point of the chain, against man-in-the-middle attacks.
 
-`dnscrypt-proxy` is only a client-implementation of the protocol. It
-requires a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on
-the other end.
+`dnscrypt-proxy` is only a client-implementation of the protocol. It requires
+a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on the other
+end.
 
 Download and integrity check
 ----------------------------
@@ -67,28 +66,26 @@ If the content of the TXT record doesn't match the SHA256 digest you
 computed, please file a bug report on Github as soon as possible and
 don't go any further.
 
-Signatures can also be verified with the [Minisign](https://jedisct1.github.io/minisign/) tool:
+Signatures can also be verified with the
+[Minisign](https://jedisct1.github.io/minisign/) tool:
 
     $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.6.1.tar.bz2
 
 Installation
 ------------
 
-The daemon is known to work on recent versions of OSX, OpenBSD,
-Bitrig, NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a
-jailbroken device), Android (requires a rooted device), and
-Windows (requires MingW).
+The daemon is known to work on recent versions of OSX, OpenBSD, Bitrig,
+NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a jailbroken device),
+Android (requires a rooted device), and Windows (requires MingW).
 
-Install [libsodium](https://github.com/jedisct1/libsodium).
-On Linux, don't forget to run `ldconfig` if you installed it from
-source.
+Install [libsodium](https://github.com/jedisct1/libsodium). On Linux, don't
+forget to run `ldconfig` if you installed it from source.
 
-A "minimal" build of libsodium (`--enable-minimal`) works equally well
-as a full build with this proxy.
+A "minimal" build of libsodium (`--enable-minimal`) works equally well as a
+full build with this proxy.
 
-On Fedora, RHEL and CentOS, you may need to add `/usr/local/lib` to
-the paths the dynamic linker is going to look at. Before issuing
-`ldconfig`, type:
+On Fedora, RHEL and CentOS, you may need to add `/usr/local/lib` to the paths
+the dynamic linker is going to look at. Before issuing `ldconfig`, type:
 
     # echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 
@@ -112,31 +109,29 @@ Command-line switches are documented in the `dnscrypt-proxy(8)` man page.
 GUIs for dnscrypt-proxy
 -----------------------
 
-If you need a simple graphical user interface in order to start/stop
-the proxy and change your DNS settings, check out the following
-project:
+If you need a simple graphical user interface in order to start/stop the proxy
+and change your DNS settings, check out the following project:
 
-- [Simple DNSCrypt](https://simplednscrypt.org/):
-an all-in-one, standalone client - using DNSCrypt on Windows has never
-been so simple.
+- [Simple DNSCrypt](https://simplednscrypt.org/): an all-in-one, standalone
+client - using DNSCrypt on Windows has never been so simple.
 
 - [DNSCrypt WinClient](https://github.com/Noxwizard/dnscrypt-winclient):
-Easily enable/disable DNSCrypt on multiple adapters. Supports
-different ports and protocols, IPv6, parental controls and the proxy
-can act as a gateway service. Windows only, written in .NET.
+Easily enable/disable DNSCrypt on multiple adapters. Supports different ports
+and protocols, IPv6, parental controls and the proxy can act as a gateway
+service. Windows only, written in .NET.
 
-- [DNSCrypt Windows Service Manager](https://github.com/simonclausen/dnscrypt-winservicemgr):
-Assists in setting up DNSCrypt as a service, configure it and change network adapter DNS
-settings to use DNSCrypt. It includes the option to use TCP/UDP protocol, IPV4/IPV6
-connectivity, choice of network adapter to configure, as well as configurations for currently
-available DNSCrypt providers.
+- [DNSCrypt Windows Service Manager](https://github.com/simonclausen/dnscrypt-winservicemgr): Assists in
+setting up DNSCrypt as a service, configure it and change network adapter DNS
+settings to use DNSCrypt. It includes the option to use TCP/UDP protocol,
+IPV4/IPV6 connectivity, choice of network adapter to configure, as well as
+configurations for currently available DNSCrypt providers.
 
 - [DNSCrypt OSXClient](https://github.com/alterstep/dnscrypt-osxclient):
 Mac OSX application to control the DNSCrypt Proxy.
 
 - [DNSCrypt Tools for Linux](https://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
-A set of tools for `dnscrypt-proxy`. Features a start and stop button as well as options to enable
-or disable from startup. Developed for Porteus Linux.
+A set of tools for `dnscrypt-proxy`. Features a start and stop button as well
+as options to enable or disable from startup. Developed for Porteus Linux.
 
 DNSCrypt-enabled resolvers
 --------------------------
@@ -157,32 +152,31 @@ resolver, check out
 These are server-side proxies that work with any name resolver.
 
 A [DNSCrypt server](https://github.com/jedisct1/dnscrypt-server-docker) Docker
-image is also available to deploy a non-logging, DNSSEC and
-DNSCrypt-capable resolver without having to manually compile or
-configure anything.
+image is also available to deploy a non-logging, DNSSEC and DNSCrypt-capable
+resolver without having to manually compile or configure anything.
 
 Usage
 -----
 
-Having a dedicated system user, with no privileges and with an empty
-home directory, is highly recommended. For extra security, DNSCrypt
-will `chroot()` to this user's home directory and drop root privileges
-for this user's uid as soon as possible.
+Having a dedicated system user, with no privileges and with an empty home
+directory, is highly recommended. For extra security, DNSCrypt will `chroot()`
+to this user's home directory and drop root privileges for this user's uid as
+soon as possible.
 
 The easiest way to start the daemon is:
 
     # dnscrypt-proxy --daemonize --resolver-name=<resolver name>
 
-Replace `<resolver name>` with the name of the resolver you want to
-use (the first column in the list of public resolvers).
+Replace `<resolver name>` with the name of the resolver you want to use (the
+first column in the list of public resolvers).
 
 The proxy will accept incoming requests on `127.0.0.1`, tag them with an
-authentication code, forward them to the resolver, and validate each
-answer before passing it to the client.
+authentication code, forward them to the resolver, and validate each answer
+before passing it to the client.
 
-Given such a setup, in order to actually start using DNSCrypt, you
-need to update your `/etc/resolv.conf` file and replace your current
-set of resolvers with:
+Given such a setup, in order to actually start using DNSCrypt, you need to
+update your `/etc/resolv.conf` file and replace your current set of resolvers
+with:
 
     nameserver 127.0.0.1
 
@@ -201,28 +195,26 @@ requests. The default value is 250.
 * `--user=<user name>` in order to chroot()/drop privileges.
 * `--resolvers-list=<file>`: to specity the path to the CSV file containing
 the list of available resolvers, and the parameters to use them.
-* `--test` in order to check that the server-side proxy is properly
-configured and that a valid certificate can be used. This is useful
-for monitoring your own dnscrypt proxy. See the man page for more
-information.
+* `--test` in order to check that the server-side proxy is properly configured
+and that a valid certificate can be used. This is useful for monitoring your
+own dnscrypt proxy. See the man page for more information.
 
 The
 `--resolver-address=<ip>[:port]`,
-`--provider-name=<certificate provider FQDN>`
-and `--provider-key=<provider public key>` switches can be specified in
-order to use a DNSCrypt-enabled recursive DNS service not listed in
-the configuration file.
+`--provider-name=<certificate provider FQDN>` and
+`--provider-key=<provider public key>` switches can be specified in order to
+use a DNSCrypt-enabled recursive DNS service not listed in the configuration
+file.
 
 Running dnscrypt-proxy using systemd
 ------------------------------------
 
-On a system using systemd, and when compiled with `--with-systemd`,
-the proxy can take advantage of systemd's socket activation instead of
-creating the sockets itself. The proxy will also notify systemd on successful
-startup.
+On a system using systemd, and when compiled with `--with-systemd`, the proxy
+can take advantage of systemd's socket activation instead of creating the
+sockets itself. The proxy will also notify systemd on successful startup.
 
-Two sockets need to be configured: a UDP socket (`ListenStream`) and a
-TCP socket (`ListenDatagram`) sharing the same port.
+Two sockets need to be configured: a UDP socket (`ListenStream`) and a TCP
+socket (`ListenDatagram`) sharing the same port.
 
 The source distribution includes the `dnscrypt-proxy.socket` and
 `dnscrypt-proxy.service` files that can be used as a starting point.
@@ -239,20 +231,19 @@ for more information on DNSCrypt on Windows.
 Using DNSCrypt in combination with a DNS cache
 ----------------------------------------------
 
-The DNSCrypt proxy is **not** a DNS cache. This means that incoming
-queries will **not** be cached and every single query will require a
-round-trip to the upstream resolver.
+The DNSCrypt proxy is **not** a DNS cache. This means that incoming queries
+will **not** be cached and every single query will require a round-trip to the
+upstream resolver.
 
-For optimal performance, the recommended way of running DNSCrypt is to
-run it as a forwarder for a local DNS cache, such as `unbound` or
+For optimal performance, the recommended way of running DNSCrypt is to run it
+as a forwarder for a local DNS cache, such as `unbound` or
 `powerdns-recursor`.
 
-Both can safely run on the same machine as long as they are listening
-to different IP addresses (preferred) or different ports.
+Both can safely run on the same machine as long as they are listening to
+different IP addresses (preferred) or different ports.
 
-If your DNS cache is `unbound`, all you need is to edit the
-`unbound.conf` file and add the following lines at the end of the `server`
-section:
+If your DNS cache is `unbound`, all you need is to edit the `unbound.conf`
+file and add the following lines at the end of the `server` section:
 
     do-not-query-localhost: no
 
@@ -260,76 +251,74 @@ section:
       name: "."
       forward-addr: 127.0.0.1@40
 
-The first line is not required if you are using different IP addresses
-instead of different ports.
+The first line is not required if you are using different IP addresses instead
+of different ports.
 
-Then start `dnscrypt-proxy`, telling it to use a specific port (`40`, in
-this example):
+Then start `dnscrypt-proxy`, telling it to use a specific port (`40`, in this
+example):
 
     # dnscrypt-proxy --local-address=127.0.0.1:40 --daemonize
 
 IPv6 support
 ------------
 
-IPv6 is fully supported. IPv6 addresses with a port number should be
-specified as [ip]:port
+IPv6 is fully supported. IPv6 addresses with a port number should be specified
+as `[ip]:port`.
 
     # dnscrypt-proxy --local-address='[::1]:40' ...
 
 Queries using nonstandard ports / over TCP
 ------------------------------------------
 
-Some routers and firewalls can block outgoing DNS queries or
-transparently redirect them to their own resolver. This especially
-happens on public Wifi hotspots, such as coffee shops.
+Some routers and firewalls can block outgoing DNS queries or transparently
+redirect them to their own resolver. This especially happens on public Wifi
+hotspots, such as coffee shops.
 
-As a workaround, the port number can be changed using
-the `--resolver-port=<port>` option.
+As a workaround, the port number can be changed using the
+`--resolver-port=<port>` option.
 
 By default, `dnscrypt-proxy` sends outgoing queries to UDP port 443.
 
-In addition, the DNSCrypt proxy can force outgoing queries to be
-sent over TCP. For example, TCP port 443, which is commonly used for
-communication over HTTPS, may not be filtered.
+In addition, the DNSCrypt proxy can force outgoing queries to be sent over
+TCP. For example, TCP port 443, which is commonly used for communication over
+HTTPS, may not be filtered.
 
-The `--tcp-only` command-line switch forces this behavior. When
-an incoming query is received, the daemon immediately replies with a
-"response truncated" message, forcing the client to retry over TCP.
-The daemon then authenticates the query and forwards it over TCP
-to the resolver.
+The `--tcp-only` command-line switch forces this behavior. When an incoming
+query is received, the daemon immediately replies with a "response truncated"
+message, forcing the client to retry over TCP. The daemon then authenticates
+the query and forwards it over TCP to the resolver.
 
-`--tcp-only` is slower than UDP because multiple queries over a single
-TCP connections aren't supported yet, and this workaround should
-never be used except when bypassing a filter is actually required.
+`--tcp-only` is slower than UDP because multiple queries over a single TCP
+connections aren't supported yet, and this workaround should never be used
+except when bypassing a filter is actually required.
 
 Public-key client authentication
 --------------------------------
 
-By default, dnscrypt-proxy generates non-deterministic client keys
-every time it starts, or for every query (when the ephemeral keys
-feature is turned on).
+By default, dnscrypt-proxy generates non-deterministic client keys every time
+it starts, or for every query (when the ephemeral keys feature is turned on).
 
-However, commercial DNS services may want to use DNSCrypt to
-authenticate the sender of a query using public-key cryptography, i.e.
-know what customer sent a query without altering the DNS query itself,
-and without using shared secrets.
+However, commercial DNS services may want to use DNSCrypt to authenticate the
+sender of a query using public-key cryptography, i.e. know what customer sent
+a query without altering the DNS query itself, and without using shared
+secrets.
 
-Resolvers that should be accessible from any IP address, but that are
-supposed to be used only by specific users, can also take advantage of
-DNSCrypt to only respond to queries sent using a given list of public keys.
+Resolvers that should be accessible from any IP address, but that are supposed
+to be used only by specific users, can also take advantage of DNSCrypt to only
+respond to queries sent using a given list of public keys.
 
-In order to do so, dnscrypt-proxy 1.6.0 introduced the `--client-key`
-(or `-K`) switch. This loads a secret client key from a file instead
-of generating random keys:
+In order to do so, dnscrypt-proxy 1.6.0 introduced the `--client-key` (or
+`-K`) switch. This loads a secret client key from a file instead of generating
+random keys:
 
     # dnscrypt-proxy --client-key=/private/client-secret.key
 
-This file has to remain private, and its content doesn't have to be
-known by the DNS service provider.
+This file has to remain private, and its content doesn't have to be known by
+the DNS service provider.
 
-Versions 1 and 2 of the DNSCrypt protocol use Curve25519 keys, and the
-format of this file for Curve25519 keys is a hexadecimal string, with
-optional `:`, `[space]` and `-` delimiters, decoding to 34 bytes:
+Versions 1 and 2 of the DNSCrypt protocol use Curve25519 keys, and the format
+of this file for Curve25519 keys is a hexadecimal string, with optional `:`,
+`[space]` and `-` delimiters, decoding to 34 bytes:
 
     01 01 || 32-byte Curve25519 secret key
 
