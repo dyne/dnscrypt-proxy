@@ -325,76 +325,73 @@ of this file for Curve25519 keys is a hexadecimal string, with optional `:`,
 EDNS payload size
 -----------------
 
-DNS packets sent over UDP have been historically limited to 512 bytes,
-which is usually fine for queries, but sometimes a bit short for
-replies.
+DNS packets sent over UDP have been historically limited to 512 bytes, which
+is usually fine for queries, but sometimes a bit short for replies.
 
-Most modern authoritative servers, resolvers and stub resolvers
-support the Extension Mechanism for DNS (EDNS) that, among other
-things, allows a client to specify how large a reply over UDP can be.
+Most modern authoritative servers, resolvers and stub resolvers support the
+Extension Mechanism for DNS (EDNS) that, among other things, allows a client
+to specify how large a reply over UDP can be.
 
-Unfortunately, this feature is disabled by default on a lot of
-operating systems. It has to be explicitly enabled, for example by
-adding `options edns0` to the `/etc/resolv.conf` file on most
-Unix-like operating systems.
+Unfortunately, this feature is disabled by default on a lot of operating
+systems. It has to be explicitly enabled, for example by adding `options
+edns0` to the `/etc/resolv.conf` file on most Unix-like operating systems.
 
 `dnscrypt-proxy` can transparently rewrite outgoing packets before
-authenticating them, in order to add the EDNS0 mechanism. By
-default, a conservative payload size of 1252 bytes is advertised.
+authenticating them, in order to add the EDNS0 mechanism. By default, a
+conservative payload size of 1252 bytes is advertised.
 
 This size can be made larger by starting the proxy with the
-`--edns-payload-size=<bytes>` command-line switch. Values up to 4096
-are usually safe, but some routers/firewall/NAT boxes block IP fragments.
+`--edns-payload-size=<bytes>` command-line switch. Values up to 4096 are
+usually safe, but some routers/firewall/NAT boxes block IP fragments.
 
-If you can resolve `test-tcp.dnscrypt.org`, increasing the maximum
-payload size is probably fine. If you can't, or just to stay on the
-safe side, do not tweak this; stick to the default value.
+If you can resolve `test-tcp.dnscrypt.org`, increasing the maximum payload
+size is probably fine. If you can't, or just to stay on the safe side, do not
+tweak this; stick to the default value.
 
-A value below or equal to 512 will disable this mechanism, unless a
-client sends a packet with an OPT section providing a payload size.
+A value below or equal to 512 will disable this mechanism, unless a client
+sends a packet with an OPT section providing a payload size.
 
 The `hostip` utility
 --------------------
 
-The DNSCrypt proxy ships with a simple tool named `hostip` that
-resolves a name to IPv4 or IPv6 addresses.
+The DNSCrypt proxy ships with a simple tool named `hostip` that resolves a
+name to IPv4 or IPv6 addresses.
 
-This tool can be useful for starting some services before
-`dnscrypt-proxy`.
+This tool can be useful for starting some services before `dnscrypt-proxy`.
 
 Queries made by `hostip` are not authenticated.
 
 Plugins
 -------
 
-`dnscrypt-proxy` can be extended with plugins. A plugin acts as a
-filter that can locally inspect and modify queries and responses.
+`dnscrypt-proxy` can be extended with plugins. A plugin acts as a filter that
+can locally inspect and modify queries and responses.
 
 The plugin API is documented in the `README-PLUGINS.markdown` file.
 
-Any number of plugins can be combined (chained) by repeating the
-`--plugin` command-line switch.
+Any number of plugins can be combined (chained) by repeating the `--plugin`
+command-line switch.
 
 The default distribution ships with some example plugins:
 
-* `libdcplugin_example_ldns_aaaa_blocking`: Directly return an empty
-response to AAAA queries
+* `libdcplugin_example_ldns_aaaa_blocking`: Directly return an empty response
+to AAAA queries
 
 Example usage:
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example_ldns_aaaa_blocking.la
 
-If IPv6 connectivity is not available on your network, this plugin
-avoids waiting for responses about IPv6 addresses from upstream
-resolvers. This can improve your web browsing experience.
+If IPv6 connectivity is not available on your network, this plugin avoids
+waiting for responses about IPv6 addresses from upstream resolvers. This can
+improve your web browsing experience.
 
 * `libdcplugin_example_ldns_blocking`: Block specific domains and IP
 addresses.
 
-This plugin returns a REFUSED response if the query name is in a
-list of blacklisted names, or if at least one of the returned
-IP addresses happens to be in a list of blacklisted IPs.
+This plugin returns a REFUSED response if the query name is in a list of
+blacklisted names, or if at least one of the returned IP addresses happens to
+be in a list of blacklisted IPs.
 
 Recognized switches are:
 
@@ -404,16 +401,17 @@ Recognized switches are:
 A file should list one entry per line.
 
 IPv4 and IPv6 addresses are supported.
-For names, leading and trailing wildcards (`*`) are also supported
-(e.g. `*xxx*`, `*.example.com`, `ads.*`)
+
+For names, leading and trailing wildcards (`*`) are also supported (e.g.
+`*xxx*`, `*.example.com`, `ads.*`)
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names
 
 * `libdcplugin_example-logging`: Log client queries
 
-This plugin logs the client queries to the standard output (default)
-or to a file.
+This plugin logs the client queries to the standard output (default) or to a
+file.
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example_logging,/var/log/dns.log
@@ -421,5 +419,6 @@ or to a file.
 * Extra plugins
 
 Additional plugins can be found on Github:
-[Masquerade plugin](https://github.com/gchehab/dnscrypt-plugin-masquerade),
-[GeoIP plugin](https://github.com/jedisct1/dnscrypt-plugin-geoip-block).
+
+- [Masquerade plugin](https://github.com/gchehab/dnscrypt-plugin-masquerade)
+- [GeoIP plugin](https://github.com/jedisct1/dnscrypt-plugin-geoip-block).
