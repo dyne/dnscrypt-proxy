@@ -55,6 +55,7 @@ static struct option getopt_long_options[] = {
     { "resolver-address", 1, NULL, 'r' },
 #ifndef _WIN32
     { "syslog", 0, NULL, 'S' },
+    { "syslog-prefix", 1, NULL, 'Z' },
 #endif
     { "user", 1, NULL, 'u' },
     { "test", 1, NULL, 't' },
@@ -68,7 +69,7 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:St:u:N:TVX:";
+static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:SZ:t:u:N:TVX:";
 #else
 static const char *getopt_options = "a:e:Ehk:K:L:l:m:n:r:R:t:u:N:TVX:";
 #endif
@@ -123,6 +124,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->provider_publickey_s = NULL;
     proxy_context->resolver_ip = NULL;
     proxy_context->syslog = 0;
+    proxy_context->syslog_prefix = NULL;
 #ifndef _WIN32
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
@@ -569,9 +571,15 @@ options_parse(AppContext * const app_context,
         case 'R':
             proxy_context->resolver_name = optarg;
             break;
+#ifndef _WIN32
         case 'S':
             proxy_context->syslog = 1;
             break;
+        case 'Z':
+            proxy_context->syslog = 1;
+            proxy_context->syslog_prefix = optarg;
+            break;
+#endif
         case 'm': {
             char *endptr;
             const long max_log_level = strtol(optarg, &endptr, 10);
