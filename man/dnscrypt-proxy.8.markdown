@@ -83,8 +83,8 @@ ports.
   * `-r`, `--resolver-address=<ip>[:port]`: a DNSCrypt-capable resolver IP
     address with an optional port. The default port is 443.
 
-  * `-S`, `--syslog:` if a log file hasn't been set, log diagnostic messages to
-    syslog instead of printing them. --daemonize implies --syslog.
+  * `-S`, `--syslog`: if a log file hasn't been set, log diagnostic messages to
+    syslog instead of printing them. `--daemonize` implies `--syslog`.
 
   * `-Z`, `--syslog-prefix=prefix`: specify a string of message to insert at
     the beginning of every line sent to syslog. This implies --syslog.
