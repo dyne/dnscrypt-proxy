@@ -105,6 +105,7 @@ typedef struct ProxyContext_ {
     const char              *resolvers_list;
     const char              *resolver_name;
     const char              *resolver_ip;
+    const char              *syslog_prefix;
     struct evconnlistener   *tcp_conn_listener;
     struct event            *tcp_accept_timer;
     struct event            *udp_listener_event;
@@ -130,7 +131,6 @@ typedef struct ProxyContext_ {
     _Bool                    ephemeral_keys;
     _Bool                    listeners_started;
     _Bool                    syslog;
-    const char              *syslog_prefix;
     _Bool                    tcp_only;
     _Bool                    test_only;
 } ProxyContext;
