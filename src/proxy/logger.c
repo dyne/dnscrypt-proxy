@@ -89,7 +89,7 @@ logger(struct ProxyContext_ * const context,
     line[len++] = 0;
 #ifndef _WIN32
     if (context != NULL && context->log_fp == NULL && context->syslog != 0) {
-        syslog(crit, "%s%s", context->syslog_prefix ? context->syslog_prefix : "", line);
+        syslog(crit, "%s", line);
         return 0;
     }
 #endif
@@ -110,11 +110,7 @@ logger(struct ProxyContext_ * const context,
     } else {
         log_fp = context->log_fp;
     }
-    if (context->syslog_prefix) {
-        fprintf(log_fp, "%s%s%s\n", urgency, context->syslog_prefix, line);
-    } else {
-        fprintf(log_fp, "%s%s\n", urgency, line);
-    }
+    fprintf(log_fp, "%s%s\n", urgency, line);
     fflush(log_fp);
 
     return 0;
