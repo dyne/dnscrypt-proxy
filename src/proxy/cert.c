@@ -405,7 +405,7 @@ cert_updater_update(ProxyContext * const proxy_context)
                                             DNS_OPTION_NAMESERVERS,
                                             "/etc/resolv.conf");
 #endif
-        (void) evdns_set_option(cert_updater->evdns_base, "attempts", "5", 0);
+        (void) evdns_base_set_option(cert_updater->evdns_base, "attempts", "5");
     }
     if (evdns_base_resolve_txt(cert_updater->evdns_base,
                                proxy_context->provider_name,
