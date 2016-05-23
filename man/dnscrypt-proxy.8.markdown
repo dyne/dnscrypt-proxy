@@ -86,6 +86,9 @@ ports.
   * `-S`, `--syslog`: if a log file hasn't been set, log diagnostic messages to
     syslog instead of printing them. `--daemonize` implies `--syslog`.
 
+  * `-Z`, `--syslog-prefix=prefix`: specify a string of message to insert at
+    the beginning of every line sent to syslog. This implies --syslog.
+
   * `-t`, `--test=<margin>`: don't actually start the proxy, but check that
     a valid certificate can be retrieved from the server and that it
     will remain valid for the next <margin> minutes. The exit code is 0
