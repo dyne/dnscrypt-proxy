@@ -69,7 +69,7 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:SZ:t:u:N:TVX:";
+static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:St:u:N:TVX:Z:";
 #else
 static const char *getopt_options = "a:e:Ehk:K:L:l:m:n:r:R:t:u:N:TVX:";
 #endif
