@@ -33,19 +33,16 @@
 #endif
 
 static struct option getopt_long_options[] = {
+    { "resolver-name", 1, NULL, 'R' },
     { "local-address", 1, NULL, 'a' },
 #ifndef _WIN32
     { "daemonize", 0, NULL, 'd' },
 #endif
-    { "edns-payload-size", 1, NULL, 'e' },
     { "ephemeral-keys", 0, NULL, 'E' },
     { "client-key", 1, NULL, 'K' },
-    { "help", 0, NULL, 'h' },
     { "resolvers-list", 1, NULL, 'L' },
-    { "resolver-name", 1, NULL, 'R' },
     { "logfile", 1, NULL, 'l' },
     { "loglevel", 1, NULL, 'm' },
-    { "max-active-requests", 1, NULL, 'n' },
 #ifndef _WIN32
     { "pidfile", 1, NULL, 'p' },
 #endif
@@ -57,10 +54,13 @@ static struct option getopt_long_options[] = {
     { "syslog", 0, NULL, 'S' },
     { "syslog-prefix", 1, NULL, 'Z' },
 #endif
+    { "max-active-requests", 1, NULL, 'n' },
     { "user", 1, NULL, 'u' },
     { "test", 1, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
+    { "edns-payload-size", 1, NULL, 'e' },
     { "version", 0, NULL, 'V' },
+    { "help", 0, NULL, 'h' },
 #ifdef _WIN32
     { "install", 0, NULL, WIN_OPTION_INSTALL },
     { "reinstall", 0, NULL, WIN_OPTION_REINSTALL },
