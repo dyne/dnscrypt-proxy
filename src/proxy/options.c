@@ -126,6 +126,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->syslog = 0;
     proxy_context->syslog_prefix = NULL;
 #ifndef _WIN32
+    proxy_context->user_name = NULL;
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
 #endif
@@ -636,6 +637,7 @@ options_parse(AppContext * const app_context,
                 logger(proxy_context, LOG_ERR, "Unknown user: [%s]", optarg);
                 exit(1);
             }
+            proxy_context->user_name = strdup(pw->pw_name);
             proxy_context->user_id = pw->pw_uid;
             proxy_context->user_group = pw->pw_gid;
             proxy_context->user_dir = strdup(pw->pw_dir);
@@ -713,6 +715,8 @@ options_parse(AppContext * const app_context,
 void
 options_free(ProxyContext * const proxy_context)
 {
+    free(proxy_context->user_name);
+    proxy_context->user_name = NULL;
     free(proxy_context->user_dir);
     proxy_context->user_dir = NULL;
 }
