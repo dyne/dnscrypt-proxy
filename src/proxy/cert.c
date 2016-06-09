@@ -59,9 +59,15 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     uint32_t serial;
     memcpy(&serial, bincert->serial, sizeof serial);
     serial = htonl(serial);
-    logger(proxy_context, LOG_INFO,
-           "Server certificate #%" PRIu32 " received", serial);
-
+    if (serial >= 0x30303030 && serial <= 0x30303039) {
+        logger(proxy_context, LOG_INFO,
+               "Server certificate with serial '%c%c%c%c' received",
+               (serial >> 24) & 0xff, (serial >> 16) & 0xff,
+               (serial >> 8) & 0xff, serial & 0xff);
+    } else {
+        logger(proxy_context, LOG_INFO,
+               "Server certificate with serial #%" PRIu32 " received", serial);
+    }
     uint32_t ts_begin;
     memcpy(&ts_begin, bincert->ts_begin, sizeof ts_begin);
     ts_begin = htonl(ts_begin);
