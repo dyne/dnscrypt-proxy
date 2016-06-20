@@ -37,6 +37,7 @@ m4/ltoptions.m4
 m4/ltsugar.m4
 m4/ltversion.m4
 m4/lt~obsolete.m4
+m4/ltargz.m4
 man/*.html
 man/Makefile.in
 missing
@@ -54,6 +55,8 @@ src/libevent-modified/include/event2/event-config.h
 src/libevent-modified/libevent.pc
 src/libevent-modified/libevent_openssl.pc
 src/libevent-modified/libevent_pthreads.pc
+src/libevent-modified/libevent_core.pc
+src/libevent-modified/libevent_extra.pc
 src/libevent-modified/m4/libtool.m4
 src/libevent-modified/m4/ltoptions.m4
 src/libevent-modified/m4/ltversion.m4
