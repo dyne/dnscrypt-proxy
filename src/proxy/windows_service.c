@@ -456,6 +456,9 @@ windows_service_install(ProxyContext * const proxy_context)
     if (GetModuleFileName(NULL, self_path, MAX_PATH) <= (DWORD) 0) {
         return -1;
     }
+    if (strchr(self_path, '"') != NULL) {
+        return -1;
+    }
     evutil_snprintf(self_path_quoted, sizeof self_path_quoted,
                     "\"%s\"", self_path);
     scm_handle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
