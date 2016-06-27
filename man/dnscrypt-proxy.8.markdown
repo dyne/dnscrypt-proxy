@@ -45,7 +45,10 @@ ports.
     same public key, allowing providers to link this public key to the
     different IP addresses you are using. This option requires extra
     CPU cycles, but mitigates this by computing an ephemeral key pair for
-    every query.
+    every query. Use it if you are not using your own server, and the
+    remote server is logging your activity, and your client IP address is
+    frequently changing. Not enabled by default because it may be slow,
+    especially on non-Intel CPUs.
 
   * `-K`, `--client-key=<file>`: use a static client secret key stored in
     `<file>`.
