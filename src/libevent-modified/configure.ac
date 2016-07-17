@@ -10,11 +10,11 @@ AC_PREREQ(2.59)
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_INIT([libevent],[2.0.22-stable])
+AC_INIT([libevent],[2.0.23-stable])
 AC_CONFIG_SRCDIR([evdns.c])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS(config.h)
-AC_DEFINE(NUMERIC_VERSION, 0x02001600, [Numeric representation of the version])
+AC_DEFINE(NUMERIC_VERSION, 0x02001700, [Numeric representation of the version])
 
 dnl Initialize prefix.
 if test "$prefix" = "NONE"; then
