@@ -402,15 +402,9 @@ cert_updater_update(ProxyContext * const proxy_context)
         return -1;
     }
     if (proxy_context->tcp_only != 0) {
-#ifdef WIN32
-        (void) evdns_base_config_windows_nameservers(cert_updater->evdns_base);
-#else
-        (void) evdns_base_resolv_conf_parse(cert_updater->evdns_base,
-                                            DNS_OPTION_NAMESERVERS,
-                                            "/etc/resolv.conf");
-#endif
-        (void) evdns_base_set_option(cert_updater->evdns_base, "attempts", "5");
         (void) evdns_base_set_option(cert_updater->evdns_base, "use-tcp", "always");
+    } else {
+        (void) evdns_base_set_option(cert_updater->evdns_base, "use-tcp", "on-tc");
     }
     if (evdns_base_resolve_txt(cert_updater->evdns_base,
                                proxy_context->provider_name,
