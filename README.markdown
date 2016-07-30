@@ -123,10 +123,6 @@ service. Windows only, written in .NET.
 - [DNSCrypt OSXClient](https://github.com/alterstep/dnscrypt-osxclient):
 Mac OSX application to control the DNSCrypt Proxy.
 
-- [DNSCrypt Tools for Linux](https://opendesktop.org/content/show.php/DNScrypt+Tools?content=164488):
-A set of tools for `dnscrypt-proxy`. Features a start and stop button as well
-as options to enable or disable from startup. Developed for Porteus Linux.
-
 DNSCrypt-enabled resolvers
 --------------------------
 
