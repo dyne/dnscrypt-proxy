@@ -327,6 +327,12 @@ windows_build_command_line_from_registry(int * const argc_p,
         err += cmdline_add_option(argc_p, argv_p, string_value);
         free(string_value);
     }
+    if (windows_service_registry_read_string
+        ("LogFile", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, "--logfile");
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+    }
     windows_service_registry_read_multi_sz
         ("Plugins", & (WindowsServiceParseMultiSzCb) {
             .cb = windows_service_parse_multi_sz_cb,
@@ -436,6 +442,10 @@ windows_registry_install(ProxyContext * const proxy_context)
     if (proxy_context->client_key_file != NULL) {
         windows_service_registry_write_string("ClientKeyFile",
                                               proxy_context->client_key_file);
+    }
+    if (proxy_context->log_file != NULL) {
+        windows_service_registry_write_string("LogFile",
+                                              proxy_context->log_file);
     }
     return 0;
 }
