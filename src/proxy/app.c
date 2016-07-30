@@ -4,7 +4,9 @@
 
 #include <assert.h>
 #include <errno.h>
-#include <grp.h>
+#ifdef HAVE_GRP_H
+# include <grp.h>
+#endif
 #include <limits.h>
 #include <locale.h>
 #include <signal.h>

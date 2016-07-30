@@ -130,8 +130,8 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->user_name = NULL;
     proxy_context->user_id = (uid_t) 0;
     proxy_context->user_group = (uid_t) 0;
-#endif
     proxy_context->user_dir = NULL;
+#endif
     proxy_context->daemonize = 0;
     proxy_context->test_cert_margin = (time_t) -1;
     proxy_context->test_only = 0;
@@ -720,8 +720,11 @@ options_parse(AppContext * const app_context,
 void
 options_free(ProxyContext * const proxy_context)
 {
+    (void) proxy_context;
+#ifndef _WIN32
     free(proxy_context->user_name);
     proxy_context->user_name = NULL;
     free(proxy_context->user_dir);
     proxy_context->user_dir = NULL;
+#endif
 }

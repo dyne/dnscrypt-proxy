@@ -271,7 +271,7 @@ dnl Checks for header files.
 
 AC_SYS_LARGEFILE
 AC_CHECK_HEADERS([sys/cdefs.h sys/feature_tests.h])
-AC_CHECK_HEADERS([execinfo.h paths.h pwd.h uuid/uuid.h])
+AC_CHECK_HEADERS([execinfo.h paths.h pwd.h grp.h uuid/uuid.h])
 AC_CHECK_HEADERS([sandbox.h])
 AC_CHECK_HEADERS([ws2tcpip.h])
 
