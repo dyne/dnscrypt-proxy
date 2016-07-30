@@ -59,6 +59,7 @@ static struct option getopt_long_options[] = {
     { "test", 1, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
     { "edns-payload-size", 1, NULL, 'e' },
+    { "ignore-timestamps", 0, NULL, 'I' },
     { "version", 0, NULL, 'V' },
     { "help", 0, NULL, 'h' },
 #ifdef _WIN32
@@ -69,9 +70,9 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:de:Ehk:K:L:l:m:n:p:r:R:St:u:N:TVX:Z:";
+static const char *getopt_options = "a:de:EhIk:K:L:l:m:n:p:r:R:St:u:N:TVX:Z:";
 #else
-static const char *getopt_options = "a:e:Ehk:K:L:l:m:n:r:R:t:u:N:TVX:";
+static const char *getopt_options = "a:e:EhIk:K:L:l:m:n:r:R:t:u:N:TVX:";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
@@ -136,6 +137,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->test_only = 0;
     proxy_context->tcp_only = 0;
     proxy_context->ephemeral_keys = 0;
+    proxy_context->ignore_timestamps = 0;
 }
 
 static int
@@ -557,6 +559,9 @@ options_parse(AppContext * const app_context,
         case 'h':
             options_usage();
             exit(0);
+        case 'I':
+            proxy_context->ignore_timestamps = 1;
+            break;
         case 'k':
             proxy_context->provider_publickey_s = optarg;
             break;

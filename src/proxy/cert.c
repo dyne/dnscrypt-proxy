@@ -79,8 +79,14 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     const uint32_t now_u32 = (uint32_t) time(NULL);
 
     if (now_u32 < ts_begin) {
-        logger_noformat(proxy_context, LOG_INFO,
-                        "This certificate has not been activated yet");
+        if (proxy_context->ignore_timestamps != 0) {
+            logger_noformat(proxy_context, LOG_WARNING,
+                            "Clock might be off - "
+                            "Pretending that this certificate is valid no matter what");
+        } else {
+            logger_noformat(proxy_context, LOG_INFO,
+                            "This certificate has not been activated yet");
+        }
         return -1;
     }
     if (now_u32 > ts_end) {

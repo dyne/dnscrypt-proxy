@@ -112,6 +112,10 @@ ports.
     This feature is enabled by default, with a payload size of 1252
     bytes. Any value below 512 disables it.
 
+  * `-I`, `--ignore-timestamps`: ignore timestamps when validating certificates.
+    Never enable this option unless you know you really need it (routers without
+    a clock battery).
+
   * `-V`, `--version`: show version number.
 
   * `-h`, `--help`: show usage.
