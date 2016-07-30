@@ -402,8 +402,6 @@ cert_updater_update(ProxyContext * const proxy_context)
         return -1;
     }
     if (proxy_context->tcp_only != 0) {
-        (void) evdns_base_nameserver_ip_add(cert_updater->evdns_base,
-                                            proxy_context->resolver_ip);
 #ifdef WIN32
         (void) evdns_base_config_windows_nameservers(cert_updater->evdns_base);
 #else
@@ -412,6 +410,7 @@ cert_updater_update(ProxyContext * const proxy_context)
                                             "/etc/resolv.conf");
 #endif
         (void) evdns_base_set_option(cert_updater->evdns_base, "attempts", "5");
+        (void) evdns_base_set_option(cert_updater->evdns_base, "use-tcp", "always");
     }
     if (evdns_base_resolve_txt(cert_updater->evdns_base,
                                proxy_context->provider_name,
