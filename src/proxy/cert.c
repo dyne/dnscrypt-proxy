@@ -198,9 +198,9 @@ cert_print_bincert_info(ProxyContext * const proxy_context,
            "from [%d-%02d-%02d] to [%d-%02d-%02d]",
            htonl(serial),
            ts_begin_tm.tm_year + 1900,
-           ts_begin_tm.tm_mon + 1, ts_begin_tm.tm_mday + 1,
+           ts_begin_tm.tm_mon + 1, ts_begin_tm.tm_mday,
            ts_end_tm.tm_year + 1900,
-           ts_end_tm.tm_mon + 1, ts_end_tm.tm_mday + 1);
+           ts_end_tm.tm_mon + 1, ts_end_tm.tm_mday);
 #endif
 }
 
