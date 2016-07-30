@@ -48,6 +48,23 @@ AC_ARG_WITH(safecode,
   ])
 ])
 
+AC_ARG_ENABLE(plugins,
+[AS_HELP_STRING(--disable-plugins,Disable support for plugins)],
+[
+  AS_IF([test "x$enableval" = "xno"], [
+    plugins="disabled"
+  ], [
+    plugins="enabled"
+  ])
+],
+[
+  plugins="enabled"
+])
+AS_IF([test "$plugins" = "enabled"], [
+  CPPFLAGS="$CPPFLAGS -DPLUGINS=1"
+])
+AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
+
 AC_ARG_ENABLE(debug,
 [AS_HELP_STRING(--enable-debug,For maintainers only - please do not use)],
 [
@@ -65,17 +82,6 @@ AC_ARG_ENABLE(debug,
     CPPFLAGS="$CPPFLAGS -DDEBUG=1"
   ])
 ])
-
-plugins=disabled
-AC_ARG_ENABLE(plugins,
-[AS_HELP_STRING(--enable-plugins,Enable support for plugins)],
-[
-	AS_IF([test "x$enableval" != "xno"], [
-		CPPFLAGS="$CPPFLAGS -DPLUGINS=1"
-		plugins=enabled
-	])
-])
-AM_CONDITIONAL(PLUGINS, test x$plugins = xenabled)
 
 relaxed_plugins_permissions=disabled
 AC_ARG_ENABLE(relaxed-plugins-permissions,
