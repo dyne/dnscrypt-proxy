@@ -51,16 +51,16 @@ source code can also be downloaded on Github, in the "releases" section.
 
 After having downloaded a file, compute its SHA256 digest. For example:
 
-    $ openssl dgst -sha256 dnscrypt-proxy-1.6.1.tar.bz2
+    $ openssl dgst -sha256 dnscrypt-proxy-1.7.0.tar.bz2
 
 Verify this digest against the expected one, that can be retrieved
 using a simple DNS query:
 
-    $ drill -aD TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
+    $ drill -aD TXT dnscrypt-proxy-1.7.0.tar.bz2.download.dnscrypt.org
 
 or
 
-    $ dig +dnssec TXT dnscrypt-proxy-1.6.1.tar.bz2.download.dnscrypt.org
+    $ dig +dnssec TXT dnscrypt-proxy-1.7.0.tar.bz2.download.dnscrypt.org
 
 If the content of the TXT record doesn't match the SHA256 digest you
 computed, please file a bug report on Github as soon as possible and
@@ -69,7 +69,7 @@ don't go any further.
 Signatures can also be verified with the
 [Minisign](https://jedisct1.github.io/minisign/) tool:
 
-    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.6.1.tar.bz2
+    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.7.0.tar.bz2
 
 Installation
 ------------

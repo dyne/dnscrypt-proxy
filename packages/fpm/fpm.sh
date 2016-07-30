@@ -1,6 +1,6 @@
 #! /bin/sh
 
-VERSION="1.6.1"
+VERSION="1.7.0"
 MAINTAINER="Frank Denis <dnscrypt@pureftpd.org>"
 CATEGORY="net"
 URL="https://dnscrypt.org"
