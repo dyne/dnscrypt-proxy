@@ -32,7 +32,7 @@ cp "${MINGW_PREFIX}/bin/libldns-1.dll" "${PREFIX}/"
 cp "${SODIUM_PREFIX}/bin/libsodium-18.dll" "${PREFIX}/"
 
 nm "${MINGW_PREFIX}/bin/libldns-1.dll" | \
-  fgrep -i libeay &&
+  fgrep -i libeay > /dev/null &&
   cp "${MINGW_PREFIX}/bin/"libeay*.dll "${PREFIX}/"
 
 cp dnscrypt-resolvers.csv "${PREFIX}/"
