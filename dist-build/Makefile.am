@@ -13,4 +13,5 @@ EXTRA_DIST = \
 	ios.sh \
 	mipsel-linux-static.sh \
 	msys2-win32.sh \
+	msys2-win64.sh \
 	osx.sh
