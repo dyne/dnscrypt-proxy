@@ -9,6 +9,11 @@ export SODIUM_PREFIX='/tmp/libsodium-win32'
 export CPPFLAGS="${CPPFLAGS} -I${SODIUM_PREFIX}/include"
 export LDFLAGS="${LDFLAGS} -L${SODIUM_PREFIX}/lib"
 
+if [ ! -d "$SODIUM_PREFIX" ]; then
+  echo "WARNING: [$SODIUM_PREFIX] not found, compiling against system libsodium" >&2
+  sleep 10
+fi
+
 ./configure --prefix="$PREFIX" --exec-prefix="$PREFIX" \
   --host=i686-w64-mingw32 \
   --bindir="$PREFIX" \
