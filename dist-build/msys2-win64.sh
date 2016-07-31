@@ -22,7 +22,7 @@ mv "${PREFIX}/lib/dnscrypt-proxy/"*.dll "${PREFIX}/"
 mv "${PREFIX}/lib/dnscrypt-proxy/"*.la "${PREFIX}/"
 rm -fr "${PREFIX}/lib"
 cp "${MINGW_PREFIX}/bin/libwinpthread-1.dll" "${PREFIX}/"
-cp "${MINGW_PREFIX}/bin/libgcc_s_dw2-1.dll" "${PREFIX}/"
+cp "${MINGW_PREFIX}/bin/libgcc_s_seh-1.dll" "${PREFIX}/"
 cp "${MINGW_PREFIX}/bin/libldns-1.dll" "${PREFIX}/"
 cp "${SODIUM_PREFIX}/bin/libsodium-18.dll" "${PREFIX}/"
 
