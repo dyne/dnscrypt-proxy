@@ -11,7 +11,6 @@ compiler:
 before_script:
  - git clone https://github.com/jedisct1/libsodium.git --branch=stable
  - cd libsodium
- - ./autogen.sh
  - ./configure --disable-dependency-tracking
  - sudo make install
  - sudo ldconfig
