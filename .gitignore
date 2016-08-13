@@ -25,6 +25,7 @@ confdefs.h
 config.*
 configure
 depcomp
+dist-build/android-files/META-INF/com/google/android/update-binary
 dnscrypt-update-resolvers.sh
 install-sh
 libltdl
