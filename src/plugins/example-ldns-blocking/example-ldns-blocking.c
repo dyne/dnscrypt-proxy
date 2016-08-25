@@ -95,19 +95,21 @@ host_only(char *line)
     return s2;
 }
 
-static StrList *
-parse_str_list(const char * const file)
+static int
+parse_str_list(StrList ** const str_list_p, const char * const file)
 {
     char     line[512U];
     char    *host;
     FILE    *fp;
     char    *ptr;
-    StrList *str_list = NULL;
     StrList *str_list_item;
     StrList *str_list_last = NULL;
+    int      ret = -1;
 
+    assert(str_list_p != NULL);
+    *str_list_p = NULL;
     if ((fp = fopen(file, "r")) == NULL) {
-        return NULL;
+        return -1;
     }
     while (fgets(line, (int) sizeof line, fp) != NULL) {
         while ((ptr = strchr(line, '\n')) != NULL ||
@@ -122,16 +124,18 @@ parse_str_list(const char * const file)
             break;
         }
         str_list_item->next = NULL;
-        *(str_list == NULL ? &str_list : &str_list_last->next) = str_list_item;
+        *(*str_list_p == NULL ? str_list_p : &str_list_last->next) = str_list_item;
         str_list_last = str_list_item;
     }
     if (!feof(fp)) {
-        str_list_free(str_list);
-        str_list = NULL;
+        str_list_free(*str_list_p);
+        *str_list_p = NULL;
+    } else {
+        ret = 0;
     }
     fclose(fp);
 
-    return str_list;
+    return ret;
 }
 
 
@@ -248,21 +252,18 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
                                    &option_index)) != -1) {
         switch (opt_flag) {
         case 'd':
-            if ((blocking->domains = parse_str_list(optarg)) == NULL) {
+            if (parse_str_list(&blocking->domains, optarg) != 0) {
                 return -1;
             }
             break;
         case 'i':
-            if ((blocking->ips = parse_str_list(optarg)) == NULL) {
+            if (parse_str_list(&blocking->ips, optarg) != 0) {
                 return -1;
             }
             break;
         default:
             return -1;
         }
-    }
-    if (blocking->domains == NULL && blocking->ips == NULL) {
-        return -1;
     }
     return 0;
 }
