@@ -310,14 +310,17 @@ options_parse_resolvers_list(ProxyContext * const proxy_context, char *buf)
     assert(proxy_context->resolver_name != NULL);
     buf = minicsv_parse_line(buf, headers, &headers_count,
                              sizeof headers / sizeof headers[0]);
-    if (headers_count < 4U) {
+    if (headers_count < 4U || headers_count > OPTIONS_RESOLVERS_LIST_MAX_COLS) {
         return -1;
     }
     do {
         buf = minicsv_parse_line(buf, cols, &cols_count,
                                  sizeof cols / sizeof cols[0]);
+        if (cols_count < 4U || cols_count > OPTIONS_RESOLVERS_LIST_MAX_COLS) {
+            continue;
+        }
         minicsv_trim_cols(cols, cols_count);
-        if (cols_count < 4U || *cols[0] == 0 || *cols[0] == '#') {
+        if (*cols[0] == 0 || *cols[0] == '#') {
             continue;
         }
         if (options_parse_resolver(proxy_context, headers, headers_count,
