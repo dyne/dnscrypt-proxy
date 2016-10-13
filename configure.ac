@@ -262,9 +262,15 @@ AC_SUBST([PROBES_SOURCE])
 AS_IF([test -d /usr/local/include], [
   CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 ])
+AS_IF([test -d /usr/local/opt/openssl/include], [
+  CPPFLAGS="$CPPFLAGS -I/usr/local/opt/openssl/include"
+])
 
 AS_IF([test -d /usr/local/lib], [
   LDFLAGS="$LDFLAGS -L/usr/local/lib"
+])
+AS_IF([test -d /usr/local/opt/openssl/lib], [
+  LDFLAGS="$LDFLAGS -L/usr/local/opt/openssl/lib"
 ])
 
 dnl Checks for header files.
