@@ -293,26 +293,35 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
     ldns_rr  *question;
     char     *owner_str;
     size_t    owner_str_len;
+	
+    DCPluginSyncFilterResult retcode=DCP_SYNC_FILTER_RESULT_OK; // Default answer
 
     scanned = blocking->domains;
+	
     question = ldns_rr_list_rr(ldns_pkt_question(packet), 0U);
     if ((owner_str = ldns_rdf2str(ldns_rr_owner(question))) == NULL) {
         return DCP_SYNC_FILTER_RESULT_FATAL;
     }
+	
     owner_str_len = strlen(owner_str);
     if (owner_str_len > (size_t) 1U && owner_str[--owner_str_len] == '.') {
         owner_str[owner_str_len] = 0;
     }
+ 
     do {
         if (wildcard_match(owner_str, scanned->str)) {
-            LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
-                           LDNS_RCODE_REFUSED);
+	        ldns_pkt_set_qr(packet, true);                      /* this is a response */
+	        ldns_pkt_set_opcode(packet, LDNS_PACKET_QUERY);     /* to a query */
+	        ldns_pkt_set_rcode(packet, LDNS_RCODE_REFUSED);     /* with this rcode */
+	        ldns_pkt_set_ra(packet, true);
+
+	        retcode=DCP_SYNC_FILTER_RESULT_DIRECT;
             break;
         }
     } while ((scanned = scanned->next) != NULL);
     free(owner_str);
 
-    return DCP_SYNC_FILTER_RESULT_OK;
+    return retcode;
 }
 
 static DCPluginSyncFilterResult
@@ -351,6 +360,42 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
     return DCP_SYNC_FILTER_RESULT_OK;
 }
 
+
+DCPluginSyncFilterResult
+dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
+{
+    Blocking                 *blocking = dcplugin_get_user_data(dcplugin);
+    ldns_pkt                 *packet;
+    uint8_t                  *wire;
+    size_t                    wire_size;
+    DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
+	
+	if (blocking->domains == NULL) {
+        return DCP_SYNC_FILTER_RESULT_OK;
+    }
+
+    ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
+                  dcplugin_get_wire_data_len(dcp_packet));
+    if (packet == NULL) {
+        return DCP_SYNC_FILTER_RESULT_ERROR;
+    }
+	
+    result = apply_block_domains(dcp_packet, blocking, packet);
+
+    if (result==DCP_SYNC_FILTER_RESULT_DIRECT) {
+		ldns_pkt2wire((uint8_t**)&wire, packet, &wire_size);
+		if (wire==NULL || wire_size==0U) {
+			ldns_pkt_free(packet);
+			return DCP_SYNC_FILTER_RESULT_ERROR;
+		}
+		dcplugin_set_wire_data(dcp_packet,wire,wire_size);
+		free(wire);
+	}
+
+    ldns_pkt_free(packet);
+    return result;
+}
+
 DCPluginSyncFilterResult
 dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
@@ -358,19 +403,13 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     ldns_pkt                 *packet = NULL;
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
 
-    if (blocking->domains == NULL && blocking->ips == NULL) {
+    if (blocking->ips == NULL) {
         return DCP_SYNC_FILTER_RESULT_OK;
     }
     if (ldns_wire2pkt(&packet, dcplugin_get_wire_data(dcp_packet),
                       dcplugin_get_wire_data_len(dcp_packet))
         != LDNS_STATUS_OK) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
-    }
-    if (blocking->domains != NULL &&
-        (result = apply_block_domains(dcp_packet, blocking, packet)
-            != DCP_SYNC_FILTER_RESULT_OK)) {
-        ldns_pkt_free(packet);
-        return result;
     }
     if (blocking->ips != NULL &&
         (result = apply_block_ips(dcp_packet, blocking, packet)
