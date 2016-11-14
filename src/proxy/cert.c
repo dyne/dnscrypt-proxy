@@ -76,6 +76,12 @@ cert_parse_bincert(ProxyContext * const proxy_context,
     memcpy(&ts_end, bincert->ts_end, sizeof ts_end);
     ts_end = htonl(ts_end);
 
+    if (ts_end <= ts_begin) {
+        logger_noformat(proxy_context, LOG_WARNING,
+                        "This certificate has a bogus validity period");
+        return -1;
+    }
+
     const uint32_t now_u32 = (uint32_t) time(NULL);
 
     if (now_u32 < ts_begin) {
@@ -285,6 +291,25 @@ cert_reschedule_query_after_success(ProxyContext * const proxy_context)
 }
 
 static void
+cert_check_key_rotation_period(ProxyContext * const proxy_context,
+                               const Bincert * const bincert)
+{
+    uint32_t ts_begin;
+    uint32_t ts_end;
+
+    memcpy(&ts_begin, bincert->ts_begin, sizeof ts_begin);
+    ts_begin = htonl(ts_begin);
+    memcpy(&ts_end, bincert->ts_end, sizeof ts_end);
+    ts_end = htonl(ts_end);
+    assert(ts_end > ts_begin);
+    if (ts_end - ts_begin > CERT_RECOMMENDED_MAX_KEY_ROTATION_PERIOD) {
+        logger_noformat(proxy_context, LOG_INFO,
+                        "The key rotation period for this server may exceed the recommended value. "
+                        "This is bad for forward secrecy.");
+    }
+}
+
+static void
 cert_query_cb(int result, char type, int count, int ttl,
               void * const txt_records_, void * const arg)
 {
@@ -346,6 +371,7 @@ cert_query_cb(int result, char type, int count, int ttl,
     memcpy(proxy_context->dnscrypt_magic_query, bincert->magic_query,
            sizeof proxy_context->dnscrypt_magic_query);
     cert_print_bincert_info(proxy_context, bincert);
+    cert_check_key_rotation_period(proxy_context, bincert);
     cert_print_server_key(proxy_context);
     dnscrypt_client_init_magic_query(&proxy_context->dnscrypt_client,
                                      bincert->magic_query);
