@@ -730,4 +730,10 @@ options_free(ProxyContext * const proxy_context)
     free(proxy_context->user_dir);
     proxy_context->user_dir = NULL;
 #endif
+    free((void *) proxy_context->provider_name);
+    proxy_context->provider_name = NULL;
+    free((void *) proxy_context->provider_publickey_s);
+    proxy_context->provider_publickey_s = NULL;
+    free((void *) proxy_context->resolver_ip);
+    proxy_context->resolver_ip = NULL;
 }
