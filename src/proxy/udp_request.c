@@ -349,7 +349,7 @@ client_to_proxy_cb(evutil_socket_t client_proxy_handle, short ev_flags,
     if (proxy_context->connections_count >=
         proxy_context->connections_count_max) {
         DNSCRYPT_PROXY_REQUEST_UDP_OVERLOADED();
-        if (udp_listener_kill_oldest_request(proxy_context) == 0) {
+        if (udp_listener_kill_oldest_request(proxy_context) != 0) {
             tcp_listener_kill_oldest_request(proxy_context);
         }
     }
@@ -566,6 +566,6 @@ udp_listener_stop(ProxyContext * const proxy_context)
     }
     event_free(proxy_context->udp_proxy_resolver_event);
     proxy_context->udp_proxy_resolver_event = NULL;
-    while (udp_listener_kill_oldest_request(proxy_context) != 0) { }
+    while (udp_listener_kill_oldest_request(proxy_context) == 0) { }
     logger_noformat(proxy_context, LOG_INFO, "UDP listener shut down");
 }
