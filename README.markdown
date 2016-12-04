@@ -123,6 +123,9 @@ service. Windows only, written in .NET.
 - [DNSCrypt OSXClient](https://github.com/alterstep/dnscrypt-osxclient):
 Mac OSX application to control the DNSCrypt Proxy.
 
+- [DNSCryptClient](https://github.com/F1ash/dnscrypt-proxy-gui): A Qt/KF5 GUI for
+Linux.
+
 DNSCrypt-enabled resolvers
 --------------------------
 
