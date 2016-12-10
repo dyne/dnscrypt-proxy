@@ -393,6 +393,7 @@ Recognized switches are:
 
     --domains=<file>
     --ips=<file>
+    --logfile=<file>
 
 A file should list one entry per line.
 
@@ -403,6 +404,8 @@ For names, leading and trailing wildcards (`*`) are also supported (e.g.
 
     # dnscrypt-proxy ... \
     --plugin libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names
+
+Blocked requests will be written to the optional log file.
 
 * `libdcplugin_example-logging`: Log client queries
 
