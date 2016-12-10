@@ -21,6 +21,51 @@
 #include "dnscrypt_client.h"
 #include "utils.h"
 
+/*
+ * Debian Jessie ships an old version of libsodium that doesn't support
+ * overlapping buffers. Use temporary buffers to work around this.
+ */
+#if SODIUM_LIBRARY_VERSION_MAJOR < 7 || SODIUM_LIBRARY_VERSION_MINOR <= 2
+int crypto_box_easy_nooverlap(unsigned char *c, const unsigned char *m,
+                              unsigned long long mlen, const unsigned char *n,
+                              const unsigned char *pk, const unsigned char *sk)
+{
+    unsigned char tmp[65536];
+
+    if (crypto_box_MACBYTES + mlen > sizeof tmp) {
+        return -1;
+    }
+    if (crypto_box_easy(tmp, m, mlen, n, pk, sk) != 0) {
+        return -1;
+    }
+    memcpy(c, tmp, crypto_box_MACBYTES + mlen);
+
+    return 0;
+}
+
+int crypto_box_open_easy_nooverlap(unsigned char *m, const unsigned char *c,
+                                   unsigned long long clen,
+                                   const unsigned char *n,
+                                   const unsigned char *pk,
+                                   const unsigned char *sk)
+{
+    unsigned char tmp[65536];
+
+    if (clen < crypto_box_MACBYTES || clen - crypto_box_MACBYTES > sizeof tmp) {
+        return -1;
+    }
+    if (crypto_box_open_easy(tmp, c, clen, n, pk, sk) != 0) {
+        return -1;
+    }
+    memcpy(m, tmp, clen - crypto_box_MACBYTES);
+
+    return 0;
+}
+
+# define crypto_box_easy      crypto_box_easy_nooverlap
+# define crypto_box_open_easy crypto_box_open_easy_nooverlap
+#endif
+
 static void
 dnscrypt_make_client_nonce(DNSCryptClient * const client,
                            uint8_t client_nonce[crypto_box_HALF_NONCEBYTES])
