@@ -423,7 +423,7 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
-AC_SEARCH_LIBS(crypto_box_easy_afternm, [sodium], [ ], AC_ERROR([libsodium >= 1.0.2 not found]))
+AC_SEARCH_LIBS(sodium_hex2bin, [sodium], [ ], AC_ERROR([libsodium >= 0.7.0 not found]))
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
@@ -455,6 +455,7 @@ AC_CHECK_HEADER([CoreServices/CoreServices.h],
   [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
 
 AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit putc_unlocked gmtime_r initgroups])
+AC_CHECK_FUNCS([crypto_box_easy_afternm crypto_core_hchacha20 crypto_box_curve25519xchacha20poly1305_open_easy_afternm])
 
 dnl Libtool.
 

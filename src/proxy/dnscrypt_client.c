@@ -76,10 +76,13 @@ dnscrypt_client_curve(DNSCryptClient * const client,
     dnscrypt_make_client_nonce(client, nonce);
     memcpy(client_nonce, nonce, crypto_box_HALF_NONCEBYTES);
     memset(nonce + crypto_box_HALF_NONCEBYTES, 0, crypto_box_HALF_NONCEBYTES);
+#ifdef HAVE_CRYPTO_BOX_EASY_AFTERNM
     if (client->ephemeral_keys == 0) {
         publickey = client->publickey;
         res = crypto_box_easy_afternm(boxed, boxed, len, nonce, client->nmkey);
-    } else {
+    } else
+#endif
+    {
         COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES < sizeof eph_nonce);
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
         memcpy(eph_nonce + crypto_box_HALF_NONCEBYTES, client->nonce_pad,
@@ -141,11 +144,14 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
     message_len = ciphertext_len - crypto_box_MACBYTES;
     memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
            crypto_box_NONCEBYTES);
+#ifdef HAVE_CRYPTO_BOX_EASY_AFTERNM
     if (client->ephemeral_keys == 0) {
         res = crypto_box_open_easy_afternm
             (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
              nonce, client->nmkey);
-    } else {
+    } else
+#endif
+    {
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
         memcpy(eph_nonce + crypto_box_HALF_NONCEBYTES, client->nonce_pad,
                crypto_box_HALF_NONCEBYTES);
