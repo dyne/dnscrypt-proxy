@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
+#include <time.h>
 
 #ifdef _WIN32
 # include <ws2tcpip.h>
@@ -299,13 +299,33 @@ dcplugin_destroy(DCPlugin * const dcplugin)
 }
 
 static int
+timestamp_fprint(FILE * const fp)
+{
+    char now_s[128];
+
+    time_t     now;
+    struct tm *tm;
+
+    if (time(&now) == (time_t) -1) {
+        fprintf(fp, "- ");
+        return -1;
+    }
+    tm = localtime(&now);
+    strftime(now_s, sizeof now_s, "%c", tm);
+    fprintf(fp, "%s ", now_s);
+
+    return 0;
+}
+
+static int
 log_blocked_rr(const Blocking * const blocking,
                const char * const blocked_question, const char * const rule)
 {
     if (blocking->fp == NULL) {
         return 0;
     }
-    fprintf(blocking->fp, "%s\t%s\n", blocked_question, rule);
+    timestamp_fprint(blocking->fp);
+    fprintf(blocking->fp, "%s %s\n", blocked_question, rule);
     fflush(blocking->fp);
 
     return 0;
