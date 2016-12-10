@@ -31,6 +31,7 @@ dnscrypt_proxy_SOURCES = \
 	safe_rw.h \
 	sandboxes.c \
 	sandboxes.h \
+	shims.h \
 	stack_trace.c \
 	stack_trace.h \
 	tcp_request.c \

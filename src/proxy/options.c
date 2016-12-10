@@ -136,11 +136,7 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->test_cert_margin = (time_t) -1;
     proxy_context->test_only = 0;
     proxy_context->tcp_only = 0;
-#ifndef HAVE_CRYPTO_BOX_EASY_AFTERNM
-    proxy_context->ephemeral_keys = 1;
-#else
     proxy_context->ephemeral_keys = 0;
-#endif
     proxy_context->ignore_timestamps = 0;
 }
 

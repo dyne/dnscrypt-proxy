@@ -20,51 +20,7 @@
 #include "dnscrypt.h"
 #include "dnscrypt_client.h"
 #include "utils.h"
-
-/*
- * Debian Jessie ships an old version of libsodium that doesn't support
- * overlapping buffers. Use temporary buffers to work around this.
- */
-#if SODIUM_LIBRARY_VERSION_MAJOR < 7 || SODIUM_LIBRARY_VERSION_MINOR <= 2
-int crypto_box_easy_nooverlap(unsigned char *c, const unsigned char *m,
-                              unsigned long long mlen, const unsigned char *n,
-                              const unsigned char *pk, const unsigned char *sk)
-{
-    unsigned char tmp[65536];
-
-    if (crypto_box_MACBYTES + mlen > sizeof tmp) {
-        return -1;
-    }
-    if (crypto_box_easy(tmp, m, mlen, n, pk, sk) != 0) {
-        return -1;
-    }
-    memcpy(c, tmp, crypto_box_MACBYTES + mlen);
-
-    return 0;
-}
-
-int crypto_box_open_easy_nooverlap(unsigned char *m, const unsigned char *c,
-                                   unsigned long long clen,
-                                   const unsigned char *n,
-                                   const unsigned char *pk,
-                                   const unsigned char *sk)
-{
-    unsigned char tmp[65536];
-
-    if (clen < crypto_box_MACBYTES || clen - crypto_box_MACBYTES > sizeof tmp) {
-        return -1;
-    }
-    if (crypto_box_open_easy(tmp, c, clen, n, pk, sk) != 0) {
-        return -1;
-    }
-    memcpy(m, tmp, clen - crypto_box_MACBYTES);
-
-    return 0;
-}
-
-# define crypto_box_easy      crypto_box_easy_nooverlap
-# define crypto_box_open_easy crypto_box_open_easy_nooverlap
-#endif
+#include "shims.h"
 
 static void
 dnscrypt_make_client_nonce(DNSCryptClient * const client,
@@ -121,13 +77,10 @@ dnscrypt_client_curve(DNSCryptClient * const client,
     dnscrypt_make_client_nonce(client, nonce);
     memcpy(client_nonce, nonce, crypto_box_HALF_NONCEBYTES);
     memset(nonce + crypto_box_HALF_NONCEBYTES, 0, crypto_box_HALF_NONCEBYTES);
-#ifdef HAVE_CRYPTO_BOX_EASY_AFTERNM
     if (client->ephemeral_keys == 0) {
         publickey = client->publickey;
         res = crypto_box_easy_afternm(boxed, boxed, len, nonce, client->nmkey);
-    } else
-#endif
-    {
+    } else {
         COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES < sizeof eph_nonce);
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
         memcpy(eph_nonce + crypto_box_HALF_NONCEBYTES, client->nonce_pad,
@@ -189,14 +142,11 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
     message_len = ciphertext_len - crypto_box_MACBYTES;
     memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
            crypto_box_NONCEBYTES);
-#ifdef HAVE_CRYPTO_BOX_EASY_AFTERNM
     if (client->ephemeral_keys == 0) {
         res = crypto_box_open_easy_afternm
             (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
              nonce, client->nmkey);
-    } else
-#endif
-    {
+    } else {
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
         memcpy(eph_nonce + crypto_box_HALF_NONCEBYTES, client->nonce_pad,
                crypto_box_HALF_NONCEBYTES);
