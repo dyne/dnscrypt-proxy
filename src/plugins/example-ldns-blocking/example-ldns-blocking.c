@@ -227,7 +227,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "(e.g. *xxx*, *.example.com, ads.*)\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
-        "  libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names\n";
+        "  libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names";
 }
 
 int

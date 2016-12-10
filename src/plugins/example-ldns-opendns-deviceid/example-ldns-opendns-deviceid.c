@@ -34,7 +34,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "\n"
         "$ dig txt debug.opendns.com\n"
         "\n"
-        "# env OPENDNS_DEVICE_ID='<device id>' dnscrypt-proxy --plugin \n"
+        "# env OPENDNS_DEVICE_ID='<device id>' dnscrypt-proxy --plugin \\\n"
         "  libdcplugin_example_ldns_opendns_deviceid.la";
 }
 
