@@ -423,7 +423,7 @@ AC_SEARCH_LIBS(backtrace, [execinfo],
 AC_SEARCH_LIBS(gethostbyname, [resolv nsl])
 AC_SEARCH_LIBS(recvfrom, [socket])
 AC_SEARCH_LIBS(kvm_open, [kvm])
-AC_SEARCH_LIBS(sodium_hex2bin, [sodium], [ ], AC_ERROR([libsodium >= 0.7.0 not found]))
+AC_SEARCH_LIBS(crypto_box_easy_afternm, [sodium], [ ], AC_ERROR([libsodium >= 1.0.2 not found]))
 
 use_ldns=no
 AC_CHECK_HEADER([ldns/ldns.h], [
