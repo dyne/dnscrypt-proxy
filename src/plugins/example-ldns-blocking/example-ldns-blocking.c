@@ -29,14 +29,16 @@ typedef struct StrList_ {
 typedef struct Blocking_ {
     StrList *domains;
     StrList *ips;
+    FILE    *fp;
 } Blocking;
 
 static struct option getopt_long_options[] = {
     { "domains", 1, NULL, 'd' },
     { "ips", 1, NULL, 'i' },
+    { "logfile", 1, NULL, 'l' },
     { NULL, 0, NULL, 0 }
 };
-static const char *getopt_options = "di";
+static const char *getopt_options = "dil";
 
 static void
 str_list_free(StrList * const str_list)
@@ -242,6 +244,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if (blocking == NULL) {
         return -1;
     }
+    blocking->fp = NULL;
     blocking->domains = blocking->ips = NULL;
     optind = 0;
 #ifdef _OPTRESET
@@ -261,6 +264,12 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
                 return -1;
             }
             break;
+        case 'l': {
+            if ((blocking->fp = fopen(optarg, "a")) == NULL) {
+                return -1;
+            }
+            break;
+        }
         default:
             return -1;
         }
@@ -280,7 +289,24 @@ dcplugin_destroy(DCPlugin * const dcplugin)
     blocking->domains = NULL;
     str_list_free(blocking->ips);
     blocking->ips = NULL;
+    if (blocking->fp != NULL) {
+        fclose(blocking->fp);
+        blocking->fp = NULL;
+    }
     free(blocking);
+
+    return 0;
+}
+
+static int
+log_blocked_rr(const Blocking * const blocking,
+               const char * const blocked_question, const char * const rule)
+{
+    if (blocking->fp == NULL) {
+        return 0;
+    }
+    fprintf(blocking->fp, "%s\t%s\n", blocked_question, rule);
+    fflush(blocking->fp);
 
     return 0;
 }
@@ -317,6 +343,7 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
             LDNS_RA_SET(wire_data);
             LDNS_RCODE_SET(wire_data, LDNS_RCODE_REFUSED);
             result = DCP_SYNC_FILTER_RESULT_DIRECT;
+            log_blocked_rr(blocking, owner_str, scanned->str);
             break;
         }
     } while ((scanned = scanned->next) != NULL);
@@ -353,6 +380,26 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
             if (strcasecmp(scanned->str, answer_str) == 0) {
                 LDNS_RCODE_SET(dcplugin_get_wire_data(dcp_packet),
                                LDNS_RCODE_REFUSED);
+                if (blocking->fp != NULL) {
+                    ldns_rr      *question;
+                    ldns_rr_list *questions;
+                    char         *owner_str;
+                    size_t        owner_str_len;
+
+                    questions = ldns_pkt_question(packet);
+                    if (ldns_rr_list_rr_count(questions) != (size_t) 1U) {
+                        return DCP_SYNC_FILTER_RESULT_ERROR;
+                    }
+                    question = ldns_rr_list_rr(questions, 0U);
+                    if ((owner_str = ldns_rdf2str(ldns_rr_owner(question))) == NULL) {
+                        return DCP_SYNC_FILTER_RESULT_FATAL;
+                    }
+                    owner_str_len = strlen(owner_str);
+                    if (owner_str_len > (size_t) 1U && owner_str[--owner_str_len] == '.') {
+                        owner_str[owner_str_len] = 0;
+                    }
+                    log_blocked_rr(blocking, owner_str, scanned->str);
+                }
                 break;
             }
         } while ((scanned = scanned->next) != NULL);
