@@ -79,7 +79,15 @@ dnscrypt_client_curve(DNSCryptClient * const client,
     memset(nonce + crypto_box_HALF_NONCEBYTES, 0, crypto_box_HALF_NONCEBYTES);
     if (client->ephemeral_keys == 0) {
         publickey = client->publickey;
-        res = crypto_box_easy_afternm(boxed, boxed, len, nonce, client->nmkey);
+        if (client->cipher == CIPHER_XSALSA20POLY1305) {
+            res = crypto_box_easy_afternm(boxed, boxed, len, nonce,
+                                          client->nmkey);
+        } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
+            res = crypto_box_curve25519xchacha20poly1305_easy_afternm(boxed, boxed, len, nonce,
+                                                                      client->nmkey);
+        } else {
+            return (ssize_t) -1;
+        }
     } else {
         COMPILER_ASSERT(crypto_box_HALF_NONCEBYTES < sizeof eph_nonce);
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
@@ -89,8 +97,15 @@ dnscrypt_client_curve(DNSCryptClient * const client,
                       eph_nonce, client->secretkey);
         crypto_scalarmult_base(eph_publickey, eph_secretkey);
         publickey = eph_publickey;
-        res = crypto_box_easy(boxed, boxed, len, nonce,
-                              client->publickey, eph_secretkey);
+        if (client->cipher == CIPHER_XSALSA20POLY1305) {
+            res = crypto_box_easy(boxed, boxed, len, nonce,
+                                  client->publickey, eph_secretkey);
+        } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
+            res = crypto_box_curve25519xchacha20poly1305_easy(boxed, boxed, len, nonce,
+                                                              client->publickey, eph_secretkey);
+        } else {
+            return (ssize_t) -1;
+        }
         sodium_memzero(eph_secretkey, sizeof eph_secretkey);
     }
     if (res != 0) {
@@ -143,9 +158,17 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
     memcpy(nonce, buf + sizeof DNSCRYPT_MAGIC_RESPONSE - 1U,
            crypto_box_NONCEBYTES);
     if (client->ephemeral_keys == 0) {
-        res = crypto_box_open_easy_afternm
-            (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
-             nonce, client->nmkey);
+        if (client->cipher == CIPHER_XSALSA20POLY1305) {
+            res = crypto_box_open_easy_afternm
+                (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
+                    nonce, client->nmkey);
+        } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
+            res = crypto_box_curve25519xchacha20poly1305_open_easy_afternm
+                (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
+                    nonce, client->nmkey);
+        } else {
+            return -1;
+        }
     } else {
         memcpy(eph_nonce, client_nonce, crypto_box_HALF_NONCEBYTES);
         memcpy(eph_nonce + crypto_box_HALF_NONCEBYTES, client->nonce_pad,
@@ -153,9 +176,17 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
         crypto_stream(eph_secretkey, sizeof eph_secretkey,
                       eph_nonce, client->secretkey);
         crypto_scalarmult_base(eph_publickey, eph_secretkey);
-        res = crypto_box_open_easy
-            (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
-             nonce, client->publickey, eph_secretkey);
+        if (client->cipher == CIPHER_XSALSA20POLY1305) {
+            res = crypto_box_open_easy
+                (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
+                    nonce, client->publickey, eph_secretkey);
+        } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
+            res = crypto_box_curve25519xchacha20poly1305_open_easy
+                (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
+                    nonce, client->publickey, eph_secretkey);
+        } else {
+            return -1;
+        }
         sodium_memzero(eph_secretkey, sizeof eph_secretkey);
     }
     sodium_memzero(nonce, sizeof nonce);
@@ -173,10 +204,12 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
 
 int
 dnscrypt_client_init_magic_query(DNSCryptClient * const client,
-                                 const uint8_t magic_query[DNSCRYPT_MAGIC_QUERY_LEN])
+                                 const uint8_t magic_query[DNSCRYPT_MAGIC_QUERY_LEN],
+                                 Cipher cipher)
 {
     COMPILER_ASSERT(DNSCRYPT_MAGIC_QUERY_LEN == sizeof client->magic_query);
     memcpy(client->magic_query, magic_query, sizeof client->magic_query);
+    client->cipher = cipher;
 
     return 0;
 }

@@ -43,7 +43,11 @@ cert_parse_version(ProxyContext * const proxy_context,
         return -1;
     }
     if (signed_bincert->version_major[0] != 0U ||
-        signed_bincert->version_major[1] != 1U) {
+        (signed_bincert->version_major[1] != 1U
+#ifdef HAVE_CRYPTO_CORE_HCHACHA20
+         && signed_bincert->version_major[1] != 2U
+#endif
+        )) {
         logger_noformat(proxy_context, LOG_WARNING,
                         "Unsupported certificate version");
         return -1;
@@ -175,9 +179,6 @@ static void
 cert_print_bincert_info(ProxyContext * const proxy_context,
                         const Bincert * const bincert)
 {
-    (void) proxy_context;
-    (void) bincert;
-
 #ifdef HAVE_GMTIME_R
     struct tm ts_begin_tm;
     struct tm ts_end_tm;
@@ -214,6 +215,13 @@ cert_print_bincert_info(ProxyContext * const proxy_context,
            ts_end_tm.tm_year + 1900,
            ts_end_tm.tm_mon + 1, ts_end_tm.tm_mday);
 #endif
+    if (bincert->version_major[1] > 1U) {
+        const unsigned int version_minor =
+            bincert->version_minor[0] * 256 + bincert->version_major[1];
+        logger(proxy_context, LOG_INFO,
+               "Using version %u.%u of the DNSCrypt protocol",
+               bincert->version_major[1], version_minor);
+    }
 }
 
 static void
@@ -316,6 +324,7 @@ cert_query_cb(int result, char type, int count, int ttl,
     Bincert                 *bincert = NULL;
     ProxyContext            *proxy_context = arg;
     const struct txt_record *txt_records = txt_records_;
+    Cipher                   cipher = CIPHER_UNDEFINED;
     int                      i = 0;
 
     (void) type;
@@ -340,6 +349,25 @@ cert_query_cb(int result, char type, int count, int ttl,
     if (bincert == NULL) {
         logger_noformat(proxy_context, LOG_ERR,
                         "No useable certificates found");
+        cert_reschedule_query_after_failure(proxy_context);
+        DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
+        if (proxy_context->test_only) {
+            exit(DNSCRYPT_EXIT_CERT_NOCERTS);
+        }
+        return;
+    }
+    switch (bincert->version_major[1]) {
+    case 1:
+        cipher = CIPHER_XSALSA20POLY1305;
+        break;
+#ifdef HAVE_CRYPTO_CORE_HCHACHA20
+    case 2:
+        cipher = CIPHER_XCHACHA20POLY1305;
+        break;
+#endif
+    default:
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unsupported certificate version");
         cert_reschedule_query_after_failure(proxy_context);
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
         if (proxy_context->test_only) {
@@ -374,7 +402,7 @@ cert_query_cb(int result, char type, int count, int ttl,
     cert_check_key_rotation_period(proxy_context, bincert);
     cert_print_server_key(proxy_context);
     dnscrypt_client_init_magic_query(&proxy_context->dnscrypt_client,
-                                     bincert->magic_query);
+                                     bincert->magic_query, cipher);
     memset(bincert, 0, sizeof *bincert);
     free(bincert);
     if (proxy_context->test_only) {
