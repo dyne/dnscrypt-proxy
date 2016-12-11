@@ -34,8 +34,8 @@ cert_parse_version(ProxyContext * const proxy_context,
                    const SignedBincert * const signed_bincert,
                    const size_t signed_bincert_len)
 {
-    if (signed_bincert_len <= (size_t) (signed_bincert->signed_data -
-                                        signed_bincert->magic_cert) ||
+    if (signed_bincert_len < (size_t) (signed_bincert->signed_data -
+                                       signed_bincert->magic_cert) ||
         memcmp(signed_bincert->magic_cert, CERT_MAGIC_CERT,
                sizeof signed_bincert->magic_cert) != 0) {
         logger_noformat(proxy_context, LOG_DEBUG,
@@ -146,12 +146,13 @@ cert_open_bincert(ProxyContext * const proxy_context,
         DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_COMMUNICATION();
         return -1;
     }
-    assert(signed_bincert_len >= (size_t) (signed_bincert->signed_data -
-                                           signed_bincert->magic_cert));
+    assert(signed_bincert_len > (size_t) (signed_bincert->signed_data -
+                                          signed_bincert->magic_cert));
     signed_data_len = signed_bincert_len -
         (size_t) (signed_bincert->signed_data - signed_bincert->magic_cert);
     assert(bincert_size - (size_t) (bincert->server_publickey -
                                     bincert->magic_cert) == signed_data_len);
+    memcpy(bincert, signed_bincert, signed_bincert_len - signed_data_len);
     if (crypto_sign_ed25519_open(bincert->server_publickey, &bincert_data_len_ul,
                                  signed_bincert->signed_data, signed_data_len,
                                  proxy_context->provider_publickey) != 0) {
