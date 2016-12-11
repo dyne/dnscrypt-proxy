@@ -109,9 +109,33 @@ cert_parse_bincert(ProxyContext * const proxy_context,
         return 0;
     }
 
+    const uint32_t version =
+        (((uint32_t) bincert->version_major[0]) << 24) +
+        (((uint32_t) bincert->version_major[1]) << 16) +
+        (((uint32_t) bincert->version_minor[0]) << 8) +
+        (((uint32_t) bincert->version_minor[1]));
+
+    const uint32_t previous_version =
+        (((uint32_t) previous_bincert->version_major[0]) << 24) +
+        (((uint32_t) previous_bincert->version_major[1]) << 16) +
+        (((uint32_t) previous_bincert->version_minor[0]) << 8) +
+        (((uint32_t) previous_bincert->version_minor[1]));
+
     uint32_t previous_serial;
     memcpy(&previous_serial, previous_bincert->serial, sizeof previous_serial);
     previous_serial = htonl(previous_serial);
+
+    if (previous_version > version) {
+        logger(proxy_context, LOG_INFO, "Keeping certificate #%" PRIu32 " "
+               "which is for a more recent version than #%" PRIu32,
+               previous_serial, serial);
+        return -1;
+    } else if (previous_version < version) {
+        logger(proxy_context, LOG_INFO, "Favoring certificate #%" PRIu32 " "
+               "which is for a more recent version than #%" PRIu32,
+               serial, previous_serial);
+        return 0;
+    }
     if (previous_serial > serial) {
         logger(proxy_context, LOG_INFO, "Certificate #%" PRIu32 " "
                "has been superseded by certificate #%" PRIu32,
