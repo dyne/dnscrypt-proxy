@@ -48,8 +48,10 @@ cert_parse_version(ProxyContext * const proxy_context,
          && signed_bincert->version_major[1] != 2U
 #endif
         )) {
-        logger_noformat(proxy_context, LOG_WARNING,
-                        "Unsupported certificate version");
+        logger(proxy_context, LOG_WARNING,
+               "Unsupported certificate version: [%u][%u]",
+               signed_bincert->version_major[0],
+               signed_bincert->version_major[1]);
         return -1;
     }
     return 0;
@@ -242,7 +244,7 @@ cert_print_bincert_info(ProxyContext * const proxy_context,
 #endif
     if (bincert->version_major[1] > 1U) {
         const unsigned int version_minor =
-            bincert->version_minor[0] * 256 + bincert->version_major[1];
+            bincert->version_minor[0] * 256 + bincert->version_minor[1];
         logger(proxy_context, LOG_INFO,
                "Using version %u.%u of the DNSCrypt protocol",
                bincert->version_major[1], version_minor);
