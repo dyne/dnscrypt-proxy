@@ -566,7 +566,8 @@ options_parse(AppContext * const app_context,
             proxy_context->ignore_timestamps = 1;
             break;
         case 'k':
-            proxy_context->provider_publickey_s = optarg;
+            free((void *) proxy_context->provider_publickey_s);
+            proxy_context->provider_publickey_s = strdup(optarg);
             break;
         case 'K':
             proxy_context->client_key_file = optarg;
@@ -621,7 +622,8 @@ options_parse(AppContext * const app_context,
             proxy_context->pid_file = optarg;
             break;
         case 'r':
-            proxy_context->resolver_ip = optarg;
+            free((void *) proxy_context->resolver_ip);
+            proxy_context->resolver_ip = strdup(optarg);
             break;
         case 't': {
             char *endptr;
@@ -645,15 +647,18 @@ options_parse(AppContext * const app_context,
                 logger(proxy_context, LOG_ERR, "Unknown user: [%s]", optarg);
                 exit(1);
             }
+            free((void *) proxy_context->user_name);
             proxy_context->user_name = strdup(pw->pw_name);
             proxy_context->user_id = pw->pw_uid;
             proxy_context->user_group = pw->pw_gid;
+            free((void *) proxy_context->user_dir);
             proxy_context->user_dir = strdup(pw->pw_dir);
             break;
         }
 #endif
         case 'N':
-            proxy_context->provider_name = optarg;
+            free((void *) proxy_context->provider_name);
+            proxy_context->provider_name = strdup(optarg);
             break;
         case 'T':
             proxy_context->tcp_only = 1;
