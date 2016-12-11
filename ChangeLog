@@ -1,3 +1,31 @@
+* Sun Dec 11 20:33:26 2016 +0100
+
+    Use strdup() for resolver parameters supplied manually
+
+* Sun Dec 11 20:19:52 2016 +0100
+
+    Properly print the minor protocol version
+
+* Sun Dec 11 19:28:14 2016 +0100
+
+    Favor newer versions of the protocol
+
+* Sun Dec 11 01:31:45 2016 +0100
+
+    Keep a copy of the non-signed certificate data in bincerts
+
+* Sun Dec 11 01:02:41 2016 +0100
+
+    Add preliminary support for xchacha20poly1305
+
+* Sun Dec 11 00:09:12 2016 +0100
+
+    Add polyfills for ancient libsodium versions
+
+* Sat Dec 10 23:10:58 2016 +0100
+
+    Update ChangeLog
+
 * Sat Dec 10 22:26:20 2016 +0100
 
     More hacks for Debian

@@ -1,4 +1,25 @@
 
+* Version 1.8.0:
+ - The protocol can now the XChaCha20 cipher as a faster alternative
+to XSalsa20.
+ - Time stamps are now being added to log files, including log files
+from plugins.
+ - `SIGINT` & `SIGTERM` handlers have been added to give plugins a chance
+to call a teardown function.
+ - A message is now displayed when servers are using a very long key
+rotation period.
+ - The domain blocking plugin is now a `pre_filter`: blocked queries are
+not sent to upstream resolvers any more [breaking change for logging
+resolvers].
+ - The domain blocking plugin do not consider empty files an error any
+more.
+ - The domain blocking plugin has a new option (`--logfile`) to log
+queries sent to blacklisted IPs and names.
+ - Android's update-binary file is not part of the source distribution
+any more.
+ - libevent2 updates.
+ - The resolvers list was updated to the latest version.
+
 * Version 1.7.0:
  - Plugins are now enabled by default.
  - Windows: new registry key: `LogFile`.
