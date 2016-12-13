@@ -66,6 +66,7 @@ static struct option getopt_long_options[] = {
     { "install", 0, NULL, WIN_OPTION_INSTALL },
     { "reinstall", 0, NULL, WIN_OPTION_REINSTALL },
     { "uninstall", 0, NULL, WIN_OPTION_UNINSTALL },
+    { "service-name", 1, NULL, WIN_OPTION_SERVICE_NAME },
 #endif
     { NULL, 0, NULL, 0 }
 };
@@ -690,10 +691,13 @@ options_parse(AppContext * const app_context,
                 logger_noformat(NULL, LOG_ERR, "Unable to uninstall the service");
                 exit(1);
             } else {
-                logger_noformat(NULL, LOG_INFO, "The " WINDOWS_SERVICE_NAME
-                                " service has been removed from this system");
+                logger(NULL, LOG_INFO,
+                       "The [%s] service has been removed from this system",
+                       get_windows_service_name());
                 exit(0);
             }
+            break;
+        case WIN_OPTION_SERVICE_NAME:
             break;
 #endif
         default:
@@ -713,10 +717,11 @@ options_parse(AppContext * const app_context,
                             "and that the service hasn't been already installed");
             exit(1);
         }
-        logger_noformat(NULL, LOG_INFO, "The " WINDOWS_SERVICE_NAME
-                        " service has been installed and started");
-        logger_noformat(NULL, LOG_INFO, "The registry key used for this "
-                        "service is " WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY);
+        logger(NULL, LOG_INFO,
+               "The [%s] service has been installed and started",
+               get_windows_service_name());
+        logger(NULL, LOG_INFO, "The registry key used for this "
+               "service is [%s]", windows_service_registry_parameters_key());
         logger(NULL, LOG_INFO, "Now, change your resolver settings to %s",
                proxy_context->local_ip);
         exit(0);

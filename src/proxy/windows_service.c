@@ -1,6 +1,8 @@
 
 #include <config.h>
 
+#include <string.h>
+
 #include "app.h"
 #include "dnscrypt_proxy.h"
 #include "logger.h"
@@ -28,6 +30,7 @@ main(int argc, char *argv[])
 #include "logger.h"
 #include "utils.h"
 
+static char                 *windows_service_name;
 static SERVICE_STATUS        service_status;
 static SERVICE_STATUS_HANDLE service_status_handle;
 static _Bool                 app_is_running_as_a_service;
@@ -124,6 +127,29 @@ windows_service_parse_multi_sz(WindowsServiceParseMultiSzCb * const cb,
     return 0;
 }
 
+char *
+windows_service_registry_parameters_key(void)
+{
+    static unsigned char *key;
+    size_t                sizeof_key;
+
+    if (key != NULL) {
+        return key;
+    }
+    sizeof_key = (sizeof WINDOWS_SERVICE_REGISTRY_PARAMETERS_PATH - 1) +
+        strlen(get_windows_service_name()) +
+        (sizeof WINDOWS_SERVICE_REGISTRY_PARAMETERS_NAME - 1);
+    if ((key = malloc(sizeof_key)) == NULL) {
+        exit(1);
+    }
+    evutil_snprintf(key, sizeof_key, "%s%s%s",
+                    WINDOWS_SERVICE_REGISTRY_PARAMETERS_PATH,
+                    get_windows_service_name(),
+                    WINDOWS_SERVICE_REGISTRY_PARAMETERS_NAME);
+
+    return key;
+}
+
 static int
 windows_service_registry_read_multi_sz(const char * const key,
                                        WindowsServiceParseMultiSzCb * const cb)
@@ -134,7 +160,7 @@ windows_service_registry_read_multi_sz(const char * const key,
     DWORD   value_type;
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     windows_service_registry_parameters_key(),
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
         return -1;
     }
@@ -174,7 +200,7 @@ windows_service_registry_read_string(const char * const key,
 
     *value_p = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     windows_service_registry_parameters_key(),
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
         return -1;
     }
@@ -210,7 +236,7 @@ windows_service_registry_read_dword(const char * const key,
 
     *value_p = (DWORD) 0;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                     windows_service_registry_parameters_key(),
                      (DWORD) 0, KEY_READ, &hk) != ERROR_SUCCESS) {
         return -1;
     }
@@ -237,7 +263,7 @@ windows_service_registry_write_string(const char * const key,
         return -1;
     }
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
-                       WINDOWS_SERVICE_REGISTRY_PARAMETERS_KEY,
+                       windows_service_registry_parameters_key(),
                        (DWORD) 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE,
                        NULL, &hk, NULL) != ERROR_SUCCESS) {
         return -1;
@@ -346,12 +372,62 @@ windows_build_command_line_from_registry(int * const argc_p,
     return 0;
 }
 
+char *
+get_windows_service_name(void)
+{
+    assert(windows_service_name != NULL);
+
+    return windows_service_name;
+}
+
+static void
+set_windows_service_name(const char *name)
+{
+    windows_service_name = name;
+}
+
+static int
+init_windows_service_name(int argc, char *argv[])
+{
+    int i;
+
+    for (i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "--service-name") == 0) {
+            if (i < argc - 1) {
+                windows_service_name = argv[i + 1];
+                return 0;
+            } else {
+                logger_noformat(NULL, LOG_ERR,
+                                "Missing service name after --service-name");
+                exit(1);
+            }
+        }
+        if (strncmp(argv[i], "--service-name=", sizeof "--service-name=" - 1) == 0) {
+            windows_service_name = argv[i] + sizeof "--service-name=" - 1;
+            if (*windows_service_name != 0) {
+                return 0;
+            } else {
+                logger_noformat(NULL, LOG_ERR,
+                                "Missing service name after --service-name");
+                exit(1);
+            }
+        }
+    }
+    if ((windows_service_name = strdup(WINDOWS_SERVICE_NAME)) == NULL) {
+        return -1;
+    }
+    return 0;
+}
+
 static void WINAPI
 service_main(DWORD argc_, LPTSTR *argv_)
 {
     char **argv = (char **) argv_;
     int    argc = (int) argc_;
 
+    if (argc != 0) {
+        set_windows_service_name(argv[0]);
+    }
     assert(argc_ < INT_MAX);
     if (windows_build_command_line_from_registry(&argc, &argv) != 0) {
         logger_noformat(NULL, LOG_ERR,
@@ -363,7 +439,7 @@ service_main(DWORD argc_, LPTSTR *argv_)
     service_status.dwCurrentState = SERVICE_START_PENDING;
     service_status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
     service_status_handle =
-        RegisterServiceCtrlHandler(WINDOWS_SERVICE_NAME, control_handler);
+        RegisterServiceCtrlHandler(get_windows_service_name(), control_handler);
     if (service_status_handle == 0) {
         return;
     }
@@ -377,18 +453,15 @@ static int
 windows_main(int argc, char *argv[])
 {
     static SERVICE_TABLE_ENTRY service_table[2];
-    char                      *service_name;
 
-    if ((service_name = strdup(WINDOWS_SERVICE_NAME)) == NULL) {
-        perror("strdup");
-        return 1;
+    if (init_windows_service_name(argc, argv) != 0) {
+        return -1;
     }
     memcpy(service_table, (SERVICE_TABLE_ENTRY[2]) {
-        { .lpServiceName = service_name, .lpServiceProc = service_main },
-        { .lpServiceName = NULL,         .lpServiceProc = (void *) NULL }
+        { .lpServiceName = get_windows_service_name(), .lpServiceProc = service_main },
+        { .lpServiceName = NULL, .lpServiceProc = (void *) NULL }
     }, sizeof service_table);
     if (StartServiceCtrlDispatcher(service_table) == 0) {
-        free(service_name);
         return dnscrypt_proxy_main(argc, argv);
     }
     app_is_running_as_a_service = 1;
@@ -408,7 +481,7 @@ windows_service_uninstall(void)
     if (scm_handle == NULL) {
         return -1;
     }
-    service_handle = OpenService(scm_handle, WINDOWS_SERVICE_NAME,
+    service_handle = OpenService(scm_handle, get_windows_service_name(),
                                  DELETE | SERVICE_STOP);
     if (service_handle == NULL) {
         CloseServiceHandle(scm_handle);
@@ -476,8 +549,8 @@ windows_service_install(ProxyContext * const proxy_context)
         return -1;
     }
     service_handle = CreateService
-        (scm_handle, WINDOWS_SERVICE_NAME,
-         WINDOWS_SERVICE_NAME, SERVICE_ALL_ACCESS,
+        (scm_handle, get_windows_service_name(),
+         get_windows_service_name(), SERVICE_ALL_ACCESS,
          SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START,
          SERVICE_ERROR_NORMAL, self_path_quoted, NULL, NULL, NULL, NULL, NULL);
     if (service_handle == NULL) {

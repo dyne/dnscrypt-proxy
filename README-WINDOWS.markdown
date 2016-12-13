@@ -106,6 +106,9 @@ the Windows builds of the proxy add the following switches:
 - `--install`: install the proxy as a service.
 - `--uninstall`: uninstall the service (but not the software - the
 service can be restarted later)
+- `--service-name=<name>`: set the service name (by default:
+`dnscrypt-proxy`). Multiple services with a different configuration can run
+simultaneously if they use distinct service names.
 
 Example: how to try a different DNSCrypt resolver:
 
@@ -164,7 +167,8 @@ Advanced usage
 Startup options should specified as subkeys from this registry key:
 `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dnscrypt-proxy\Parameters`
 
-The service is named `dnscrypt-proxy`.
+By default, the service is named `dnscrypt-proxy`, but this can be changed
+with the `--service-name` command-line switch when installing the service.
 
 The following subkeys are recognized and should be self-explanatory:
 
