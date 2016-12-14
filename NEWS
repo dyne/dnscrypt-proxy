@@ -1,5 +1,7 @@
 
 * Version 1.8.0:
+ - On Windows, a new option, `--service-name` can be used to set the
+service name, so that multiple instances can run simultaneously.
  - The protocol can now the XChaCha20 cipher as a faster alternative
 to XSalsa20.
  - Time stamps are now being added to log files, including log files

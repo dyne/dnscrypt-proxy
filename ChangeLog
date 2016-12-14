@@ -1,3 +1,11 @@
+* Tue Dec 13 12:00:14 2016 +0100
+
+    New option `--service-name` to set the Windows service name
+
+* Sun Dec 11 20:56:23 2016 +0100
+
+    Version bump, update ChangeLog/NEWS
+
 * Sun Dec 11 20:33:26 2016 +0100
 
     Use strdup() for resolver parameters supplied manually
