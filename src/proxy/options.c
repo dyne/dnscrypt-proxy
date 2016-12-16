@@ -8,7 +8,6 @@
 #endif
 
 #include <assert.h>
-#include <ctype.h>
 #include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
@@ -27,6 +26,8 @@
 #include "logger.h"
 #include "minicsv.h"
 #include "pid_file.h"
+#include "simpleconf.h"
+#include "simpleconf_dnscrypt.h"
 #include "utils.h"
 #include "windows_service.h"
 #ifdef PLUGINS
@@ -34,8 +35,6 @@
 #endif
 
 static struct option getopt_long_options[] = {
-    { "config", 1, NULL, 'c' },
-    { "dump-config", 0, NULL, 'C' },
     { "resolver-name", 1, NULL, 'R' },
     { "local-address", 1, NULL, 'a' },
 #ifndef _WIN32
@@ -58,9 +57,7 @@ static struct option getopt_long_options[] = {
     { "syslog-prefix", 1, NULL, 'Z' },
 #endif
     { "max-active-requests", 1, NULL, 'n' },
-#ifdef HAVE_GETPWNAM
     { "user", 1, NULL, 'u' },
-#endif
     { "test", 1, NULL, 't' },
     { "tcp-only", 0, NULL, 'T' },
     { "edns-payload-size", 1, NULL, 'e' },
@@ -76,15 +73,14 @@ static struct option getopt_long_options[] = {
     { NULL, 0, NULL, 0 }
 };
 #ifndef _WIN32
-static const char *getopt_options = "a:c:Cde:EhIk:K:L:l:m:n:p:r:R:St:u:N:TVX:Z:";
+static const char *getopt_options = "a:de:EhIk:K:L:l:m:n:p:r:R:St:u:N:TVX:Z:";
 #else
-static const char *getopt_options = "a:c:Ce:EhIk:K:L:l:m:n:r:R:t:u:N:TVX:";
+static const char *getopt_options = "a:e:EhIk:K:L:l:m:n:r:R:t:u:N:TVX:";
 #endif
 
 #ifndef DEFAULT_CONNECTIONS_COUNT_MAX
 # define DEFAULT_CONNECTIONS_COUNT_MAX 250U
 #endif
-#define DEFAULT_LOCAL_ADDRESS "127.0.0.1:53"
 
 static void
 options_version(void)
@@ -122,14 +118,12 @@ void options_init_with_default(AppContext * const app_context,
     proxy_context->connections_count_max = DEFAULT_CONNECTIONS_COUNT_MAX;
     proxy_context->edns_payload_size = (size_t) DNS_DEFAULT_EDNS_PAYLOAD_SIZE;
     proxy_context->client_key_file = NULL;
-    proxy_context->local_ip = strdup(DEFAULT_LOCAL_ADDRESS);
+    proxy_context->local_ip = "127.0.0.1:53";
     proxy_context->log_fp = NULL;
     proxy_context->log_file = NULL;
     proxy_context->pid_file = NULL;
-    proxy_context->resolvers_list = (DEFAULT_RESOLVERS_LIST == NULL) ? NULL
-                                  : strdup(DEFAULT_RESOLVERS_LIST);
-    proxy_context->resolver_name = (DEFAULT_RESOLVER_NAME == NULL) ? NULL
-                                 : strdup(DEFAULT_RESOLVER_NAME);
+    proxy_context->resolvers_list = DEFAULT_RESOLVERS_LIST;
+    proxy_context->resolver_name = DEFAULT_RESOLVER_NAME;
     proxy_context->provider_name = NULL;
     proxy_context->provider_publickey_s = NULL;
     proxy_context->resolver_ip = NULL;
@@ -182,7 +176,7 @@ options_read_file(const char * const file_name)
         return NULL;
     }
     rewind(fp);
-    if ((file_buf = malloc(file_size + 1)) == NULL) {
+    if ((file_buf = malloc(file_size)) == NULL) {
         fclose(fp);
         return NULL;
     }
@@ -192,7 +186,6 @@ options_read_file(const char * const file_name)
         return NULL;
     }
     (void) fclose(fp);
-    file_buf[file_size] = 0;
 
     return file_buf;
 }
@@ -413,11 +406,6 @@ options_use_client_key_file(ProxyContext * const proxy_context)
 static int
 options_apply(ProxyContext * const proxy_context)
 {
-    if (proxy_context->local_ip == NULL) {
-        logger_noformat(proxy_context, LOG_ERR,
-                        "--local-address requires a non-empty argument");
-        exit(1);
-    }
     if (proxy_context->client_key_file != NULL) {
         if (proxy_context->ephemeral_keys != 0) {
             logger_noformat(proxy_context, LOG_ERR,
@@ -526,335 +514,6 @@ options_apply(ProxyContext * const proxy_context)
     return 0;
 }
 
-static void
-options_strdup(ProxyContext * const proxy_context,
-               char ** const resource,
-               const char * const string)
-{
-    if (string == NULL || *string == 0) {
-        if (*resource != NULL) {
-            free(*resource);
-        }
-        *resource = NULL;
-    } else {
-        char *const duplicate = strdup(string);
-        if (duplicate == NULL) {
-            logger_noformat(proxy_context, LOG_EMERG, "Out of memory");
-        } else {
-            if (*resource != NULL) {
-                free(*resource);
-            }
-            *resource = duplicate;
-        }
-    }
-}
-
-static int
-options_parse_flag(ProxyContext * const proxy_context,
-                   const int opt_flag, char * const optarg, const int boolval)
-{
-    switch (opt_flag) {
-    case 'a':
-        options_strdup(proxy_context, &proxy_context->local_ip, optarg);
-        break;
-    case 'd':
-        proxy_context->daemonize = boolval;
-        break;
-    case 'e': {
-        char *endptr;
-        const unsigned long edns_payload_size = strtoul(optarg, &endptr, 10);
-
-        if (*optarg == 0 || *endptr != 0 ||
-            edns_payload_size > DNS_MAX_PACKET_SIZE_UDP_RECV) {
-            logger(proxy_context, LOG_ERR,
-                   "Invalid EDNS payload size: [%s]", optarg);
-            exit(1);
-        }
-        if (edns_payload_size <= DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
-            proxy_context->edns_payload_size = (size_t) 0U;
-            proxy_context->udp_max_size = DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND;
-        } else {
-            proxy_context->edns_payload_size = (size_t) edns_payload_size;
-            assert(proxy_context->udp_max_size >=
-                   DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND);
-            if (proxy_context->edns_payload_size > DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
-                proxy_context->udp_max_size =
-                    proxy_context->edns_payload_size;
-            }
-        }
-        break;
-    }
-    case 'E':
-        proxy_context->ephemeral_keys = boolval;
-        break;
-    case 'I':
-        proxy_context->ignore_timestamps = boolval;
-        break;
-    case 'k':
-        options_strdup(proxy_context, &proxy_context->provider_publickey_s,
-                       optarg);
-        break;
-    case 'K':
-        options_strdup(proxy_context, &proxy_context->client_key_file, optarg);
-        break;
-    case 'l':
-        options_strdup(proxy_context, &proxy_context->log_file, optarg);
-        break;
-    case 'L':
-        options_strdup(proxy_context, &proxy_context->resolvers_list, optarg);
-        break;
-    case 'R':
-        options_strdup(proxy_context, &proxy_context->resolver_name, optarg);
-        break;
-#ifndef _WIN32
-    case 'S':
-        proxy_context->syslog = boolval;
-        break;
-    case 'Z':
-        proxy_context->syslog = boolval;
-        options_strdup(proxy_context, &proxy_context->syslog_prefix, optarg);
-        break;
-#endif
-    case 'm': {
-        char *endptr;
-        const long max_log_level = strtol(optarg, &endptr, 10);
-
-        if (*optarg == 0 || *endptr != 0 || max_log_level < 0) {
-            logger(proxy_context, LOG_ERR,
-                   "Invalid max log level: [%s]", optarg);
-            exit(1);
-        }
-        proxy_context->max_log_level = max_log_level;
-        break;
-    }
-    case 'n': {
-        char *endptr;
-        const unsigned long connections_count_max =
-            strtoul(optarg, &endptr, 10);
-
-        if (*optarg == 0 || *endptr != 0 ||
-            connections_count_max <= 0U ||
-            connections_count_max > UINT_MAX) {
-            logger(proxy_context, LOG_ERR,
-                   "Invalid max number of active request: [%s]", optarg);
-            exit(1);
-        }
-        proxy_context->connections_count_max =
-            (unsigned int) connections_count_max;
-        break;
-    }
-    case 'p':
-        options_strdup(proxy_context, &proxy_context->pid_file, optarg);
-        break;
-    case 'r':
-        options_strdup(proxy_context, &proxy_context->resolver_ip, optarg);
-        break;
-    case 't': {
-        char *endptr;
-        const unsigned long margin =
-            strtoul(optarg, &endptr, 10);
-
-        if (*optarg == 0 || *endptr != 0 || margin == 0 ||
-            margin > UINT32_MAX / 60U) {
-            logger(proxy_context, LOG_ERR,
-                   "Invalid certificate grace period: [%s]", optarg);
-            exit(1);
-        }
-        proxy_context->test_cert_margin = (time_t) margin * (time_t) 60U;
-        proxy_context->test_only = 1;
-        break;
-    }
-#ifdef HAVE_GETPWNAM
-    case 'u': {
-        const struct passwd * const pw = getpwnam(optarg);
-        if (pw == NULL) {
-            logger(proxy_context, LOG_ERR, "Unknown user: [%s]", optarg);
-            exit(1);
-        }
-        options_strdup(proxy_context, &proxy_context->user_name, pw->pw_name);
-        proxy_context->user_id = pw->pw_uid;
-        proxy_context->user_group = pw->pw_gid;
-        options_strdup(proxy_context, &proxy_context->user_dir, pw->pw_dir);
-        break;
-    }
-#endif
-    case 'N':
-        options_strdup(proxy_context, &proxy_context->provider_name, optarg);
-        break;
-    case 'T':
-        proxy_context->tcp_only = boolval;
-        break;
-    case 'X':
-#ifndef PLUGINS
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Support for plugins hasn't been compiled in");
-        exit(1);
-#else
-        if (plugin_options_parse_str
-            (proxy_context->app_context->dcps_context, optarg) != 0) {
-            logger_noformat(proxy_context, LOG_ERR,
-                            "Error while parsing plugin options");
-            exit(2);
-        }
-#endif
-        break;
-    default:
-        options_usage();
-        exit(1);
-    }
-}
-
-static int
-options_isspace(const char ch)
-{
-    return isspace((int) (unsigned char) ch);
-}
-
-static char *
-options_trim(char * const string)
-{
-    size_t i = strlen(string);
-    while (0 < i && options_isspace(string[i - 1]) != 0) {
-        string[--i] = 0;
-    }
-    for (i = 0; string[i] != 0 && options_isspace(string[i]); ++i) {
-    }
-    return &string[i];
-}
-
-static void
-options_config_line(ProxyContext * const proxy_context,
-                    const char * const file_name, const int line_num,
-                    const char * const key, char *const val)
-{
-    const struct option *found = NULL;
-    const struct option *option = &getopt_long_options[0];
-
-    for (; found == NULL && option->name != NULL; ++option) {
-        const int flag = option->val;
-        if (0 < flag && flag < 127 && flag != 'c' && flag != 'C') {
-            if (strcmp(key, option->name) == 0) {
-                found = option;
-            }
-        }
-    }
-
-    if (found == NULL) {
-        logger(proxy_context, LOG_ERR,
-               "Invalid configuration in [%s] at line [%d]",
-               file_name, line_num);
-    }
-    else {
-        int boolval = 0;
-        if (found->has_arg == 0) {
-            if (evutil_ascii_strcasecmp(val, "1") == 0 ||
-                evutil_ascii_strcasecmp(val, "yes") == 0 ||
-                evutil_ascii_strcasecmp(val, "true") == 0) {
-                boolval = 1;
-            }
-            else if (evutil_ascii_strcasecmp(val, "0") != 0 &&
-                     evutil_ascii_strcasecmp(val, "no") != 0 &&
-                     evutil_ascii_strcasecmp(val, "false") != 0) {
-                logger(proxy_context, LOG_ERR,
-                       "Invalid value for [%s] in config [%s] at line [%d]",
-                       key, file_name, line_num);
-                exit(1);
-            }
-        }
-        options_parse_flag(proxy_context, found->val, val, boolval);
-    }
-}
-
-static void
-options_config_file(ProxyContext * const proxy_context,
-                    const char * const file_name)
-{
-    FILE       *fp;
-    const int   line_len = 1024;
-    char        line_buf[line_len];
-    int         line_num = 1;
-
-    assert(file_name != NULL);
-    if ((fp = fopen(file_name, "rb")) == NULL) {
-        logger(proxy_context, LOG_ERR, "Unable to read config [%s]", file_name);
-        exit(1);
-    }
-    for (; fgets(line_buf, line_len, fp) != NULL; ++line_num) {
-        char *trimmed = options_trim(line_buf);
-        if (*trimmed && *trimmed != '#') {
-            char *equals = strchr(trimmed, '=');
-            if (equals == NULL) {
-                logger(proxy_context, LOG_ERR, "Invalid line [%d] in config [%s]",
-                       line_num, file_name);
-            }
-            else {
-                *equals = 0;
-                options_config_line(proxy_context, file_name, line_num,
-                                    options_trim(trimmed),
-                                    options_trim(equals + 1));
-            }
-        }
-    }
-    (void) fclose(fp);
-}
-
-static const char *
-options_dump_string(const char * const string)
-{
-    return (string != NULL) ? string : "";
-}
-
-static const char *
-options_dump_yesno(int value)
-{
-    return (value == 0) ? "no" : "yes";
-}
-
-static void
-options_dump_config(ProxyContext * const proxy_context)
-{
-    printf("%-20s = %s\n", "client-key",
-            options_dump_string(proxy_context->client_key_file));
-    printf("%-20s = %u\n", "max-active-requests",
-            proxy_context->connections_count_max);
-    printf("%-20s = %s\n", "daemonize",
-            options_dump_yesno(proxy_context->daemonize));
-    printf("%-20s = %zu\n", "edns-payload-size",
-            proxy_context->edns_payload_size);
-    printf("%-20s = %s\n", "ephemeral-keys",
-            options_dump_yesno(proxy_context->ephemeral_keys));
-    printf("%-20s = %s\n", "ignore-timestamps",
-            options_dump_yesno(proxy_context->ignore_timestamps));
-    printf("%-20s = %s\n", "local-address",
-            options_dump_string(proxy_context->local_ip));
-    printf("%-20s = %s\n", "logfile",
-            options_dump_string(proxy_context->log_file));
-    printf("%-20s = %d\n", "loglevel",
-            proxy_context->max_log_level);
-    printf("%-20s = %s\n", "pidfile",
-            options_dump_string(proxy_context->pid_file));
-    printf("%-20s = %s\n", "provider-name",
-            options_dump_string(proxy_context->provider_name));
-    printf("%-20s = %s\n", "provider-key",
-            options_dump_string(proxy_context->provider_publickey_s));
-    printf("%-20s = %s\n", "resolver-address",
-            options_dump_string(proxy_context->resolver_ip));
-    printf("%-20s = %s\n", "resolver-name",
-            options_dump_string(proxy_context->resolver_name));
-    printf("%-20s = %s\n", "resolvers-list",
-            options_dump_string(proxy_context->resolvers_list));
-    printf("%-20s = %s\n", "syslog",
-            options_dump_yesno(proxy_context->syslog));
-    printf("%-20s = %s\n", "syslog-prefix",
-            options_dump_string(proxy_context->syslog_prefix));
-    printf("%-20s = %s\n", "tcp-only",
-            options_dump_yesno(proxy_context->tcp_only));
-    printf("%-20s = %ld\n", "test", proxy_context->test_only == 0 ? -1 :
-            (long) (proxy_context->test_cert_margin / 60));
-    printf("%-20s = %s\n", "user",
-            options_dump_string(proxy_context->user_name));
-}
-
 int
 options_parse(AppContext * const app_context,
               ProxyContext * const proxy_context, int argc, char *argv[])
@@ -864,25 +523,175 @@ options_parse(AppContext * const app_context,
 #ifdef _WIN32
     _Bool option_install = 0;
 #endif
-    _Bool dump_config = 0;
 
     options_init_with_default(app_context, proxy_context);
+    if (argc == 2 && *argv[1] != '-' &&
+        sc_build_command_line_from_file(argv[1], simpleconf_options,
+                                        (sizeof simpleconf_options) /
+                                        (sizeof simpleconf_options[0]),
+                                        argv[0], &argc, &argv) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unable to read the configuration file");
+        return -1;
+    }
     while ((opt_flag = getopt_long(argc, argv,
                                    getopt_options, getopt_long_options,
                                    &option_index)) != -1) {
         switch (opt_flag) {
-        case 'c':
-            options_config_file(proxy_context, optarg);
+        case 'a':
+            proxy_context->local_ip = optarg;
             break;
-        case 'C':
-            dump_config = 1;
+        case 'd':
+            proxy_context->daemonize = 1;
+            break;
+        case 'e': {
+            char *endptr;
+            const unsigned long edns_payload_size = strtoul(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 ||
+                edns_payload_size > DNS_MAX_PACKET_SIZE_UDP_RECV) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid EDNS payload size: [%s]", optarg);
+                exit(1);
+            }
+            if (edns_payload_size <= DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
+                proxy_context->edns_payload_size = (size_t) 0U;
+                proxy_context->udp_max_size = DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND;
+            } else {
+                proxy_context->edns_payload_size = (size_t) edns_payload_size;
+                assert(proxy_context->udp_max_size >=
+                       DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND);
+                if (proxy_context->edns_payload_size > DNS_MAX_PACKET_SIZE_UDP_NO_EDNS_SEND) {
+                    proxy_context->udp_max_size =
+                        proxy_context->edns_payload_size;
+                }
+            }
+            break;
+        }
+        case 'E':
+            proxy_context->ephemeral_keys = 1;
             break;
         case 'h':
             options_usage();
             exit(0);
+        case 'I':
+            proxy_context->ignore_timestamps = 1;
+            break;
+        case 'k':
+            free((void *) proxy_context->provider_publickey_s);
+            proxy_context->provider_publickey_s = strdup(optarg);
+            break;
+        case 'K':
+            proxy_context->client_key_file = optarg;
+            break;
+        case 'l':
+            proxy_context->log_file = optarg;
+            break;
+        case 'L':
+            proxy_context->resolvers_list = optarg;
+            break;
+        case 'R':
+            proxy_context->resolver_name = optarg;
+            break;
+#ifndef _WIN32
+        case 'S':
+            proxy_context->syslog = 1;
+            break;
+        case 'Z':
+            proxy_context->syslog = 1;
+            proxy_context->syslog_prefix = optarg;
+            break;
+#endif
+        case 'm': {
+            char *endptr;
+            const long max_log_level = strtol(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 || max_log_level < 0) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid max log level: [%s]", optarg);
+                exit(1);
+            }
+            proxy_context->max_log_level = max_log_level;
+            break;
+        }
+        case 'n': {
+            char *endptr;
+            const unsigned long connections_count_max =
+                strtoul(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 ||
+                connections_count_max <= 0U ||
+                connections_count_max > UINT_MAX) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid max number of active request: [%s]", optarg);
+                exit(1);
+            }
+            proxy_context->connections_count_max =
+                (unsigned int) connections_count_max;
+            break;
+        }
+        case 'p':
+            proxy_context->pid_file = optarg;
+            break;
+        case 'r':
+            free((void *) proxy_context->resolver_ip);
+            proxy_context->resolver_ip = strdup(optarg);
+            break;
+        case 't': {
+            char *endptr;
+            const unsigned long margin =
+                strtoul(optarg, &endptr, 10);
+
+            if (*optarg == 0 || *endptr != 0 ||
+                margin > UINT32_MAX / 60U) {
+                logger(proxy_context, LOG_ERR,
+                       "Invalid certificate grace period: [%s]", optarg);
+                exit(1);
+            }
+            proxy_context->test_cert_margin = (time_t) margin * (time_t) 60U;
+            proxy_context->test_only = 1;
+            break;
+        }
+#ifdef HAVE_GETPWNAM
+        case 'u': {
+            const struct passwd * const pw = getpwnam(optarg);
+            if (pw == NULL) {
+                logger(proxy_context, LOG_ERR, "Unknown user: [%s]", optarg);
+                exit(1);
+            }
+            free((void *) proxy_context->user_name);
+            proxy_context->user_name = strdup(pw->pw_name);
+            proxy_context->user_id = pw->pw_uid;
+            proxy_context->user_group = pw->pw_gid;
+            free((void *) proxy_context->user_dir);
+            proxy_context->user_dir = strdup(pw->pw_dir);
+            break;
+        }
+#endif
+        case 'N':
+            free((void *) proxy_context->provider_name);
+            proxy_context->provider_name = strdup(optarg);
+            break;
+        case 'T':
+            proxy_context->tcp_only = 1;
+            break;
         case 'V':
             options_version();
             exit(0);
+        case 'X':
+#ifndef PLUGINS
+            logger_noformat(proxy_context, LOG_ERR,
+                            "Support for plugins hasn't been compiled in");
+            exit(1);
+#else
+            if (plugin_options_parse_str
+                (proxy_context->app_context->dcps_context, optarg) != 0) {
+                logger_noformat(proxy_context, LOG_ERR,
+                                "Error while parsing plugin options");
+                exit(2);
+            }
+#endif
+            break;
 #ifdef _WIN32
         case WIN_OPTION_INSTALL:
         case WIN_OPTION_REINSTALL:
@@ -903,11 +712,9 @@ options_parse(AppContext * const app_context,
             break;
 #endif
         default:
-            options_parse_flag(proxy_context, opt_flag, optarg, 1);
+            options_usage();
+            exit(1);
         }
-    }
-    if (dump_config == 1) {
-        options_dump_config(proxy_context);
     }
     if (options_apply(proxy_context) != 0) {
         return -1;
@@ -934,30 +741,20 @@ options_parse(AppContext * const app_context,
     return 0;
 }
 
-static void
-options_checked_free(char ** const strptr)
-{
-    if (*strptr != NULL) {
-        free(*strptr);
-        *strptr = NULL;
-    }
-}
-
 void
 options_free(ProxyContext * const proxy_context)
 {
-    options_checked_free(&proxy_context->client_key_file);
-    options_checked_free(&proxy_context->local_ip);
-    options_checked_free(&proxy_context->log_file);
-    options_checked_free(&proxy_context->pid_file);
-    options_checked_free(&proxy_context->provider_name);
-    options_checked_free(&proxy_context->provider_publickey_s);
-    options_checked_free(&proxy_context->resolver_ip);
-    options_checked_free(&proxy_context->resolver_name);
-    options_checked_free(&proxy_context->resolvers_list);
-    options_checked_free(&proxy_context->syslog_prefix);
+    (void) proxy_context;
 #ifndef _WIN32
-    options_checked_free(&proxy_context->user_name);
-    options_checked_free(&proxy_context->user_dir);
+    free(proxy_context->user_name);
+    proxy_context->user_name = NULL;
+    free(proxy_context->user_dir);
+    proxy_context->user_dir = NULL;
 #endif
+    free((void *) proxy_context->provider_name);
+    proxy_context->provider_name = NULL;
+    free((void *) proxy_context->provider_publickey_s);
+    proxy_context->provider_publickey_s = NULL;
+    free((void *) proxy_context->resolver_ip);
+    proxy_context->resolver_ip = NULL;
 }

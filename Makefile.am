@@ -30,3 +30,6 @@ SUBDIRS += \
 dist_pkgdata_DATA = \
 	dnscrypt-resolvers.csv \
 	minisign.pub
+
+sysconf_DATA = \
+	dnscrypt-proxy.conf
