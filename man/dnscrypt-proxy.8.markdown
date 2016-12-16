@@ -116,6 +116,14 @@ ports.
     Never enable this option unless you know you really need it (routers without
     a clock battery).
 
+  * `-c`, `--config=<file>`: load configuration options from file.
+    Options are specified by their long name, followed by an equals-sign,
+    followed by their value. Whitespace is optional. Empty lines
+    and comment lines are ignored.
+
+  * `-C`, `--dump-config`: after option processing, write the configuration
+    to standard output in configuration file format.
+
   * `-V`, `--version`: show version number.
 
   * `-h`, `--help`: show usage.
@@ -132,6 +140,15 @@ The resolver name is the first column (Name) in the CSV file.
 ## USAGE EXAMPLE WITH A PRIVATE SERVER
 
     $ dnscrypt-proxy --daemonize --provider-key=... --provider-name=... --resolver-address=...
+
+## USAGE EXAMPLE WITH CONFIGURATION FILE
+
+    # dnscrypt-proxy configuration /etc/dnscp.conf
+    daemonize            = true
+    local-address        = 127.0.0.1:53
+    resolver-name        = ...
+
+    $ dnscrypt-proxy --config /etc/dnscp.conf
 
 ## BUGS AND SUPPORT
 

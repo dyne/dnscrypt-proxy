@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "DNSCRYPT\-PROXY" "8" "July 2016" "" ""
+.TH "DNSCRYPT\-PROXY" "8" "August 2016" "" ""
 .
 .SH "NAME"
 \fBdnscrypt\-proxy\fR \- A DNSCrypt forwarder
@@ -93,6 +93,12 @@ Intead, run a DNS cache like \fBUnbound\fR, and configure it to use \fBdnscrypt\
 \fB\-I\fR, \fB\-\-ignore\-timestamps\fR: ignore timestamps when validating certificates\. Never enable this option unless you know you really need it (routers without a clock battery)\.
 .
 .IP "\(bu" 4
+\fB\-c\fR, \fB\-\-config=<file>\fR: load configuration options from file\. Options are specified by their long name, followed by an equals\-sign, followed by their value\. Whitespace is optional\. Empty lines and comment lines are ignored\.
+.
+.IP "\(bu" 4
+\fB\-C\fR, \fB\-\-dump\-config\fR: after option processing, write the configuration to standard output in configuration file format\.
+.
+.IP "\(bu" 4
 \fB\-V\fR, \fB\-\-version\fR: show version number\.
 .
 .IP "\(bu" 4
@@ -119,6 +125,19 @@ The resolver name is the first column (Name) in the CSV file\.
 .nf
 
 $ dnscrypt\-proxy \-\-daemonize \-\-provider\-key=\.\.\. \-\-provider\-name=\.\.\. \-\-resolver\-address=\.\.\.
+.
+.fi
+.
+.SH "USAGE EXAMPLE WITH CONFIGURATION FILE"
+.
+.nf
+
+# dnscrypt\-proxy configuration /etc/dnscp\.conf
+daemonize            = true
+local\-address        = 127\.0\.0\.1:53
+resolver\-name        = \.\.\.
+
+$ dnscrypt\-proxy \-\-config /etc/dnscp\.conf
 .
 .fi
 .

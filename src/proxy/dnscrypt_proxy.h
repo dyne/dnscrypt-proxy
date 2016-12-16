@@ -96,16 +96,16 @@ typedef struct ProxyContext_ {
     AppContext              *app_context;
     struct event_base       *event_loop;
     FILE                    *log_fp;
-    const char              *client_key_file;
-    const char              *local_ip;
-    const char              *log_file;
-    const char              *pid_file;
-    const char              *provider_name;
-    const char              *provider_publickey_s;
-    const char              *resolvers_list;
-    const char              *resolver_name;
-    const char              *resolver_ip;
-    const char              *syslog_prefix;
+    char                    *client_key_file;
+    char                    *local_ip;
+    char                    *log_file;
+    char                    *pid_file;
+    char                    *provider_name;
+    char                    *provider_publickey_s;
+    char                    *resolvers_list;
+    char                    *resolver_name;
+    char                    *resolver_ip;
+    char                    *syslog_prefix;
 #ifndef _WIN32
     char                    *user_dir;
     char                    *user_name;
