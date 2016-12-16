@@ -1,3 +1,58 @@
+* Sat Dec 17 00:02:42 2016 +0100
+
+    The OpenDNS password can finally be loaded from a file
+    
+    The environment variable remains supported for backwards compatibility,
+    but it is not documented any more.
+
+* Sat Dec 17 00:02:15 2016 +0100
+
+    Do not use two identification methods simultaneously
+
+* Fri Dec 16 23:41:16 2016 +0100
+
+    Looks like the password is just called "device"
+
+* Fri Dec 16 23:16:43 2016 +0100
+
+    Keep IgnoreTimeStamps commented in order to discourage its use
+
+* Fri Dec 16 23:01:28 2016 +0100
+
+    Remove down d0wn resolvers
+
+* Fri Dec 16 22:23:40 2016 +0100
+
+    Sort
+
+* Fri Dec 16 22:18:59 2016 +0100
+
+    Add a sample configuration file
+
+* Fri Dec 16 22:18:09 2016 +0100
+
+    Typo in the man page
+
+* Fri Dec 16 11:34:39 2016 +0100
+
+    Reuse the pure-ftpd config file parser
+
+* Fri Dec 16 11:31:46 2016 +0100
+
+    Configuration file (#454)
+    
+    * Add option -c to load configuration from a file.
+    Add option -C to print the current configuration to stdout.
+    Properly nul-terminate file_buf in options_read_file.
+    
+    * Document -c, -C and the configuration file.
+    
+    * Regenerate dnscrypt-proxy.8 from dnscrypt-proxy.8.markdown with ronn.
+
+* Wed Dec 14 12:02:57 2016 +0100
+
+    Update ChangeLog
+
 * Tue Dec 13 12:00:14 2016 +0100
 
     New option `--service-name` to set the Windows service name

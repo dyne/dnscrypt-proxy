@@ -1,5 +1,7 @@
 
 * Version 1.8.0:
+ - All the features of the proxy can now be enabled using a
+configuration file.
  - On Windows, a new option, `--service-name` can be used to set the
 service name, so that multiple instances can run simultaneously.
  - The protocol can now the XChaCha20 cipher as a faster alternative
@@ -19,7 +21,7 @@ more.
 queries sent to blacklisted IPs and names.
  - Android's update-binary file is not part of the source distribution
 any more.
- - libevent2 updates.
+ - libevent2 has been updated.
  - The resolvers list was updated to the latest version.
 
 * Version 1.7.0:
