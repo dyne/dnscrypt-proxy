@@ -749,7 +749,7 @@ options_parse(AppContext * const app_context,
                get_windows_service_name());
         logger(NULL, LOG_INFO, "The registry key used for this "
                "service is [%s]", windows_service_registry_parameters_key());
-        if (service_config_file != NULL) {
+        if (service_config_file == NULL) {
             logger(NULL, LOG_INFO, "Now, change your resolver settings to %s",
                    proxy_context->local_ip);
         } else {
