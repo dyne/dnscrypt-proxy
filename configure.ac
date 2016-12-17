@@ -448,9 +448,6 @@ case $host_os in
   ;;
 esac
 
-AC_CHECK_HEADER([CoreServices/CoreServices.h],
-  [LIBS="$LIBS -framework CoreFoundation -framework CoreServices"])
-
 AC_CHECK_FUNCS([getpwnam sandbox_init setrlimit putc_unlocked gmtime_r initgroups])
 AC_CHECK_FUNCS([crypto_box_easy_afternm crypto_core_hchacha20 crypto_box_curve25519xchacha20poly1305_open_easy_afternm])
 
