@@ -25,6 +25,7 @@
 #include "dnscrypt_proxy.h"
 #include "logger.h"
 #include "probes.h"
+#include "shims.h"
 #include "utils.h"
 
 static int cert_updater_update(ProxyContext * const proxy_context);
@@ -44,7 +45,7 @@ cert_parse_version(ProxyContext * const proxy_context,
     }
     if (signed_bincert->version_major[0] != 0U ||
         (signed_bincert->version_major[1] != 1U
-#ifdef HAVE_CRYPTO_CORE_HCHACHA20
+#ifdef HAVE_XCHACHA20
          && signed_bincert->version_major[1] != 2U
 #endif
         )) {
@@ -387,7 +388,7 @@ cert_query_cb(int result, char type, int count, int ttl,
     case 1:
         cipher = CIPHER_XSALSA20POLY1305;
         break;
-#ifdef HAVE_CRYPTO_CORE_HCHACHA20
+#ifdef HAVE_XCHACHA20
     case 2:
         cipher = CIPHER_XCHACHA20POLY1305;
         break;

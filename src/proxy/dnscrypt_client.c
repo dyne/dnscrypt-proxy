@@ -82,9 +82,11 @@ dnscrypt_client_curve(DNSCryptClient * const client,
         if (client->cipher == CIPHER_XSALSA20POLY1305) {
             res = crypto_box_easy_afternm(boxed, boxed, len, nonce,
                                           client->nmkey);
+#ifdef HAVE_XCHACHA20
         } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
             res = crypto_box_curve25519xchacha20poly1305_easy_afternm(boxed, boxed, len, nonce,
                                                                       client->nmkey);
+#endif
         } else {
             return (ssize_t) -1;
         }
@@ -100,9 +102,11 @@ dnscrypt_client_curve(DNSCryptClient * const client,
         if (client->cipher == CIPHER_XSALSA20POLY1305) {
             res = crypto_box_easy(boxed, boxed, len, nonce,
                                   client->publickey, eph_secretkey);
+#ifdef HAVE_XCHACHA20
         } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
             res = crypto_box_curve25519xchacha20poly1305_easy(boxed, boxed, len, nonce,
                                                               client->publickey, eph_secretkey);
+#endif
         } else {
             return (ssize_t) -1;
         }
@@ -162,10 +166,12 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
             res = crypto_box_open_easy_afternm
                 (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
                     nonce, client->nmkey);
+#ifdef HAVE_XCHACHA20
         } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
             res = crypto_box_curve25519xchacha20poly1305_open_easy_afternm
                 (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
                     nonce, client->nmkey);
+#endif
         } else {
             return -1;
         }
@@ -180,10 +186,12 @@ dnscrypt_client_uncurve(const DNSCryptClient * const client,
             res = crypto_box_open_easy
                 (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
                     nonce, client->publickey, eph_secretkey);
+#ifdef HAVE_XCHACHA20
         } else if (client->cipher == CIPHER_XCHACHA20POLY1305) {
             res = crypto_box_curve25519xchacha20poly1305_open_easy
                 (buf, buf + DNSCRYPT_SERVER_BOX_OFFSET, ciphertext_len,
                     nonce, client->publickey, eph_secretkey);
+#endif
         } else {
             return -1;
         }

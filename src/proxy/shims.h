@@ -96,8 +96,11 @@ crypto_box_open_easy_afternm(unsigned char *m, const unsigned char *c,
 }
 #endif
 
-#if !defined(HAVE_CRYPTO_BOX_CURVE25519XCHACHA20POLY1305_OPEN_EASY_AFTERNM) && \
-    defined(HAVE_CRYPTO_CORE_HCHACHA20)
+#if defined(HAVE_CRYPTO_BOX_CURVE25519XCHACHA20POLY1305_OPEN_EASY_AFTERNM)
+# define HAVE_XCHACHA20 1
+
+#elif defined(HAVE_CRYPTO_CORE_HCHACHA20)
+# define HAVE_XCHACHA20 1
 
 # define crypto_secretbox_xchacha20poly1305_ZEROBYTES 32U
 # define crypto_secretbox_xchacha20poly1305_MACBYTES 16U
