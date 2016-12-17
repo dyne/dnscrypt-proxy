@@ -6,7 +6,7 @@ setup() {
 
   pacman -Sy --noconfirm \
     base-devel git libtool autoconf automake \
-    mingw-w64-toolchain wine winetricks \
+    mingw-w64-toolchain \
     p7zip
 
   rm -fr tmp
