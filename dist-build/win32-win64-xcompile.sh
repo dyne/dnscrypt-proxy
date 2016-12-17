@@ -140,12 +140,12 @@ setup
 
 fetch_src
 
-export CFLAGS="-Os -fomit-frame-pointer -m64 -mtune=westmere -flto"
-export LDFLAGS="-mtune=westmere -flto"
+export CFLAGS="-Os -fomit-frame-pointer -m64 -mtune=westmere"
+export LDFLAGS="-mtune=westmere"
 export TARGET=x86_64-w64-mingw32
 compile dnscrypt-proxy-win64
 
 export CFLAGS="-Os -fomit-frame-pointer -m32 -march=pentium3 -mtune=core2"
-export LDFLAGS="-march=pentium3 -flto"
+export LDFLAGS="-march=pentium3"
 export TARGET=i686-w64-mingw32
 compile dnscrypt-proxy-win32
