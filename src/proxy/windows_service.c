@@ -507,8 +507,8 @@ windows_service_uninstall(void)
 static int
 windows_registry_install_with_config_file(const char *config_file)
 {
-    const char *config_file_path;
-    int         ret;
+    char *config_file_path;
+    int   ret;
 
     if ((config_file_path = path_from_app_folder(config_file)) == NULL) {
         return -1;
