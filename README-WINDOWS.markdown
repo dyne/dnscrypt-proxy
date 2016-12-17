@@ -173,7 +173,8 @@ Advanced configuration
 ----------------------
 
 Many additional features (logging, filtering...) can be enabled by
-loading a configuration file:
+loading a configuration file. This requires at least dnscrypt-proxy
+version 1.8.0.
 
 1) Make sure that the service is not running:
 
