@@ -6,6 +6,7 @@
 #include "app.h"
 #include "dnscrypt_proxy.h"
 #include "logger.h"
+#include "utils.h"
 #include "windows_service.h"
 
 #ifndef _WIN32
@@ -290,6 +291,12 @@ windows_build_command_line_from_registry(int * const argc_p,
         exit(1);
     }
     if (windows_service_registry_read_string
+        ("ConfigFile", &string_value) == 0) {
+        err += cmdline_add_option(argc_p, argv_p, string_value);
+        free(string_value);
+        return -(err != 0);
+    }
+    if (windows_service_registry_read_string
         ("ResolversList", &string_value) == 0) {
         err += cmdline_add_option(argc_p, argv_p, "--resolvers-list");
         err += cmdline_add_option(argc_p, argv_p, string_value);
@@ -381,7 +388,7 @@ get_windows_service_name(void)
 }
 
 static void
-set_windows_service_name(const char *name)
+set_windows_service_name(char *name)
 {
     windows_service_name = name;
 }
@@ -498,6 +505,22 @@ windows_service_uninstall(void)
 }
 
 static int
+windows_registry_install_with_config_file(const char *config_file)
+{
+    const char *config_file_path;
+    int         ret;
+
+    if ((config_file_path = path_from_app_folder(config_file)) == NULL) {
+        return -1;
+    }
+    ret = windows_service_registry_write_string("ConfigFile",
+                                                config_file_path);
+    free(config_file_path);
+
+    return ret;
+}
+
+static int
 windows_registry_install(ProxyContext * const proxy_context)
 {
     if (proxy_context->resolvers_list != NULL) {
@@ -523,19 +546,14 @@ windows_registry_install(ProxyContext * const proxy_context)
     return 0;
 }
 
-int
-windows_service_install(ProxyContext * const proxy_context)
+static int
+register_service(void)
 {
     char      self_path[MAX_PATH];
     char      self_path_quoted[2U + MAX_PATH];
     SC_HANDLE scm_handle;
     SC_HANDLE service_handle;
 
-    if (windows_registry_install(proxy_context) != 0) {
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Unable to set up registry keys");
-        return -1;
-    }
     if (GetModuleFileName(NULL, self_path, MAX_PATH) <= (DWORD) 0) {
         return -1;
     }
@@ -562,6 +580,29 @@ windows_service_install(ProxyContext * const proxy_context)
     CloseServiceHandle(scm_handle);
 
     return 0;
+}
+
+int
+windows_service_install(ProxyContext * const proxy_context)
+{
+    if (windows_registry_install(proxy_context) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unable to set up registry keys");
+        return -1;
+    }
+    return register_service();
+}
+
+int
+windows_service_install_with_config_file(ProxyContext * const proxy_context,
+                                         const char * const config_file)
+{
+    if (windows_registry_install_with_config_file(config_file) != 0) {
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Unable to set up registry keys for the config file");
+        return -1;
+    }
+    return register_service();
 }
 
 int

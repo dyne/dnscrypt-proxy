@@ -66,7 +66,9 @@ static struct option getopt_long_options[] = {
     { "help", 0, NULL, 'h' },
 #ifdef _WIN32
     { "install", 0, NULL, WIN_OPTION_INSTALL },
+    { "install-with-config-file", 1, NULL, WIN_OPTION_INSTALL_WITH_CONFIG_FILE },
     { "reinstall", 0, NULL, WIN_OPTION_REINSTALL },
+    { "reinstall-with-config-file", 1, NULL, WIN_OPTION_REINSTALL_WITH_CONFIG_FILE },
     { "uninstall", 0, NULL, WIN_OPTION_UNINSTALL },
     { "service-name", 1, NULL, WIN_OPTION_SERVICE_NAME },
 #endif
@@ -518,10 +520,11 @@ int
 options_parse(AppContext * const app_context,
               ProxyContext * const proxy_context, int argc, char *argv[])
 {
-    int   opt_flag;
-    int   option_index = 0;
+    const char *service_config_file = NULL;
+    int         opt_flag;
+    int         option_index = 0;
 #ifdef _WIN32
-    _Bool option_install = 0;
+    _Bool       option_install = 0;
 #endif
 
     options_init_with_default(app_context, proxy_context);
@@ -697,6 +700,11 @@ options_parse(AppContext * const app_context,
         case WIN_OPTION_REINSTALL:
             option_install = 1;
             break;
+        case WIN_OPTION_INSTALL_WITH_CONFIG_FILE:
+        case WIN_OPTION_REINSTALL_WITH_CONFIG_FILE:
+            option_install = 1;
+            service_config_file = optarg;
+            break;
         case WIN_OPTION_UNINSTALL:
             if (windows_service_uninstall() != 0) {
                 logger_noformat(NULL, LOG_ERR, "Unable to uninstall the service");
@@ -716,12 +724,20 @@ options_parse(AppContext * const app_context,
             exit(1);
         }
     }
-    if (options_apply(proxy_context) != 0) {
+    if (service_config_file == NULL && options_apply(proxy_context) != 0) {
         return -1;
     }
 #ifdef _WIN32
     if (option_install != 0) {
-        if (windows_service_install(proxy_context) != 0) {
+        int ret;
+
+        if (service_config_file != NULL) {
+            ret = windows_service_install_with_config_file(proxy_context,
+                                                           service_config_file);
+        } else {
+            ret = windows_service_install(proxy_context);
+        }
+        if (ret != 0) {
             logger_noformat(NULL, LOG_ERR, "Unable to install the service");
             logger_noformat(NULL, LOG_ERR,
                             "Make sure that you are using an elevated command prompt "
@@ -733,8 +749,12 @@ options_parse(AppContext * const app_context,
                get_windows_service_name());
         logger(NULL, LOG_INFO, "The registry key used for this "
                "service is [%s]", windows_service_registry_parameters_key());
-        logger(NULL, LOG_INFO, "Now, change your resolver settings to %s",
-               proxy_context->local_ip);
+        if (service_config_file != NULL) {
+            logger(NULL, LOG_INFO, "Now, change your resolver settings to %s",
+                   proxy_context->local_ip);
+        } else {
+            logger_noformat(NULL, LOG_INFO, "Now, change your resolver settings");
+        }
         exit(0);
     }
 #endif
