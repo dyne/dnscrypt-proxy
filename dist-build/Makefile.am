@@ -15,4 +15,5 @@ EXTRA_DIST = \
 	mipsel-linux-static.sh \
 	msys2-win32.sh \
 	msys2-win64.sh \
+	win32-win64-xcompile.sh \
 	osx.sh
