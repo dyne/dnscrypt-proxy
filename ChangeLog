@@ -1,3 +1,81 @@
+* Sat Dec 17 19:05:12 2016 +0100
+
+    Sync the Android build scripts with libsodium
+
+* Sat Dec 17 18:43:36 2016 +0100
+
+    Require iOS6
+
+* Sat Dec 17 18:42:58 2016 +0100
+
+    Compat with minimal builds of libsodium
+
+* Sat Dec 17 18:41:45 2016 +0100
+
+    The CoreServices framework is probably not required any more
+
+* Sat Dec 17 18:41:14 2016 +0100
+
+    Do not recommend minimal libsodium builds any more, for xchacha20
+
+* Sat Dec 17 18:21:34 2016 +0100
+
+    Sign
+
+* Sat Dec 17 18:20:48 2016 +0100
+
+    Added d0wn Italy's resolver (#511)
+    
+    Added d0wn Italy's resolver - from https://dns.d0wn.biz
+
+* Sat Dec 17 18:19:15 2016 +0100
+
+    Only keep vendor-neutral options in the configuration file
+
+* Sat Dec 17 18:15:59 2016 +0100
+
+    Update NEWS
+
+* Sat Dec 17 17:32:58 2016 +0100
+
+    The query logs is usually what people want, not the server log
+
+* Sat Dec 17 17:29:00 2016 +0100
+
+    More explicit default resolver
+
+* Sat Dec 17 17:25:27 2016 +0100
+
+    Inverted logic
+
+* Sat Dec 17 17:19:38 2016 +0100
+
+    lto still doesn't work reliably on mingw
+
+* Sat Dec 17 16:18:17 2016 +0100
+
+    Add a cross-compilation script for win32/win64 from Arch Linux
+
+* Sat Dec 17 13:46:01 2016 +0100
+
+    Bump example version
+
+* Sat Dec 17 13:49:19 2016 +0100
+
+    Deconstify
+
+* Sat Dec 17 12:46:30 2016 +0100
+
+    Windows: add a --install-with-config-file= command-line option
+
+* Sat Dec 17 11:39:01 2016 +0100
+
+    Avoid snprintf() in plugins
+
+* Sat Dec 17 00:08:45 2016 +0100
+
+    Update ChangeLog
+
 * Sat Dec 17 00:02:42 2016 +0100
 
     The OpenDNS password can finally be loaded from a file
