@@ -26,6 +26,7 @@ any more.
  - libevent2 has been updated.
  - The resolvers list was updated to the latest version.
  - iOS builds now require iOS 6.0.0.
+ - Windows builds now link ldns against LibreSSL.
 
 * Version 1.7.0:
  - Plugins are now enabled by default.
