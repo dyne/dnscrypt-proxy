@@ -501,8 +501,8 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/example-logging/Makefile
                  src/plugins/example-ldns-aaaa-blocking/Makefile
                  src/plugins/example-ldns-blocking/Makefile
-                 src/plugins/example-ldns-opendns-deviceid/Makefile
-                 src/plugins/example-ldns-opendns-set-client-ip/Makefile
+                 src/plugins/vendor-specific/example-ldns-opendns-deviceid/Makefile
+                 src/plugins/vendor-specific/example-ldns-opendns-set-client-ip/Makefile
                  test/Makefile])
 
 AC_OUTPUT

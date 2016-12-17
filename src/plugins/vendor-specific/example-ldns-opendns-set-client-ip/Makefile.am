@@ -1,4 +1,7 @@
 
+EXTRA_DIST = \
+	CONFIGURATION.txt
+
 pkglib_LTLIBRARIES = \
 	libdcplugin_example_ldns_opendns_set_client_ip.la
 
