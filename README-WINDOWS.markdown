@@ -189,7 +189,8 @@ starting the proxy without installing the service:
     .\dnscrypt-proxy dnscrypt-proxy.conf
 
 Check that errors are not printed, and that DNS queries sent to the
-configured IP addresses receive responses.
+configured IP addresses receive responses. Hit `Control`+`C` in order to
+stop the server and get back to the interactive command prompt.
 
 4) If that setup looks fine, install the Windows service so that it
 loads that configuration file automatically:
