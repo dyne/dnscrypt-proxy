@@ -1,3 +1,32 @@
+* Mon Dec 19 10:10:49 2016 +0100
+
+    Android: downgrade the NDK to 19 when building for platform 16
+    
+    May fix the `signal()` (inlined prior to version 21) symbol being undefined.
+
+* Mon Dec 19 08:51:29 2016 +0100
+
+    Fix off-by-one in the registry key
+    
+    Spotted by Christian Hermann
+
+* Sun Dec 18 15:17:27 2016 +0100
+
+    Document Control-C
+
+* Sat Dec 17 22:54:09 2016 +0100
+
+    Revert "dnscrypt.eu-nl-ipv6 has been down for a while"
+    
+
+* Sat Dec 17 22:35:57 2016 +0100
+
+    sysconf -> dist_sysconf
+
+* Sat Dec 17 19:44:10 2016 +0100
+
+    Update ChangeLog
+
 * Sat Dec 17 19:43:43 2016 +0100
 
     Do not require wine
