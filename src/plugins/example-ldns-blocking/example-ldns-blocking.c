@@ -75,7 +75,7 @@ skip_chars(char *line)
 }
 
 static char *
-host_only(char *line)
+trim_comments(char *line)
 {
     char *s1;
     char *s2;
@@ -118,7 +118,7 @@ parse_str_list(StrList ** const str_list_p, const char * const file)
                (ptr = strchr(line, '\r')) != NULL) {
             *ptr = 0;
         }
-        if ((host = host_only(line)) == NULL || *host == 0) {
+        if ((host = trim_comments(line)) == NULL || *host == 0) {
             continue;
         }
         if ((str_list_item = calloc(1U, sizeof *str_list_item)) == NULL ||
