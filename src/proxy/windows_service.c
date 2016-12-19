@@ -139,7 +139,7 @@ windows_service_registry_parameters_key(void)
     }
     sizeof_key = (sizeof WINDOWS_SERVICE_REGISTRY_PARAMETERS_PATH - 1) +
         strlen(get_windows_service_name()) +
-        (sizeof WINDOWS_SERVICE_REGISTRY_PARAMETERS_NAME - 1);
+        (sizeof WINDOWS_SERVICE_REGISTRY_PARAMETERS_NAME - 1) + 1;
     if ((key = malloc(sizeof_key)) == NULL) {
         exit(1);
     }
