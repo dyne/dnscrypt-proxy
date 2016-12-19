@@ -1,3 +1,11 @@
+* Mon Dec 19 11:31:08 2016 +0100
+
+    host_only() -> trim_comments()
+
+* Mon Dec 19 10:25:50 2016 +0100
+
+    Version bump
+
 * Mon Dec 19 10:10:49 2016 +0100
 
     Android: downgrade the NDK to 19 when building for platform 16
