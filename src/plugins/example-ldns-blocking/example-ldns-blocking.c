@@ -488,9 +488,14 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
         if (fpst_starts_with_existing_key(blocking->domains_rev,
                                           rev, owner_str_len,
                                           &found_key, &found_block_type)) {
+            const size_t found_key_len = strlen(found_key);
+
             assert(found_block_type == BLOCKTYPE_SUFFIX);
-            block = 1;
-            break;
+            if (found_key_len <= owner_str_len &&
+                (rev[found_key_len] == 0 || rev[found_key_len] == '.')) {
+                block = 1;
+                break;
+            }
         }
         if (fpst_starts_with_existing_key(blocking->domains,
                                           owner_str, owner_str_len,
