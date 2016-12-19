@@ -2,7 +2,7 @@
 #! /bin/sh
 
 if [ -z "$NDK_PLATFORM" ]; then
-  export NDK_PLATFORM="android-24"
+  export NDK_PLATFORM="android-19"
   export NDK_PLATFORM_COMPAT="${NDK_PLATFORM_COMPAT:-android-16}"
 else
   export NDK_PLATFORM_COMPAT="${NDK_PLATFORM_COMPAT:-${NDK_PLATFORM}}"
