@@ -10,6 +10,7 @@
 #else
 # include <sys/socket.h>
 # include <arpa/inet.h>
+# include <netinet/in.h>
 #endif
 
 DCPLUGIN_MAIN(__FILE__);
