@@ -3,12 +3,16 @@
 #include <ctype.h>
 #include <getopt.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
 #ifdef _WIN32
 # include <ws2tcpip.h>
+#else
+# include <sys/socket.h>
+# include <arpa/inet.h>
 #endif
 
 #include <dnscrypt/plugin.h>
@@ -396,32 +400,55 @@ timestamp_fprint(FILE * const fp)
     }
     tm = localtime(&now);
     strftime(now_s, sizeof now_s, "%c", tm);
-    fprintf(fp, "%s ", now_s);
+    fprintf(fp, "%s\t", now_s);
 
+    return 0;
+}
+
+static int
+ip_fprint(FILE * const fp,
+          const struct sockaddr_storage * const client_addr,
+          const size_t client_addr_len)
+{
+    if (client_addr->ss_family == AF_INET) {
+        struct sockaddr_in in;
+        uint32_t           a;
+
+        memcpy(&in, client_addr, sizeof in);
+        a = ntohl(in.sin_addr.s_addr);
+        fprintf(fp, "%u.%u.%u.%u\t",
+                (a >> 24) & 0xff, (a >> 16) & 0xff,
+                (a >> 8) & 0xff, a  & 0xff);
+    } else {
+        fprintf(fp, "[ipv6]\t");
+    }
     return 0;
 }
 
 static int
 log_blocked_rr(const Blocking * const blocking,
                const char * const blocked_question,
-               const char * const rule, BlockType block_type)
+               const char * const rule, BlockType block_type,
+               const struct sockaddr_storage * const client_addr,
+               const size_t client_addr_len)
 {
     if (blocking->fp == NULL) {
         return 0;
     }
     timestamp_fprint(blocking->fp);
+    ip_fprint(blocking->fp, client_addr, client_addr_len);
     switch (block_type) {
     case BLOCKTYPE_PREFIX:
-        fprintf(blocking->fp, "%s %s*\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s\t%s*\n", blocked_question, rule);
         break;
     case BLOCKTYPE_SUFFIX:
-        fprintf(blocking->fp, "%s *%s\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s\t*%s\n", blocked_question, rule);
         break;
     case BLOCKTYPE_SUBSTRING:
-        fprintf(blocking->fp, "%s *%s*\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s\t*%s*\n", blocked_question, rule);
         break;
     default:
-        fprintf(blocking->fp, "%s %s\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s\t%s\n", blocked_question, rule);
         break;
     }
     fflush(blocking->fp);
@@ -521,9 +548,13 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
         if (found_block_type == BLOCKTYPE_SUFFIX) {
             str_lcpy(rev, found_key, sizeof rev);
             str_reverse(rev);
-            log_blocked_rr(blocking, owner_str, rev, found_block_type);
+            log_blocked_rr(blocking, owner_str, rev, found_block_type,
+                           dcplugin_get_client_address(dcp_packet),
+                           dcplugin_get_client_address_len(dcp_packet));
         } else {
-            log_blocked_rr(blocking, owner_str, found_key, found_block_type);
+            log_blocked_rr(blocking, owner_str, found_key, found_block_type,
+                           dcplugin_get_client_address(dcp_packet),
+                           dcplugin_get_client_address_len(dcp_packet));
         }
     }
     free(owner_str);
@@ -580,7 +611,9 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
                     if (owner_str_len > (size_t) 1U && owner_str[owner_str_len - 1U] == '.') {
                         owner_str[--owner_str_len] = 0;
                     }
-                    log_blocked_rr(blocking, owner_str, found_key, found_block_type);
+                    log_blocked_rr(blocking, owner_str, found_key, found_block_type,
+                                   dcplugin_get_client_address(dcp_packet),
+                                   dcplugin_get_client_address_len(dcp_packet));
                 }
                 free(answer_str);
                 break;
