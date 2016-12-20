@@ -239,6 +239,10 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         fprintf(logging->fp, "A\n"); break;
     case 0x02:
         fprintf(logging->fp, "NS\n"); break;
+    case 0x06:
+        fprintf(logging->fp, "SOA\n"); break;
+    case 0x0c:
+        fprintf(logging->fp, "PTR\n"); break;
     case 0x0f:
         fprintf(logging->fp, "MX\n"); break;
     case 0x1c:
