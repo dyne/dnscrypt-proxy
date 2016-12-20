@@ -395,12 +395,12 @@ timestamp_fprint(FILE * const fp)
     struct tm *tm;
 
     if (time(&now) == (time_t) -1) {
-        fprintf(fp, "- ");
+        putc('-', fp);
         return -1;
     }
     tm = localtime(&now);
     strftime(now_s, sizeof now_s, "%c", tm);
-    fprintf(fp, "%s\t", now_s);
+    fprintf(fp, "%s", now_s);
 
     return 0;
 }
@@ -416,11 +416,39 @@ ip_fprint(FILE * const fp,
 
         memcpy(&in, client_addr, sizeof in);
         a = ntohl(in.sin_addr.s_addr);
-        fprintf(fp, "%u.%u.%u.%u\t",
+        fprintf(fp, "%u.%u.%u.%u",
                 (a >> 24) & 0xff, (a >> 16) & 0xff,
                 (a >> 8) & 0xff, a  & 0xff);
+    } else if (client_addr->ss_family == AF_INET6) {
+        struct sockaddr_in6  in6;
+        const unsigned char *a;
+        int                  i;
+        uint16_t             w;
+        _Bool                blanks;
+
+        memcpy(&in6, client_addr, sizeof in6);
+        a = in6.sin6_addr.s6_addr;
+        blanks = (a[0] | a[1]) == 0;
+        putc('[', fp);
+        for (i = 0; i < 16; i += 2) {
+            w = ((uint16_t) a[i] << 8) | (uint16_t) a[i + 1];
+            if (blanks) {
+                if (w == 0U) {
+                    continue;
+                }
+                putc(':', fp);
+                blanks = 0;
+            }
+            if (i != 0) {
+                putc(':', fp);
+            }
+            if (blanks == 0) {
+                fprintf(fp, "%x", (unsigned int) w);
+            }
+        }
+        putc(']', fp);
     } else {
-        fprintf(fp, "[ipv6]\t");
+        putc('-', fp);
     }
     return 0;
 }
@@ -436,7 +464,9 @@ log_blocked_rr(const Blocking * const blocking,
         return 0;
     }
     timestamp_fprint(blocking->fp);
+    putc('\t', blocking->fp);
     ip_fprint(blocking->fp, client_addr, client_addr_len);
+    putc('\t', blocking->fp);
     switch (block_type) {
     case BLOCKTYPE_PREFIX:
         fprintf(blocking->fp, "%s\t%s*\n", blocked_question, rule);
