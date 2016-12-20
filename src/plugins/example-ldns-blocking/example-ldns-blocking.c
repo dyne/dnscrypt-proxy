@@ -47,7 +47,7 @@ typedef struct Blocking_ {
     FPST *domains_substr;
     FPST *ips;
     FILE *fp;
-    _Bool unix_ts;
+    _Bool ltsv;
 } Blocking;
 
 static struct option getopt_long_options[] = {
@@ -107,6 +107,7 @@ untab(char *line)
     while ((ptr = strchr(line, '\t')) != NULL) {
         *ptr = ' ';
     }
+    return line;
 }
 
 static char *
@@ -314,6 +315,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "Recognized switches are:\n"
         "--domains=<file>\n"
         "--ips=<file>\n"
+        "--logfile=[ltsv:]<file>\n"
         "\n"
         "A file should list one entry per line.\n"
         "\n"
@@ -321,8 +323,14 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "For names, leading and trailing wildcards (*) are also supported\n"
         "(e.g. *xxx*, *.example.com, ads.*)\n"
         "\n"
+        "For IP addresses, trailing wildcards are supported\n"
+        "(e.g. 192.168.*, 10.0.0.*)\n"
+        "\n"
         "# dnscrypt-proxy --plugin \\\n"
-        "  libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names";
+        "  libdcplugin_example,--ips=/etc/blk-ips,--domains=/etc/blk-names"
+        "\n"
+        "By default, logs are written in a human-readable format.\n"
+        "Prepending ltsv: to the file name changes the log format to LTSV.";
 }
 
 int
@@ -339,12 +347,12 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if (blocking == NULL) {
         return -1;
     }
-    blocking->unix_ts = 0;
     blocking->fp = NULL;
     blocking->domains = NULL;
     blocking->domains_rev = NULL;
     blocking->domains_substr = NULL;
     blocking->ips = NULL;
+    blocking->ltsv = 0;
     optind = 0;
 #ifdef _OPTRESET
     optreset = 1;
@@ -364,12 +372,15 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
                 return -1;
             }
             break;
-        case 'l': {
+        case 'l':
+            if (strncmp(optarg, "ltsv:", (sizeof "ltsv:") - 1U) == 0) {
+                blocking->ltsv = 1;
+                optarg += (sizeof "ltsv:") - 1U;
+            }
             if ((blocking->fp = fopen(optarg, "a")) == NULL) {
                 return -1;
             }
             break;
-        }
         default:
             return -1;
         }
@@ -398,6 +409,18 @@ dcplugin_destroy(DCPlugin * const dcplugin)
         blocking->fp = NULL;
     }
     free(blocking);
+
+    return 0;
+}
+
+static int
+ltsv_prop(FILE * const fp, const char * const prop,
+          const Blocking * const blocking)
+{
+    if (blocking->ltsv == 0) {
+        return 0;
+    }
+    fprintf(fp, "%s:", prop);
 
     return 0;
 }
@@ -482,22 +505,27 @@ log_blocked_rr(const Blocking * const blocking,
     if (blocking->fp == NULL) {
         return 0;
     }
-    timestamp_fprint(blocking->fp, blocking->unix_ts);
+    ltsv_prop(blocking->fp, "time", blocking);
+    timestamp_fprint(blocking->fp, blocking->ltsv);
     putc_unlocked('\t', blocking->fp);
+    ltsv_prop(blocking->fp, "host", blocking);
     ip_fprint(blocking->fp, client_addr, client_addr_len);
     putc_unlocked('\t', blocking->fp);
+    ltsv_prop(blocking->fp, "qname", blocking);
+    fprintf(blocking->fp, "%s\t", blocked_question);
+    ltsv_prop(blocking->fp, "message", blocking);
     switch (block_type) {
     case BLOCKTYPE_PREFIX:
-        fprintf(blocking->fp, "%s\t%s*\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s*\n", rule);
         break;
     case BLOCKTYPE_SUFFIX:
-        fprintf(blocking->fp, "%s\t*%s\n", blocked_question, rule);
+        fprintf(blocking->fp, "*%s\n", rule);
         break;
     case BLOCKTYPE_SUBSTRING:
-        fprintf(blocking->fp, "%s\t*%s*\n", blocked_question, rule);
+        fprintf(blocking->fp, "*%s*\n", rule);
         break;
     default:
-        fprintf(blocking->fp, "%s\t%s\n", blocked_question, rule);
+        fprintf(blocking->fp, "%s\n", rule);
         break;
     }
     fflush(blocking->fp);
