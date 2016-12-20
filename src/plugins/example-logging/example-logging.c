@@ -248,7 +248,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     case 0x1c:
         fprintf(logging->fp, "AAAA\n"); break;
     default:
-        fprintf(logging->fp, "0x%02hX\n", type);
+        fprintf(logging->fp, "0x%02hc\n", type);
     }
     fflush(logging->fp);
 
