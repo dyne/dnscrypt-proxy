@@ -126,7 +126,6 @@ compile() {
     rm ${RELEASE_DIR}/libtls-*.dll
     rm ${RELEASE_DIR}/libssl-*.dll
     cp /usr/${TARGET}/bin/libwinpthread-*.dll $RELEASE_DIR
-    cp /usr/${TARGET}/bin/libgcc_s_*.dll $RELEASE_DIR
     strip ${RELEASE_DIR}/*.exe
   )
 
