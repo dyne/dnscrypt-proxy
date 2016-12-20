@@ -1,7 +1,7 @@
 #! /bin/sh
 
 export CFLAGS="-Os -m64 -mtune=westmere"
-export LDFLAGS="-mtune=westmere"
+export LDFLAGS="-static-libgcc -mtune=westmere"
 export PREFIX="$(pwd)/dnscrypt-proxy-win64"
 export MINGW_PREFIX='/mingw64'
 export SODIUM_PREFIX='/tmp/libsodium-win64'
