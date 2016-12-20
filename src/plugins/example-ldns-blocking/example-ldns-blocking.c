@@ -100,6 +100,16 @@ str_reverse(char *str)
 }
 
 static char *
+untab(char *line)
+{
+    char *ptr;
+
+    while ((ptr = strchr(line, '\t')) != NULL) {
+        *ptr = ' ';
+    }
+}
+
+static char *
 trim_comments(char *line)
 {
     char *ptr;
@@ -164,7 +174,7 @@ parse_domain_list(FPST ** const domain_list_p,
         return -1;
     }
     while (fgets(buf, (int) sizeof buf, fp) != NULL) {
-        if ((line = trim_comments(buf)) == NULL || *line == 0) {
+        if ((line = trim_comments(untab(buf))) == NULL || *line == 0) {
             continue;
         }
         line_len = strlen(line);
@@ -243,7 +253,7 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
         return -1;
     }
     while (fgets(buf, (int) sizeof buf, fp) != NULL) {
-        if ((line = trim_comments(buf)) == NULL || *line == 0) {
+        if ((line = trim_comments(untab(buf))) == NULL || *line == 0) {
             continue;
         }
         line_len = strlen(line);
