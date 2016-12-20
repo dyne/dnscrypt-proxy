@@ -27,6 +27,10 @@
 
 DCPLUGIN_MAIN(__FILE__);
 
+#ifndef putc_unlocked
+# define putc_unlocked(c, stream) putc((c), (stream))
+#endif
+
 #define MAX_QNAME_LENGTH 255U
 
 typedef enum BlockType {
@@ -43,6 +47,7 @@ typedef struct Blocking_ {
     FPST *domains_substr;
     FPST *ips;
     FILE *fp;
+    _Bool unix_ts;
 } Blocking;
 
 static struct option getopt_long_options[] = {
@@ -324,6 +329,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if (blocking == NULL) {
         return -1;
     }
+    blocking->unix_ts = 0;
     blocking->fp = NULL;
     blocking->domains = NULL;
     blocking->domains_rev = NULL;
@@ -387,7 +393,7 @@ dcplugin_destroy(DCPlugin * const dcplugin)
 }
 
 static int
-timestamp_fprint(FILE * const fp)
+timestamp_fprint(FILE * const fp, _Bool unix_ts)
 {
     char now_s[128];
 
@@ -395,13 +401,16 @@ timestamp_fprint(FILE * const fp)
     struct tm *tm;
 
     if (time(&now) == (time_t) -1) {
-        putc('-', fp);
+        putc_unlocked('-', fp);
         return -1;
     }
-    tm = localtime(&now);
-    strftime(now_s, sizeof now_s, "%c", tm);
-    fprintf(fp, "%s", now_s);
-
+    if (unix_ts) {
+        fprintf(fp, "%lu", (unsigned long) now);
+    } else {
+        tm = localtime(&now);
+        strftime(now_s, sizeof now_s, "%c", tm);
+        fprintf(fp, "%s", now_s);
+    }
     return 0;
 }
 
@@ -429,26 +438,26 @@ ip_fprint(FILE * const fp,
         memcpy(&in6, client_addr, sizeof in6);
         a = in6.sin6_addr.s6_addr;
         blanks = (a[0] | a[1]) == 0;
-        putc('[', fp);
+        putc_unlocked('[', fp);
         for (i = 0; i < 16; i += 2) {
             w = ((uint16_t) a[i] << 8) | (uint16_t) a[i + 1];
             if (blanks) {
                 if (w == 0U) {
                     continue;
                 }
-                putc(':', fp);
+                putc_unlocked(':', fp);
                 blanks = 0;
             }
             if (i != 0) {
-                putc(':', fp);
+                putc_unlocked(':', fp);
             }
             if (blanks == 0) {
                 fprintf(fp, "%x", (unsigned int) w);
             }
         }
-        putc(']', fp);
+        putc_unlocked(']', fp);
     } else {
-        putc('-', fp);
+        putc_unlocked('-', fp);
     }
     return 0;
 }
@@ -463,10 +472,10 @@ log_blocked_rr(const Blocking * const blocking,
     if (blocking->fp == NULL) {
         return 0;
     }
-    timestamp_fprint(blocking->fp);
-    putc('\t', blocking->fp);
+    timestamp_fprint(blocking->fp, blocking->unix_ts);
+    putc_unlocked('\t', blocking->fp);
     ip_fprint(blocking->fp, client_addr, client_addr_len);
-    putc('\t', blocking->fp);
+    putc_unlocked('\t', blocking->fp);
     switch (block_type) {
     case BLOCKTYPE_PREFIX:
         fprintf(blocking->fp, "%s\t%s*\n", blocked_question, rule);
