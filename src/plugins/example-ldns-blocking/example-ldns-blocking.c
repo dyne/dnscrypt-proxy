@@ -344,9 +344,6 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
         return -1;
     }
     dcplugin_set_user_data(dcplugin, blocking);
-    if (blocking == NULL) {
-        return -1;
-    }
     blocking->fp = NULL;
     blocking->domains = NULL;
     blocking->domains_rev = NULL;

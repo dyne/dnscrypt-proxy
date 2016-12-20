@@ -18,6 +18,11 @@ DCPLUGIN_MAIN(__FILE__);
 # define putc_unlocked(c, stream) putc((c), (stream))
 #endif
 
+typedef struct Logging_ {
+    FILE *fp;
+    _Bool ltsv;
+} Logging;
+
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {
@@ -33,34 +38,51 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "This plugin logs the client queries to the standard output (default)\n"
         "or to a file.\n"
         "\n"
-        "# dnscrypt-proxy --plugin libdcplugin_example_logging,/var/log/dns.log";
+        "# dnscrypt-proxy --plugin libdcplugin_example_logging,/var/log/dns.log\n"
+        "\n"
+        "Prefixing the file name with ltsv: changes the log format to LTSV.";
 }
 
 int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
-    FILE *fp;
+    Logging *logging;
 
+    if ((logging = calloc((size_t) 1U, sizeof *logging)) == NULL) {
+        return -1;
+    }
+    dcplugin_set_user_data(dcplugin, logging);
+    logging->ltsv = 0;
     if (argc != 2U) {
-        fp = stdout;
+        logging->fp = stdout;
     } else {
-        if ((fp = fopen(argv[1], "a")) == NULL) {
+        const char *file = argv[1];
+
+        if (strncmp(file, "ltsv:", (sizeof "ltsv:") - 1U) == 0) {
+            logging->ltsv = 1;
+            file += (sizeof "ltsv:") - 1U;
+        }
+        if ((logging->fp = fopen(file, "a")) == NULL) {
             return -1;
         }
     }
-    dcplugin_set_user_data(dcplugin, fp);
-
     return 0;
 }
 
 int
 dcplugin_destroy(DCPlugin * const dcplugin)
 {
-    FILE * const fp = dcplugin_get_user_data(dcplugin);
+    Logging *logging = dcplugin_get_user_data(dcplugin);
 
-    if (fp != stdout) {
-        fclose(fp);
+    if (logging == NULL) {
+        return 0;
     }
+    if (logging->fp != stdout) {
+        fclose(logging->fp);
+    }
+    logging->fp = NULL;
+    free(logging);
+
     return 0;
 }
 
@@ -83,6 +105,18 @@ string_fprint(FILE * const fp, const unsigned char *str,
         }
         putc_unlocked(c, fp);
     }
+    return 0;
+}
+
+static int
+ltsv_prop(FILE * const fp, const char * const prop,
+          const Logging * const logging)
+{
+    if (logging->ltsv == 0) {
+        return 0;
+    }
+    fprintf(fp, "%s:", prop);
+
     return 0;
 }
 
@@ -159,7 +193,7 @@ ip_fprint(FILE * const fp,
 DCPluginSyncFilterResult
 dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
-    FILE                *fp = dcplugin_get_user_data(dcplugin);
+    Logging             *logging = dcplugin_get_user_data(dcplugin);
     const unsigned char *wire_data = dcplugin_get_wire_data(dcp_packet);
     size_t               wire_data_len = dcplugin_get_wire_data_len(dcp_packet);
     size_t               i = (size_t) 12U;
@@ -171,13 +205,16 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (wire_data_len < 15U || wire_data[4] != 0U || wire_data[5] != 1U) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
-    timestamp_fprint(fp, 0);
-    putc_unlocked('\t', fp);
-    ip_fprint(fp, dcplugin_get_client_address(dcp_packet),
+    ltsv_prop(logging->fp, "time", logging);
+    timestamp_fprint(logging->fp, logging->ltsv);
+    putc_unlocked('\t', logging->fp);
+    ltsv_prop(logging->fp, "host", logging);
+    ip_fprint(logging->fp, dcplugin_get_client_address(dcp_packet),
               dcplugin_get_client_address_len(dcp_packet));
-    putc_unlocked('\t', fp);
+    putc_unlocked('\t', logging->fp);
+    ltsv_prop(logging->fp, "message", logging);
     if (wire_data[i] == 0U) {
-        putc_unlocked('.', fp);
+        putc_unlocked('.', logging->fp);
     }
     while (i < wire_data_len && (csize = wire_data[i]) != 0U &&
            csize < wire_data_len - i) {
@@ -185,28 +222,30 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         if (first != 0) {
             first = 0;
         } else {
-            putc_unlocked('.', fp);
+            putc_unlocked('.', logging->fp);
         }
-        string_fprint(fp, &wire_data[i], csize, 1);
+        string_fprint(logging->fp, &wire_data[i], csize, 1);
         i += csize;
     }
     type = 0U;
     if (i < wire_data_len - 2U) {
         type = (wire_data[i + 1U] << 8) + wire_data[i + 2U];
     }
+    putc_unlocked('\t', logging->fp);
+    ltsv_prop(logging->fp, "type", logging);
     switch (type) {
     case 0x01:
-        fprintf(fp, "\tA\n"); break;
+        fprintf(logging->fp, "A\n"); break;
     case 0x02:
-        fprintf(fp, "\tNS\n"); break;
+        fprintf(logging->fp, "NS\n"); break;
     case 0x0f:
-        fprintf(fp, "\tMX\n"); break;
+        fprintf(logging->fp, "MX\n"); break;
     case 0x1c:
-        fprintf(fp, "\tAAAA\n"); break;
+        fprintf(logging->fp, "AAAA\n"); break;
     default:
-        fprintf(fp, "\t0x%02hX\n", type);
+        fprintf(logging->fp, "0x%02hX\n", type);
     }
-    fflush(fp);
+    fflush(logging->fp);
 
     return DCP_SYNC_FILTER_RESULT_OK;
 }
