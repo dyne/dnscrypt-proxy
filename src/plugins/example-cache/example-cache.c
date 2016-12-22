@@ -349,7 +349,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     uint8_t    *wire_qname;
     uint8_t    *wire_data = dcplugin_get_wire_data(dcp_packet);
     size_t      wire_data_len = dcplugin_get_wire_data_len(dcp_packet);
-    size_t      i = (size_t) 12U;
+    size_t      i = DNS_HEADER_SIZE;
     size_t      qname_len;
     uint16_t    qtype;
     uint16_t    qclass;
@@ -378,7 +378,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
                     &opt_type, NULL, &opt_ttl) != 0) {
             return DCP_SYNC_FILTER_RESULT_ERROR;
         }
-        if (opt_type != 41) {
+        if (opt_type != DNS_TYPE_OPT) {
             return DCP_SYNC_FILTER_RESULT_OK;
         }
         if ((opt_ttl & 0x8000) == 0x8000) {
@@ -406,8 +406,8 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         wire_data = dcplugin_get_wire_data(dcp_packet);
         wire_data[0] = (uint8_t) (tid >> 8);
         wire_data[1] = (uint8_t) tid;
-        memcpy(&wire_data[12], qname, qname_len);
-        i = 12;
+        memcpy(&wire_data[DNS_HEADER_SIZE], qname, qname_len);
+        i = DNS_HEADER_SIZE;
         wire_data_len = scanned_cache_entry->response_len;
         if (next_rr(wire_data, wire_data_len, 1, NULL, &i,
                     NULL, NULL, NULL) != 0) {
@@ -421,7 +421,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
             if (4 > wire_data_len - ttl_i) {
                 return DCP_SYNC_FILTER_RESULT_ERROR;
             }
-            if (atype != 41) {
+            if (atype != DNS_TYPE_OPT) {
                 wire_data[ttl_i] = (uint8_t) (ttl >> 24);
                 wire_data[ttl_i + 1] = (uint8_t) (ttl >> 16);
                 wire_data[ttl_i + 2] = (uint8_t) (ttl >> 8);
@@ -443,7 +443,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     uint8_t    *wire_data = dcplugin_get_wire_data(dcp_packet);
     uint8_t    *wire_qname;
     size_t      wire_data_len = dcplugin_get_wire_data_len(dcp_packet);
-    size_t      i = (size_t) 12U;
+    size_t      i = DNS_HEADER_SIZE;
     size_t      qname_len;
     uint32_t    ttl;
     uint32_t    min_ttl;
@@ -473,7 +473,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     min_ttl = MAX_TTL;
     while (next_rr(wire_data, wire_data_len, 0, NULL, &i,
                    &atype, NULL, &ttl) == 0) {
-        if (atype != 41 && ttl < min_ttl) {
+        if (atype != DNS_TYPE_OPT && ttl < min_ttl) {
             min_ttl = ttl;
             is_empty = 0;
         }

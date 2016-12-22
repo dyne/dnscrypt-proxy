@@ -6,6 +6,8 @@
 #define MAX_TTL 86400
 
 #define DNS_MAX_HOSTNAME_LEN 256U
+#define DNS_HEADER_SIZE 12
+#define DNS_TYPE_OPT 41
 
 #include <stdint.h>
 #include <stdlib.h>
