@@ -46,23 +46,30 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     return 0;
 }
 
-int
-dcplugin_destroy(DCPlugin * const dcplugin)
+static void
+free_cache_entries(CacheEntry *cache_entries)
 {
-    Cache      *cache = dcplugin_get_user_data(dcplugin);
     CacheEntry *cache_entry;
     CacheEntry *next;
 
-    if (cache == NULL) {
-        return 0;
-    }
-    cache_entry = cache->cache_entries;
+    cache_entry = cache_entries;
     while (cache_entry != NULL) {
         next = cache_entry->next;
         free(cache_entry->response);
         cache_entry->response = NULL;
         cache_entry = next;
     }
+}
+
+int
+dcplugin_destroy(DCPlugin * const dcplugin)
+{
+    Cache *cache = dcplugin_get_user_data(dcplugin);
+
+    if (cache == NULL) {
+        return 0;
+    }
+    free_cache_entries(cache->cache_entries);
     cache->cache_entries = NULL;
     free(cache);
 
