@@ -57,9 +57,9 @@ tool:
 Installation
 ------------
 
-The daemon is known to work on recent versions of OSX, OpenBSD, Bitrig,
+The daemon is known to work on recent versions of MacOS, OpenBSD, Bitrig,
 NetBSD, Dragonfly BSD, FreeBSD, Linux, iOS (requires a jailbroken device),
-Android (requires a rooted device), and Windows (requires MingW).
+Android (requires a rooted device), Windows and more.
 
 Install [libsodium](https://github.com/jedisct1/libsodium). On Linux, don't
 forget to run `ldconfig` if you installed it from source.
@@ -76,11 +76,8 @@ Now, download the latest `dnscrypt-proxy` version and extract it:
 
 Compile and install it using the standard procedure:
 
-    $ ./configure && make -j2
+    $ ./configure && make
     # make install
-
-Replace `-j2` with whatever number of CPU cores you want to use for the
-compilation process.
 
 The proxy will be installed as `/usr/local/sbin/dnscrypt-proxy` by default.
 
@@ -101,7 +98,7 @@ and protocols, IPv6, parental controls and the proxy can act as a gateway
 service. Windows only, written in .NET.
 
 - [DNSCrypt OSXClient](https://github.com/alterstep/dnscrypt-osxclient):
-Mac OSX application to control the DNSCrypt Proxy.
+MacOS application to control the DNSCrypt Proxy.
 
 - [DNSCryptClient](https://github.com/F1ash/dnscrypt-proxy-gui): A Qt/KF5 GUI for
 Linux.
