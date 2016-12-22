@@ -37,7 +37,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if ((cache = calloc((size_t) 1U, sizeof *cache)) == NULL) {
         return -1;
     }
-    cache->cache_entries = cache->cache_entries_l2 = NULL;
+    cache->cache_entries = cache->cache_entries_frequent = NULL;
     cache->cache_entries_max = DEFAULT_CACHE_ENTRIES_MAX;
     cache->min_ttl = DEFAULT_MIN_TTL;
     cache->now = (time_t) 0;
@@ -86,7 +86,7 @@ find_cached_entry(Cache * const cache, const uint8_t * const qname,
 
     if ((scanned_cache_entry = _find_cached_entry(cache->cache_entries,
                                               qname, qname_len, qtype)) == NULL) {
-        scanned_cache_entry = _find_cached_entry(cache->cache_entries_l2,
+        scanned_cache_entry = _find_cached_entry(cache->cache_entries_frequent,
                                                  qname, qname_len, qtype);
     }
     return scanned_cache_entry;
@@ -117,9 +117,14 @@ _find_cached_entry_ext(CacheEntry * const cache_entries,
 }
 
 static int
-remove_last_cache_entry(CacheEntry * const last_cache_entry,
-                        CacheEntry * const last_cache_entry_parent)
+_make_space_for_cache_entry(Cache * const cache,
+                            CacheEntry * const last_cache_entry,
+                            CacheEntry * const last_cache_entry_parent,
+                            const size_t cache_entries_count)
 {
+    if (cache_entries_count < cache->cache_entries_max) {
+        return 0;
+    }
     if (last_cache_entry == NULL || last_cache_entry_parent == NULL) {
         return -1;
     }
@@ -134,6 +139,26 @@ remove_last_cache_entry(CacheEntry * const last_cache_entry,
 }
 
 static int
+make_space_for_cache_entry(Cache * const cache,
+                           CacheEntry * const cache_entries)
+{
+    CacheEntry *scanned_cache_entry = cache_entries;
+    CacheEntry *last_cache_entry = NULL;
+    CacheEntry *last_cache_entry_parent = NULL;
+    size_t      cache_entries_count = 0;
+
+    while (scanned_cache_entry != NULL) {
+        cache_entries_count++;
+        last_cache_entry_parent = last_cache_entry;
+        last_cache_entry = scanned_cache_entry;
+        scanned_cache_entry = scanned_cache_entry->next;
+    }
+    return _make_space_for_cache_entry(cache, last_cache_entry,
+                                       last_cache_entry_parent,
+                                       cache_entries_count);
+}
+
+static int
 replace_cache_entry(Cache * const cache,
                     uint8_t * const wire_qname, const size_t qname_len,
                     uint8_t * const wire_data, const size_t wire_data_len,
@@ -145,14 +170,16 @@ replace_cache_entry(Cache * const cache,
     CacheEntry *scanned_cache_entry = cache->cache_entries;
     uint8_t    *response_tmp;
     size_t      cache_entries_count;
+    _Bool       in_frequent = 1;
 
-    scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries,
+    scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries_frequent,
                                                  wire_qname, qname_len, qtype,
                                                  &cache_entries_count,
                                                  &last_cache_entry,
                                                  &last_cache_entry_parent);
     if (scanned_cache_entry == NULL) {
-        scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries_l2,
+        in_frequent = 0;
+        scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries,
                                                      wire_qname, qname_len, qtype,
                                                      &cache_entries_count,
                                                      &last_cache_entry,
@@ -170,16 +197,18 @@ replace_cache_entry(Cache * const cache,
         scanned_cache_entry->response_len = wire_data_len;
         scanned_cache_entry->deadline = cache->now + ttl;
         if (last_cache_entry_parent != NULL) {
+            if (in_frequent == 0) {
+                make_space_for_cache_entry(cache, cache->cache_entries_frequent);
+            }
             assert(last_cache_entry_parent->next = scanned_cache_entry);
             last_cache_entry_parent->next = NULL;
-            scanned_cache_entry->next = cache->cache_entries;
-            cache->cache_entries = scanned_cache_entry;
+            scanned_cache_entry->next = cache->cache_entries_frequent;
+            cache->cache_entries_frequent = scanned_cache_entry;
         }
         return 0;
     }
-    if (cache_entries_count >= cache->cache_entries_max) {
-        remove_last_cache_entry(last_cache_entry, last_cache_entry_parent);
-    }
+    _make_space_for_cache_entry(cache, last_cache_entry, last_cache_entry_parent,
+                                cache_entries_count);
     if ((cache_entry = calloc((size_t) 1U, sizeof *cache_entry)) == NULL) {
         return -1;
     }
@@ -207,8 +236,8 @@ dcplugin_destroy(DCPlugin * const dcplugin)
         return 0;
     }
     free_cache_entries(cache->cache_entries);
-    free_cache_entries(cache->cache_entries_l2);    
-    cache->cache_entries = cache->cache_entries_l2 = NULL;
+    free_cache_entries(cache->cache_entries_frequent);
+    cache->cache_entries = cache->cache_entries_frequent = NULL;
     free(cache);
 
     return 0;
