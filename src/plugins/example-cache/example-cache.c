@@ -37,7 +37,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if ((cache = calloc((size_t) 1U, sizeof *cache)) == NULL) {
         return -1;
     }
-    cache->cache_entries = NULL;
+    cache->cache_entries = cache->cache_entries_l2 = NULL;
     cache->cache_entries_max = DEFAULT_CACHE_ENTRIES_MAX;
     cache->min_ttl = DEFAULT_MIN_TTL;
     cache->now = (time_t) 0;
@@ -62,10 +62,11 @@ free_cache_entries(CacheEntry *cache_entries)
 }
 
 static CacheEntry *
-find_cached_entry(Cache * const cache, const uint8_t * const qname,
-                  const size_t qname_len, const uint16_t qtype)
+_find_cached_entry(CacheEntry * const cache_entries,
+                   const uint8_t * const qname, const size_t qname_len,
+                   const uint16_t qtype)
 {
-    CacheEntry *scanned_cache_entry = cache->cache_entries;
+    CacheEntry *scanned_cache_entry = cache_entries;
 
     while (scanned_cache_entry != NULL) {
         if (memcmp(scanned_cache_entry->qname, qname, qname_len) == 0 &&
@@ -77,6 +78,61 @@ find_cached_entry(Cache * const cache, const uint8_t * const qname,
     return scanned_cache_entry;
 }
 
+static CacheEntry *
+find_cached_entry(Cache * const cache, const uint8_t * const qname,
+                  const size_t qname_len, const uint16_t qtype)
+{
+    CacheEntry *scanned_cache_entry;
+
+    if ((scanned_cache_entry = _find_cached_entry(cache->cache_entries,
+                                              qname, qname_len, qtype)) == NULL) {
+        scanned_cache_entry = _find_cached_entry(cache->cache_entries_l2,
+                                                 qname, qname_len, qtype);
+    }
+    return scanned_cache_entry;
+}
+
+static CacheEntry *
+_find_cached_entry_ext(CacheEntry * const cache_entries,
+                       const uint8_t * const qname, const size_t qname_len,
+                       const uint16_t qtype, size_t * const cache_entries_count_p,
+                       CacheEntry ** const last_cache_entry_p,
+                       CacheEntry ** const last_cache_entry_parent_p)
+{
+    CacheEntry *scanned_cache_entry = cache_entries;
+
+    *last_cache_entry_p = *last_cache_entry_parent_p = NULL;
+    *cache_entries_count_p = 0;
+    while (scanned_cache_entry != NULL) {
+        (*cache_entries_count_p)++;
+        *last_cache_entry_parent_p = *last_cache_entry_p;
+        *last_cache_entry_p = scanned_cache_entry;
+        if (memcmp(scanned_cache_entry->qname, qname, qname_len) == 0 &&
+            scanned_cache_entry->qtype == qtype) {
+            break;
+        }
+        scanned_cache_entry = scanned_cache_entry->next;
+    }
+    return scanned_cache_entry;
+}
+
+static int
+remove_last_cache_entry(CacheEntry * const last_cache_entry,
+                        CacheEntry * const last_cache_entry_parent)
+{
+    if (last_cache_entry == NULL || last_cache_entry_parent == NULL) {
+        return -1;
+    }
+    free(last_cache_entry->response);
+    last_cache_entry->response = NULL;
+    assert(last_cache_entry->next == NULL);
+    assert(last_cache_entry_parent->next == last_cache_entry);
+    free(last_cache_entry);
+    last_cache_entry_parent->next = NULL;
+
+    return 0;
+}
+
 static int
 replace_cache_entry(Cache * const cache,
                     uint8_t * const wire_qname, const size_t qname_len,
@@ -84,21 +140,23 @@ replace_cache_entry(Cache * const cache,
                     const uint32_t ttl, const uint16_t qtype)
 {
     CacheEntry *cache_entry;
-    CacheEntry *last_cache_entry = NULL;
-    CacheEntry *last_cache_entry_parent = NULL;
+    CacheEntry *last_cache_entry;
+    CacheEntry *last_cache_entry_parent;
     CacheEntry *scanned_cache_entry = cache->cache_entries;
     uint8_t    *response_tmp;
-    size_t      cache_entries_count = 0;
+    size_t      cache_entries_count;
 
-    while (scanned_cache_entry != NULL) {
-        cache_entries_count++;
-        last_cache_entry_parent = last_cache_entry;
-        last_cache_entry = scanned_cache_entry;
-        if (memcmp(scanned_cache_entry->qname, wire_qname, qname_len) == 0 &&
-            scanned_cache_entry->qtype == qtype) {
-            break;
-        }
-        scanned_cache_entry = scanned_cache_entry->next;
+    scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries,
+                                                 wire_qname, qname_len, qtype,
+                                                 &cache_entries_count,
+                                                 &last_cache_entry,
+                                                 &last_cache_entry_parent);
+    if (scanned_cache_entry == NULL) {
+        scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries_l2,
+                                                     wire_qname, qname_len, qtype,
+                                                     &cache_entries_count,
+                                                     &last_cache_entry,
+                                                     &last_cache_entry_parent);
     }
     if (scanned_cache_entry != NULL) {
         if (wire_data_len > scanned_cache_entry->response_len) {
@@ -117,31 +175,26 @@ replace_cache_entry(Cache * const cache,
             scanned_cache_entry->next = cache->cache_entries;
             cache->cache_entries = scanned_cache_entry;
         }
-    } else {
-        if (cache_entries_count >= cache->cache_entries_max &&
-            last_cache_entry_parent != NULL && last_cache_entry != NULL) {
-            free(last_cache_entry->response);
-            last_cache_entry->response = NULL;
-            assert(last_cache_entry->next == NULL);
-            assert(last_cache_entry_parent->next == last_cache_entry);
-            free(last_cache_entry);
-            last_cache_entry_parent->next = NULL;
-        }
-        if ((cache_entry = calloc((size_t) 1U, sizeof *cache_entry)) == NULL) {
-            return -1;
-        }
-        memcpy(cache_entry->qname, wire_qname, qname_len);
-        cache_entry->qtype = qtype;
-        if ((cache_entry->response = malloc(wire_data_len)) == NULL) {
-            free(cache_entry);
-            return -1;
-        }
-        memcpy(cache_entry->response, wire_data, wire_data_len);
-        cache_entry->response_len = wire_data_len;
-        cache_entry->deadline = cache->now + ttl;
-        cache_entry->next = cache->cache_entries;
-        cache->cache_entries = cache_entry;
+        return 0;
     }
+    if (cache_entries_count >= cache->cache_entries_max) {
+        remove_last_cache_entry(last_cache_entry, last_cache_entry_parent);
+    }
+    if ((cache_entry = calloc((size_t) 1U, sizeof *cache_entry)) == NULL) {
+        return -1;
+    }
+    memcpy(cache_entry->qname, wire_qname, qname_len);
+    cache_entry->qtype = qtype;
+    if ((cache_entry->response = malloc(wire_data_len)) == NULL) {
+        free(cache_entry);
+        return -1;
+    }
+    memcpy(cache_entry->response, wire_data, wire_data_len);
+    cache_entry->response_len = wire_data_len;
+    cache_entry->deadline = cache->now + ttl;
+    cache_entry->next = cache->cache_entries;
+    cache->cache_entries = cache_entry;
+
     return 0;
 }
 
@@ -154,7 +207,8 @@ dcplugin_destroy(DCPlugin * const dcplugin)
         return 0;
     }
     free_cache_entries(cache->cache_entries);
-    cache->cache_entries = NULL;
+    free_cache_entries(cache->cache_entries_l2);    
+    cache->cache_entries = cache->cache_entries_l2 = NULL;
     free(cache);
 
     return 0;

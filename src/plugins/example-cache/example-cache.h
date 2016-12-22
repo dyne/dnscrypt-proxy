@@ -21,6 +21,7 @@ typedef struct CacheEntry_ {
 
 typedef struct Cache_ {
     CacheEntry *cache_entries;
+    CacheEntry *cache_entries_l2;
     size_t      cache_entries_max;
     time_t      now;
     time_t      min_ttl;
