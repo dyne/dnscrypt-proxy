@@ -99,8 +99,8 @@ cert_parse_bincert(ProxyContext * const proxy_context,
         } else {
             logger_noformat(proxy_context, LOG_INFO,
                             "This certificate has not been activated yet");
+            return -1;
         }
-        return -1;
     }
     if (now_u32 > ts_end) {
         logger_noformat(proxy_context, LOG_INFO,
