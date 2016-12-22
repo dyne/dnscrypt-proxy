@@ -61,6 +61,91 @@ free_cache_entries(CacheEntry *cache_entries)
     }
 }
 
+static CacheEntry *
+find_cached_entry(Cache * const cache, const uint8_t * const qname,
+                  const size_t qname_len, const uint16_t qtype)
+{
+    CacheEntry *scanned_cache_entry = cache->cache_entries;
+
+    while (scanned_cache_entry != NULL) {
+        if (memcmp(scanned_cache_entry->qname, qname, qname_len) == 0 &&
+            scanned_cache_entry->qtype == qtype) {
+            break;
+        }
+        scanned_cache_entry = scanned_cache_entry->next;
+    }
+    return scanned_cache_entry;
+}
+
+static int
+replace_cache_entry(Cache * const cache,
+                    uint8_t * const wire_qname, const size_t qname_len,
+                    uint8_t * const wire_data, const size_t wire_data_len,
+                    const uint32_t ttl, const uint16_t qtype)
+{
+    CacheEntry *last_cache_entry = NULL;
+    CacheEntry *last_cache_entry_parent = NULL;
+    CacheEntry *scanned_cache_entry = cache->cache_entries;
+    uint8_t    *response_tmp;
+    size_t      cache_entries_count = 0;
+
+    while (scanned_cache_entry != NULL) {
+        cache_entries_count++;
+        last_cache_entry_parent = last_cache_entry;
+        last_cache_entry = scanned_cache_entry;
+        if (memcmp(scanned_cache_entry->qname, wire_qname, qname_len) == 0 &&
+            scanned_cache_entry->qtype == qtype) {
+            break;
+        }
+        scanned_cache_entry = scanned_cache_entry->next;
+    }
+    if (scanned_cache_entry != NULL) {
+        if (wire_data_len > scanned_cache_entry->response_len) {
+            if ((response_tmp = realloc(scanned_cache_entry->response,
+                                        wire_data_len)) == NULL) {
+                return -1;
+            }
+            scanned_cache_entry->response = response_tmp;
+        }
+        memcpy(scanned_cache_entry->response, wire_data, wire_data_len);
+        scanned_cache_entry->response_len = wire_data_len;
+        scanned_cache_entry->deadline = cache->now + ttl;
+        if (last_cache_entry_parent != NULL) {
+            assert(last_cache_entry_parent->next = scanned_cache_entry);
+            last_cache_entry_parent->next = NULL;
+            scanned_cache_entry->next = cache->cache_entries;
+            cache->cache_entries = scanned_cache_entry;
+        }
+    } else {
+        CacheEntry *cache_entry;
+
+        if (cache_entries_count >= cache->cache_entries_max &&
+            last_cache_entry_parent != NULL && last_cache_entry != NULL) {
+            free(last_cache_entry->response);
+            last_cache_entry->response = NULL;
+            assert(last_cache_entry->next == NULL);
+            assert(last_cache_entry_parent->next == last_cache_entry);
+            free(last_cache_entry);
+            last_cache_entry_parent->next = NULL;
+        }
+        if ((cache_entry = calloc((size_t) 1U, sizeof *cache_entry)) == NULL) {
+            return -1;
+        }
+        memcpy(cache_entry->qname, wire_qname, qname_len);
+        cache_entry->qtype = qtype;
+        if ((cache_entry->response = malloc(wire_data_len)) == NULL) {
+            free(cache_entry);
+            return -1;
+        }
+        memcpy(cache_entry->response, wire_data, wire_data_len);
+        cache_entry->response_len = wire_data_len;
+        cache_entry->deadline = cache->now + ttl;
+        cache_entry->next = cache->cache_entries;
+        cache->cache_entries = cache_entry;
+    }
+    return 0;
+}
+
 int
 dcplugin_destroy(DCPlugin * const dcplugin)
 {
@@ -219,14 +304,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
             }
         }
     }
-    scanned_cache_entry = cache->cache_entries;
-    while (scanned_cache_entry != NULL) {
-        if (memcmp(scanned_cache_entry->qname, qname, qname_len) == 0 &&
-            scanned_cache_entry->qtype == qtype) {
-            break;
-        }
-        scanned_cache_entry = scanned_cache_entry->next;
-    }
+    scanned_cache_entry = find_cached_entry(cache, qname, qname_len, qtype);
     time(&cache->now);
     if (scanned_cache_entry != NULL &&
         scanned_cache_entry->response_len <=
@@ -279,14 +357,9 @@ DCPluginSyncFilterResult
 dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
 {
     Cache      *cache = dcplugin_get_user_data(dcplugin);
-    CacheEntry *scanned_cache_entry;
-    CacheEntry *last_cache_entry;
-    CacheEntry *last_cache_entry_parent;
     uint8_t    *wire_data = dcplugin_get_wire_data(dcp_packet);
     uint8_t    *wire_qname;
-    uint8_t    *response_tmp;
     size_t      wire_data_len = dcplugin_get_wire_data_len(dcp_packet);
-    size_t      cache_entries_count;
     size_t      i = (size_t) 12U;
     size_t      qname_len;
     uint32_t    ttl;
@@ -294,8 +367,6 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     uint16_t    atype;
     uint16_t    qtype;
     uint16_t    qclass;
-    uint16_t    tid;
-    uint8_t     c;
     _Bool       empty;
 
     if (wire_data_len < 15U || wire_data[4] != 0U || wire_data[5] != 1U) {
@@ -327,62 +398,8 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (ttl < cache->min_ttl || empty != 0) {
         ttl = cache->min_ttl;
     }
-    scanned_cache_entry = cache->cache_entries;
-    last_cache_entry_parent = last_cache_entry = NULL;
-    cache_entries_count = 0;
-    while (scanned_cache_entry != NULL) {
-        cache_entries_count++;
-        last_cache_entry_parent = last_cache_entry;
-        last_cache_entry = scanned_cache_entry;
-        if (memcmp(scanned_cache_entry->qname, wire_qname, qname_len) == 0 &&
-            scanned_cache_entry->qtype == qtype) {
-            break;
-        }
-        scanned_cache_entry = scanned_cache_entry->next;
-    }
-    if (scanned_cache_entry != NULL) {
-        if (wire_data_len > scanned_cache_entry->response_len) {
-            if ((response_tmp = realloc(scanned_cache_entry->response,
-                                        wire_data_len)) == NULL) {
-                return DCP_SYNC_FILTER_RESULT_OK;
-            }
-            scanned_cache_entry->response = response_tmp;
-        }
-        memcpy(scanned_cache_entry->response, wire_data, wire_data_len);
-        scanned_cache_entry->response_len = wire_data_len;
-        scanned_cache_entry->deadline = cache->now + ttl;
-        if (last_cache_entry_parent != NULL) {
-            assert(last_cache_entry_parent->next = scanned_cache_entry);
-            last_cache_entry_parent->next = NULL;
-            scanned_cache_entry->next = cache->cache_entries;
-            cache->cache_entries = scanned_cache_entry;
-        }
-    } else {
-        CacheEntry *cache_entry;
+    replace_cache_entry(cache, wire_qname, qname_len,
+                        wire_data, wire_data_len, ttl, qtype);
 
-        if (cache_entries_count >= cache->cache_entries_max &&
-            last_cache_entry_parent != NULL && last_cache_entry != NULL) {
-            free(last_cache_entry->response);
-            last_cache_entry->response = NULL;
-            assert(last_cache_entry->next == NULL);
-            assert(last_cache_entry_parent->next == last_cache_entry);
-            free(last_cache_entry);
-            last_cache_entry_parent->next = NULL;
-        }
-        if ((cache_entry = calloc((size_t) 1U, sizeof *cache_entry)) == NULL) {
-            return DCP_SYNC_FILTER_RESULT_OK;
-        }
-        memcpy(cache_entry->qname, wire_qname, qname_len);
-        cache_entry->qtype = qtype;
-        if ((cache_entry->response = malloc(wire_data_len)) == NULL) {
-            free(cache_entry);
-            return DCP_SYNC_FILTER_RESULT_OK;
-        }
-        memcpy(cache_entry->response, wire_data, wire_data_len);
-        cache_entry->response_len = wire_data_len;
-        cache_entry->deadline = cache->now + ttl;
-        cache_entry->next = cache->cache_entries;
-        cache->cache_entries = cache_entry;
-    }
     return DCP_SYNC_FILTER_RESULT_OK;
 }
