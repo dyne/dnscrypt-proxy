@@ -39,7 +39,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "This plugin logs the client queries to the standard output (default)\n"
         "or to a file.\n"
         "\n"
-        "# dnscrypt-proxy --plugin libdcplugin_example_logging,/var/log/dns.log\n"
+        "# dnscrypt-proxy --plugin libdcplugin_example_logging.la,/var/log/dns.log\n"
         "\n"
         "Prefixing the file name with ltsv: changes the log format to LTSV.";
 }
