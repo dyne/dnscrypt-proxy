@@ -450,7 +450,7 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     uint16_t    atype;
     uint16_t    qtype;
     uint16_t    qclass;
-    _Bool       empty;
+    _Bool       is_empty;
 
     if (wire_data_len < 15U || wire_data[4] != 0U || wire_data[5] != 1U) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
@@ -469,16 +469,16 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     if (qclass != 1) {
         return DCP_SYNC_FILTER_RESULT_OK;
     }
-    empty = 1;
+    is_empty = 1;
     min_ttl = MAX_TTL;
     while (next_rr(wire_data, wire_data_len, 0, NULL, &i,
                    &atype, NULL, &ttl) == 0) {
         if (atype != 41 && ttl < min_ttl) {
             min_ttl = ttl;
-            empty = 0;
+            is_empty = 0;
         }
     }
-    if (ttl < cache->min_ttl || empty != 0) {
+    if (ttl < cache->min_ttl || is_empty != 0) {
         ttl = cache->min_ttl;
     }
     replace_cache_entry(cache, wire_qname, qname_len,
