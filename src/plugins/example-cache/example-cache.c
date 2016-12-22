@@ -83,6 +83,7 @@ replace_cache_entry(Cache * const cache,
                     uint8_t * const wire_data, const size_t wire_data_len,
                     const uint32_t ttl, const uint16_t qtype)
 {
+    CacheEntry *cache_entry;
     CacheEntry *last_cache_entry = NULL;
     CacheEntry *last_cache_entry_parent = NULL;
     CacheEntry *scanned_cache_entry = cache->cache_entries;
@@ -117,8 +118,6 @@ replace_cache_entry(Cache * const cache,
             cache->cache_entries = scanned_cache_entry;
         }
     } else {
-        CacheEntry *cache_entry;
-
         if (cache_entries_count >= cache->cache_entries_max &&
             last_cache_entry_parent != NULL && last_cache_entry != NULL) {
             free(last_cache_entry->response);
