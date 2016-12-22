@@ -37,7 +37,7 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     if ((cache = calloc((size_t) 1U, sizeof *cache)) == NULL) {
         return -1;
     }
-    cache->cache_entries = cache->cache_entries_frequent = NULL;
+    cache->cache_entries_recent = cache->cache_entries_frequent = NULL;
     cache->cache_entries_max = DEFAULT_CACHE_ENTRIES_MAX;
     cache->min_ttl = DEFAULT_MIN_TTL;
     cache->now = (time_t) 0;
@@ -84,9 +84,10 @@ find_cached_entry(Cache * const cache, const uint8_t * const qname,
 {
     CacheEntry *scanned_cache_entry;
 
-    if ((scanned_cache_entry = _find_cached_entry(cache->cache_entries,
-                                              qname, qname_len, qtype)) == NULL) {
-        scanned_cache_entry = _find_cached_entry(cache->cache_entries_frequent,
+    if ((scanned_cache_entry = _find_cached_entry(cache->cache_entries_frequent,
+                                                  qname, qname_len, qtype))
+        == NULL) {
+        scanned_cache_entry = _find_cached_entry(cache->cache_entries_recent,
                                                  qname, qname_len, qtype);
     }
     return scanned_cache_entry;
@@ -167,7 +168,7 @@ replace_cache_entry(Cache * const cache,
     CacheEntry *cache_entry;
     CacheEntry *last_cache_entry;
     CacheEntry *last_cache_entry_parent;
-    CacheEntry *scanned_cache_entry = cache->cache_entries;
+    CacheEntry *scanned_cache_entry;
     uint8_t    *response_tmp;
     size_t      cache_entries_count;
     _Bool       in_frequent = 1;
@@ -179,7 +180,7 @@ replace_cache_entry(Cache * const cache,
                                                  &last_cache_entry_parent);
     if (scanned_cache_entry == NULL) {
         in_frequent = 0;
-        scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries,
+        scanned_cache_entry = _find_cached_entry_ext(cache->cache_entries_recent,
                                                      wire_qname, qname_len, qtype,
                                                      &cache_entries_count,
                                                      &last_cache_entry,
@@ -221,8 +222,8 @@ replace_cache_entry(Cache * const cache,
     memcpy(cache_entry->response, wire_data, wire_data_len);
     cache_entry->response_len = wire_data_len;
     cache_entry->deadline = cache->now + ttl;
-    cache_entry->next = cache->cache_entries;
-    cache->cache_entries = cache_entry;
+    cache_entry->next = cache->cache_entries_recent;
+    cache->cache_entries_recent = cache_entry;
 
     return 0;
 }
@@ -235,9 +236,9 @@ dcplugin_destroy(DCPlugin * const dcplugin)
     if (cache == NULL) {
         return 0;
     }
-    free_cache_entries(cache->cache_entries);
+    free_cache_entries(cache->cache_entries_recent);
     free_cache_entries(cache->cache_entries_frequent);
-    cache->cache_entries = cache->cache_entries_frequent = NULL;
+    cache->cache_entries_recent = cache->cache_entries_frequent = NULL;
     free(cache);
 
     return 0;
