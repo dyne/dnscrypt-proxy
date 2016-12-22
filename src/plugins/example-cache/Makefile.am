@@ -5,7 +5,8 @@ pkglib_LTLIBRARIES = \
 libdcplugin_example_cache_la_LIBTOOLFLAGS = --tag=disable-static
 
 libdcplugin_example_cache_la_SOURCES = \
-	example-cache.c
+	example-cache.c \
+	example-cache.h
 
 libdcplugin_example_cache_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
