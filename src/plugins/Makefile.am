@@ -1,6 +1,7 @@
 
 SUBDIRS = \
 	example \
+	example-cache \
 	example-logging
 
 if USE_LDNS

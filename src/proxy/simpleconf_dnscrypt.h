@@ -39,6 +39,7 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"BlackList domains:(<any>) ips:(<any>)", "--plugin=" PLUGIN_LIB("ldns_blocking") ",--domains=$0,--ips=$1" },
     {"BlockIPv6? <bool>",            "--plugin=" PLUGIN_LIB("ldns_aaaa_blocking") },
     {"QueryLogFile (<any*>)",        "--plugin=" PLUGIN_LIB("logging") ",$0" },
+    {"LocalCache? <bool>",           "--plugin=" PLUGIN_LIB("cache") },
     {"OpenDNSIP (<nospace>)",        "--plugin=" PLUGIN_LIB("ldns_opendns_set_client_ip") ",$0" },
     {"OpenDNSPasswordFile (<any*>)", "--plugin=" PLUGIN_LIB("ldns_opendns_deviceid") ",$0" },
     {"Plugin (<any_noquotes>)",      "--plugin=$0" }
