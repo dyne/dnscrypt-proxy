@@ -233,7 +233,6 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         if ((opt_ttl & 0x8000) == 0x8000) {
             if (qname_len >= 2) {
                 qname[qname_len - 2] = (uint8_t) toupper(qname[qname_len - 2]);
-                wire_qname[qname_len - 2] = qname[qname_len - 2];
             }
         }
     }
@@ -253,6 +252,7 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         size_t   aname_i;
         size_t   aname_len;
         size_t   ttl_i;
+        uint16_t atype;
         uint32_t ttl;
 
         tid = (wire_data[0] << 8) | wire_data[1];
@@ -272,19 +272,23 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         ttl = scanned_cache_entry->deadline - cache->now;
         aname_i = i;
         while (next_rr(wire_data, wire_data_len, 0, &aname_len, &i,
-                       NULL, NULL, NULL) == 0) {
+                       &atype, NULL, NULL) == 0) {
             ttl_i = aname_i + aname_len + 4;
             if (4 > wire_data_len - ttl_i) {
                 return DCP_SYNC_FILTER_RESULT_ERROR;
             }
-            wire_data[ttl_i] = (uint8_t) (ttl >> 24);
-            wire_data[ttl_i + 1] = (uint8_t) (ttl >> 16);
-            wire_data[ttl_i + 2] = (uint8_t) (ttl >> 8);
-            wire_data[ttl_i + 3] = (uint8_t) ttl;
+            if (atype != 41) {
+                wire_data[ttl_i] = (uint8_t) (ttl >> 24);
+                wire_data[ttl_i + 1] = (uint8_t) (ttl >> 16);
+                wire_data[ttl_i + 2] = (uint8_t) (ttl >> 8);
+                wire_data[ttl_i + 3] = (uint8_t) ttl;
+            }
             aname_i = i;
         }
         return DCP_SYNC_FILTER_RESULT_DIRECT;
     }
+    memcpy(wire_qname, qname, qname_len);
+
     return DCP_SYNC_FILTER_RESULT_OK;
 }
 
