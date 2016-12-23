@@ -129,10 +129,10 @@ file and add the following lines at the end of the `server` section:
 The first line is not required if you are using different IP addresses
 instead of different ports.
 
-Then start `dnscrypt-proxy`, telling it to use a specific port (`40`,
-in this example):
+Then change the `dnscrypt-proxy` local port in the configuration file
+(`40`, in this example):
 
-    # dnscrypt-proxy --local-address=127.0.0.1:40 --daemonize
+    LocalAddress 127.0.0.1:40
 
 IPv6 support
 ------------
