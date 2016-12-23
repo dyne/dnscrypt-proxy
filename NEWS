@@ -3,7 +3,7 @@
  - Version 1.8.0 didn't use the same Windows registry key as past
 versions. This has been fixed. In order to upgrade from 1.8.0,
 it is recommended to uninstall the service before upgrading
-(using the `dnscrypt-proxy --unininstall` command).
+(using the `dnscrypt-proxy --uninstall` command).
  - The SDK used to build Android binaries was downgraded in order to
 retain compatibility with Android 4.1 (Jelly Bean).
 
