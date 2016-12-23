@@ -52,7 +52,7 @@ source code can also be downloaded on Github, in the "releases" section.
 Signatures can be verified with the [Minisign](https://jedisct1.github.io/minisign/)
 tool:
 
-    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.8.1.tar.bz2
+    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.9.0.tar.bz2
 
 Installation
 ------------
@@ -202,7 +202,7 @@ for more information on DNSCrypt on Windows.
 Configuration file
 ------------------
 
-Starting with version 1.8.1, a configuration file can be used instead
+Starting with version 1.8.0, a configuration file can be used instead
 of supplying command-line switches.
 
 The distribution includes a sample configuration file named
