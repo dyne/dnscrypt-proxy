@@ -1,3 +1,208 @@
+* Fri Dec 23 11:38:08 2016 +0100
+
+    SIGHUP now reloads the plugins
+    
+    Useful to rotate logs, and to update blacklists
+
+* Fri Dec 23 11:15:03 2016 +0100
+
+    Make plugin_support.h more readable
+
+* Thu Dec 22 16:47:16 2016 +0100
+
+    Fix `--ignore-timestamps`
+    
+    Reported by Toni Uhlig - Thanks!
+
+* Thu Dec 22 11:18:53 2016 +0100
+
+    Recommend checking the Daemonize option
+
+* Thu Dec 22 11:16:34 2016 +0100
+
+    Do not overwrite an existing dnscrypt-proxy.conf file
+
+* Thu Dec 22 11:09:14 2016 +0100
+
+    OSX -> MacOS and other minor changes to the documentation
+
+* Thu Dec 22 10:51:09 2016 +0100
+
+    Next will be 1.9.0 due to the major changes to the plugins
+
+* Thu Dec 22 10:48:06 2016 +0100
+
+    Just define some constants for clarity
+
+* Thu Dec 22 10:43:45 2016 +0100
+
+    empty -> is_empty
+
+* Thu Dec 22 10:38:45 2016 +0100
+
+    Lookup the frequent cache before the recent one
+
+* Thu Dec 22 10:28:27 2016 +0100
+
+    Add a second queue to the cache
+
+* Thu Dec 22 09:52:56 2016 +0100
+
+    up
+
+* Thu Dec 22 09:22:52 2016 +0100
+
+    Keep things together
+
+* Thu Dec 22 09:21:32 2016 +0100
+
+    Move code updating the cache to its own set of functions for clarity
+
+* Thu Dec 22 08:55:09 2016 +0100
+
+    Move the code that deallocates cache entries to its own function
+
+* Thu Dec 22 07:51:22 2016 +0100
+
+    Move a few definitions to example-cache.h
+
+* Thu Dec 22 07:44:11 2016 +0100
+
+    space->tab in Makefile.am
+
+* Thu Dec 22 03:02:00 2016 +0100
+
+    Do not change the TTL of OPT records
+    
+    Also properly copy the casing of the original client query
+
+* Thu Dec 22 02:36:12 2016 +0100
+
+    Ignore the TTL of OPT records
+    
+    And use the minimum TTL for empty zones.
+    
+    Probably not as great as looking at the SOA, very likely better than
+    assuming the maximum TTL.
+
+* Wed Dec 21 18:14:12 2016 +0100
+
+    Only recommend one verification procedure
+
+* Wed Dec 21 18:12:37 2016 +0100
+
+    Bump the example version number
+
+* Thu Dec 22 01:58:33 2016 +0100
+
+    Add a simple DNS cache
+
+* Thu Dec 22 01:45:30 2016 +0100
+
+    Do not forget the file extension in plugins descriptions
+
+* Tue Dec 20 20:59:11 2016 +0100
+
+    Correct format string
+
+* Tue Dec 20 16:46:09 2016 +0100
+
+    Use lowercase hex digits
+
+* Tue Dec 20 16:45:03 2016 +0100
+
+    logging: add some common query types
+
+* Tue Dec 20 14:09:29 2016 +0100
+
+    libgcc_s_*.dll should not be required any more
+
+* Tue Dec 20 13:55:39 2016 +0100
+
+    Add -static-libgcc to mingw builds
+
+* Tue Dec 20 13:43:17 2016 +0100
+
+    Include <netinet/in.h> for sockaddr_* definitions
+
+* Tue Dec 20 13:41:18 2016 +0100
+
+    Add /usr/${TARGET}/bin/libgcc_s_* to the distributed file
+
+* Tue Dec 20 13:08:25 2016 +0100
+
+    Keep only one port per service
+    
+    A way to list the set of ports every service can be reached at
+    would be great, and we really need to find a clean way to
+    support this in the future.
+
+* Tue Dec 20 11:33:51 2016 +0100
+
+    Add the ability to log queries using LTSV, too
+
+* Tue Dec 20 11:18:57 2016 +0100
+
+    Version bump even if we're not there yet
+
+* Tue Dec 20 11:15:15 2016 +0100
+
+    example-ldns-blocking: support the LTSV logging format
+
+* Tue Dec 20 10:34:18 2016 +0100
+
+    untab input
+
+* Tue Dec 20 10:29:09 2016 +0100
+
+    Major additions to the way [blocked] queries are logged
+
+* Tue Dec 20 09:25:11 2016 +0100
+
+    Print IPv6 addresses
+
+* Tue Dec 20 01:26:22 2016 +0100
+
+    Add the client IP address
+
+* Tue Dec 20 00:57:56 2016 +0100
+
+    `*.example.com` now matches example.com and x.example.com, not xexample.com
+
+* Mon Dec 19 11:54:25 2016 +0100
+
+    Complete rewrite of the blocking plugin to make it really fast
+    
+    This was intended to be nothing but a simple example of a plugin.
+    
+    However, this example turned out to be useful. And actually used.
+    
+    So, let's get serious about it and do better than a linear scan
+    in order to match names and IPs.
+    
+    A critbit-like data structure is a perfect fit for that kind of list.
+    
+    So, split blacklists into 4 tries (5-bit variant of qp-tries):
+    - ips
+    - name prefixes
+    - name suffixes
+    - patterns that can be found anywhere
+    
+    Linear scans could have been kept for case #4, but this is not a
+    common use case, and having a single data structure for everything
+    reduces bloat.
+    
+    Suffix matching currently works the same way as prefix matching, with
+    keys and strings being reversed first. However, from a user perspective,
+    it makes sense to have `*.example.com` match `example.com` and
+    `www.example.com` but not `abcexample.com`. This will be addressed next.
+    
+    Meanwhile, the plugin can now seamlessly handle very large blacklists.
+
+* Mon Dec 19 12:06:37 2016 +0100
+
+    Update ChangeLog for 1.8.1
+
 * Mon Dec 19 11:31:08 2016 +0100
 
     host_only() -> trim_comments()
