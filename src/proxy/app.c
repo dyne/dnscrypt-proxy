@@ -314,19 +314,32 @@ init_descriptors_from_systemd(ProxyContext * const proxy_context)
 #endif
 
 static void
-signal_cb(evutil_socket_t sig, short events, void *fodder)
+sigterm_cb(evutil_socket_t sig, short events, void *fodder)
 {
-    (void) events;
-    (void) fodder;
+    (void) events; (void) fodder; (void) sig;
     dnscrypt_proxy_loop_break();
 }
+
+#ifdef SIGHUP
+static void
+sighup_cb(evutil_socket_t sig, short events, void *fodder)
+{
+    (void) events; (void) fodder; (void) sig;
+# ifdef PLUGINS
+    (void) plugin_support_context_reload(app_context.dcps_context);
+# endif
+}
+#endif
 
 int
 dnscrypt_proxy_main(int argc, char *argv[])
 {
     ProxyContext  proxy_context;
     struct event *sigint_event;
-    struct event *sigterm_event;    
+    struct event *sigterm_event;
+#ifdef SIGHUP
+    struct event *sighup_event;
+#endif
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
@@ -390,13 +403,20 @@ dnscrypt_proxy_main(int argc, char *argv[])
     }
 
     sigint_event  = evsignal_new(proxy_context.event_loop, SIGINT,
-                                 signal_cb, &proxy_context);
+                                 sigterm_cb, &proxy_context);
     sigterm_event = evsignal_new(proxy_context.event_loop, SIGTERM,
-                                 signal_cb, &proxy_context);
+                                 sigterm_cb, &proxy_context);
     if (sigint_event  == NULL || event_add(sigint_event,  NULL) != 0 ||
         sigterm_event == NULL || event_add(sigterm_event, NULL) != 0) {
         exit(1);
     }
+#ifdef SIGHUP
+    sighup_event = evsignal_new(proxy_context.event_loop, SIGHUP,
+                                sighup_cb, &proxy_context);
+    if (sighup_event  == NULL || event_add(sighup_event,  NULL) != 0) {
+        exit(1);
+    }
+#endif
 #ifdef HAVE_LIBSYSTEMD
     sd_notifyf(0, "MAINPID=%lu", (unsigned long) getpid());
 #endif
@@ -411,6 +431,9 @@ dnscrypt_proxy_main(int argc, char *argv[])
     tcp_listener_stop(&proxy_context);
     event_free(sigint_event);
     event_free(sigterm_event);
+#ifdef SIGHUP
+    event_free(sighup_event);
+#endif
     event_base_free(proxy_context.event_loop);
 #ifdef PLUGINS
     plugin_support_context_free(app_context.dcps_context);

@@ -19,6 +19,8 @@ int plugin_support_context_insert(DCPluginSupportContext * const dcps_context,
 int plugin_support_context_remove(DCPluginSupportContext * const dcps_context,
                                   DCPluginSupport * const dcps);
 
+int plugin_support_context_reload(DCPluginSupportContext * const dcps_context);
+
 DCPluginSupport * plugin_support_new(const char * const plugin_file);
 
 void plugin_support_free(DCPluginSupport *dcps);
