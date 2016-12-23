@@ -25,7 +25,7 @@ forwards them to the local stub resolver.
 already provides a decent built-in cache (and by default, most systems
 don't), clients shouldn't directly send requests to **dnscrypt-proxy**.
 
-Intead, run a DNS cache like **Unbound**, and configure it to use
+Instead, run a DNS cache like **Unbound**, and configure it to use
 **dnscrypt-proxy** as a forwarder. Both can safely run on the same
 machine as long as they use different IP addresses and/or different
 ports.

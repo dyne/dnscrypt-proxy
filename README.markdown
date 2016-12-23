@@ -164,7 +164,7 @@ and to syslog if it is running in background.
 requests. The default value is 250.
 * `--pidfile=<file>` in order to store the PID number to a file.
 * `--user=<user name>` in order to chroot()/drop privileges.
-* `--resolvers-list=<file>`: to specity the path to the CSV file containing
+* `--resolvers-list=<file>`: to specify the path to the CSV file containing
 the list of available resolvers, and the parameters to use them.
 * `--test` in order to check that the server-side proxy is properly configured
 and that a valid certificate can be used. This is useful for monitoring your
