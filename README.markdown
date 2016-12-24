@@ -3,26 +3,16 @@
 [![DNSCrypt](https://raw.github.com/jedisct1/dnscrypt-proxy/master/dnscrypt-small.png)](https://dnscrypt.org)
 ============
 
-A protocol for securing communications between a client and a DNS resolver.
-
-Description
------------
-
-`dnscrypt-proxy` provides local service which can be used directly as your
-local resolver or as a DNS forwarder, authenticating requests using the
-DNSCrypt protocol and passing them to an upstream server.
-
-The DNSCrypt protocol uses high-speed high-security elliptic-curve
-cryptography and is very similar to [DNSCurve](https://dnscurve.org/), but
-focuses on securing communications between a client and its first-level
-resolver.
+DNScrypt is a protocol for securing communications between a client
+and a DNS resolver, using  high-speed high-security elliptic-curve
+cryptography.
 
 While not providing end-to-end security, it protects the local network, which
 is often the weakest point of the chain, against man-in-the-middle attacks.
 
-`dnscrypt-proxy` is only a client-implementation of the protocol. It requires
-a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on the other
-end.
+`dnscrypt-proxy` is a client-implementation of the protocol. It
+requires a [DNSCrypt server](https://www.dnscrypt.org/#dnscrypt-server) on
+the other end.
 
 Online documentation
 --------------------
