@@ -27,7 +27,7 @@ Download and integrity check
 ----------------------------
 
 dnscrypt-proxy can be downloaded here:
-[dnscrypt-proxy download](https://download.dnscrypt.org/dnscrypt-proxy/)
+[dnscrypt-proxy download](https://download.dnscrypt.org/dnscrypt-proxy/).
 
 Signatures can be verified with the
 [Minisign](https://jedisct1.github.io/minisign/) tool:
