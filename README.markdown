@@ -17,9 +17,8 @@ the other end.
 Online documentation
 --------------------
 
-* The complete [dnscrypt-proxy documentation](https://github.com/jedisct1/dnscrypt-proxy/wiki/)
-is now available as a Wiki.
-* For the recent news about the project, please refer to the [dnscrypt website](https://dnscrypt.org).
+* [dnscrypt-proxy documentation](https://github.com/jedisct1/dnscrypt-proxy/wiki/)
+* [dnscrypt website](https://dnscrypt.org).
 
 Download and integrity check
 ----------------------------
@@ -27,7 +26,6 @@ Download and integrity check
 dnscrypt-proxy can be downloaded here:
 [dnscrypt-proxy download](https://download.dnscrypt.org/dnscrypt-proxy/).
 
-Signatures can be verified with the
-[Minisign](https://jedisct1.github.io/minisign/) tool:
+Signatures can be verified with [Minisign](https://jedisct1.github.io/minisign/):
 
     $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.9.0.tar.bz2
