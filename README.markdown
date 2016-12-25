@@ -4,7 +4,7 @@
 ============
 
 DNScrypt is a protocol for securing communications between a client
-and a DNS resolver, using  high-speed high-security elliptic-curve
+and a DNS resolver, using high-speed high-security elliptic-curve
 cryptography.
 
 While not providing end-to-end security, it protects the local network, which
@@ -17,11 +17,9 @@ the other end.
 Online documentation
 --------------------
 
-For complete and up-to-date documentation, please refer to the
-[dnscrypt-proxy wiki](https://github.com/jedisct1/dnscrypt-proxy/wiki/).
-
-For the most recent news about the project, please refer to the
-[dnscrypt website](https://dnscrypt.org).
+* The complete [dnscrypt-proxy documentation](https://github.com/jedisct1/dnscrypt-proxy/wiki/)
+is now available as a Wiki.
+* For the recent news about the project, please refer to the [dnscrypt website](https://dnscrypt.org).
 
 Download and integrity check
 ----------------------------
