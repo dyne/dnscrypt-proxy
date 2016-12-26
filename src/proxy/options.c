@@ -595,7 +595,6 @@ options_parse(AppContext * const app_context,
             proxy_context->syslog = 1;
             break;
         case 'Z':
-            proxy_context->syslog = 1;
             proxy_context->syslog_prefix = optarg;
             break;
 #endif
