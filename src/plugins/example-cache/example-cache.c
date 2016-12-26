@@ -13,7 +13,7 @@ DCPLUGIN_MAIN(__FILE__);
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
 {
-    return "A toy DNS cache";
+    return "A basic DNS cache";
 }
 
 const char *
