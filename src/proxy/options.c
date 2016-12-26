@@ -441,29 +441,18 @@ options_apply(ProxyContext * const proxy_context)
         proxy_context->provider_publickey_s == NULL ||
         *proxy_context->provider_publickey_s == 0) {
         logger_noformat(proxy_context, LOG_ERR,
-                        "Resolver information required.");
+                        "Error: no resolver name given, no configuration file either.");
         logger_noformat(proxy_context, LOG_ERR,
-                        "The easiest way to do so is to provide a resolver name.");
+                        "The easiest way to get started is to edit the example configuration file");
         logger_noformat(proxy_context, LOG_ERR,
-                        "Example: dnscrypt-proxy -R mydnsprovider");
+                        "and to append the full path to that configuration file to the command.");
+        logger_noformat(proxy_context, LOG_ERR,
+                        "Example: dnscrypt-proxy /usr/local/etc/dnscrypt-proxy.conf");
         logger(proxy_context, LOG_ERR,
-               "See the file [%s] for a list of compatible public resolvers",
+               "The local list of public resolvers is loaded from: [%s]",
                proxy_context->resolvers_list);
         logger_noformat(proxy_context, LOG_ERR,
-                        "The name is the first column in this table.");
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Alternatively, an IP address, a provider name "
-                        "and a provider key can be supplied.");
-#ifdef _WIN32
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Consult https://dnscrypt.org "
-                        "and https://github.com/jedisct1/dnscrypt-proxy/blob/master/README-WINDOWS.markdown "
-                        "for details.");
-#else
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Please consult https://dnscrypt.org "
-                        "and the dnscrypt-proxy(8) man page for details.");
-#endif
+                        "Consult https://dnscrypt.org for more information about dnscrypt-proxy.");
         exit(1);
     }
     if (proxy_context->provider_name == NULL ||
