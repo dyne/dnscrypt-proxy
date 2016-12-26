@@ -294,7 +294,12 @@ options_parse_resolver(ProxyContext * const proxy_context,
 
     proxy_context->provider_name = strdup(provider_name);
     proxy_context->provider_publickey_s = strdup(provider_publickey_s);
-    proxy_context->resolver_ip = strdup(resolver_ip);
+    if (proxy_context->resolver_ip == NULL) {
+        proxy_context->resolver_ip = strdup(resolver_ip);
+    } else {
+        logger(proxy_context, LOG_INFO,
+               "Resolver address forced to [%s]", proxy_context->resolver_ip);
+    }
     if (proxy_context->provider_name == NULL ||
         proxy_context->provider_publickey_s == NULL ||
         proxy_context->resolver_ip == NULL) {
