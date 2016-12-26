@@ -3,9 +3,9 @@ dnscrypt-proxy(8) -- A DNSCrypt forwarder
 
 ## SYNOPSIS
 
-`dnscrypt-proxy` <config file>
+`dnscrypt-proxy <config file>`
 
-`dnscrypt-proxy` [<option>, ...]
+`dnscrypt-proxy [<option>, ...]`
 
 ## DESCRIPTION
 
