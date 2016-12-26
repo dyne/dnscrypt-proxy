@@ -450,7 +450,7 @@ options_apply(ProxyContext * const proxy_context)
         logger_noformat(proxy_context, LOG_ERR,
                         "The easiest way to get started is to edit the example configuration file");
         logger_noformat(proxy_context, LOG_ERR,
-                        "and to append the full path to that configuration file to the command.");
+                        "and to append the full path to that file to the dnscrypt-proxy command.");
         logger_noformat(proxy_context, LOG_ERR,
                         "Example: dnscrypt-proxy /usr/local/etc/dnscrypt-proxy.conf");
         logger(proxy_context, LOG_ERR,
