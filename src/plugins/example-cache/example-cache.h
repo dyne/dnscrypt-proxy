@@ -16,8 +16,8 @@ typedef struct CacheEntry_ {
     struct CacheEntry_ *next;
     uint8_t            *response;
     uint16_t            response_len;
-    char                qname[DNS_MAX_HOSTNAME_LEN];
     uint16_t            qtype;
+    uint8_t             qname[DNS_MAX_HOSTNAME_LEN];
     time_t              deadline;
 } CacheEntry;
 
