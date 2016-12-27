@@ -219,6 +219,8 @@ parse_domain_list(FPST ** const domain_list_p,
                                                       (uint64_t) block_type)) == NULL) {
                 break;
             }
+        } else {
+            free(line);
         }
     }
     if (!feof(fp)) {
@@ -266,9 +268,12 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
             block_type = BLOCKTYPE_EXACT;
         }
         str_tolower(line);
-        if ((line = strdup(line)) == NULL ||
-            (ip_list = fpst_insert_str(ip_list, line,
+        if ((line = strdup(line)) == NULL) {
+            break;
+        }
+        if ((ip_list = fpst_insert_str(ip_list, line,
                                        (uint64_t) block_type)) == NULL) {
+            free(line);
             break;
         }
     }
