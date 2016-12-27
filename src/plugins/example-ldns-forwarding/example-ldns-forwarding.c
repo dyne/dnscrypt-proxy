@@ -305,9 +305,6 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
 
     query_wire = dcplugin_get_wire_data(dcp_packet);
-    LDNS_AA_CLR(query_wire);
-    LDNS_QR_CLR(query_wire);
-    LDNS_TC_CLR(query_wire);
     if (ldns_wire2pkt(&query, query_wire, dcplugin_get_wire_data_len(dcp_packet))
         != LDNS_STATUS_OK) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
@@ -327,6 +324,8 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         ldns_pkt_free(query);        
         return DCP_SYNC_FILTER_RESULT_OK;
     }
+    free(owner_str);
+    owner_str = NULL;
     if (ldns_send(&response, forwarder->resolver, query) != LDNS_STATUS_OK) {
         ldns_pkt_free(query);
         return DCP_SYNC_FILTER_RESULT_ERROR;

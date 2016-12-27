@@ -207,16 +207,19 @@ parse_domain_list(FPST ** const domain_list_p,
         if (block_type == BLOCKTYPE_SUFFIX) {
             if ((domain_rev_list = fpst_insert_str(domain_rev_list, line,
                                                    (uint64_t) block_type)) == NULL) {
+                free(line);
                 break;
             }
         } else if (block_type == BLOCKTYPE_PREFIX) {
             if ((domain_list = fpst_insert_str(domain_list, line,
                                                (uint64_t) block_type)) == NULL) {
+                free(line);
                 break;
             }
         } else if (block_type == BLOCKTYPE_SUBSTRING) {
             if ((domain_substr_list = fpst_insert_str(domain_substr_list, line,
                                                       (uint64_t) block_type)) == NULL) {
+                free(line);
                 break;
             }
         } else {
