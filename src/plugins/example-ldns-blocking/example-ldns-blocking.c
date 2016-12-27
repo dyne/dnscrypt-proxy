@@ -581,6 +581,7 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
         owner_str[--owner_str_len] = 0;
     }
     if (owner_str_len <= 0) {
+        free(owner_str);
         return DCP_SYNC_FILTER_RESULT_OK;
     }
     str_tolower(owner_str);
@@ -676,10 +677,12 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
 
                     questions = ldns_pkt_question(packet);
                     if (ldns_rr_list_rr_count(questions) != (size_t) 1U) {
+                        free(answer_str);
                         return DCP_SYNC_FILTER_RESULT_ERROR;
                     }
                     question = ldns_rr_list_rr(questions, 0U);
                     if ((owner_str = ldns_rdf2str(ldns_rr_owner(question))) == NULL) {
+                        free(answer_str);
                         return DCP_SYNC_FILTER_RESULT_FATAL;
                     }
                     owner_str_len = strlen(owner_str);
@@ -689,8 +692,10 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
                     log_blocked_rr(blocking, owner_str, found_key, found_block_type,
                                    dcplugin_get_client_address(dcp_packet),
                                    dcplugin_get_client_address_len(dcp_packet));
+                    free(owner_str);
                 }
                 free(answer_str);
+                answer_str = NULL;
                 break;
             }
         }
