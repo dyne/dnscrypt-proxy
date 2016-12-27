@@ -60,21 +60,21 @@ static struct option getopt_long_options[] = {
 static const char *getopt_options = "dil";
 
 static char *
-skip_spaces(char *line)
+skip_spaces(char *str)
 {
-    while (*line != 0 && isspace((int) (unsigned char) *line)) {
-        line++;
+    while (*str != 0 && isspace((int) (unsigned char) *str)) {
+        str++;
     }
-    return line;
+    return str;
 }
 
 static char *
-skip_chars(char *line)
+skip_chars(char *str)
 {
-    while (*line != 0 && !isspace((int) (unsigned char) *line)) {
-        line++;
+    while (*str != 0 && !isspace((int) (unsigned char) *str)) {
+        str++;
     }
-    return line;
+    return str;
 }
 
 static void
