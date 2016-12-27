@@ -1,3 +1,171 @@
+* Tue Dec 27 21:10:29 2016 +0100
+
+    Sign
+
+* Tue Dec 27 21:10:14 2016 +0100
+
+    d0wn-ua-ns1 is down
+
+* Tue Dec 27 21:07:39 2016 +0100
+
+    Change ifreenet location to unicast
+
+* Wed Dec 28 03:04:32 2016 +0700
+
+    Added d0wn Indonesia resolver (#522)
+    
+    Added d0wn Indonesia resolver from https://dns.d0wn.biz
+
+* Tue Dec 27 20:54:04 2016 +0100
+
+    Plug leak on error path
+
+* Tue Dec 27 20:33:20 2016 +0100
+
+    Add Forward domains:(<any>) to:(<any>)
+
+* Tue Dec 27 20:08:11 2016 +0100
+
+    Mention that `--service-name` only makes sense with `--[un]install`
+
+* Tue Dec 27 20:05:21 2016 +0100
+
+    Typo
+
+* Tue Dec 27 20:02:15 2016 +0100
+
+    Remove `ServiceName` from the config file
+
+* Tue Dec 27 19:38:03 2016 +0100
+
+    Add a plugin to forward queries to specific resolvers
+
+* Tue Dec 27 12:26:04 2016 +0100
+
+    Plug some memory leaks on error path
+
+* Tue Dec 27 10:20:19 2016 +0100
+
+    line->str for consistency
+
+* Tue Dec 27 09:31:38 2016 +0100
+
+    Mention that ServiceName is only used when installing the service.
+
+* Tue Dec 27 09:25:43 2016 +0100
+
+    Also leverage `LT_LIBPREFIX`
+
+* Tue Dec 27 09:16:36 2016 +0100
+
+    Use `LT_MODULE_EXT` to retrieve the module extension
+    
+    This renders the presence of .la files optional.
+
+* Mon Dec 26 22:05:58 2016 +0100
+
+    Correct the synopsis
+
+* Mon Dec 26 22:04:15 2016 +0100
+
+    Update the man page
+
+* Mon Dec 26 18:56:00 2016 +0100
+
+    Clarify
+
+* Mon Dec 26 18:52:20 2016 +0100
+
+    Add a port number in the ResolverAddress example
+
+* Mon Dec 26 18:47:37 2016 +0100
+
+    -Z should not imply -S
+
+* Mon Dec 26 18:45:40 2016 +0100
+
+    Allow ResolverAddress to override the CSV-provided address
+
+* Mon Dec 26 18:34:49 2016 +0100
+
+    Update the help message when no command-line options have been given
+
+* Mon Dec 26 10:40:16 2016 +0100
+
+    Move the blacklist generation script to a contrib folder
+
+* Mon Dec 26 10:38:52 2016 +0100
+
+    Toy might be misinterpreted
+
+* Sun Dec 25 23:22:34 2016 +0100
+
+    Add a sample script to generate lists of blacklisted domains
+
+* Sun Dec 25 11:42:51 2016 +0100
+
+    Shorten
+
+* Sun Dec 25 11:41:22 2016 +0100
+
+    Rephrase, remove double space
+
+* Sat Dec 24 19:11:30 2016 +0100
+
+    Final stop
+
+* Sat Dec 24 01:38:33 2016 +0100
+
+    Use the config file in the systemd service
+
+* Sat Dec 24 01:33:55 2016 +0100
+
+    Shorten even more
+
+* Sat Dec 24 01:32:05 2016 +0100
+
+    The disclaimer can be moved to the wiki, too
+
+* Sat Dec 24 01:30:44 2016 +0100
+
+    Remove a lot of the documentation. The Wiki is a better tool.
+
+* Sat Dec 24 00:27:31 2016 +0100
+
+    web sites -> websites
+
+* Fri Dec 23 23:17:28 2016 +0100
+
+    doc update
+
+* Fri Dec 23 23:15:43 2016 +0100
+
+    Doc update
+
+* Fri Dec 23 22:50:07 2016 +0100
+
+    Doc update
+
+* Fri Dec 23 22:41:05 2016 +0100
+
+    Use the config file in the .plist example
+
+* Fri Dec 23 22:26:31 2016 +0100
+
+    Typo
+
+* Fri Dec 23 21:49:20 2016 +0100
+
+    Update the minisign check example
+
+* Fri Dec 23 19:21:47 2016 +0300
+
+    Correct spelling (#521)
+
+* Fri Dec 23 11:50:37 2016 +0100
+
+    Update ChangeLog
+
 * Fri Dec 23 11:38:08 2016 +0100
 
     SIGHUP now reloads the plugins
