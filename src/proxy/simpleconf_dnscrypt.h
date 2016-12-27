@@ -3,11 +3,7 @@
 
 #include "simpleconf.h"
 
-#ifdef _WIN32
-# define PLUGIN_LIB(X) "libdcplugin_example_" X ".dll"
-#else
-# define PLUGIN_LIB(X) "libdcplugin_example_" X ".la"
-#endif
+#define PLUGIN_LIB(X) "libdcplugin_example_" X LT_MODULE_EXT
 
 static const SimpleConfEntry simpleconf_options[] = {
     {"ClientKey (<any*>)",           "--client-key=$0"},
