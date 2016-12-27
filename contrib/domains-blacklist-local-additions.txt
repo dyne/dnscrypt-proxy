@@ -1,0 +1,9 @@
+ad.*
+ads.*
+banner.*
+banners.*
+creatives.*
+stats.*
+tag.*
+telemetry.*
+tracker.*
