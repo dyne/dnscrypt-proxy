@@ -121,7 +121,9 @@ the service.
 service can be restarted later)
 - `--service-name=<name>`: set the service name (by default:
 `dnscrypt-proxy`). Multiple services with a different configuration can run
-simultaneously if they use distinct service names.
+simultaneously if they use distinct service names. `--service-name`
+must be combined with `--install`, `--install-with-config-file` or
+`--uninstall`.
 
 Example: how to try a different DNSCrypt resolver:
 
