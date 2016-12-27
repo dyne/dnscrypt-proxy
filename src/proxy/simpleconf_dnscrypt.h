@@ -21,7 +21,6 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"ResolverAddress (<nospace>)",  "--resolver-address=$0"},
     {"ResolverName (<nospace>)",     "--resolver-name=$0"},
     {"ResolversList (<any*>)",       "--resolvers-list=$0"},
-    {"ServiceName (<nospace>)",      "--service-name=$0"},
     {"SyslogPrefix (<nospace>)",     "--syslog-prefix=$0"},
     {"Syslog? <bool>",               "--syslog"},
     {"TCPOnly? <bool>",              "--tcp-only"},
