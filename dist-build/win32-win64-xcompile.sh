@@ -116,7 +116,6 @@ compile() {
     make clean
     make install
     mv ${RELEASE_DIR}/lib/dnscrypt-proxy/*.dll $RELEASE_DIR
-    mv ${RELEASE_DIR}/lib/dnscrypt-proxy/*.la $RELEASE_DIR
     mv ${RELEASE_DIR}/dnscrypt-proxy/* $RELEASE_DIR
     rmdir ${RELEASE_DIR}/dnscrypt-proxy
     rm -fr ${RELEASE_DIR}/lib

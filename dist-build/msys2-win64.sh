@@ -25,10 +25,10 @@ fi
   --sysconfdir="$PREFIX" && \
 make install
 
+rm -fr "${PREFIX}/man"
 rm -fr "${PREFIX}/share"
 rm -fr "${PREFIX}/lib/pkgconfig"
 mv "${PREFIX}/lib/dnscrypt-proxy/"*.dll "${PREFIX}/"
-mv "${PREFIX}/lib/dnscrypt-proxy/"*.la "${PREFIX}/"
 mv "${PREFIX}/dnscrypt-proxy/"* "${PREFIX}/"
 rmdir "${PREFIX}/dnscrypt-proxy"
 rm -fr "${PREFIX}/lib"
