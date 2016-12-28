@@ -134,9 +134,9 @@ cert_parse_bincert(ProxyContext * const proxy_context,
                previous_serial, serial);
         return -1;
     } else if (previous_version < version) {
-        logger(proxy_context, LOG_INFO, "Favoring certificate #%" PRIu32 " "
-               "which is for a more recent version than #%" PRIu32,
-               serial, previous_serial);
+        logger(proxy_context, LOG_INFO,
+               "Favoring version #%" PRIu32 " over version #%" PRIu32,
+               version, previous_version);
         return 0;
     }
     if (previous_serial > serial) {
