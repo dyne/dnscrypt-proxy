@@ -26,7 +26,6 @@ thanks to Toni Uhlig.
  - `make install` does not overwrite an existing `dnscrypt-proxy.conf`
 file any more. An up-to-date example is installed as
 `dnscrypt-proxy.conf.example`.
- - Windows: `libgcc_s_*.dll` is not required any more.
  - The query log and the logfile of hits for blacklisted domains/IPs
 are now more detailed and more readable. As an alternative to human-readable
 records, prefixing a log file name with "ltsv:" causes the log entries to use
