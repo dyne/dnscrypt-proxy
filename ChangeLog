@@ -1,3 +1,27 @@
+* Wed Dec 28 22:28:58 2016 +0100
+
+    Use 1 fastopen queue on MacOS, 5 on Linux
+
+* Wed Dec 28 22:18:41 2016 +0100
+
+    Cache entries according to the minimum TTL, not the first one observed
+
+* Wed Dec 28 22:09:47 2016 +0100
+
+    Sync msys-* build scripts with the xcompile build script
+
+* Wed Dec 28 21:49:54 2016 +0100
+
+    Use sodium_memzero() to zero structures before a call to free()
+
+* Wed Dec 28 21:44:11 2016 +0100
+
+    Why I love Rust
+
+* Wed Dec 28 21:09:07 2016 +0100
+
+    Udpate ChangeLog
+
 * Wed Dec 28 21:08:51 2016 +0100
 
     Mention plugins that require the ldns library
