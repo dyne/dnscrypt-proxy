@@ -1,3 +1,69 @@
+* Wed Dec 28 14:14:29 2016 +0100
+
+    /etc/dnscrypt-proxy.conf is probably required in the apparmor profile
+
+* Wed Dec 28 13:48:10 2016 +0100
+
+    crypto_box_*_afternm() computes the hash, so it can't be shared
+
+* Wed Dec 28 13:21:22 2016 +0100
+
+    Print favored versions, not serials
+
+* Wed Dec 28 11:59:27 2016 +0100
+
+    Downgrade "Unsupported certificate version" to LOG_INFO
+
+* Wed Dec 28 11:45:00 2016 +0100
+
+    Do not assume that ntohl() is available without extra libraries
+
+* Wed Dec 28 11:13:54 2016 +0100
+
+    libgcc_s* is required after all :/
+
+* Wed Dec 28 10:44:19 2016 +0100
+
+    Revert "Add -static-libgcc to mingw builds"
+    
+
+* Wed Dec 28 10:43:55 2016 +0100
+
+    Revert "libgcc_s_*.dll should not be required any more"
+    
+
+* Wed Dec 28 09:05:06 2016 +0100
+
+    Doc update
+
+* Wed Dec 28 08:45:24 2016 +0100
+
+    Block *.local and *.lan in domains-blacklist-local-additions.txt
+
+* Wed Dec 28 08:26:03 2016 +0100
+
+    Mention that LocalAddress doesn't work if systemd interferes
+
+* Wed Dec 28 00:48:48 2016 +0100
+
+    When using systemd, daemonization should apparently be disabled
+
+* Tue Dec 27 23:35:21 2016 +0100
+
+    Add domains-blacklist-local-additions.txt for... local additions
+
+* Tue Dec 27 22:22:12 2016 +0100
+
+    Fix more memory leaks on error path
+
+* Tue Dec 27 21:45:34 2016 +0100
+
+    Update the NEWS file for version 1.9.0
+
+* Tue Dec 27 21:21:25 2016 +0100
+
+    Update ChangeLog
+
 * Tue Dec 27 21:10:29 2016 +0100
 
     Sign
