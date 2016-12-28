@@ -311,7 +311,7 @@ next_rr(const uint8_t * const dns_packet, const size_t dns_packet_len,
     if (name_len_p != NULL) {
         *name_len_p = (size_t) (offset - *offset_p);
     }
-    if ((is_question ? 6 : 10) > dns_packet_len - offset) {
+    if ((is_question ? 4 : 10) > dns_packet_len - offset) {
         return -1;
     }
     if (qtype_p != NULL) {
