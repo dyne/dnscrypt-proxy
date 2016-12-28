@@ -1,3 +1,35 @@
+* Thu Dec 29 00:07:09 2016 +0100
+
+    Remove man pages, and .la files from the Windows distribution files
+
+* Wed Dec 28 23:56:51 2016 +0100
+
+    msys*: add the CSV + pub file to the root directory
+
+* Wed Dec 28 23:44:31 2016 +0100
+
+    Avoid ntohl() in example-ldns-blocking
+
+* Wed Dec 28 23:26:23 2016 +0100
+
+    Add *.workgroup
+
+* Wed Dec 28 23:25:12 2016 +0100
+
+    Block *.localdomain in the local-additions.txt example
+
+* Wed Dec 28 23:24:28 2016 +0100
+
+    Add SRV records
+
+* Wed Dec 28 23:11:13 2016 +0100
+
+    Try to enable TFO even after the listen() call
+
+* Wed Dec 28 22:32:37 2016 +0100
+
+    Update the ChangeLog
+
 * Wed Dec 28 22:28:58 2016 +0100
 
     Use 1 fastopen queue on MacOS, 5 on Linux
