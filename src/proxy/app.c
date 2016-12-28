@@ -32,6 +32,7 @@
 #include "logger.h"
 #include "options.h"
 #include "sandboxes.h"
+#include "simpleconf.h"
 #include "stack_trace.h"
 #include "tcp_request.h"
 #include "udp_request.h"
@@ -346,6 +347,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
     if (sodium_init() != 0) {
         exit(1);
     }
+    app_context.allocated_args = 0;
 #ifdef PLUGINS
     if ((app_context.dcps_context = plugin_support_context_new()) == NULL) {
         logger_noformat(NULL, LOG_ERR, "Unable to setup plugin support");
@@ -443,6 +445,8 @@ dnscrypt_proxy_main(int argc, char *argv[])
     sodium_munlock(&proxy_context, sizeof proxy_context);
     app_context.proxy_context = NULL;
     randombytes_close();
-
+    if (app_context.allocated_args != 0) {
+        sc_argv_free(argc, argv);
+    }
     return 0;
 }

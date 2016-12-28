@@ -523,14 +523,16 @@ options_parse(AppContext * const app_context,
 #endif
 
     options_init_with_default(app_context, proxy_context);
-    if (*argc_p == 2 && *(*argv_p)[1] != '-' &&
-        sc_build_command_line_from_file((*argv_p)[1], simpleconf_options,
-                                        (sizeof simpleconf_options) /
-                                        (sizeof simpleconf_options[0]),
-                                        *(argv_p)[0], argc_p, argv_p) != 0) {
-        logger_noformat(proxy_context, LOG_ERR,
-                        "Unable to read the configuration file");
-        return -1;
+    if (*argc_p == 2 && *(*argv_p)[1] != '-') {
+        if (sc_build_command_line_from_file((*argv_p)[1], simpleconf_options,
+                                            (sizeof simpleconf_options) /
+                                            (sizeof simpleconf_options[0]),
+                                            *(argv_p)[0], argc_p, argv_p) != 0) {
+            logger_noformat(proxy_context, LOG_ERR,
+                            "Unable to read the configuration file");
+            return -1;
+        }
+        app_context->allocated_args = 1;
     }
     while ((opt_flag = getopt_long(*argc_p, *argv_p,
                                    getopt_options, getopt_long_options,
