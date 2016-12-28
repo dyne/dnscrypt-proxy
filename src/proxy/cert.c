@@ -49,10 +49,10 @@ cert_parse_version(ProxyContext * const proxy_context,
          && signed_bincert->version_major[1] != 2U
 #endif
         )) {
-        logger(proxy_context, LOG_WARNING,
-               "Unsupported certificate version: [%u][%u]",
-               signed_bincert->version_major[0],
-               signed_bincert->version_major[1]);
+        logger(proxy_context, LOG_INFO,
+               "Unsupported certificate version: %u.%u",
+               signed_bincert->version_major[1],
+               signed_bincert->version_major[0]);
         return -1;
     }
     return 0;
