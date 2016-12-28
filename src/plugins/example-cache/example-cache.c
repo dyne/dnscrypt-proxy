@@ -479,11 +479,11 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
             is_empty = 0;
         }
     }
-    if (ttl < cache->min_ttl || is_empty != 0) {
-        ttl = cache->min_ttl;
+    if (min_ttl < cache->min_ttl || is_empty != 0) {
+        min_ttl = cache->min_ttl;
     }
     replace_cache_entry(cache, wire_qname, qname_len,
-                        wire_data, wire_data_len, ttl, qtype);
+                        wire_data, wire_data_len, min_ttl, qtype);
 
     return DCP_SYNC_FILTER_RESULT_OK;
 }
