@@ -1,3 +1,35 @@
+* Wed Dec 28 21:08:51 2016 +0100
+
+    Mention plugins that require the ldns library
+
+* Wed Dec 28 17:32:11 2016 +0100
+
+    Improve plugin documentation
+
+* Wed Dec 28 17:09:56 2016 +0100
+
+    4 extra bytes after the qname are fine in a question RR
+
+* Wed Dec 28 16:55:01 2016 +0100
+
+    free() allocated command-line arguments when using the config parser
+
+* Wed Dec 28 16:51:01 2016 +0100
+
+    Allow options_parse() to alter argc/argv
+
+* Wed Dec 28 16:27:12 2016 +0100
+
+    Plug a memory leak when deleting the cache
+
+* Wed Dec 28 15:48:34 2016 +0100
+
+    options_read_file(): ensure that the output buffer is zero-terminated
+
+* Wed Dec 28 14:14:42 2016 +0100
+
+    Update ChangeLog
+
 * Wed Dec 28 14:14:29 2016 +0100
 
     /etc/dnscrypt-proxy.conf is probably required in the apparmor profile
