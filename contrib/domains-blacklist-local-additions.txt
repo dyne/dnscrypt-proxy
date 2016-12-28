@@ -12,7 +12,9 @@ telemetry.*
 tracker.*
 
 # My Macbook constantly sends a lot of useless queries to *.local,
-# so I block them. *.lan is apparently another common one.
+# so I block them. *.lan is apparently another common one, and
+# Windows likes to use *.localdomain
 
-*.local
 *.lan
+*.local
+*.localdomain
