@@ -321,7 +321,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "list of blacklisted names, or if at least one of the returned IP\n"
         "addresses happens to be in a list of blacklisted IPs.\n"
         "\n"
-        "Recognized switches are:\n"
+        "Plugin parameters:\n"
         "--domains=<file>\n"
         "--ips=<file>\n"
         "--logfile=[ltsv:]<file>\n"

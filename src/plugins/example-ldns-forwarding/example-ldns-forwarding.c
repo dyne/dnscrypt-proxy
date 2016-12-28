@@ -38,6 +38,22 @@ dcplugin_description(DCPlugin * const dcplugin)
     return "Forward queries for some domains to specific resolvers";
 }
 
+const char *
+dcplugin_long_description(DCPlugin * const dcplugin)
+{
+    return
+        "This plugin redirects queries for specific zones to a set of\n"
+        "non-DNSCrypt resolvers. This can be useful for private zones that\n"
+        "can only be resolved by a local DNS server.\n"
+        "\n"
+        "Plugin parameters:\n"
+        "--domains=\"<domain> [<domain>...]\"\n"
+        "--resolvers=\"<ip> [<ip>...]\"\n"
+        "\n"
+        "Requests are synchronous, so this plugin should not be enabled with\n"
+        "untrusted clients.";
+}
+
 static void
 str_tolower(char *str)
 {
