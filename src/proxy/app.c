@@ -93,7 +93,7 @@ sockaddr_from_ip_and_port(struct sockaddr_storage * const sockaddr,
 }
 
 static int
-proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
+proxy_context_init(ProxyContext * const proxy_context, int *argc_p, char ***argv_p)
 {
     memset(proxy_context, 0, sizeof *proxy_context);
     proxy_context->event_loop = NULL;
@@ -110,7 +110,7 @@ proxy_context_init(ProxyContext * const proxy_context, int argc, char *argv[])
     proxy_context->tcp_listener_handle = -1;
     sodium_mlock(&proxy_context->dnscrypt_client,
                  sizeof proxy_context->dnscrypt_client);
-    if (options_parse(&app_context, proxy_context, argc, argv) != 0) {
+    if (options_parse(&app_context, proxy_context, argc_p, argv_p) != 0) {
         return -1;
     }
 #ifdef _WIN32
@@ -352,13 +352,14 @@ dnscrypt_proxy_main(int argc, char *argv[])
         exit(2);
     }
 #endif
-    if (proxy_context_init(&proxy_context, argc, argv) != 0) {
+    if (proxy_context_init(&proxy_context, &argc, &argv) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to start the proxy");
         exit(1);
     }
     logger_noformat(&proxy_context, LOG_NOTICE, "Starting " PACKAGE_STRING);
     sodium_mlock(&proxy_context, sizeof proxy_context);
     randombytes_set_implementation(&randombytes_salsa20_implementation);
+
 #ifdef PLUGINS
     if (plugin_support_context_load(app_context.dcps_context) != 0) {
         logger_noformat(NULL, LOG_ERR, "Unable to load plugins");

@@ -513,7 +513,7 @@ options_apply(ProxyContext * const proxy_context)
 
 int
 options_parse(AppContext * const app_context,
-              ProxyContext * const proxy_context, int argc, char *argv[])
+              ProxyContext * const proxy_context, int *argc_p, char ***argv_p)
 {
     const char *service_config_file = NULL;
     int         opt_flag;
@@ -523,16 +523,16 @@ options_parse(AppContext * const app_context,
 #endif
 
     options_init_with_default(app_context, proxy_context);
-    if (argc == 2 && *argv[1] != '-' &&
-        sc_build_command_line_from_file(argv[1], simpleconf_options,
+    if (*argc_p == 2 && *(*argv_p)[1] != '-' &&
+        sc_build_command_line_from_file((*argv_p)[1], simpleconf_options,
                                         (sizeof simpleconf_options) /
                                         (sizeof simpleconf_options[0]),
-                                        argv[0], &argc, &argv) != 0) {
+                                        *(argv_p)[0], argc_p, argv_p) != 0) {
         logger_noformat(proxy_context, LOG_ERR,
                         "Unable to read the configuration file");
         return -1;
     }
-    while ((opt_flag = getopt_long(argc, argv,
+    while ((opt_flag = getopt_long(*argc_p, *argv_p,
                                    getopt_options, getopt_long_options,
                                    &option_index)) != -1) {
         switch (opt_flag) {
