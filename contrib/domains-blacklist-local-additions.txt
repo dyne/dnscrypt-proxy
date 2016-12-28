@@ -1,3 +1,6 @@
+
+# Local set of patterns to block
+
 ad.*
 ads.*
 banner.*
@@ -7,3 +10,9 @@ stats.*
 tag.*
 telemetry.*
 tracker.*
+
+# My Macbook constantly sends a lot of useless queries to *.local,
+# so I block them. *.lan is apparently another common one.
+
+*.local
+*.lan
