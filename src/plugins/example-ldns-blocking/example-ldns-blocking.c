@@ -728,8 +728,8 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         != LDNS_STATUS_OK) {
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
-    if ((result = apply_block_domains(dcp_packet, blocking, packet)
-         != DCP_SYNC_FILTER_RESULT_OK)) {
+    if ((result = apply_block_domains(dcp_packet, blocking, packet))
+         != DCP_SYNC_FILTER_RESULT_OK) {
         ldns_pkt_free(packet);
         return result;
     }
@@ -754,8 +754,8 @@ dcplugin_sync_post_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
         return DCP_SYNC_FILTER_RESULT_ERROR;
     }
     if (blocking->ips != NULL &&
-        (result = apply_block_ips(dcp_packet, blocking, packet)
-         != DCP_SYNC_FILTER_RESULT_OK)) {
+        (result = apply_block_ips(dcp_packet, blocking, packet))
+         != DCP_SYNC_FILTER_RESULT_OK) {
         ldns_pkt_free(packet);
         return result;
     }
