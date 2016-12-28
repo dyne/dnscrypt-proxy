@@ -57,6 +57,7 @@ free_cache_entries(CacheEntry *cache_entries)
         next = cache_entry->next;
         free(cache_entry->response);
         cache_entry->response = NULL;
+        free(cache_entry);
         cache_entry = next;
     }
 }
