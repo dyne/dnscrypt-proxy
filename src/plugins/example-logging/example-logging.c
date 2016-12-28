@@ -143,6 +143,16 @@ timestamp_fprint(FILE * const fp, _Bool unix_ts)
     return 0;
 }
 
+static void
+util_ntohl(uint32_t * const xp)
+{
+    uint8_t p[4U];
+
+    memcpy(p, xp, 4U);
+    *xp = (((uint32_t) p[0]) << 24) | (((uint32_t) p[1]) << 16) |
+          (((uint32_t) p[2]) << 16) | (((uint32_t) p[3]));
+}
+
 static int
 ip_fprint(FILE * const fp,
           const struct sockaddr_storage * const client_addr,
@@ -153,7 +163,8 @@ ip_fprint(FILE * const fp,
         uint32_t           a;
 
         memcpy(&in, client_addr, sizeof in);
-        a = ntohl(in.sin_addr.s_addr);
+        a = (uint32_t) in.sin_addr.s_addr;
+        util_ntohl(&a);
         fprintf(fp, "%u.%u.%u.%u",
                 (a >> 24) & 0xff, (a >> 16) & 0xff,
                 (a >> 8) & 0xff, a  & 0xff);
