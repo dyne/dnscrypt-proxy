@@ -178,7 +178,7 @@ options_read_file(const char * const file_name)
         return NULL;
     }
     rewind(fp);
-    if ((file_buf = malloc(file_size)) == NULL) {
+    if ((file_buf = malloc(file_size + 1U)) == NULL) {
         fclose(fp);
         return NULL;
     }
@@ -188,6 +188,7 @@ options_read_file(const char * const file_name)
         return NULL;
     }
     (void) fclose(fp);
+    file_buf[file_size] = 0;
 
     return file_buf;
 }
