@@ -29,3 +29,19 @@ dnscrypt-proxy can be downloaded here:
 Signatures can be verified with [Minisign](https://jedisct1.github.io/minisign/):
 
     $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.9.0.tar.bz2
+
+Plugins
+-------
+
+Aside from implementing the protocol, dnscrypt-proxy can be extended
+with plug-ins, and gives a lot of control on the local DNS traffic:
+
+- Review the DNS traffic originating from your network in real time,
+and detect compromised hosts and applications phoning home.
+- Locally block ads, trackers, malware, spam, and any website whose
+domain names or IP addresses match a set of rules you define.
+- Prevent queries for local zones from being leaked.
+- Reduce latency by caching resposes and avoiding requesting IPv6
+addresses on IPv4-only networks.
+- Force traffic to use TCP, to route it through TCP-only tunnels or
+Tor.
