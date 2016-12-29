@@ -14,6 +14,7 @@ AC_SUBST(VERSION)
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
+AC_LANG_ASSERT(C)
 LX_CFLAGS=${CFLAGS-NONE}
 
 dnl Switches.
@@ -134,19 +135,14 @@ AX_CHECK_COMPILE_FLAG([-D_FORTIFY_SOURCE=2],
   [CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"])
 
 AS_CASE([$host_os], [cygwin*|mingw*|msys|pw32*|cegcc*], [ ], [
-  AX_CHECK_COMPILE_FLAG([-fPIC], [
-    AX_CHECK_LINK_FLAG([-fPIC],
-      [CFLAGS="$CFLAGS -fPIC"]
-    )
-  ])
+  AX_CHECK_COMPILE_FLAG([-fPIC], [CFLAGS="$CFLAGS -fPIC"])
 ])
 
 AS_IF([test "$enable_pie" != "no"],[
   AX_CHECK_COMPILE_FLAG([-fPIE], [
-    AX_CHECK_LINK_FLAG([-fPIE],
-      [AX_CHECK_LINK_FLAG([-pie],
-        [CFLAGS="$CFLAGS -fPIE"
-         LDFLAGS="$LDFLAGS -pie"])
+    AX_CHECK_LINK_FLAG([-pie], [
+      [CFLAGS="$CFLAGS -fPIE"
+       LDFLAGS="$LDFLAGS -pie"]
     ])
   ])
 ])
@@ -168,18 +164,15 @@ AS_IF([test "x$enable_ssp" != "xno"],[
 AS_CASE([$host_os],
   [cygwin* | mingw* | pw32* | cegcc*], [ ],
   [dragonfly*], [
-    AX_CHECK_COMPILE_FLAG([-fstack-protector], [
-      AX_CHECK_LINK_FLAG([-fstack-protector],
-        [CFLAGS="$CFLAGS -fstack-protector"]
-      )
-    ])
+    AX_CHECK_COMPILE_FLAG([-fstack-protector],
+      [CFLAGS="$CFLAGS -fstack-protector"])
   ],
   [*], [
-    AX_CHECK_COMPILE_FLAG([-fstack-protector-all], [
-      AX_CHECK_LINK_FLAG([-fstack-protector-all],
-        [CFLAGS="$CFLAGS -fstack-protector-all"]
-      )
-    ])
+    AX_CHECK_COMPILE_FLAG([-fstack-protector-strong],
+     [CFLAGS="$CFLAGS -fstack-protector-strong"],
+     [AX_CHECK_COMPILE_FLAG([-fstack-protector-all],
+       [CFLAGS="$CFLAGS -fstack-protector-all"])]
+    )
   ])
 ])
 
