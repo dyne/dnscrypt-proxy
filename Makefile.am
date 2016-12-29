@@ -25,6 +25,7 @@ SUBDIRS += \
 endif
 
 SUBDIRS += \
+	contrib \
 	src \
 	test
 
