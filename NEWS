@@ -1,10 +1,11 @@
 
 * Version 1.9.0
- - New plugin: example-ldns-forwarding. This plugin forwards queries for
+ - Support for TCP was added to the `hostip` tool.
+ - New plugin: `example-ldns-forwarding`. This plugin forwards queries for
 a specific set of domain names to one or more non-DNSCrypt resolvers.
 This can be used to send queries for private domains to the router or
 to an internal DNS server.
- - New plugin: example-cache. This plugin implements a simple,
+ - New plugin: `example-cache`. This plugin implements a simple,
 zero-configuration DNS response cache.
  - The default plugin paths, as loaded via the configuration file, use
 the native module file names instead of libtool's `.la` files. Installing the
