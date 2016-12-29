@@ -1,3 +1,15 @@
+* Thu Dec 29 09:14:49 2016 +0100
+
+    Do not use --high-entropy-va on i686
+
+* Thu Dec 29 09:03:22 2016 +0100
+
+    Typo
+
+* Thu Dec 29 08:42:29 2016 +0100
+
+    Update ChangeLog
+
 * Thu Dec 29 08:41:30 2016 +0100
 
     Temporarily remove cs-uswest
