@@ -163,10 +163,6 @@ AS_IF([test "x$enable_ssp" != "xno"],[
 
 AS_CASE([$host_os],
   [cygwin* | mingw* | pw32* | cegcc*], [ ],
-  [dragonfly*], [
-    AX_CHECK_COMPILE_FLAG([-fstack-protector],
-      [CFLAGS="$CFLAGS -fstack-protector"])
-  ],
   [*], [
     AX_CHECK_COMPILE_FLAG([-fstack-protector-strong],
      [CFLAGS="$CFLAGS -fstack-protector-strong"],
