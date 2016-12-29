@@ -1,3 +1,14 @@
+* Thu Dec 29 08:41:30 2016 +0100
+
+    Temporarily remove cs-uswest
+    
+    Since a new release is being tagged, this resolver cannot be included
+    in the default list.
+
+* Thu Dec 29 08:32:43 2016 +0100
+
+    Update ChangeLog
+
 * Thu Dec 29 08:32:35 2016 +0100
 
     + TCP for hostip
