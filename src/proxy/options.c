@@ -107,7 +107,9 @@ options_usage(void)
         }
         options++;
     } while (options->name != NULL);
+#ifndef _WIN32
     puts("\nPlease consult the dnscrypt-proxy(8) man page for details.\n");
+#endif
 }
 
 static
