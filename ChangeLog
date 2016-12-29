@@ -1,3 +1,48 @@
+* Thu Dec 29 08:32:35 2016 +0100
+
+    + TCP for hostip
+
+* Thu Dec 29 08:31:04 2016 +0100
+
+    hostip: retry using TCP on truncated responses, dont change qname case
+
+* Thu Dec 29 08:16:32 2016 +0100
+
+    Update some m4 scripts
+
+* Thu Dec 29 07:48:18 2016 +0100
+
+    win[32|64]-xcompile: Force some link options even for dependencies
+
+* Thu Dec 29 07:38:55 2016 +0100
+
+    Tweak AX_CHECK_COMPILE_FLAG to also try to link the test program
+    
+    This simplifies the main configure script.
+    
+    Also try to use -fstack-protector-strong if available instead of
+    -fstack-protector-all
+
+* Thu Dec 29 07:13:36 2016 +0100
+
+    The libsodium copy doesn't require POSIX threads on Windows
+
+* Thu Dec 29 00:33:08 2016 +0100
+
+    Add oas.* and oascentral.* (ads)
+
+* Thu Dec 29 00:12:29 2016 +0100
+
+    Don't assume that the proxy is in /usr/local for the systemd service
+    
+    People compiling the proxy themselves won't use systemd right away,
+    and people using dnscrypt-proxy via systemd are likely to use system
+    packages.
+
+* Thu Dec 29 00:07:51 2016 +0100
+
+    Update ChangeLog
+
 * Thu Dec 29 00:07:09 2016 +0100
 
     Remove man pages, and .la files from the Windows distribution files
