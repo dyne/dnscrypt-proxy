@@ -95,7 +95,7 @@ compile() {
     mkdir libsodium
     cd libsodium
     $SRCDEPS_DIR/libsodium/configure --disable-dependency-tracking \
-      --host=$TARGET --prefix="$DEPS_DIR"
+      --host=$TARGET --prefix="$DEPS_DIR" --without-pthreads
     make clean
     make install
   )
