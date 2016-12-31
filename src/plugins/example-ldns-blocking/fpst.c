@@ -1,51 +1,28 @@
 
-#include <errno.h>
+#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Leaf {
-    const char *key;
-    uint32_t    val0;
-    uint32_t    val1;
-} Leaf;
-
-typedef struct Branch {
-    union FPST *twigs;
-    uint32_t    bitmap;
-    uint32_t    index: 28, flags : 4;
-} Branch;
-
-typedef union FPST {
-    struct Leaf   leaf;
-    struct Branch branch;
-} FPST;
-
-#define FPST_DEFINED 1
 #include "fpst.h"
 
+typedef struct FPST {
+    struct FPST *children;
+    const char  *key;
+    uint16_t     idx;
+    uint16_t     bitmap;
+    uint32_t     hits; /* reserved */
+    uint64_t     val;
+} FPST;
+
 #ifdef __GNUC__
-# define clz_u8(X)       (__builtin_clz(X) + 8 - sizeof(unsigned int) * 8)
-# define popcount_u32(X) ((unsigned int) __builtin_popcount(X))
-# define prefetch(X)     __builtin_prefetch(X)
+# define popcount(X) ((unsigned int) __builtin_popcount(X))
+# define prefetch(X)  __builtin_prefetch(X)
 #else
-# define prefetch(X)     (void)(X)
+# define prefetch(X) (void)(X)
 
 static inline unsigned int
-clz_u8(unsigned int x)
-{
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x -= (x >> 1) & 0x55;
-    x = ((x >> 2) & 0x33) + (x & 0x33);
-    x = ((x >> 4) + x) & 0x0f;
-
-    return 8 - x;
-}
-
-static inline unsigned int
-popcount_u32(uint32_t w)
+popcount(uint32_t w)
 {
     w -= (w >> 1) & 0x55555555;
     w = (w & 0x33333333) + ((w >> 2) & 0x33333333);
@@ -55,59 +32,77 @@ popcount_u32(uint32_t w)
 }
 #endif
 
-static inline int
-is_branch(FPST *t)
+static inline unsigned char
+fpst_quadbit_at(const char *str, size_t i)
 {
-    return t->branch.flags & 8;
-}
+    unsigned char c;
 
-static inline uint32_t
-nib_bit(unsigned int k, unsigned int flags)
-{
-    unsigned int shift = 16 - 5 - (flags & 7);
-
-    return 1U << ((k >> shift) & 0x1fU);
-}
-
-static inline uint32_t
-twig_bit(FPST *t, const char *key, size_t len)
-{
-    uint64_t     i = t->branch.index;
-    unsigned int k;
-
-    if (i >= len) {
-        return 1;
+    c = (unsigned char) str[i / 2];
+    if ((i & 1U) == 0U) {
+        c >>= 4;
     }
-    if ((k = (unsigned char)key[i] << 8)) {
-        k |= (unsigned char)key[i + 1];
-    }
-    return nib_bit(k, t->branch.flags);
+    return c & 0xf;
 }
 
 static inline int
-has_twig(FPST *t, uint32_t bit)
+fpst_bitmap_is_set(const FPST *t, size_t bit)
 {
-    return t->branch.bitmap & bit;
+    return (t->bitmap & (((uint16_t) 1U) << bit)) != 0U;
 }
 
-static inline unsigned int
-twig_off(FPST *t, uint32_t b)
+static inline void
+fpst_bitmap_set(FPST *t, size_t bit)
 {
-    return popcount_u32(t->branch.bitmap & (b - 1));
+    t->bitmap |= (((uint16_t) 1U) << bit);
 }
 
-static inline FPST *
-twig(FPST *t, unsigned int i)
+static inline size_t
+fpst_actual_index(const FPST *t, size_t i)
 {
-    return &t->branch.twigs[i];
+    const uint16_t b = t->bitmap & ((((uint16_t) 1U) << i) - 1U);
+
+    return (size_t) popcount((uint32_t) b);
 }
 
-#define TWIG_OFF_MAX(off, max, t, b)                                           \
-    do {                                                                       \
-        off = twig_off(t, b);                                                  \
-        max = popcount_u32(t->branch.bitmap);                                  \
-    } while (0)
+static FPST *
+fpst_child_get(FPST *t, size_t i)
+{
+    if (!fpst_bitmap_is_set(t, i)) {
+        return NULL;
+    }
+    assert(t->children != NULL);
 
+    return &t->children[fpst_actual_index(t, i)];
+}
+
+static int
+fpst_child_set(FPST *t, FPST *v, size_t i)
+{
+    FPST     *previous;
+    FPST     *tmp;
+    size_t    ri;
+    size_t    rcount;
+    size_t    count;
+
+    if ((previous = fpst_child_get(t, i)) != NULL) {
+        *previous = *v;
+        return 0;
+    }
+    count = (size_t) popcount(t->bitmap) + 1U;
+    if ((tmp = realloc(t->children, count * (sizeof *t->children))) == NULL) {
+        return -1;
+    }
+    t->children = tmp;
+    ri = fpst_actual_index(t, i);
+    if ((rcount = count - ri - 1U) > 0U) {
+        memmove(&t->children[ri + 1U], &t->children[ri],
+                rcount * (sizeof *t->children));
+    }
+    t->children[ri] = *v;
+    fpst_bitmap_set(t, i);
+
+    return 0;
+}
 
 FPST *
 fpst_new(void)
@@ -115,49 +110,183 @@ fpst_new(void)
     return NULL;
 }
 
-int
-fpst_starts_with_existing_key(FPST *trie, const char *str, size_t len,
-                              const char **found_key_p, uint64_t *found_val_p)
+FPST *
+fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val)
 {
-    FPST       *t;
-    const char *lk;
-    size_t      i;
+    FPST         *new_node_p;
+    FPST         *t;
+    const char   *lk;
+    FPST          new_node, saved_node;
+    size_t        i;
+    size_t        j;
+    unsigned char c;
+    unsigned char x;
+
+    if (len >= 0xffff) {
+        return NULL;
+    }
+    if (trie == NULL) {
+        if ((new_node_p = malloc(sizeof *new_node_p)) == NULL) {
+            return NULL;
+        }
+        new_node_p->key = key;
+        new_node_p->val = val;
+        new_node_p->idx = 0U;
+        new_node_p->hits = 0U;
+        new_node_p->bitmap = 0U;
+        new_node_p->children = NULL;
+
+        return new_node_p;
+    }
+    t = trie;
+    for (;;) {
+        lk = t->key;
+        x = 0U;
+        for (j = 0U; j < len; j++) {
+            x = ((unsigned char) lk[j]) ^ ((unsigned char) key[j]);
+            if (x != 0U) {
+                break;
+            }
+        }
+        if (j == len && lk[j] == 0) {
+            assert(key[j] == 0);
+            t->val = val;
+            return trie;
+        }
+        i = j * 2;
+        if ((x & 0xf0) == 0U) {
+            i++;
+        }
+        if (t->bitmap == 0U) {
+            /* keep index from the new key */
+        } else if (i >= t->idx) {
+            i = t->idx;
+        } else {
+            saved_node = *t;
+            t->key = key;
+            t->val = val;
+            t->idx = (uint16_t) i;
+            t->hits = 0U;
+            t->bitmap = 0U;
+            t->children = NULL;
+            c = fpst_quadbit_at(lk, i);
+            if (fpst_child_set(t, &saved_node, (size_t) c) != 0) {
+                *t = saved_node;
+                return NULL;
+            }
+            return trie;
+        }
+        prefetch(t->children);
+        c = fpst_quadbit_at(key, i);
+        if (!fpst_bitmap_is_set(t, c)) {
+            break;
+        }
+        t = fpst_child_get(t, (size_t) c);
+    }
+    t->idx = (uint16_t) i;
+    assert(!fpst_bitmap_is_set(t, c));
+    new_node.key = key;
+    new_node.val = val;
+    new_node.idx = 0U;
+    new_node.hits = 0U;
+    new_node.bitmap = 0U;
+    new_node.children = NULL;
+    if (fpst_child_set(t, &new_node, (size_t) c) != 0) {
+        return NULL;
+    }
+    return trie;
+}
+
+FPST *
+fpst_insert_str(FPST *trie, const char *key, uint64_t val)
+{
+    return fpst_insert(trie, key, strlen(key), val);
+}
+
+int
+fpst_starts_with_existing_key(FPST *trie,
+                              const char *str, size_t len,
+                              const char **found_key_p,
+                              uint64_t *found_val_p)
+{
+    FPST          *t;
+    const char    *lk;
+    size_t         i;
+    size_t         j;
+    unsigned char  c;
+    int            ret = 0;
 
     if (trie == NULL) {
         return 0;
     }
     t = trie;
-    while (is_branch(t)) {
-        uint32_t b;
-
-        prefetch(t->branch.twigs);
-        b = twig_bit(t, str, len);
-        if (!has_twig(t, b)) {
-            return 0;
+    for (;;) {
+        lk = t->key;
+        for (j = 0U; j <= len; j++) {
+            if (lk[j] != str[j]) {
+                if (lk[j] == 0) {
+                    *found_key_p = t->key;
+                    *found_val_p = t->val;
+                    ret = 1;
+                }
+                break;
+            }
         }
-        t = twig(t, twig_off(t, b));
-    }
-    lk = t->leaf.key;
-    for (i = 0; lk[i] != 0; i++) {
-        if (lk[i] != str[i]) {
-            return 0;
+        if (j > len) {
+            *found_key_p = t->key;
+            *found_val_p = t->val;
+            ret = 1;
+            break;
         }
+        if (t->bitmap == 0U) {
+            break;
+        }
+        i = t->idx;
+        if (i > len * 2) {
+            break;
+        }
+        prefetch(t->children);
+        c = fpst_quadbit_at(str, i);
+        if (!fpst_bitmap_is_set(t, c)) {
+            if (fpst_bitmap_is_set(t, 0U)) {
+                c = 0U;
+            } else {
+                break;
+            }
+        }
+        t = fpst_child_get(t, (size_t) c);
     }
-    if (found_key_p != NULL) {
-        *found_key_p = t->leaf.key;
-    }
-    if (found_val_p != NULL) {
-        *found_val_p = ((uint64_t) t->leaf.val0) | (((uint64_t) t->leaf.val1) << 32);
-    }
-    return 1;
+    return ret;
 }
 
 int
 fpst_str_starts_with_existing_key(FPST *trie, const char *str,
-                                  const char **found_key_p, uint64_t *found_val_p)
+                                  const char **found_key_p,
+                                  uint64_t *found_val_p)
 {
     return fpst_starts_with_existing_key(trie, str, strlen(str),
                                          found_key_p, found_val_p);
+}
+
+static void
+fpst_free_node(FPST *t, FPST_FreeFn free_kv_fn)
+{
+    size_t count;
+    size_t i;
+
+    if (t->bitmap == 0U) {
+        assert(t->children == NULL);
+    }
+    count = (size_t) popcount(t->bitmap);
+    for (i = 0; i < count; i++) {
+        fpst_free_node(&t->children[i], free_kv_fn);
+    }
+    free(t->children);
+    t->hits = 0U;
+    t->bitmap = 0U;
+    t->children = NULL;
+    free_kv_fn(t->key, t->val);
+    t->key = NULL;
 }
 
 int
@@ -180,166 +309,12 @@ fpst_has_key_str(FPST *trie, const char *key, uint64_t *found_val_p)
     return fpst_has_key(trie, key, strlen(key), found_val_p);
 }
 
-FPST *
-fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val)
-{
-    FPST *       t;
-    size_t       i;
-    unsigned int f;
-    unsigned int k1, k2;
-    uint32_t     b1;
-    uint32_t     val0 = (uint32_t) val;
-    uint32_t     val1 = (uint32_t) (val >> 32);
-
-    if ((val1 & 0x80000000) != 0 || len > 0xFFFFFF) {
-        abort();
-    }
-    if (trie == NULL) {
-        if ((trie = malloc(sizeof *trie)) == NULL) {
-            return NULL;
-        }
-        trie->leaf.key = key;
-        trie->leaf.val0 = val0;
-        trie->leaf.val1 = val1;
-
-        return trie;
-    }
-    t = trie;
-    while (is_branch(t)) {
-        uint32_t b;
-
-        prefetch(t->branch.twigs);
-        b = twig_bit(t, key, len);
-        t = twig(t, has_twig(t, b) ? twig_off(t, b) : 0);
-    }
-    for (i = 0; i <= len; i++) {
-        f = (unsigned char)key[i] ^ (unsigned char)t->leaf.key[i];
-        if (f != 0) {
-            goto newkey;
-        }
-    }
-    t->leaf.val0 = val0;
-    t->leaf.val1 = val1;
-
-    return trie;
-
-newkey: {
-    size_t bit = i * 8 + clz_u8(f);
-    size_t qi  = bit / 5;
-
-    i  = qi * 5 / 8;
-    f  = qi * 5 % 8 | 8;
-    k1 = (unsigned char)key[i] << 8;
-    k2 = (unsigned char)t->leaf.key[i] << 8;
-    k1 |= (k1 ? (unsigned char)key[i + 1] : 0);
-    k2 |= (k2 ? (unsigned char)t->leaf.key[i + 1] : 0);
-    b1 = nib_bit(k1, f);
-    t  = trie;
-    while (is_branch(t)) {
-        uint32_t b;
-
-        prefetch(t->branch.twigs);
-        if (i == t->branch.index && f == t->branch.flags) {
-            goto growbranch;
-        }
-        if ((i == t->branch.index && f < t->branch.flags) ||
-            (i < t->branch.index)) {
-            goto newbranch;
-        }
-        b = twig_bit(t, key, len);
-        t = twig(t, twig_off(t, b));
-    }
-}
-
-newbranch : {
-    FPST *   twigs;
-    FPST     t1;
-    FPST     t2;
-    uint32_t b2;
-
-    if ((twigs = malloc(sizeof(FPST) * 2)) == NULL) {
-        return NULL;
-    }
-    t1.leaf.key      = key;
-    t1.leaf.val0     = val0;
-    t1.leaf.val1     = val1;
-    t2               = *t;
-    b2               = nib_bit(k2, f);
-    t->branch.twigs  = twigs;
-    t->branch.flags  = f;
-    t->branch.index  = i;
-    t->branch.bitmap = b1 | b2;
-    *twig(t, twig_off(t, b1)) = t1;
-    *twig(t, twig_off(t, b2)) = t2;
-
-    return trie;
-}
-
-growbranch: {
-    FPST *       twigs;
-    FPST         t1;
-    unsigned int s, m;
-
-    TWIG_OFF_MAX(s, m, t, b1);
-    if ((twigs = realloc(t->branch.twigs, sizeof(FPST) * (m + 1))) == NULL) {
-        return NULL;
-    }
-    t1.leaf.key  = key;
-    t1.leaf.val0 = val0;
-    t1.leaf.val1 = val1;
-    memmove(twigs + s + 1, twigs + s, sizeof(FPST) * (m - s));
-    memmove(twigs + s, &t1, sizeof(FPST));
-    t->branch.twigs = twigs;
-    t->branch.bitmap |= b1;
-
-    return trie;
-}}
-
-FPST *
-fpst_insert_str(FPST *trie, const char *key, uint64_t val)
-{
-        return fpst_insert(trie, key, strlen(key), val);
-}
-
-static void
-fpst_free_leaf(Leaf *leaf, FPST_FreeFn fpst_free_kv_fn)
-{
-    if (fpst_free_kv_fn != NULL) {
-        fpst_free_kv_fn(leaf->key,
-                        ((uint64_t) leaf->val0) | (((uint64_t) leaf->val1) << 32));
-    }
-    leaf->key = NULL;
-    leaf->val0 = leaf->val1 = 0;
-}
-
-static void
-fpst_free_branch(Branch *branch, FPST_FreeFn fpst_free_kv_fn)
-{
-    unsigned int count;
-    unsigned int i;
-
-    count = popcount_u32(branch->bitmap);
-    for (i = 0; i < count; i++) {
-        if (is_branch(&branch->twigs[i])) {
-            fpst_free_branch(&branch->twigs[i].branch, fpst_free_kv_fn);
-        } else {
-            fpst_free_leaf(&branch->twigs[i].leaf, fpst_free_kv_fn);
-        }
-    }
-    free(branch->twigs);
-    branch->twigs = NULL;
-}
-
 void
 fpst_free(FPST *trie, FPST_FreeFn free_kv_fn)
 {
     if (trie == NULL) {
         return;
     }
-    if (is_branch(trie)) {
-        fpst_free_branch(&trie->branch, free_kv_fn);
-    } else {
-        fpst_free_leaf(&trie->leaf, free_kv_fn);
-        free(trie);
-    }
+    fpst_free_node(trie, free_kv_fn);
+    free(trie);
 }

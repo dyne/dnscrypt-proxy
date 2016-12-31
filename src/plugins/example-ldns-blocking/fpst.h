@@ -4,10 +4,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifndef FPST_DEFINED
 /** A trie */
-typedef union FPST FPST;
-#endif
+typedef struct FPST FPST;
 
 /** Type of the function pointer for `fpst_free()` */
 typedef void (*FPST_FreeFn)(const char *key, uint64_t val);
@@ -27,8 +25,10 @@ void fpst_free(FPST *trie, FPST_FreeFn free_kv_fn);
  * If `found_key_p` and/or `found_val_p` are not `NULL`, these are filled
  * with the longest matching key and its corresponding value.
  */
-int fpst_starts_with_existing_key(FPST *trie, const char *str, size_t len,
-                                  const char **found_key_p, uint64_t *found_val_p);
+int fpst_starts_with_existing_key(FPST *t,
+                                  const char *str, size_t len,
+                                  const char **found_key_p,
+                                  uint64_t *found_val_p);
 
 /**
  * Check if the zero-terminated string `str` starts with one of the keys
