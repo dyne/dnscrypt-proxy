@@ -139,10 +139,11 @@ fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val)
         return new_node_p;
     }
     t = trie;
+    j = 0U;
     for (;;) {
         lk = t->key;
         x = 0U;
-        for (j = 0U; j < len; j++) {
+        for (; j < len; j++) {
             x = ((unsigned char) lk[j]) ^ ((unsigned char) key[j]);
             if (x != 0U) {
                 break;
@@ -220,9 +221,10 @@ fpst_starts_with_existing_key(FPST *trie,
         return 0;
     }
     t = trie;
+    j = 0U;
     for (;;) {
         lk = t->key;
-        for (j = 0U; j <= len; j++) {
+        for (; j <= len; j++) {
             if (lk[j] != str[j]) {
                 if (lk[j] == 0) {
                     *found_key_p = t->key;
