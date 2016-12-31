@@ -159,6 +159,7 @@ fpst_insert(FPST *trie, const char *key, size_t len, uint32_t val)
             /* keep index from the new key */
         } else if (i >= t->idx) {
             i = t->idx;
+            j = i / 2;
         } else {
             saved_node = *t;
             t->key = key;
@@ -241,6 +242,9 @@ fpst_starts_with_existing_key(FPST *trie,
         i = t->idx;
         if (i > len * 2) {
             break;
+        }
+        if (j > i / 2) {
+            j = i / 2;
         }
         prefetch(t->children);
         c = fpst_quadbit_at(str, i);
