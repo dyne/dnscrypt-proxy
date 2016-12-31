@@ -1,4 +1,11 @@
 
+* Version 1.9.1
+ - The blocking plugin introduced in version 1.9.0 didn't properly
+handle overlapping rules. This has been fixed.
+ - The documentation and examples were updated.
+ - The mimimum time to keep a record in cache can be specified in the
+cache plugin, with the `--with-ttl` option (config file: `with-ttl:...`).
+
 * Version 1.9.0
  - Support for TCP was added to the `hostip` tool.
  - New plugin: `example-ldns-forwarding`. This plugin forwards queries for
