@@ -1,3 +1,74 @@
+* Sat Dec 31 22:23:42 2016 +0100
+
+    Add the ability to specify the minimum TTL a record has to be cached
+
+* Sat Dec 31 21:58:44 2016 +0100
+
+    Remove an useless assertion
+
+* Sat Dec 31 20:48:11 2016 +0100
+
+    inline
+
+* Sat Dec 31 20:45:18 2016 +0100
+
+    Reduce the value to 32 bits
+
+* Sat Dec 31 20:37:28 2016 +0100
+
+    The max length of a key is 32767 bytes
+
+* Sat Dec 31 20:29:33 2016 +0100
+
+    2017
+
+* Sat Dec 31 20:29:29 2016 +0100
+
+    C++ compat
+
+* Sat Dec 31 20:20:35 2016 +0100
+
+    Resume string comparison where we left after the previous iteration
+
+* Sat Dec 31 18:34:52 2016 +0100
+
+    Version bump
+
+* Sat Dec 31 18:32:40 2016 +0100
+
+    Rewrite the prefix matching algorithm for the blocking plugin
+
+* Thu Dec 29 21:06:38 2016 +0100
+
+    Add quotes around paths to blacklists in the example file
+    
+    Unnecessary for paths that don't include spaces, but paths with
+    spaces are common on Windows, so make the example more universal.
+
+* Thu Dec 29 16:12:28 2016 +0100
+
+    Dragonfly BSD doesn't have any problems with -fstack-protector-strong
+
+* Thu Dec 29 13:55:32 2016 +0100
+
+    `--install-service-with-config-file` -> `--install-with-config-file`
+
+* Thu Dec 29 13:52:43 2016 +0100
+
+    Do not print references to man pages on Windows
+
+* Thu Dec 29 11:21:29 2016 +0100
+
+    Properly include the contrib dir in the dist tarball
+
+* Thu Dec 29 10:28:52 2016 +0100
+
+    Document what plugins can do
+
+* Thu Dec 29 09:15:19 2016 +0100
+
+    Update ChangeLog
+
 * Thu Dec 29 09:14:49 2016 +0100
 
     Do not use --high-entropy-va on i686
