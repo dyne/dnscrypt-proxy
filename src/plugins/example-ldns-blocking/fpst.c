@@ -123,7 +123,7 @@ fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val)
     unsigned char c;
     unsigned char x;
 
-    if (len >= 0xffff) {
+    if (len >= 0x7fff) {
         return NULL;
     }
     if (trie == NULL) {
