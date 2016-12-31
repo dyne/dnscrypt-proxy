@@ -69,8 +69,6 @@ fpst_child_get(FPST *t, size_t i)
     if (!fpst_bitmap_is_set(t, i)) {
         return NULL;
     }
-    assert(t->children != NULL);
-
     return &t->children[fpst_actual_index(t, i)];
 }
 
