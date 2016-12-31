@@ -89,7 +89,8 @@ fpst_child_set(FPST *t, FPST *v, size_t i)
         return 0;
     }
     count = (size_t) popcount(t->bitmap) + 1U;
-    if ((tmp = realloc(t->children, count * (sizeof *t->children))) == NULL) {
+    if ((tmp = (FPST *) realloc(t->children,
+                                count * (sizeof *t->children))) == NULL) {
         return -1;
     }
     t->children = tmp;
@@ -126,7 +127,7 @@ fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val)
         return NULL;
     }
     if (trie == NULL) {
-        if ((new_node_p = malloc(sizeof *new_node_p)) == NULL) {
+        if ((new_node_p = (FPST *) malloc(sizeof *new_node_p)) == NULL) {
             return NULL;
         }
         new_node_p->key = key;
