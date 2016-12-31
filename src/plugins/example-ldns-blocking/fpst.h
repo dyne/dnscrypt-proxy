@@ -8,7 +8,7 @@
 typedef struct FPST FPST;
 
 /** Type of the function pointer for `fpst_free()` */
-typedef void (*FPST_FreeFn)(const char *key, uint64_t val);
+typedef void (*FPST_FreeFn)(const char *key, uint32_t val);
 
 /** Returns an empty trie */
 FPST *fpst_new(void);
@@ -28,7 +28,7 @@ void fpst_free(FPST *trie, FPST_FreeFn free_kv_fn);
 int fpst_starts_with_existing_key(FPST *t,
                                   const char *str, size_t len,
                                   const char **found_key_p,
-                                  uint64_t *found_val_p);
+                                  uint32_t *found_val_p);
 
 /**
  * Check if the zero-terminated string `str` starts with one of the keys
@@ -37,24 +37,23 @@ int fpst_starts_with_existing_key(FPST *t,
  * with the longest matching key and its corresponding value.
  */
 int fpst_str_starts_with_existing_key(FPST *trie, const char *str,
-                                      const char **found_key_p, uint64_t *found_val_p);
+                                      const char **found_key_p, uint32_t *found_val_p);
 
 /** Check if the exact key `key` of length `len` (`\0` not included) exists */
-int fpst_has_key(FPST *trie, const char *key, size_t len, uint64_t *found_val_p);
+int fpst_has_key(FPST *trie, const char *key, size_t len, uint32_t *found_val_p);
 
 /** Check if the exact zero-terminated key `key` is present in the trie */
-int fpst_has_key_str(FPST *trie, const char *key, uint64_t *found_val_p);
+int fpst_has_key_str(FPST *trie, const char *key, uint32_t *found_val_p);
 
 /**
  * Inserts a key `key` of length `len` (not including the leading `\0`)
- * into the trie. `val` is a 63-bit value: the highest bit must not be set.
+ * into the trie.
  */
-FPST * fpst_insert(FPST *trie, const char *key, size_t len, uint64_t val);
+FPST * fpst_insert(FPST *trie, const char *key, size_t len, uint32_t val);
 
 /**
  * Inserts a zero-terminated key `key` into the trie.
- * `val` is a 63-bit value: the highest bit must not be set.
  */
-FPST * fpst_insert_str(FPST *trie, const char *key, uint64_t val);
+FPST * fpst_insert_str(FPST *trie, const char *key, uint32_t val);
 
 #endif

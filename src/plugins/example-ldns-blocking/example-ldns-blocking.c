@@ -140,7 +140,7 @@ trim_comments(char *line)
 }
 
 static void
-free_list(const char *key, uint64_t val)
+free_list(const char *key, uint32_t val)
 {
     (void) val;
     free((void *) key);
@@ -206,19 +206,19 @@ parse_domain_list(FPST ** const domain_list_p,
         }
         if (block_type == BLOCKTYPE_SUFFIX) {
             if ((domain_rev_list = fpst_insert_str(domain_rev_list, line,
-                                                   (uint64_t) block_type)) == NULL) {
+                                                   (uint32_t) block_type)) == NULL) {
                 free(line);
                 break;
             }
         } else if (block_type == BLOCKTYPE_PREFIX) {
             if ((domain_list = fpst_insert_str(domain_list, line,
-                                               (uint64_t) block_type)) == NULL) {
+                                               (uint32_t) block_type)) == NULL) {
                 free(line);
                 break;
             }
         } else if (block_type == BLOCKTYPE_SUBSTRING) {
             if ((domain_substr_list = fpst_insert_str(domain_substr_list, line,
-                                                      (uint64_t) block_type)) == NULL) {
+                                                      (uint32_t) block_type)) == NULL) {
                 free(line);
                 break;
             }
@@ -275,7 +275,7 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
             break;
         }
         if ((ip_list = fpst_insert_str(ip_list, line,
-                                       (uint64_t) block_type)) == NULL) {
+                                       (uint32_t) block_type)) == NULL) {
             free(line);
             break;
         }
@@ -293,7 +293,7 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
 
 static _Bool
 substr_match(FPST *list, const char *str,
-             const char **found_key_p, uint64_t *found_block_type_p)
+             const char **found_key_p, uint32_t *found_block_type_p)
 {
     size_t i;
 
@@ -578,7 +578,7 @@ apply_block_domains(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
     const char               *found_key;
     uint8_t                  *wire_data;
     size_t                    owner_str_len;
-    uint64_t                  found_block_type;
+    uint32_t                  found_block_type;
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
     _Bool                     block = 0;
 
@@ -666,7 +666,7 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
     const char   *found_key;
     char         *answer_str;
     ldns_rr_type  type;
-    uint64_t      found_block_type;
+    uint32_t      found_block_type;
     size_t        answers_count;
     size_t        i;
 
