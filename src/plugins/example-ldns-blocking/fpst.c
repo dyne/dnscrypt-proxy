@@ -63,7 +63,7 @@ fpst_actual_index(const FPST *t, size_t i)
     return (size_t) popcount((uint32_t) b);
 }
 
-static FPST *
+static inline FPST *
 fpst_child_get(FPST *t, size_t i)
 {
     if (!fpst_bitmap_is_set(t, i)) {
