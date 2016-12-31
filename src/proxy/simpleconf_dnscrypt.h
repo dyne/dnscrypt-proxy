@@ -35,6 +35,7 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"BlockIPv6? <bool>",            "--plugin=" PLUGIN_LIB("ldns_aaaa_blocking") },
     {"QueryLogFile (<any*>)",        "--plugin=" PLUGIN_LIB("logging") ",$0" },
     {"Forward domains:(<any>) to:(<any>)", "--plugin=" PLUGIN_LIB("ldns_forwarding") ",--domains=$0,--resolvers=$1" },
+    {"LocalCache? <bool> min-ttl:(<digits>)", "--plugin=" PLUGIN_LIB("cache") ",--min-ttl=$0" },
     {"LocalCache? <bool>",           "--plugin=" PLUGIN_LIB("cache") },
     {"OpenDNSIP (<nospace>)",        "--plugin=" PLUGIN_LIB("ldns_opendns_set_client_ip") ",$0" },
     {"OpenDNSPasswordFile (<any*>)", "--plugin=" PLUGIN_LIB("ldns_opendns_deviceid") ",$0" },

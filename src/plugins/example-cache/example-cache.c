@@ -2,6 +2,7 @@
 #include <dnscrypt/plugin.h>
 
 #include <ctype.h>
+#include <getopt.h>
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
@@ -9,6 +10,12 @@
 #include "example-cache.h"
 
 DCPLUGIN_MAIN(__FILE__);
+
+static struct option getopt_long_options[] = {
+    { "min-ttl", 1, NULL, 't' },
+    { NULL, 0, NULL, 0 }
+};
+static const char *getopt_options = "t:";
 
 const char *
 dcplugin_description(DCPlugin * const dcplugin)
@@ -23,6 +30,9 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "This plugin implements a very basic DNS cache, designed to avoid\n"
         "sending the same queries multiple times in a row.\n"
         "\n"
+        "Plugin parameters:\n"
+        "--min-ttl=<ttl>: minimum time to keep an entry cached, in seconds.\n"
+        "\n"
         "Usage:\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
@@ -33,6 +43,8 @@ int
 dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
 {
     Cache *cache;
+    int    opt_flag;
+    int    option_index = 0;
 
     if ((cache = calloc((size_t) 1U, sizeof *cache)) == NULL) {
         return -1;
@@ -42,7 +54,21 @@ dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[])
     cache->min_ttl = DEFAULT_MIN_TTL;
     cache->now = (time_t) 0;
     dcplugin_set_user_data(dcplugin, cache);
-
+    optind = 0;
+#ifdef _OPTRESET
+    optreset = 1;
+#endif
+    while ((opt_flag = getopt_long(argc, argv,
+                                   getopt_options, getopt_long_options,
+                                   &option_index)) != -1) {
+        switch (opt_flag) {
+        case 't':
+            cache->min_ttl = atoi(optarg);
+            break;
+        default:
+            return -1;
+        }
+    }
     return 0;
 }
 
