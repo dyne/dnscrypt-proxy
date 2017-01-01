@@ -255,6 +255,9 @@ timeout_timer_cb(evutil_socket_t timeout_timer_handle, short ev_flags,
 #ifndef SO_SNDBUFFORCE
 # define SO_SNDBUFFORCE SO_SNDBUF
 #endif
+#ifndef IPTOS_DSCP_AF32
+# define IPTOS_DSCP_AF32 0x70
+#endif
 
 static void
 udp_tune(evutil_socket_t const handle)
@@ -275,6 +278,10 @@ udp_tune(evutil_socket_t const handle)
 #elif defined(IP_DONTFRAG)
     setsockopt(handle, IPPROTO_IP, IP_DONTFRAG,
                (void *) (int []) { 0 }, sizeof (int));
+#endif
+#ifdef IP_TOS
+    setsockopt(handle, IPPROTO_IP, IP_TOS,
+               (void *) (int []) { IPTOS_DSCP_AF32 }, sizeof (int));
 #endif
 }
 
