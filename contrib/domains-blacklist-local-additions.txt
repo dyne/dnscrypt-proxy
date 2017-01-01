@@ -21,3 +21,9 @@ tracker.*
 *.local
 *.localdomain
 *.workgroup
+
+# eth0.me is hardcoded in tools such as Archey, but is not available any
+# more, causing issues such as terminal sessions taking a long time to
+# start.
+
+eth0.me
