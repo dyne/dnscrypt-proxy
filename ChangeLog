@@ -1,3 +1,47 @@
+* Sun Jan 1 17:30:16 2017 +0100
+
+    generate-domains-blacklist.py: remove overlapping names
+
+* Sun Jan 1 15:23:42 2017 +0100
+
+    Include netinet/ip.h
+
+* Sun Jan 1 15:17:53 2017 +0100
+
+    Set the DSCP to AF32
+
+* Sun Jan 1 08:00:55 2017 +0100
+
+    Fix stupid pasto in util_ntohl()
+
+* Sun Jan 1 07:26:53 2017 +0100
+
+    Block eth0.me
+
+* Sun Jan 1 00:22:01 2017 +0100
+
+    Regen man pages
+
+* Sat Dec 31 23:35:10 2016 +0100
+
+    Fix string comparison after a previous iteration
+
+* Sat Dec 31 23:08:35 2016 +0100
+
+    Keep the frame pointers to get nicer backtraces on Windows
+
+* Sat Dec 31 23:07:04 2016 +0100
+
+    Actually run pkg-config and autoreconf
+
+* Sat Dec 31 22:27:05 2016 +0100
+
+    A short update to the NEWS file
+
+* Sat Dec 31 22:24:02 2016 +0100
+
+    Update ChangeLog
+
 * Sat Dec 31 22:23:42 2016 +0100
 
     Add the ability to specify the minimum TTL a record has to be cached
