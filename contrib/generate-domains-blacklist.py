@@ -7,6 +7,7 @@ import urllib2
 
 def parse_blacklist(content, trusted=False):
     rx_comment = re.compile(r'^(#|$)')
+    rx_inline_comment = re.compile(r'\s*#.*$')
     rx_u = re.compile(r'^@*\|\|([a-z0-9.-]+[.][a-z]{2,})\^?(\$(popup|third-party))?$')
     rx_l = re.compile(r'^([a-z0-9.-]+[.][a-z]{2,})$')
     rx_h = re.compile(r'^[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}\s+([a-z0-9.-]+[.][a-z]{2,})$')
@@ -22,6 +23,7 @@ def parse_blacklist(content, trusted=False):
         line = str.lower(str.strip(line))
         if rx_comment.match(line):
             continue
+        line = rx_inline_comment.sub('', line)
         for rx in rx_set:
             matches = rx.match(line)
             if not matches:
