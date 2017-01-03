@@ -94,21 +94,18 @@ def blacklists_from_config_file(file, whitelist):
                 continue
             url = line
             names = list_from_url(url)
-            filtered_names = set()
-            for name in names:
-                if not (has_suffix(whitelisted_names, name) or name in whitelisted_names):
-                    filtered_names.add(name)
-
-            blacklists[url] = filtered_names
-            all_names |= filtered_names
+            blacklists[url] = names
+            all_names |= names
 
     for url, names in blacklists.items():
         print("\n\n########## Blacklist from {} ##########\n".format(url))
-        ignored = 0
+        ignored, whitelisted = 0, 0
         list_names = list()
         for name in names:
             if has_suffix(all_names, name) or name in unique_names:
                 ignored = ignored + 1
+            elif has_suffix(whitelisted_names, name) or name in whitelisted_names:
+                whitelisted = whitelisted + 1
             else:
                 list_names.append(name)
                 unique_names.add(name)
@@ -116,6 +113,8 @@ def blacklists_from_config_file(file, whitelist):
         list_names.sort(key=name_cmp)
         if ignored:
             print("# Ignored duplicates: {}\n".format(ignored))
+        if whitelisted:
+            print("# Ignored entries due to the whitelist: {}\n".format(whitelisted))
         for name in list_names:
             print(name)
 
