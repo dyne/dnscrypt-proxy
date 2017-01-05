@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "fpst.h"
-
 typedef struct FPST {
     struct FPST *children;
     const char  *key;
@@ -13,6 +11,9 @@ typedef struct FPST {
     uint16_t     bitmap;
     uint32_t     val;
 } FPST;
+
+#define FPST_DEFINED 1
+#include "fpst.h"
 
 #ifdef __GNUC__
 # define popcount(X) ((unsigned int) __builtin_popcount(X))
