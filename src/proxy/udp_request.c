@@ -26,6 +26,7 @@
 #include "logger.h"
 #include "probes.h"
 #include "queue.h"
+#include "sandboxes.h"
 #include "tcp_request.h"
 #include "udp_request.h"
 #include "udp_request_p.h"
@@ -517,7 +518,7 @@ udp_listener_bind(ProxyContext * const proxy_context)
     evutil_make_socket_closeonexec(proxy_context->udp_listener_handle);
     evutil_make_socket_nonblocking(proxy_context->udp_listener_handle);
     udp_tune(proxy_context->udp_listener_handle);
-
+    attach_udp_dnsq_bpf(proxy_context->udp_listener_handle);
     if ((proxy_context->udp_proxy_resolver_handle = socket
          (proxy_context->resolver_sockaddr.ss_family, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
         logger_noformat(proxy_context, LOG_ERR,
