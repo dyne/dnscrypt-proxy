@@ -564,7 +564,9 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                                     LEV_OPT_CLOSE_ON_FREE |
                                     LEV_OPT_CLOSE_ON_EXEC |
                                     LEV_OPT_REUSEABLE |
+#ifndef NO_REUSEPORT
                                     LEV_OPT_REUSEABLE_PORT |
+#endif
                                     LEV_OPT_DEFERRED_ACCEPT,
                                     TCP_REQUEST_BACKLOG,
                                     (struct sockaddr *)

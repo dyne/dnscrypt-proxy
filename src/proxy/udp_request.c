@@ -500,7 +500,7 @@ udp_listener_bind(ProxyContext * const proxy_context)
                             "Unable to create a socket (UDP)");
             return -1;
         }
-#if defined(__linux__) && defined(SO_REUSEPORT)
+#if defined(__linux__) && defined(SO_REUSEPORT) && !defined(NO_REUSEPORT)
         setsockopt(proxy_context->udp_listener_handle, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
 #endif
         if (bind(proxy_context->udp_listener_handle,
