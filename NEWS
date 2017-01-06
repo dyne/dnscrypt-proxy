@@ -3,7 +3,7 @@
  - The blocking plugin introduced in version 1.9.0 didn't properly
 handle overlapping rules. This has been fixed.
  - The documentation and examples were updated.
- - The mimimum time to keep a record in cache can be specified in the
+ - The minimum time to keep a record in cache can be specified in the
 cache plugin, with the `--with-ttl` option (config file: `with-ttl:...`).
  - The example generate-domains-blacklist.py script produces a more
 optimized list, without overlapping names.
