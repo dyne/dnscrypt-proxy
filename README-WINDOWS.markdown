@@ -276,7 +276,7 @@ Explanation for registry value:
                         Value must be 1 or 0.
                         Equal to `ephemeral-keys` parameter.
     IgnoreTimestamps  : Value must be 1 or 0.
-                        Equal to `ignore-timestamps` parameter.
+                        Equal to `ignore-timestamps` parameter. Do not enable blindly.
     ClientKeyFile     : Your own DNSCrypt key.
                         Equal to `client-key` parameter.
     LogFile           : Log file for DNSCrypt-Proxy.
