@@ -224,22 +224,73 @@ Startup options can specified as subkeys from a registry key:
 By default, the service is named `dnscrypt-proxy`, but this can be changed
 with the `--service-name` command-line switch when installing the service.
 
-The following subkeys are recognized and should be self-explanatory:
+The following registry value are recognized:
 
-    ConfigFile        (REG_SZ)
-    Plugins           (REG_MULTI_SZ)
-    LocalAddress      (REG_SZ)
-    ProviderKey       (REG_SZ)
-    ProviderName      (REG_SZ)
-    ResolverAddress   (REG_SZ)
-    ResolverName      (REG_SZ)
-    ResolversList     (REG_SZ)
-    LogFile           (REG_SZ)
-    EDNSPayloadSize   (DWORD)
-    MaxActiveRequests (DWORD)
-    TCPOnly           (DWORD)
-    ClientKeyFile     (REG_SZ)
-    EphemeralKeys     (DWORD)
+Registry Value    | Type
+----------------- | --------------
+ConfigFile        | REG_SZ
+ResolversList     | REG_SZ
+ResolverName      | REG_SZ
+LocalAddress      | REG_SZ
+ProviderKey       | REG_SZ
+ProviderName      | REG_SZ
+ResolverAddress   | REG_SZ
+EDNSPayloadSize   | REG_DWORD
+MaxActiveRequests | REG_DWORD
+TCPOnly           | REG_DWORD
+EphemeralKeys     | REG_DWORD
+IgnoreTimestamps  | REG_DWORD
+ClientKeyFile     | REG_SZ
+LogFile           | REG_SZ
+LogLevel          | REG_DWORD
+Plugins           | REG_MULTI_SZ
+
+Explanation for registry value:
+
+    ResolversList     : Full path to the `dnscrypt-resolvers.csv` file.
+                        Equal to `resolvers-list` parameter.
+    ResolverName      : Resolver name in `dnscrypt-resolvers.csv` file.
+                        Look for `Name` header in `dnscrypt-resolvers.csv` file.
+                        Equal to `resolver-name` parameter.
+    LocalAddress      : IP Address where DNSCrypt-Proxy listen for DNS request.
+                        Equal to `local-address` parameter.
+    ProviderKey       : DNS server key.
+                        Look for `Provider public key` header in `dnscrypt-resolvers.csv` file.
+                        Equal to `provider-key` parameter.
+    ProviderName      : DNS server name.
+                        Look for `Provider name` header in `dnscrypt-resolvers.csv` file.
+                        Equal to `provider-name` parameter.
+    ResolverAddress   : DNS server IP.
+                        Look for `Resolver address` header in `dnscrypt-resolvers.csv` file.
+                        Equal to `resolver-address` parameter.
+    EDNSPayloadSize   : EDNS size.
+                        Value must be between 1 and 65535.
+                        Equal to `edns-payload-size` parameter.
+    MaxActiveRequests : Maximum DNS request from client can be process by DNSCrypt-Proxy.
+                        Value must be greater than or equal to 1.
+                        Equal to `max-active-requests` parameter.
+    TCPOnly           : Send DNS request into DNS server using UDP and/or TCP or it just TCP.
+                        Value must be 1 or 0.
+                        Equal to `tcp-only` parameter.
+    EphemeralKeys     : Key seed for DNSCrypt-Proxy.
+                        Value must be 1 or 0.
+                        Equal to `ephemeral-keys` parameter.
+    IgnoreTimestamps  : Value must be 1 or 0.
+                        Equal to `ignore-timestamps` parameter.
+    ClientKeyFile     : Your own DNSCrypt key.
+                        Equal to `client-key` parameter.
+    LogFile           : Log file for DNSCrypt-Proxy.
+                        Equal to `logfile` parameter.
+    LogLevel          : Maximum info level for DNSCrypt-Proxy log.
+                        Equal to `loglevel` parameter.
+    Plugins           : Plugin loaded by DNSCrypt-Proxy.
+                        Equal to `plugin` parameter.
+
+Plugins Example (INF):
+
+````
+HKLM,"SYSTEM\CurrentControlSet\services\dnscrypt-proxy\Parameters",0x10000,"C:\Program Files\DNSCrypt\libdcplugin_example_ldns_blocking.dll,--domains=C:\Program Files\DNSCrypt\Names.txt,--ips=C:\Program Files\DNSCrypt\IPs.txt,--logfile=C:\DNSCrypt-Block.log"
+````
 
 For example, in order to listen to local address that is not the default
 `127.0.0.1`, the key to put the custom IP address is
