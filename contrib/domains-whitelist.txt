@@ -3,4 +3,5 @@ appsflyer.com
 cdnetworks.com
 edgekey.net
 ovh.net
+spotify.com
 tagcommander.com
