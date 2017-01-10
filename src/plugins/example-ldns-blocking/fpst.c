@@ -141,7 +141,7 @@ fpst_insert(FPST *trie, const char *key, size_t len, uint32_t val)
     for (;;) {
         lk = t->key;
         x = 0U;
-        for (; j < len; j++) {
+        for (; j <= len; j++) {
             x = ((unsigned char) lk[j]) ^ ((unsigned char) key[j]);
             if (x != 0U) {
                 break;
