@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+# run with python generate-domains-blacklist.py > list.txt.tmp && mv -f list.txt.tmp list
+
 import argparse
 import re
 import sys
