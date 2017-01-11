@@ -57,7 +57,17 @@ crypto_box_detached_afternm(unsigned char *c, unsigned char *mac,
                             const unsigned char *m, unsigned long long mlen,
                             const unsigned char *n, const unsigned char *k)
 {
-    return crypto_secretbox_detached(c, mac, m, mlen, n, k);
+    unsigned char tmp[65536];
+
+    if (mlen > sizeof tmp) {
+        return -1;
+    }
+    if (crypto_secretbox_detached(tmp, mac, m, mlen, n, k) != 0) {
+        return -1;
+    }
+    memcpy(c, tmp, mlen);
+
+    return 0;
 }
 
 static int
@@ -79,7 +89,17 @@ crypto_box_open_detached_afternm(unsigned char *m, const unsigned char *c,
                                  const unsigned char *n,
                                  const unsigned char *k)
 {
-    return crypto_secretbox_open_detached(m, c, mac, clen, n, k);
+    unsigned char tmp[65536];
+
+    if (clen > sizeof tmp) {
+        return -1;
+    }
+    if (crypto_secretbox_open_detached(tmp, c, mac, clen, n, k) != 0) {
+        return -1;
+    }
+    memcpy(m, tmp, clen);
+
+    return 0;
 }
 
 static int
