@@ -2,6 +2,7 @@ amazon.com
 appsflyer.com
 cdnetworks.com
 edgekey.net
+elasticbeanstalk.com
 ovh.net
 spotify.com
 tagcommander.com
