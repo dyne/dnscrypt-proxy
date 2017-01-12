@@ -4,5 +4,7 @@ cdnetworks.com
 edgekey.net
 elasticbeanstalk.com
 ovh.net
+pusher.com
+pusherapp.com
 spotify.com
 tagcommander.com
