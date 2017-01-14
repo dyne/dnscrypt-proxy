@@ -8,6 +8,7 @@
 #include "simpleconf.h"
 
 #define MAX_ARG_LENGTH 65536
+#define MAX_RECURSION  16
 
 typedef enum State_ {
     STATE_UNDEFINED,
@@ -528,7 +529,8 @@ static int
 append_to_command_line_from_file(const char *file_name,
                                  const SimpleConfEntry entries[],
                                  size_t entries_count,
-                                 int *argc_p, char ***argv_p)
+                                 int *argc_p, char ***argv_p,
+                                 unsigned int depth)
 {
     char          line[MAX_ARG_LENGTH];
     FILE         *fp = NULL;
@@ -540,6 +542,10 @@ append_to_command_line_from_file(const char *file_name,
     unsigned int  line_count = 0;
     int           try_next   = 1;
 
+    if (depth >= MAX_RECURSION) {
+        fprintf(stderr, "[%s]: too many levels of recursion\n", file_name);
+        return -1;
+    }
     if ((fp = fopen(file_name, "r")) == NULL) {
         fprintf(stderr, "Unable to open [%s]: %s\n", file_name, strerror(errno));
         return -1;
@@ -599,6 +605,14 @@ append_to_command_line_from_file(const char *file_name,
                 break;
             case ENTRYRESULT_SPECIAL:
                 try_next = 0;
+                if (append_to_command_line_from_file(arg, entries,
+                                                     entries_count,
+                                                     argc_p, argv_p,
+                                                     depth + 1U) != 0) {
+                    free(arg);
+                    fclose(fp);
+                    return -1;
+                }
                 free(arg);
                 break;
             default:
@@ -644,7 +658,7 @@ sc_build_command_line_from_file(const char *file_name,
     }
     argv[argc++] = app_name;
     if (append_to_command_line_from_file(file_name, entries, entries_count,
-                                         &argc, &argv) != 0) {
+                                         &argc, &argv, 0U) != 0) {
         sc_argv_free(argc, argv);
         return -1;
     }

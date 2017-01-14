@@ -11,6 +11,7 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"EDNSPayloadSize (<digits>)",   "--edns-payload-size=$0"},
     {"EphemeralKeys? <bool>",        "--ephemeral-keys"},
     {"IgnoreTimestamps? <bool>",     "--ignore-timestamps"},
+    {"!Include (<any*>)",            "$0"},
     {"LocalAddress (<nospace>)",     "--local-address=$0"},
     {"LogFile (<any*>)",             "--logfile=$0"},
     {"LogLevel (<digits>)",          "--loglevel=$0"},
