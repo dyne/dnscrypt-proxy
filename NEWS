@@ -20,6 +20,8 @@ to drop invalid DNS queries right away.
  - The `NO_REUSEPORT` preprocessor macro can be defined in order to avoid
 enabling `SO_REUSEPORT` on older linux-sunxi kernels.
  - The package can be compiled on Debian 6.
+ - `--version` now reports useful information about the way the server was
+compiled.
 
 * Version 1.9.1
  - The blocking plugin introduced in version 1.9.0 didn't properly

@@ -26,6 +26,7 @@
 #include "logger.h"
 #include "minicsv.h"
 #include "pid_file.h"
+#include "shims.h"
 #include "simpleconf.h"
 #include "simpleconf_dnscrypt.h"
 #include "utils.h"
@@ -88,6 +89,29 @@ static void
 options_version(void)
 {
     puts(PACKAGE_STRING);
+    puts("");
+    printf("Compilation date: %s\n", __DATE__);
+#ifdef PLUGINS
+    puts("Support for plugins: present");
+#endif
+#ifdef PLUGINS_ROOT
+    printf("Plugins root directory: [%s]\n", PLUGINS_ROOT);
+#endif
+#ifdef ENABLE_PLUGINS_ROOT
+    puts("Plugins restricted to the default plugins directory: yes");
+#endif
+#ifdef RELAXED_PLUGINS_PERMISSIONS
+    puts("Relaxed plugins permissions: yes");
+#endif
+#ifdef USE_LDNS
+    puts("Support for ldns-based plugins: present");
+#endif
+#ifdef HAVE_LIBSYSTEMD
+    puts("Support for systemd socket activation: present");
+#endif
+#ifdef HAVE_XCHACHA20
+    puts("Support for the XChaCha20-Poly1305 cipher: present");
+#endif
 }
 
 static void
