@@ -1,3 +1,15 @@
+* Sun Jan 15 18:55:28 2017 +0100
+
+    Do not include <sys/socket.h> on WIN32
+
+* Sun Jan 15 18:23:42 2017 +0100
+
+    --version now reports useful information about how the server was compiled
+
+* Sun Jan 15 18:11:08 2017 +0100
+
+    Update ChangeLog
+
 * Sun Jan 15 17:51:10 2017 +0100
 
     Remove the fpm package
