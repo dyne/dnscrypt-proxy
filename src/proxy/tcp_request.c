@@ -10,6 +10,7 @@
 #endif
 
 #include <assert.h>
+#include <errno.h>
 #include <limits.h>
 #include <signal.h>
 #include <stdint.h>
@@ -586,7 +587,9 @@ tcp_listener_bind(ProxyContext * const proxy_context)
                                proxy_context->tcp_listener_handle);
     }
     if (proxy_context->tcp_conn_listener == NULL) {
-        logger_noformat(proxy_context, LOG_ERR, "Unable to bind (TCP)");
+        logger(proxy_context, LOG_ERR, "Unable to bind (TCP): [%s]",
+               evutil_socket_error_to_string(evutil_socket_geterror(
+                   proxy_context->tcp_listener_handle)));
         return -1;
     }
 #ifdef TCP_FASTOPEN
