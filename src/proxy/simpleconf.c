@@ -623,18 +623,15 @@ append_to_command_line_from_file(const char *file_name,
                     fclose(fp);
                     return -1;
                 } else if (special_result == SC_SPECIAL_HANDLER_RESULT_INCLUDE) {
-                    if (append_to_command_line_from_file((const char *) output,
-                                                         config,
-                                                         entries, entries_count,
-                                                         argc_p, argv_p,
-                                                         depth + 1U) != 0) {
-                        free(output);
-                        free(arg);
+                    const int ret = append_to_command_line_from_file
+                        ((const char *) output, config, entries, entries_count,
+                         argc_p, argv_p, depth + 1U);
+                    free(output);
+                    free(arg);
+                    if (ret != 0) {
                         fclose(fp);
                         return -1;
                     }
-                    free(output);
-                    free(arg);
                     break;
                 }
                 abort();
