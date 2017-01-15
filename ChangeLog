@@ -1,3 +1,13 @@
+* Sun Jan 15 17:51:10 2017 +0100
+
+    Remove the fpm package
+    
+    fpm is awesome, but apparently, nobody's using this script.
+
+* Sun Jan 15 17:42:07 2017 +0100
+
+    Prepare for version 1.9.2
+
 * Sun Jan 15 17:19:09 2017 +0100
 
     Fix KX when using xchacha20poly1305 and non-ephemeral keys
