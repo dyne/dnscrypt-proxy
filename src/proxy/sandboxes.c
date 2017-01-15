@@ -1,8 +1,10 @@
 
 #include <config.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/time.h>
+#ifndef _WIN32
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <sys/time.h>
+#endif
 
 #ifdef HAVE_SANDBOX_H
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
