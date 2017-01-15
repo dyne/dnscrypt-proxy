@@ -527,6 +527,7 @@ sc_argv_free(int argc, char *argv[])
 
 static int
 append_to_command_line_from_file(const char *file_name,
+                                 const SimpleConfConfig *config,
                                  const SimpleConfEntry entries[],
                                  size_t entries_count,
                                  int *argc_p, char ***argv_p,
@@ -603,18 +604,41 @@ append_to_command_line_from_file(const char *file_name,
                 *argv_p = argv_tmp;
                 (*argv_p)[(*argc_p)++] = arg;
                 break;
-            case ENTRYRESULT_SPECIAL:
+            case ENTRYRESULT_SPECIAL: {
+                char                           *output = NULL;
+                SimpleConfSpecialHandlerResult  special_result;
+
                 try_next = 0;
-                if (append_to_command_line_from_file(arg, entries,
-                                                     entries_count,
-                                                     argc_p, argv_p,
-                                                     depth + 1U) != 0) {
+                if (config == NULL || config->special_handler == NULL) {
+                    fprintf(stderr, "Undefined handler for special keywords\n");
+                    abort();
+                }
+                special_result = config->special_handler((void **) &output, arg,
+                                                         config->user_data);
+                if (special_result == SC_SPECIAL_HANDLER_RESULT_NEXT) {
+                    free(arg);
+                    break;
+                } else if (special_result == SC_SPECIAL_HANDLER_RESULT_ERROR) {
                     free(arg);
                     fclose(fp);
                     return -1;
+                } else if (special_result == SC_SPECIAL_HANDLER_RESULT_INCLUDE) {
+                    if (append_to_command_line_from_file((const char *) output,
+                                                         config,
+                                                         entries, entries_count,
+                                                         argc_p, argv_p,
+                                                         depth + 1U) != 0) {
+                        free(output);
+                        free(arg);
+                        fclose(fp);
+                        return -1;
+                    }
+                    free(output);
+                    free(arg);
+                    break;
                 }
-                free(arg);
-                break;
+                abort();
+            }
             default:
                 abort();
             }
@@ -642,6 +666,7 @@ append_to_command_line_from_file(const char *file_name,
 
 int
 sc_build_command_line_from_file(const char *file_name,
+                                const SimpleConfConfig *config,
                                 const SimpleConfEntry entries[],
                                 size_t entries_count, char *app_name,
                                 int *argc_p, char ***argv_p)
@@ -657,7 +682,8 @@ sc_build_command_line_from_file(const char *file_name,
         return -1;
     }
     argv[argc++] = app_name;
-    if (append_to_command_line_from_file(file_name, entries, entries_count,
+    if (append_to_command_line_from_file(file_name, config,
+                                         entries, entries_count,
                                          &argc, &argv, 0U) != 0) {
         sc_argv_free(argc, argv);
         return -1;

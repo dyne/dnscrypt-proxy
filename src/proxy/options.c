@@ -513,20 +513,38 @@ options_apply(ProxyContext * const proxy_context)
     return 0;
 }
 
+static SimpleConfSpecialHandlerResult
+simpleconf_special_handler(void **output, const char *arg, void *user_data)
+{
+    char *file_name;
+
+    if ((file_name = strdup(arg)) == NULL) {
+        logger((ProxyContext *) user_data, LOG_EMERG, "Out of memory");
+        exit(1);
+    }
+    *output = (void *) file_name;
+
+    return SC_SPECIAL_HANDLER_RESULT_INCLUDE;
+}
+
 int
 options_parse(AppContext * const app_context,
               ProxyContext * const proxy_context, int *argc_p, char ***argv_p)
 {
-    const char *service_config_file = NULL;
-    int         opt_flag;
-    int         option_index = 0;
+    SimpleConfConfig  simpleconf_config = {
+        proxy_context, simpleconf_special_handler
+    };
+    const char       *service_config_file = NULL;
+    int               opt_flag;
+    int               option_index = 0;
 #ifdef _WIN32
-    _Bool       option_install = 0;
+    _Bool             option_install = 0;
 #endif
 
     options_init_with_default(app_context, proxy_context);
     if (*argc_p == 2 && *(*argv_p)[1] != '-') {
-        if (sc_build_command_line_from_file((*argv_p)[1], simpleconf_options,
+        if (sc_build_command_line_from_file((*argv_p)[1], &simpleconf_config,
+                                            simpleconf_options,
                                             (sizeof simpleconf_options) /
                                             (sizeof simpleconf_options[0]),
                                             *(argv_p)[0], argc_p, argv_p) != 0) {
