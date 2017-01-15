@@ -11,7 +11,6 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"EDNSPayloadSize (<digits>)",   "--edns-payload-size=$0"},
     {"EphemeralKeys? <bool>",        "--ephemeral-keys"},
     {"IgnoreTimestamps? <bool>",     "--ignore-timestamps"},
-    {"!Include (<any*>)",            "$0"},
     {"LocalAddress (<nospace>)",     "--local-address=$0"},
     {"LogFile (<any*>)",             "--logfile=$0"},
     {"LogLevel (<digits>)",          "--loglevel=$0"},
@@ -40,7 +39,9 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"LocalCache? <bool>",           "--plugin=" PLUGIN_LIB("cache") },
     {"OpenDNSIP (<nospace>)",        "--plugin=" PLUGIN_LIB("ldns_opendns_set_client_ip") ",$0" },
     {"OpenDNSPasswordFile (<any*>)", "--plugin=" PLUGIN_LIB("ldns_opendns_deviceid") ",$0" },
-    {"Plugin (<any_noquotes>)",      "--plugin=$0" }
+    {"Plugin (<any_noquotes>)",      "--plugin=$0" },
+
+    {"!Include (<any*>)",            "$0"}
 };
 
 #endif
