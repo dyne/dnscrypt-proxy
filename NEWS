@@ -1,4 +1,26 @@
 
+* Version 1.9.2
+ - Compatibility with ancient libsodium versions (1.0.0, as still shipped
+in Debian Jessie) has been restored.
+ - With newer libsodium versions, the XChaCha20-Poly1305 can now actually
+be used on servers supporting this construction.
+ - The configuration file can now recursively include other configuration
+files, with the `Include` keyword.
+ - Error messages were improved.
+ - The generate-domains-blacklist.py script now supports whitelists in
+addition to blacklists, and provides more example feeds.
+ - The blocking plugin sometimes didn't match overlapping rules. This should
+have been fixed for good.
+ - The `IgnoreTimestamps` and `LogLevel` options can now be controlled using
+Windows registry keys.
+ - Log error messages whose level is lower than `LOG_NOTICE` now go to
+`stderr` instead of `stdout`.
+ - On Linux, a BPF filter is attached to the client-side UDP socket in order
+to drop invalid DNS queries right away.
+ - The `NO_REUSEPORT` preprocessor macro can be defined in order to avoid
+enabling `SO_REUSEPORT` on older linux-sunxi kernels.
+ - The package can be compiled on Debian 6.
+
 * Version 1.9.1
  - The blocking plugin introduced in version 1.9.0 didn't properly
 handle overlapping rules. This has been fixed.
