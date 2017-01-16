@@ -94,7 +94,7 @@ options_version(void)
 #ifdef PLUGINS
     puts("Support for plugins: present");
 #endif
-#ifdef PLUGINS_ROOT
+#if defined(PLUGINS_ROOT) && !defined(_WIN32)
     printf("Plugins root directory: [%s]\n", PLUGINS_ROOT);
 #endif
 #ifdef ENABLE_PLUGINS_ROOT
