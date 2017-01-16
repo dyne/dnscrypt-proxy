@@ -3,7 +3,7 @@
 [![DNSCrypt](https://raw.github.com/jedisct1/dnscrypt-proxy/master/dnscrypt-small.png)](https://dnscrypt.org)
 ============
 
-DNScrypt is a protocol for securing communications between a client
+DNSCrypt is a protocol for securing communications between a client
 and a DNS resolver, using high-speed high-security elliptic-curve
 cryptography.
 
