@@ -36,13 +36,14 @@ dist_pkgdata_DATA = \
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
 	if [ ! -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf ]; then \
+		$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf.example; \
+	else \
 		$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; \
-	fi; \
-	$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf.example
+	fi
 
 uninstall-local:
 	if cmp -s $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf $(srcdir)/dnscrypt-proxy.conf; then \
-		echo "$(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf is not changed and will be removed."; \
+		echo "$(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf has not changed and will be removed."; \
 		rm -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; \
 	fi; \
 	rm -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf.example
