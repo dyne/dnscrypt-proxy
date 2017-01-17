@@ -5,7 +5,7 @@ set -e
 cd /workdir
 
 apk --update upgrade
-apk add alpine-sdk
+apk add build-base
 apk add coreutils
 apk add ldns-dev
 
