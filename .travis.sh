@@ -14,7 +14,7 @@ cd libsodium
 make clean
 make -j$(nproc) check
 make -j$(nproc) install ||:
-/sbin/ldconfig
+/sbin/ldconfig ||:
 
 cd ..
 ./configure --disable-dependency-tracking --enable-debug
