@@ -8,11 +8,12 @@ os:
 compiler:
  - gcc
 
-before_script:
- - apt install libldns-dev
+before_install:
+ - sudo apt-get install -y libldns-dev
  - git clone https://github.com/jedisct1/libsodium.git --branch=stable
  - ./autogen.sh
  - docker pull multiarch/crossbuild
+ - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
   - docker run --rm -v $(pwd):/workdir                                       multiarch/crossbuild ./travis.sh
