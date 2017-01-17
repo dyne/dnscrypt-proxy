@@ -39,7 +39,7 @@ static const SimpleConfEntry simpleconf_options[] = {
     {"LocalCache? <bool>",                                    "--plugin=" PLUGIN_LIB("cache") },
     {"OpenDNSIP (<nospace>)",                                 "--plugin=" PLUGIN_LIB("ldns_opendns_set_client_ip") ",$0" },
     {"OpenDNSPasswordFile (<any*>)",                          "--plugin=" PLUGIN_LIB("ldns_opendns_deviceid") ",$0" },
-    {"Plugin (<any_noquotes>)",                               "--plugin=$0" },
+    {"Plugin (<any*>)",                                       "--plugin=$0" },
 
     {"!Include (<any*>)",                                     "$0"}
 };
