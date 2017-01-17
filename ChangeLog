@@ -1,3 +1,73 @@
+* Tue Jan 17 21:50:02 2017 +0100
+
+    Travis: actually try to install the proxy
+
+* Tue Jan 17 21:41:29 2017 +0100
+
+    Fix the Plugin directive in config files; add a CI test for it as well
+
+* Tue Jan 17 20:00:22 2017 +0100
+
+    Ignore ldconfig errors
+
+* Tue Jan 17 19:52:50 2017 +0100
+
+    Restore -e, ignore make install errors
+
+* Tue Jan 17 15:33:24 2017 +0100
+
+    Switch Travis builds to multiarch/alpine
+
+* Tue Jan 17 15:30:38 2017 +0100
+
+    Update NEWS
+
+* Tue Jan 17 15:27:01 2017 +0100
+
+    apt is not present on Travis
+
+* Tue Jan 17 15:22:04 2017 +0100
+
+    Travis: try to compile for multiple Linux architectures
+
+* Tue Jan 17 12:34:37 2017 +0100
+
+    If binding a TCP socket with SO_REUSEPORT fails, retry without it
+    
+    This is required at least on alpine/armhf
+
+* Tue Jan 17 12:09:45 2017 +0100
+
+    Check for linux/filter.h presence -- Allows compilation on musl libc
+
+* Tue Jan 17 01:37:11 2017 +0100
+
+    Mention that the Include path does not require quotes
+
+* Tue Jan 17 01:18:10 2017 +0100
+
+    --with-ttl was renamed --min-ttl
+
+* Tue Jan 17 00:38:42 2017 +0100
+
+    Fix casing
+
+* Mon Jan 16 23:52:20 2017 +0100
+
+    Do not print the plugins root directory on Windows
+
+* Mon Jan 16 20:01:34 2017 +0100
+
+    It's called "tracker.debian.org", but it's not a tracker
+
+* Mon Jan 16 14:10:30 2017 +0100
+
+    Do not install dnscrypt-proxy.conf.example if no dnscrypt-proxy.conf file exists
+
+* Sun Jan 15 18:56:07 2017 +0100
+
+    Update ChangeLog
+
 * Sun Jan 15 18:55:28 2017 +0100
 
     Do not include <sys/socket.h> on WIN32
