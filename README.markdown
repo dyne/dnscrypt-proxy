@@ -28,7 +28,7 @@ dnscrypt-proxy can be downloaded here:
 
 Signatures can be verified with [Minisign](https://jedisct1.github.io/minisign/):
 
-    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.9.2.tar.bz2
+    $ minisign -VP RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3 -m dnscrypt-proxy-1.9.3.tar.bz2
 
 Plugins
 -------
