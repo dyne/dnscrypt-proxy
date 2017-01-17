@@ -20,8 +20,9 @@ cd ..
 ./configure --disable-dependency-tracking --enable-debug
 make clean
 make -j$(nproc) check
+make -j$(nproc) install
 
-dnscrypt-proxy -t 900 -R dnscrypt.org-fr \
+/usr/local/sbin/dnscrypt-proxy -t 900 -R dnscrypt.org-fr \
   --plugin=libdcplugin_example.so \
   --plugin=libdcplugin_example_cache.so \
   --plugin=/usr/local/lib/dnscrypt-proxy/libdcplugin_example_ldns_aaaa_blocking.so
@@ -32,4 +33,4 @@ echo 'BlockIPv6 yes' >> /tmp/dnscrypt-proxy.conf
 echo 'Plugin libdcplugin_example.so' >> /tmp/dnscrypt-proxy.conf
 echo 'Test 900' >> /tmp/dnscrypt-proxy.conf
 
-dnscrypt-proxy /tmp/dnscrypt-proxy.conf
+/usr/local/sbin/dnscrypt-proxy /tmp/dnscrypt-proxy.conf
