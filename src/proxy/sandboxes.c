@@ -33,7 +33,7 @@ sandboxes_pidproc(void)
     return 0;
 }
 
-#if defined(SO_ATTACH_FILTER) && defined(__linux__)
+#if defined(SO_ATTACH_FILTER) && defined(HAVE_LINUX_FILTER_H)
 # include <linux/filter.h>
 
 /*
