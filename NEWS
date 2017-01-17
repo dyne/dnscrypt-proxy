@@ -1,4 +1,8 @@
 
+* Version 1.9.3
+ - This version can be compiled on Linux distributions using the musl C
+library.
+
 * Version 1.9.2
  - Compatibility with ancient libsodium versions (1.0.0, as still shipped
 in Debian Jessie) has been restored.
