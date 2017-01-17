@@ -1,9 +1,10 @@
+dist: trusty
 sudo: required
 
 language: c
 
-os:
- - linux
+services:
+  - docker
 
 compiler:
  - gcc
@@ -12,20 +13,12 @@ before_install:
  - sudo apt-get install -y libldns-dev
  - git clone https://github.com/jedisct1/libsodium.git --branch=stable
  - ./autogen.sh
- - docker pull multiarch/crossbuild
  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
-  - docker run --rm -v $(pwd):/workdir                                       multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=arm-linux-gnueabi     multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=arm-linux-gnueabihf   multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=powerpc64le-linux-gnu multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=aarch64-linux-gnu     multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=mipsel-linux-gnu      multiarch/crossbuild ./travis.sh  
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=i386-apple-darwin     multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=x86_64-apple-darwin   multiarch/crossbuild ./travis.sh  
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=i686-w64-mingw32      multiarch/crossbuild ./travis.sh
-  - docker run --rm -v $(pwd):/workdir -e CROSS_TRIPLE=x86_64-w64-mingw32    multiarch/crossbuild ./travis.sh  
+ - docker run --rm -v $(pwd):/workdir multiarch/alpine:x86-edge   /workdir/.travis.sh
+ - docker run --rm -v $(pwd):/workdir multiarch/alpine:armhf-edge /workdir/.travis.sh
+ - docker run --rm -v $(pwd):/workdir multiarch/alpine:x86_64-edge /workdir/.travis.sh
 
 matrix:
  - fast_finish: true
