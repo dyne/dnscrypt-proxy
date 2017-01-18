@@ -117,7 +117,7 @@ AS_IF([test "x$with_systemd" = "xyes"], [
   ])
   AS_CASE([$with_systemd:$have_systemd],
     [yes:no],
-      [AC_MSG_ERROR([systemd expected but libsystemd not found])],
+      [AC_MSG_ERROR([systemd expected but libsystemd not found -- maybe you need to install the pkg-config and libsystemd-dev packages])],
     [*:yes],
        AC_DEFINE([HAVE_LIBSYSTEMD], [1], [Define if libsystemd is available])
   )
