@@ -2,6 +2,9 @@
 * Version 1.9.3
  - This version can be compiled on Linux distributions using the musl C
 library.
+ - Version 1.9.3 also restores compatibility with ancient Linux kernels that
+didn't support `SO_REUSEPORT`, without having to explicitly compile the package
+with `NO_REUSEPORT`.
 
 * Version 1.9.2
  - Compatibility with ancient libsodium versions (1.0.0, as still shipped
