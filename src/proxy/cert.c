@@ -421,8 +421,9 @@ cert_query_cb(int result, char type, int count, int ttl,
         }
         if (now_u32 < ts_begin || now_u32 > safe_end) {
             logger(proxy_context, LOG_WARNING,
-                   "The certificate is not valid for the given safety margin (%lu not within [%lu..%lu])",
-                   (unsigned long) now_u32, (unsigned long) ts_begin, (unsigned long) safe_end);
+                   "The certificate is not valid for the given safety margin (%lu-%lu not within [%lu..%lu])",
+                   (unsigned long) now_u32, (unsigned long) proxy_context->test_cert_margin,
+                   (unsigned long) ts_begin, (unsigned long) safe_end);
             DNSCRYPT_PROXY_CERTS_UPDATE_ERROR_NOCERTS();
             exit(DNSCRYPT_EXIT_CERT_MARGIN);
         }
