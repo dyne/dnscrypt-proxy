@@ -16,6 +16,13 @@
 #include <time.h>
 #include <unistd.h>
 
+#if defined(__linux__) && defined(HAVE_LINUX_RANDOM_H)
+# include <sys/ioctl.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <linux/random.h>
+#endif
+
 #include <event2/event.h>
 #include <event2/util.h>
 
@@ -332,6 +339,29 @@ sighup_cb(evutil_socket_t sig, short events, void *fodder)
 }
 #endif
 
+static void
+entropy_check(void)
+{
+#if defined(__linux__) && defined(HAVE_LINUX_RANDOM_H) && defined(RNDGETENTCNT)
+    int fd;
+    int c;
+
+    if ((fd = open("/dev/random", O_RDONLY)) != -1) {
+        if (ioctl(fd, RNDGETENTCNT, &c) == 0 && c < 160) {
+            logger(NULL, LOG_WARNING,
+                   "This system doesn't provide enough entropy to quickly generate high-quality random numbers");
+            logger(NULL, LOG_WARNING,
+                   "Installing the rng-utils/rng-tools or haveged packages may help.");
+            logger(NULL, LOG_WARNING,
+                   "On virtualized Linux environments, also consider using virtio-rng.");
+            logger(NULL, LOG_WARNING,
+                   "The service will not start until enough entropy has been collected.");
+        }
+        close(fd);
+    }
+#endif
+}
+
 int
 dnscrypt_proxy_main(int argc, char *argv[])
 {
@@ -344,6 +374,7 @@ dnscrypt_proxy_main(int argc, char *argv[])
 
     setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
     stack_trace_on_crash();
+    entropy_check();
     if (sodium_init() != 0) {
         exit(1);
     }
