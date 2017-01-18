@@ -5,6 +5,8 @@ library.
  - Version 1.9.3 also restores compatibility with ancient Linux kernels that
 didn't support `SO_REUSEPORT`, without having to explicitly compile the package
 with `NO_REUSEPORT`.
+ - On Linux, the service now prints when the system doesn't have enough entropy
+to initialize the PRNG.
 
 * Version 1.9.2
  - Compatibility with ancient libsodium versions (1.0.0, as still shipped

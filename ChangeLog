@@ -1,3 +1,43 @@
+* Wed Jan 18 08:46:40 2017 +0100
+
+    On Linux, warn when we are running low on entropy
+
+* Wed Jan 18 08:18:57 2017 +0100
+
+    Print even more details in test mode
+
+* Wed Jan 18 08:15:48 2017 +0100
+
+    Improve the test mode output and print the validity period
+
+* Wed Jan 18 03:15:58 2017 +0100
+
+    Travis: increase the margin for the certificate check
+
+* Wed Jan 18 03:15:46 2017 +0100
+
+    Recommend installing pkg-config and libsystemd-dev for systemd
+
+* Wed Jan 18 01:59:11 2017 +0100
+
+    Mention that NO_REUSEPORT is not required any more
+
+* Tue Jan 17 22:48:18 2017 +0100
+
+    build-base should be enough to build the package
+
+* Tue Jan 17 22:40:38 2017 +0100
+
+    d0wn-us-ns3 and soltysiak-ipv6 are temporarily down
+
+* Tue Jan 17 22:37:45 2017 +0100
+
+    1.9.3
+
+* Tue Jan 17 22:34:53 2017 +0100
+
+    Update ChangeLog
+
 * Tue Jan 17 21:50:02 2017 +0100
 
     Travis: actually try to install the proxy
