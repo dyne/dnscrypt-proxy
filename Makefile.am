@@ -66,7 +66,8 @@ install-data-local:
 		if cmp -s $(srcdir)/dnscrypt-proxy.conf $(docdir)/dnscrypt-proxy.conf; then \
 			echo "Configuration file unchanged"; \
 		else \
-			echo "The example configuration file [$(docdir)/dnscrypt-proxy.conf] has been updated, you may want to compare it with the one at [$(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf]"; \
+			echo "The example configuration file [$(docdir)/dnscrypt-proxy.conf] has been updated."; \
+			echo "You may want to compare it with the one at [$(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf]."; \
 		fi; \
 	else \
 		$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; \
