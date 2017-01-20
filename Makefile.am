@@ -67,6 +67,7 @@ org.dnscrypt.osx.DNSCryptProxy.plist: org.dnscrypt.osx.DNSCryptProxy.plist.in
 
 CLEANFILES = \
 	dnscrypt-proxy.service \
+	dnscrypt-update-resolvers.sh \
 	org.dnscrypt.osx.DNSCryptProxy.plist
 
 install-data-local:
