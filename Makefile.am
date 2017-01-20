@@ -35,7 +35,7 @@ dist_pkgdata_DATA = \
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
-	if [ ! -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf ]; then \
+	if [ -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf ]; then \
 		$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf.example; \
 	else \
 		$(INSTALL_DATA) $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; \
