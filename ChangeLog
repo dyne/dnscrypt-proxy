@@ -1,3 +1,45 @@
+* Fri Jan 20 23:58:24 2017 +0100
+
+    Fix libsodium warning
+
+* Fri Jan 20 23:45:33 2017 +0100
+
+    CLEANFILES += dnscrypt-update-resolvers.sh
+
+* Fri Jan 20 23:43:58 2017 +0100
+
+    Do not install the systemd files
+    
+    Package maintainers will do a way better job with these
+
+* Fri Jan 20 23:40:21 2017 +0100
+
+    Generate org.dnscrypt.osx.DNSCryptProxy.plist from a template
+
+* Fri Jan 20 23:29:26 2017 +0100
+
+    Reduce the difference between Android and iOS builds
+
+* Fri Jan 20 23:13:18 2017 +0100
+
+    Always include stdlib.h in evutil_rand.c
+
+* Fri Jan 20 23:09:26 2017 +0100
+
+    Make the builds a little bit more silent
+
+* Fri Jan 20 22:57:16 2017 +0100
+
+    Split
+
+* Fri Jan 20 22:40:54 2017 +0100
+
+    Regen the man page
+
+* Fri Jan 20 22:39:50 2017 +0100
+
+    Update ChangeLog
+
 * Fri Jan 20 22:37:01 2017 +0100
 
     Support "random" as a resolver name to pick a random resolver
