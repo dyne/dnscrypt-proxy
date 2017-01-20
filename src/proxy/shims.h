@@ -10,7 +10,7 @@
  * Debian Jessie ships an old version of libsodium that doesn't support
  * overlapping buffers. Use temporary buffers to work around this.
  */
-#if SODIUM_LIBRARY_VERSION_MAJOR < 7 || SODIUM_LIBRARY_VERSION_MINOR <= 2
+#if SODIUM_LIBRARY_VERSION_MAJOR < 7 || (SODIUM_LIBRARY_VERSION_MAJOR == 7 && SODIUM_LIBRARY_VERSION_MINOR <= 2)
 # warning The installed libsodium version is very old and will not be supported in the future.
 # warning Support for the XChaCha20 cipher will also not be available in that build.
 static int
