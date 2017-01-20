@@ -13,7 +13,7 @@ EXTRA_DIST = \
 	dnscrypt-proxy.service.in \
 	dnscrypt-proxy.socket \
 	dnscrypt-update-resolvers.sh.in \
-	org.dnscrypt.osx.DNSCryptProxy.plist \
+	org.dnscrypt.osx.DNSCryptProxy.plist.in \
 	resolvers-check.sh
 
 SUBDIRS = \
@@ -51,11 +51,20 @@ doc_DATA += \
 	dnscrypt-proxy.socket
 endif
 
+noinst_DATA = \
+	org.dnscrypt.osx.DNSCryptProxy.plist
+
 dnscrypt-proxy.service: dnscrypt-proxy.service.in
 	$(SED) \
 	-e 's|[@]sbindir@|$(sbindir)|g' \
 	-e 's|[@]sysconfdir@|$(sysconfdir)|g' \
 	< dnscrypt-proxy.service.in > dnscrypt-proxy.service
+
+org.dnscrypt.osx.DNSCryptProxy.plist: org.dnscrypt.osx.DNSCryptProxy.plist.in
+	$(SED) \
+	-e 's|[@]sbindir@|$(sbindir)|g' \
+	-e 's|[@]sysconfdir@|$(sysconfdir)|g' \
+	< org.dnscrypt.osx.DNSCryptProxy.plist.in > org.dnscrypt.osx.DNSCryptProxy.plist
 
 CLEANFILES = \
 	dnscrypt-proxy.service

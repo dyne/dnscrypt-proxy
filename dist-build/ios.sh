@@ -24,8 +24,7 @@ export LDFLAGS="$LDFLAGS -L${SODIUM_IOS_PREFIX}/lib"
 make clean && \
 make -j3 install && \
 rm -fr "${PREFIX}/include" "${PREFIX}/share" "${PREFIX}/man" && \
-sed 's#/usr/local/#/usr/#g' < org.dnscrypt.osx.DNSCryptProxy.plist > \
-  "$PREFIX/org.dnscrypt.osx.DNSCryptProxy.plist" && \
-cp README-iOS.markdown "$PREFIX/" && \
-echo "dnscrypt-proxy has been installed into $PREFIX" && \
+install -m 644 org.dnscrypt.osx.DNSCryptProxy.plist "${PREFIX}/org.dnscrypt.osx.DNSCryptProxy.plist" && \
+cp README-iOS.markdown "${PREFIX}/" && \
+echo "dnscrypt-proxy has been installed into ${PREFIX}" && \
 echo 'Now, using codesign(1) to sign dnscrypt-proxy'

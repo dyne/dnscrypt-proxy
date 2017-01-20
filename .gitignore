@@ -42,6 +42,7 @@ m4/ltargz.m4
 man/*.html
 man/Makefile.in
 missing
+org.dnscrypt.osx.DNSCryptProxy.plist
 probes.h
 probes_dnscrypt_proxy.h
 src/*.o
