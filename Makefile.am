@@ -45,14 +45,13 @@ doc_DATA += \
 	README-PLUGINS.markdown
 endif
 
-if HAVE_SYSTEMD
-doc_DATA += \
-	dnscrypt-proxy.service \
-	dnscrypt-proxy.socket
-endif
-
 noinst_DATA = \
 	org.dnscrypt.osx.DNSCryptProxy.plist
+
+if HAVE_SYSTEMD
+noinst_DATA += \
+	dnscrypt-proxy.service
+endif
 
 dnscrypt-proxy.service: dnscrypt-proxy.service.in
 	$(SED) \
@@ -67,7 +66,8 @@ org.dnscrypt.osx.DNSCryptProxy.plist: org.dnscrypt.osx.DNSCryptProxy.plist.in
 	< org.dnscrypt.osx.DNSCryptProxy.plist.in > org.dnscrypt.osx.DNSCryptProxy.plist
 
 CLEANFILES = \
-	dnscrypt-proxy.service
+	dnscrypt-proxy.service \
+	org.dnscrypt.osx.DNSCryptProxy.plist
 
 install-data-local:
 	@$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
