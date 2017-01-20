@@ -1,3 +1,19 @@
+* Fri Jan 20 13:08:02 2017 +0100
+
+    Overwrite conf if the installed one is the vanilla example
+
+* Fri Jan 20 12:52:21 2017 +0100
+
+    Fix inverted logic in the installation of the example config file
+
+* Wed Jan 18 10:52:53 2017 +0100
+
+    cs-lt and d0wn-us-ns3 are temporarily unresponsive
+
+* Wed Jan 18 08:59:36 2017 +0100
+
+    Update ChangeLog
+
 * Wed Jan 18 08:46:40 2017 +0100
 
     On Linux, warn when we are running low on entropy
