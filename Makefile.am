@@ -61,7 +61,7 @@ CLEANFILES = \
 	dnscrypt-proxy.service
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
+	@$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
 	if [ -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf ]; then \
 		if cmp -s $(srcdir)/dnscrypt-proxy.conf $(docdir)/dnscrypt-proxy.conf; then \
 			echo "Configuration file unchanged"; \
@@ -74,8 +74,8 @@ install-data-local:
 	fi
 
 uninstall-local:
-	if cmp -s $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; then \
+	@if cmp -s $(srcdir)/dnscrypt-proxy.conf $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; then \
 		echo "$(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf has not changed and will be removed."; \
 		rm -f $(DESTDIR)$(sysconfdir)/dnscrypt-proxy.conf; \
-        rmdir $(DESTDIR)$(sysconfdir) 2> /dev/null; \
+        rmdir $(DESTDIR)$(sysconfdir) 2> /dev/null ||:; \
 	fi
