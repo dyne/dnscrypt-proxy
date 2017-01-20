@@ -1,6 +1,7 @@
 #! /bin/sh
 
 prefix="@prefix@"
+datarootdir = "@datarootdir@"
 PKG_DATA_DIR="@datadir@/@PACKAGE@"
 RESOLVERS_FILE="${PKG_DATA_DIR}/dnscrypt-resolvers.csv"
 RESOLVERS_FILE_TMP="${RESOLVERS_FILE}.tmp"
