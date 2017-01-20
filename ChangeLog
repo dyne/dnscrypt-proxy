@@ -1,3 +1,27 @@
+* Fri Jan 20 22:37:01 2017 +0100
+
+    Support "random" as a resolver name to pick a random resolver
+
+* Fri Jan 20 21:32:03 2017 +0100
+
+    Install examples in @docdir@, create systemd files from templates
+
+* Fri Jan 20 21:31:42 2017 +0100
+
+    Pay attention to @datarootdir@ in dnscrypt-update-resolvers.sh.in
+
+* Fri Jan 20 13:58:37 2017 +0100
+
+    Print when the configuration file did not change
+
+* Fri Jan 20 13:30:42 2017 +0100
+
+    1.9.4
+
+* Fri Jan 20 13:30:57 2017 +0100
+
+    soltysiak down :( cs-lt up, cs-ua down.
+
 * Fri Jan 20 13:08:02 2017 +0100
 
     Overwrite conf if the installed one is the vanilla example

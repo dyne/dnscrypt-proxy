@@ -2,6 +2,7 @@
 * Version 1.9.4
  - The default installation script in version 1.9.3 unconditionally replaced
 the configuration file with the example one. This has been fixed.
+ - The resolver name can be set to "random" in order to pick a random resolver.
 
 * Version 1.9.3
  - This version can be compiled on Linux distributions using the musl C
