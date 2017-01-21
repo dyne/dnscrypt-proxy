@@ -34,3 +34,7 @@ echo 'Plugin libdcplugin_example.so' >> /tmp/dnscrypt-proxy.conf
 echo 'Test 60' >> /tmp/dnscrypt-proxy.conf
 
 /usr/local/sbin/dnscrypt-proxy /tmp/dnscrypt-proxy.conf
+
+make uninstall > /dev/null
+make distclean > /dev/null
+
