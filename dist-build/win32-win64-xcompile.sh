@@ -5,6 +5,7 @@ cd $(dirname $(readlink -f "$0"))
 
 setup() {
 
+  pacman -Syu --noconfirm
   pacman -Sy --noconfirm \
     base-devel git libtool autoconf automake \
     mingw-w64-toolchain \
