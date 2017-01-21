@@ -10,7 +10,6 @@ apk add coreutils
 apk add ldns-dev
 apk add libsodium-dev
 
-cd ..
 ./configure --disable-dependency-tracking --enable-debug
 make clean > /dev/null
 make -j$(nproc) check
