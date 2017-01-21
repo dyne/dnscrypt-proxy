@@ -8,13 +8,7 @@ apk --update upgrade
 apk add build-base
 apk add coreutils
 apk add ldns-dev
-
-cd libsodium
-./configure --disable-dependency-tracking --enable-minimal --prefix=/usr
-make clean > /dev/null
-make -j$(nproc) check
-make -j$(nproc) install
-/sbin/ldconfig ||:
+apk add libsodium-dev
 
 cd ..
 ./configure --disable-dependency-tracking --enable-debug
