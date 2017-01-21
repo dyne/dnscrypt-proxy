@@ -4,6 +4,13 @@
 the configuration file with the example one. This has been fixed.
  - The resolver name can be set to "random" in order to pick a random resolver.
  - Paths are not hardcoded any more in the sample systemd and plist files.
+ - The dnscrypt-update-resolvers.sh and resolvers-check.sh scripts have been
+moved to the contrib/ directory.
+ - An IPV4_ONLY environment variable can be set to skip IPv6-only entries in
+resolvers-check.sh.
+ - Precompiled iOS/Android/Windows packages have become more consistent, and
+now include basic documentation.
+ - Tests are now run using random resolvers.
 
 * Version 1.9.3
  - This version can be compiled on Linux distributions using the musl C
