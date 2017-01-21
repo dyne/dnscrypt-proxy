@@ -12,9 +12,7 @@ EXTRA_DIST = \
 	dnscrypt-proxy.conf \
 	dnscrypt-proxy.service.in \
 	dnscrypt-proxy.socket \
-	dnscrypt-update-resolvers.sh.in \
-	org.dnscrypt.osx.DNSCryptProxy.plist.in \
-	resolvers-check.sh
+	org.dnscrypt.osx.DNSCryptProxy.plist.in
 
 SUBDIRS = \
 	dist-build \
