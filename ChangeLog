@@ -1,3 +1,27 @@
+* Sat Jan 21 11:10:33 2017 +0100
+
+    Ignore *.exe
+
+* Sat Jan 21 11:08:14 2017 +0100
+
+    Update permissions on dnscrypt-update-resolvers.sh
+
+* Sat Jan 21 10:15:48 2017 +0100
+
+    Remove cd.. leftover
+
+* Sat Jan 21 10:10:37 2017 +0100
+
+    Reduce the number of CI builds
+
+* Sat Jan 21 09:18:11 2017 +0100
+
+    Check that everything builds with minimal libsodium builds
+
+* Sat Jan 21 09:13:09 2017 +0100
+
+    Update NEWS/ChangeLog
+
 * Sat Jan 21 09:09:07 2017 +0100
 
     "make clean" is not super interesting to log
