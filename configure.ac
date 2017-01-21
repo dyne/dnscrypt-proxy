@@ -475,7 +475,6 @@ AH_VERBATIM([NDEBUG], [/* Never ever ignore assertions */
 
 AC_CONFIG_FILES([Makefile
                  contrib/Makefile
-                 contrib/dnscrypt-update-resolvers.sh
                  dist-build/Makefile
                  man/Makefile
                  src/Makefile
