@@ -17,7 +17,7 @@ before_install:
 
 script:
  - ./configure --with-systemd && make -j$(nproc) install
- - ./contrib/resolvers-check.sh
+ - env IPV4_ONLY=yes ./contrib/resolvers-check.sh
  - make uninstall
  - make distclean
 
