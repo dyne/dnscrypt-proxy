@@ -11,14 +11,14 @@ apk add ldns-dev
 
 cd libsodium
 ./configure --disable-dependency-tracking --prefix=/usr
-make clean
+make clean > /dev/null
 make -j$(nproc) check
 make -j$(nproc) install
 /sbin/ldconfig ||:
 
 cd ..
 ./configure --disable-dependency-tracking --enable-debug
-make clean
+make clean > /dev/null
 make -j$(nproc) check
 make -j$(nproc) install
 
@@ -37,4 +37,3 @@ echo 'Test 60' >> /tmp/dnscrypt-proxy.conf
 
 make uninstall > /dev/null
 make distclean > /dev/null
-
