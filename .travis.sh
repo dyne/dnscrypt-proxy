@@ -10,7 +10,7 @@ apk add coreutils
 apk add ldns-dev
 
 cd libsodium
-./configure --disable-dependency-tracking --prefix=/usr
+./configure --disable-dependency-tracking --enable-minimal --prefix=/usr
 make clean > /dev/null
 make -j$(nproc) check
 make -j$(nproc) install
