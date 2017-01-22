@@ -10,7 +10,6 @@ while :; do
         case "$?" in
                 0 ) break;;
         esac
-        sleep 1
 
 # check second server (servers go down pretty often)
         RESOLVER_NAME=random
@@ -21,7 +20,8 @@ while :; do
         case "$?" in
                 0 ) break;;
         esac
-        sleep 1
+
+        sleep 5
 done
 
 dnscrypt-proxy \
