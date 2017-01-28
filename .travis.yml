@@ -15,9 +15,7 @@ before_install:
  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
- - docker run --rm -v $(pwd):/workdir multiarch/alpine:x86-edge    /workdir/.travis.sh
  - docker run --rm -v $(pwd):/workdir multiarch/alpine:armhf-edge  /workdir/.travis.sh
-
  - docker run --rm -v $(pwd):/workdir pritunl/archlinux:latest     /workdir/dist-build/win32-win64-xcompile.sh
 
 matrix:
