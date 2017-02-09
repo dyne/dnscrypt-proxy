@@ -114,7 +114,11 @@ dnl Checks for libraries.
 AC_SEARCH_LIBS([inet_ntoa], [nsl])
 AC_SEARCH_LIBS([socket], [socket])
 AC_SEARCH_LIBS([inet_aton], [resolv])
-AC_SEARCH_LIBS([clock_gettime], [rt])
+
+AS_IF([test "$host_vendor" = "apple"], [],[
+  AC_SEARCH_LIBS([clock_gettime], [rt])
+])
+
 AC_SEARCH_LIBS([sendfile], [sendfile])
 
 dnl - check if the macro WIN32 is defined on this compiler.
@@ -291,7 +295,7 @@ AC_C_INLINE
 AC_HEADER_TIME
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS([gettimeofday vasprintf fcntl clock_gettime strtok_r strsep])
+AC_CHECK_FUNCS([gettimeofday vasprintf fcntl strtok_r strsep])
 AC_CHECK_FUNCS([getnameinfo strlcpy inet_ntop inet_pton signal sigaction strtoll inet_aton pipe eventfd sendfile mmap splice arc4random arc4random_buf arc4random_addrandom issetugid geteuid getegid getprotobynumber setenv unsetenv putenv sysctl])
 AC_CHECK_FUNCS([umask])
 
