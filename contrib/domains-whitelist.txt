@@ -1,8 +1,10 @@
+a-msedge.net
 amazon.com
 appsflyer.com
 cdnetworks.com
 edgekey.net
 elasticbeanstalk.com
+l-msedge.net
 ovh.net
 pusher.com
 pusherapp.com
