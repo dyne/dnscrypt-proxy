@@ -4,6 +4,7 @@ appsflyer.com
 cdnetworks.com
 edgekey.net
 elasticbeanstalk.com
+j.mp
 l-msedge.net
 ovh.net
 pusher.com
