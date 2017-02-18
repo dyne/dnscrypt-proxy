@@ -4,8 +4,11 @@ appsflyer.com
 cdnetworks.com
 edgekey.net
 elasticbeanstalk.com
+invalid
 j.mp
 l-msedge.net
+lan
+localdomain
 ovh.net
 pusher.com
 pusherapp.com
