@@ -177,7 +177,7 @@ same TCP connections are not allowed by this revision of the protocol.
 
 <client-nonce> ::= the nonce sent by the client in the related query.
 
-<client-pk> ::= the client's secret key.
+<client-pk> ::= the client's public key.
 
 <resolver-sk> ::= the resolver's public key.
 
