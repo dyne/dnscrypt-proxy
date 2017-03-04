@@ -318,9 +318,9 @@ dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDNSPacket *dcp_packet)
     ldns_rr                  *question;
     ldns_rr_list             *questions;
     size_t                    response_wire_len;
-    _Bool                     has_reachable_ns = 0;
-    int                       i;
     DCPluginSyncFilterResult  result = DCP_SYNC_FILTER_RESULT_OK;
+    int                       i;
+    _Bool                     has_reachable_ns = 0;
 
     query_wire = dcplugin_get_wire_data(dcp_packet);
     if (ldns_wire2pkt(&query, query_wire, dcplugin_get_wire_data_len(dcp_packet))
