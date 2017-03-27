@@ -1,3 +1,4 @@
+[![Make a donation to support this project](https://img.shields.io/badge/donate-PayPal-green.svg?style=plastic)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypalrecovery-a@pureftpd.org&lc=US&item_name=Donation+to+the+DNSCrypt+project)
 [![Build Status](https://travis-ci.org/jedisct1/dnscrypt-proxy.png?branch=master)](https://travis-ci.org/jedisct1/dnscrypt-proxy?branch=master)
 
 [![DNSCrypt](https://raw.github.com/jedisct1/dnscrypt-proxy/master/dnscrypt-small.png)](https://dnscrypt.org)
