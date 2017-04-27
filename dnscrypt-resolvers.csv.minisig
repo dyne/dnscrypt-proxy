@@ -1,4 +1,10 @@
 untrusted comment: verify with https://jedisct1.github.io/minisign/
+<<<<<<< HEAD
 RWQf6LRCGA9i5zE1TvKCrZfJqpt6W6mgn0csrfFSH+jOqMRHEOM5jy3zELQcgyAe9jGphu0LUa/p9NEji7kJLLkXVvm0QCzYvAM=
 trusted comment: timestamp:1493284285	file:dnscrypt-resolvers.csv
 tJ+jWy5btDREr5LsusprT6NA3FeGMadbSL+LCoczZL1Y++YS+xASydnZXXhKT1UhHvED97KaGnW8/kYs0wY6BA==
+=======
+RWQf6LRCGA9i57pnrnV93OvM1gDC/3UtCGPiZWv4tDAkwbAxKieWfYTaPQVARPDNkjEqk58aWYd/CYqEcd+4iy1C2gA6+aL+UQA=
+trusted comment: timestamp:1491767205	file:dnscrypt-resolvers.csv
+OEmeaszH0nGRE038v14DMRMtyY1sYkSr0xshRupvMvsUOU2/emzsrjfIk4CmY93MBBIpHULBQDZwUUAy9x03Dg==
+>>>>>>> parent of d1264f2... Hopefully temporary: adguard-dns-ns2, d0wn-random-ns1 down
