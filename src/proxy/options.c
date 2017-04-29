@@ -88,7 +88,11 @@ static const char *getopt_options = "a:e:EhIk:K:L:l:m:n:r:R:t:u:N:TVX:";
 static void
 options_version(void)
 {
+#ifdef PACKAGE_VENDOR
+    puts(PACKAGE_STRING "-" PACKAGE_VENDOR);
+#else
     puts(PACKAGE_STRING);
+#endif
     puts("");
     printf("Compilation date: %s\n", __DATE__);
 #ifdef PLUGINS
