@@ -1,3 +1,328 @@
+* Sat May 6 19:38:35 2017 +0200
+
+    Cache plugin: fix the way items are moved from recent to frequent lists
+    
+    In addition to making the cache work as expected, this prevents
+    `CacheEntry` items from becoming orphans.
+
+* Fri May 5 09:59:10 2017 +0200
+
+    Sign
+
+* Fri May 5 09:54:22 2017 +0200
+
+    Adding Babylon Network resolvers (#647)
+
+* Sat Apr 29 20:13:13 2017 +0200
+
+    Add support for adding the vendor name to the version string
+
+* Thu Apr 27 11:36:40 2017 +0200
+
+    Remove dead resolvers, sign
+
+* Thu Apr 27 11:36:32 2017 +0200
+
+    Reduce the margin even more in resolvers-check
+
+* Thu Apr 27 11:12:40 2017 +0200
+
+    Revert "Hopefully temporary: adguard-dns-ns2, d0wn-random-ns1 down"
+    
+
+* Thu Apr 27 11:12:15 2017 +0200
+
+    sign
+
+* Thu Apr 27 11:11:08 2017 +0200
+
+    Replacing port 443 with 5353 due to incompatibility with HTTPS services (#639)
+
+* Wed Apr 19 10:03:03 2017 +0200
+
+    Revert "Temporarily remove dnscrypt.org-fr"
+    
+
+* Tue Apr 18 23:32:11 2017 +0200
+
+    Temporarily remove dnscrypt.org-fr
+
+* Tue Apr 18 22:43:19 2017 +0200
+
+    Hopefully temporary: adguard-dns-ns2, d0wn-random-ns1 down
+
+* Sun Apr 9 21:43:20 2017 +0200
+
+    sign
+
+* Mon Apr 10 02:40:04 2017 +0700
+
+    d0wn servers update (#625)
+    
+    Update some d0wn servers.
+    
+    Up : ns1.au , ns1.hk
+    IPv4 only (IPv6 unreachable), no port 443 : ns1.fr
+    No port 443 : ns2.nl
+    Add IPv6, IPv4 already listed : ns1.ro
+    Add all the rest with no special treatment : ns1.cr, ns1.dk, ns3.hk, ns2.is, ns1.mx, ns4.nl, ns2.se, ns2.sg, ns4.us, ns1.za
+    
+    All added servers tested via IPv4. For IPv6, only tested for open port via online web check.
+
+* Sun Apr 9 21:20:15 2017 +0200
+
+    Add a couple domains to the whitelist
+
+* Wed Apr 5 21:44:59 2017 -0700
+
+    Remove down d0wn servers
+
+* Thu Apr 6 14:39:50 2017 +1000
+
+    Add second d0wn AU server (#622)
+
+* Thu Mar 30 14:42:53 2017 +0200
+
+    Revert "Add the DNS Spy public resolver (#619)"
+    
+
+* Thu Mar 30 14:40:29 2017 +0200
+
+    Add the DNS Spy public resolver (#619)
+
+* Tue Mar 28 10:53:28 2017 +0200
+
+    Doc: mention that timestamps are encoded in big-endian
+
+* Mon Mar 27 22:01:32 2017 +0200
+
+    Invert
+
+* Mon Mar 27 22:00:55 2017 +0200
+
+    Try the flat style
+
+* Mon Mar 27 21:58:17 2017 +0200
+
+    + donate button
+
+* Sat Mar 25 12:46:53 2017 +0100
+
+    Sign
+
+* Sat Mar 25 04:46:03 2017 -0700
+
+    adding nxd.ist resolver (#618)
+    
+    * adding nxd.ist
+    
+    * changing description of nxd.ist
+
+* Mon Mar 20 22:28:37 2017 +0100
+
+    cs-ch2 is unresponsive
+
+* Mon Mar 20 22:27:49 2017 +0100
+
+    contrib/resolvers-check.sh: allow a lower margin for the certificate
+
+* Mon Mar 6 22:53:44 2017 +0100
+
+    Sign
+
+* Mon Mar 6 22:52:43 2017 +0100
+
+    Update dnscrypt-resolvers.csv (#612)
+    
+    Previously mistakenly added the wrong IPv6 address. Added the correct one for dnscrypt.nl-ns0-ipv6
+
+* Mon Mar 6 20:04:58 2017 +0100
+
+    Sign
+
+* Mon Mar 6 20:04:45 2017 +0100
+
+    Amsterdan -> Amsterdam
+
+* Mon Mar 6 20:04:07 2017 +0100
+
+    Temporarily remove dnscrypt.nl-ns0-ipv6
+
+* Mon Mar 6 20:01:35 2017 +0100
+
+    Update dnscrypt-resolvers.csv (#611)
+    
+    Added dnscrypt.nl
+
+* Mon Mar 6 08:38:28 2017 +0100
+
+    Use unified headers on Android
+
+* Sat Mar 4 19:37:35 2017 +0100
+
+    Keep variables sorted by size
+
+* Sat Mar 4 13:36:04 2017 -0500
+
+    Reset the reachability of nameservers if all are unreachable (#609)
+    
+    If all nameservers have been marked unreachable, they will not be queried
+    again until dnscrypt-proxy is restarted. This fix allows for queries to be
+    retried without restarting dnscrypt-proxy.
+    
+    Fixes jedisct1/dnscrypt-proxy#608
+    
+    Signed-off-by: Mitchel Haan <mitchel@mhstud.io>
+
+* Wed Feb 22 13:45:54 2017 +0100
+
+    Doc error: client-pk is the client' public key.
+    
+    Spotted by @willnix
+    
+    Fixes #603
+
+* Sat Feb 18 18:54:52 2017 +0100
+
+    - d0wn-lt-ns1
+
+* Sat Feb 18 10:45:16 2017 +0100
+
+    Whitelist some TLDs typically used on local networks
+
+* Thu Feb 16 09:58:12 2017 +0100
+
+    whitelist << "j.mp"
+
+* Tue Feb 14 08:33:53 2017 +0100
+
+    Whitelist a-msedge.net and l-msedge.net
+    
+    Fixes #596
+
+* Mon Feb 13 19:42:45 2017 +0100
+
+    soltysiak-ipv6 is back
+
+* Sun Feb 12 22:42:48 2017 +0100
+
+    Compile for macOS >= 10.10
+
+* Sat Feb 11 20:50:20 2017 +0100
+
+    cs-es is temporarily down
+
+* Thu Feb 9 22:25:39 2017 +0100
+
+    Avoid clock_gettime() usage on MacOS
+    
+    The function is present in Sierra, but not on previous OS versions,
+    although the linker doesn't complain when `-mmacosx-version-min=`
+    mentions that we want to support OSX < 10.12.
+    
+    So, just pretend it doesn't exist, and remember to remove that
+    hack the day everyone is running OSX >= 10.12.
+    
+    Via an issue from @Thireus
+
+* Thu Feb 9 17:35:57 2017 +0100
+
+    Looks like this is being renamed
+
+* Thu Feb 9 13:56:11 2017 +0100
+
+    Sign
+
+* Thu Feb 9 16:25:51 2017 +0330
+
+    Remove iFreeNet (#591)
+
+* Thu Feb 9 12:58:48 2017 +0100
+
+    domains -> zones
+
+* Tue Feb 7 14:25:26 2017 +0100
+
+    libevent test/dns: run async resolving after sync one (to avoid timeouts)
+
+* Tue Feb 7 12:33:55 2017 +0100
+
+    Normalize the dnscrypt-resolvers.csv format
+    
+    Also remove the namecoin tag from servers that don't support it any more.
+
+* Tue Feb 7 12:03:43 2017 +0100
+
+    Remove unresponsive resolvers
+
+* Sun Jan 29 00:46:04 2017 +0100
+
+    Travis is too slow :(
+
+* Sat Jan 28 16:38:43 2017 +0100
+
+    ldns-blocking: fix another corner case with suffix matching
+    
+    Ruleset:
+    ```
+    *.example.com
+    ru.example.com
+    ```
+    
+    A query for `xru.example.com` would find `ru.example.com` as the longest
+    suffix. The expression didn't match since this is neither an exact match
+    nor a match that stops at a label.
+    
+    However, this was ignoring the fact that there a different, shorter rule
+    could match.
+    
+    This is pretty annoying, as keeping our promise to log the longest match
+    means that we need at least yet another lookup in that specific case.
+    Alternatively, the fpst lookup function could be specialized to stop at
+    labels, but that would defeat the point of this example plugin. So,
+    perform an extra lookup after striping the first (last, once the name is
+    reversed) label.
+
+* Fri Jan 27 00:37:21 2017 +0100
+
+    Sort, re-add resolvers that were temporarily down
+
+* Fri Jan 27 00:26:14 2017 +0100
+
+
+* Sun Jan 22 16:54:03 2017 +0100
+
+    Use the PID file to kill the service on Android
+
+* Sun Jan 22 16:51:41 2017 +0100
+
+    Update 99dnscrypt (#580)
+    
+    Added pidfile
+
+* Sun Jan 22 13:00:28 2017 +0100
+
+    Android 99dnscrypt: do not sleep before trying the next resolver
+
+* Sun Jan 22 12:55:11 2017 +0100
+
+    Android 99dnscrypt: reduce the margin to 700
+
+* Sun Jan 22 12:48:59 2017 +0100
+
+    Android's 99dnscrypt: use a random resolver
+
+* Sat Jan 21 11:52:49 2017 +0100
+
+
+* Sat Jan 21 11:51:05 2017 +0100
+
+    Quotes
+
+* Sat Jan 21 11:48:28 2017 +0100
+
+    Update ChangeLog
+
 * Sat Jan 21 11:10:33 2017 +0100
 
     Ignore *.exe
