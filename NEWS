@@ -1,4 +1,14 @@
 
+* Version 1.9.5
+ - The cache plugin didn't properly move cached entries between the
+recent and frequent lists, resulting is suboptimal performance and
+memory not being properly freed. This has been fixed.
+ - Many updates were made to the default list of resolvers.
+ - The forwarding plugin can now recover after all name servers have
+temporarily been unreachable.
+ - Compatibility with older versions of MacOS has been restored.
+ - Official precompiled packages for Linux are now available.
+
 * Version 1.9.4
  - The default installation script in version 1.9.3 unconditionally replaced
 the configuration file with the example one. This has been fixed.
