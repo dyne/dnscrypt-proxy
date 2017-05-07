@@ -16,12 +16,12 @@ if [ -z "$ANDROID_NDK_HOME" ]; then
 fi
 
 if [ ! -f ./configure ]; then
-  echo "Can't find ./configure. Wrong directory or haven't run autogen.sh?"
+  echo "Can't find ./configure. Wrong directory or haven't run autogen.sh?" >&2
   exit 1
 fi
 
 if [ "x$TARGET_ARCH" = 'x' ] || [ "x$ARCH" = 'x' ] || [ "x$HOST_COMPILER" = 'x' ]; then
-  echo "You shouldn't use android-build.sh directly, use android-[arch].sh instead"
+  echo "You shouldn't use android-build.sh directly, use android-[arch].sh instead" >&2
   exit 1
 fi
 
@@ -31,6 +31,8 @@ export PREFIX="$(pwd)/dnscrypt-proxy-android-${TARGET_ARCH}"
 export TOOLCHAIN_DIR="$(pwd)/android-toolchain-${TARGET_ARCH}"
 export PATH="${PATH}:${TOOLCHAIN_DIR}/bin"
 
+export CC=${CC:-"${HOST_COMPILER}-clang"}
+
 export SODIUM_ANDROID_PREFIX=${SODIUM_ANDROID_PREFIX:-/tmp/libsodium-android-${TARGET_ARCH}}
 export CPPFLAGS="$CPPFLAGS -I${SODIUM_ANDROID_PREFIX}/include"
 export LDFLAGS="$LDFLAGS -L${SODIUM_ANDROID_PREFIX}/lib"
@@ -39,8 +41,6 @@ export UPDATE_BINARY="dist-build/android-files/META-INF/com/google/android/updat
 export UPDATE_BINARY_URL="https://github.com/jedisct1/dnscrypt-proxy/blob/master/dist-build/android-files/META-INF/com/google/android/update-binary?raw=true"
 export UPDATE_BINARY_SIG_URL="https://github.com/jedisct1/dnscrypt-proxy/blob/master/dist-build/android-files/META-INF/com/google/android/update-binary.minisig?raw=true"
 export UPDATE_BINARY_PUBKEY="RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"
-
-rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
 
 if [ ! -f "$UPDATE_BINARY" ]; then
   curl -v -L -o "${UPDATE_BINARY}.tmp" "$UPDATE_BINARY_URL" || exit 1
@@ -52,6 +52,12 @@ if [ ! -f "$UPDATE_BINARY" ]; then
   mv -f "${UPDATE_BINARY}.tmp" "$UPDATE_BINARY"
   chmod 755 "$UPDATE_BINARY"
 fi
+
+rm -rf "${TOOLCHAIN_DIR}" "${PREFIX}"
+
+echo
+echo "Building for platform [${NDK_PLATFORM}], retaining compatibility with platform [${NDK_PLATFORM_COMPAT}]"
+echo
 
 env - PATH="$PATH" \
     "$MAKE_TOOLCHAIN" --force --api="$NDK_API_VERSION_COMPAT" \
