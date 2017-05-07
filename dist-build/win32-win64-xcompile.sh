@@ -78,6 +78,8 @@ compile() {
     $SRCDEPS_DIR/libressl/configure --disable-dependency-tracking \
       --host=$TARGET --prefix="$DEPS_DIR"
     make clean
+    $SRCDEPS_DIR/libressl/configure --disable-dependency-tracking \
+      --host=$TARGET --prefix="$DEPS_DIR"
     make install
   )
 
