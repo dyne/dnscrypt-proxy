@@ -336,7 +336,7 @@ dcplugin_long_description(DCPlugin * const dcplugin)
         "(e.g. 192.168.*, 10.0.0.*)\n"
         "\n"
         "# dnscrypt-proxy --plugin \\\n"
-        "  libdcplugin_example.la,--ips=/etc/blk-ips,--domains=/etc/blk-names"
+        "  libdcplugin_example_ldns_blocking.la,--ips=/etc/blk-ips,--domains=/etc/blk-names"
         "\n"
         "By default, logs are written in a human-readable format.\n"
         "Prepending ltsv: to the file name changes the log format to LTSV.";
