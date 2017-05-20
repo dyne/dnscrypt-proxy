@@ -1,11 +1,9 @@
 #! /bin/sh
 
 if [ -z "$NDK_PLATFORM" ]; then
-  export NDK_PLATFORM="android-24"
-  export NDK_PLATFORM_COMPAT="${NDK_PLATFORM_COMPAT:-android-16}"
-else
-  export NDK_PLATFORM_COMPAT="${NDK_PLATFORM_COMPAT:-${NDK_PLATFORM}}"
+  export NDK_PLATFORM="android-16"
 fi
+export NDK_PLATFORM_COMPAT="${NDK_PLATFORM_COMPAT:-${NDK_PLATFORM}}"
 export NDK_API_VERSION=$(echo "$NDK_PLATFORM" | sed 's/^android-//')
 export NDK_API_VERSION_COMPAT=$(echo "$NDK_PLATFORM_COMPAT" | sed 's/^android-//')
 
