@@ -157,8 +157,11 @@ parse_domain_list(FPST ** const domain_list_p,
     FILE      *fp;
     char      *ptr;
     FPST      *domain_list;
+    FPST      *domain_list_tmp;
     FPST      *domain_rev_list;
+    FPST      *domain_rev_list_tmp;
     FPST      *domain_substr_list;
+    FPST      *domain_substr_list_tmp;
     size_t     line_len;
     BlockType  block_type = BLOCKTYPE_UNDEFINED;
     int        ret = -1;
@@ -205,23 +208,26 @@ parse_domain_list(FPST ** const domain_list_p,
             break;
         }
         if (block_type == BLOCKTYPE_SUFFIX) {
-            if ((domain_rev_list = fpst_insert_str(domain_rev_list, line,
+            if ((domain_rev_list_tmp = fpst_insert_str(domain_rev_list, line,
+                                                       (uint32_t) block_type)) == NULL) {
+                free(line);
+                break;
+            }
+            domain_rev_list = domain_rev_list_tmp;
+        } else if (block_type == BLOCKTYPE_PREFIX) {
+            if ((domain_list_tmp = fpst_insert_str(domain_list, line,
                                                    (uint32_t) block_type)) == NULL) {
                 free(line);
                 break;
             }
-        } else if (block_type == BLOCKTYPE_PREFIX) {
-            if ((domain_list = fpst_insert_str(domain_list, line,
-                                               (uint32_t) block_type)) == NULL) {
-                free(line);
-                break;
-            }
+            domain_list = domain_list_tmp;
         } else if (block_type == BLOCKTYPE_SUBSTRING) {
-            if ((domain_substr_list = fpst_insert_str(domain_substr_list, line,
-                                                      (uint32_t) block_type)) == NULL) {
+            if ((domain_substr_list_tmp = fpst_insert_str(domain_substr_list, line,
+                                                          (uint32_t) block_type)) == NULL) {
                 free(line);
                 break;
             }
+            domain_substr_list = domain_substr_list_tmp;
         } else {
             free(line);
         }
@@ -249,6 +255,7 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
     FILE      *fp;
     char      *ptr;
     FPST      *ip_list;
+    FPST      *ip_list_tmp;
     size_t     line_len;
     BlockType  block_type = BLOCKTYPE_UNDEFINED;
     int        ret = -1;
@@ -274,11 +281,12 @@ parse_ip_list(FPST ** const ip_list_p, const char * const file)
         if ((line = strdup(line)) == NULL) {
             break;
         }
-        if ((ip_list = fpst_insert_str(ip_list, line,
-                                       (uint32_t) block_type)) == NULL) {
+        if ((ip_list_tmp = fpst_insert_str(ip_list, line,
+                                           (uint32_t) block_type)) == NULL) {
             free(line);
             break;
         }
+        ip_list = ip_list_tmp;
     }
     if (!feof(fp)) {
         fpst_free(ip_list, free_list);
