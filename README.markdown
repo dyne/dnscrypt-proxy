@@ -1,5 +1,7 @@
 [![DNSCrypt](https://raw.github.com/dyne/dnscrypt-proxy/master/dnscrypt-small.png)](https://dowse.eu)
 
+[![Build Status](https://travis-ci.org/dyne/dnscrypt-proxy.png?branch=master)](https://travis-ci.org/dyne/dnscrypt-proxy)
+
 ## Status of the project
 
 This project was taken offline by its creator and maintainer Frank Denis on the 6th December 2018, after announcing in November 2017 that [the project needs a new maintainer](https://twitter.com/jedisct1/status/928942292202860544).
