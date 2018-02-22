@@ -4,7 +4,7 @@
 
 ## Status of the project
 
-This project was taken offline by its creator and maintainer Frank Denis on the 6th December 2018, after announcing in November 2017 that [the project needs a new maintainer](https://twitter.com/jedisct1/status/928942292202860544).
+This project was taken offline by its creator and maintainer Frank Denis on the 6th December 2017, after announcing in November 2017 that [the project needs a new maintainer](https://twitter.com/jedisct1/status/928942292202860544).
 
 The old webpage [dnscrypt.org]() now points to a new domain, endorsing the usage of competing protocol "DNS-over-TLS" and competing software in particular the "getdns" library and an immature implementation that could substitute dnscrypt-proxy, called "stubby".
 
