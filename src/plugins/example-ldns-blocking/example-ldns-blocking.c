@@ -707,6 +707,26 @@ apply_block_ips(DCPluginDNSPacket *dcp_packet, Blocking * const blocking,
         if ((answer_str = ldns_rdf2str(ldns_rr_a_address(answer))) == NULL) {
             return DCP_SYNC_FILTER_RESULT_FATAL;
         }
+        if (type == LDNS_RR_TYPE_AAAA) {
+            struct in_addr i4;
+            struct sockaddr_in6 si6;
+            struct sockaddr_storage *ss;
+            size_t ss_len;
+
+            ss = ldns_rdf2native_sockaddr_storage(ldns_rr_a_address(answer), 0, &ss_len);
+            if (ss == NULL || ss_len > sizeof si6) {
+                return DCP_SYNC_FILTER_RESULT_FATAL;
+            }
+            memcpy(&si6, ss, ss_len);
+            if (IN6_IS_ADDR_V4MAPPED(&si6.sin6_addr)) {
+                free(answer_str);
+                memcpy(&i4, 12 + (unsigned char *) &si6.sin6_addr.s6_addr, sizeof i4);
+                if ((answer_str = strdup(inet_ntoa(i4))) == NULL) {
+                    return DCP_SYNC_FILTER_RESULT_FATAL;
+                }
+            }
+            free(ss);
+        }
         str_tolower(answer_str);
         if (fpst_str_starts_with_existing_key(blocking->ips, answer_str,
                                               &found_key, &found_block_type)) {
