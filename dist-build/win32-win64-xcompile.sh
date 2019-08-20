@@ -4,7 +4,7 @@ set -x
 cd $(dirname $(readlink -f "$0"))
 
 setup() {
-
+  echo "Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
   pacman -Syu --noconfirm
   pacman -Sy --noconfirm \
     base-devel git libtool autoconf automake \
