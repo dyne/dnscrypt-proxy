@@ -1,7 +1,6 @@
 AC_PREREQ([2.65])
 AC_INIT([dnscrypt-proxy],[1.9.5],[https://dnscrypt.org])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_AUX_DIR([libltdl/config])
 AC_CONFIG_SRCDIR([src/proxy/app.c])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SUBDIRS([src/libevent-modified])
@@ -461,7 +460,6 @@ AC_CHECK_FUNCS([crypto_box_easy_afternm crypto_core_hchacha20 crypto_box_curve25
 dnl Libtool.
 
 LT_INIT([dlopen])
-LT_CONFIG_LTDL_DIR([libltdl])
 LTDL_INIT
 
 dnl Subconfig.

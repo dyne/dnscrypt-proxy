@@ -18,11 +18,6 @@ SUBDIRS = \
 	dist-build \
 	man
 
-if PLUGINS
-SUBDIRS += \
-	libltdl
-endif
-
 SUBDIRS += \
 	contrib \
 	src \
