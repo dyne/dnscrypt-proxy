@@ -17,4 +17,5 @@ libdcplugin_example_cache_la_LDFLAGS = \
 
 libdcplugin_example_cache_la_CPPFLAGS = \
 	$(LTDLINCL) \
-	-I../../include
+	-I../../include \
+	-I$(srcdir)/../../include

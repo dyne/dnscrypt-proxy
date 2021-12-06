@@ -18,4 +18,5 @@ libdcplugin_example_ldns_aaaa_blocking_la_LDFLAGS = \
 
 libdcplugin_example_ldns_aaaa_blocking_la_CPPFLAGS = \
 	$(LTDLINCL) \
-	-I../../include
+	-I../../include \
+	-I$(srcdir)/../../include

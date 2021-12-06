@@ -18,4 +18,5 @@ libdcplugin_example_ldns_forwarding_la_LDFLAGS = \
 
 libdcplugin_example_ldns_forwarding_la_CPPFLAGS = \
 	$(LTDLINCL) \
-	-I../../include
+	-I../../include \
+	-I$(srcdir)/../../include
