@@ -1,6 +1,6 @@
 /*  Dowse - ip2mac translation function
  *
- *  (c) Copyright 2016-2017 Dyne.org foundation, Amsterdam
+ *  (c) Copyright 2016-2024 Dyne.org foundation, Amsterdam
  *  Written by Nicola Rossi <nicola@dyne.org>
  *             Denis Roio <jaromil@dyne.org>
  *
@@ -32,8 +32,9 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <ctype.h>
-#include "dowse.h"
-#include "dnscrypt-dowse.h"
+
+#include <dowse.h>
+#include <dnscrypt-dowse.h>
 
 #define IP2MAC_ERROR (1)
 #define IP2MAC_RESULT_OK (0)
@@ -114,7 +115,7 @@ int convert_from_ipv6(char *ipaddr_value, char *mac_addr) {
     sin->sin6_family = ARPHRD_ETHER;
 
     /* TODO definizione di device su cui e' attestata webui */
-    char *dev = getenv("interface");
+    const char *dev = getenv("interface");
     if (dev == NULL) {
         dev = "lo";
     }

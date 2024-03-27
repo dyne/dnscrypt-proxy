@@ -4,8 +4,8 @@ pkglib_LTLIBRARIES = \
 
 libdcplugin_dowse_la_LIBTOOLFLAGS = --tag=disable-static
 
-libdcplugin_dowse_la_SOURCES = \
-	dnscrypt-dowse.c domainlist.c ip2mac.c database.h dnscrypt-dowse.h
+libdcplugin_dowse_la_SOURCES = database.h dnscrypt-dowse.h dowse.h  \
+ip2mac.c dnscrypt-dowse.c domainlist.c hashmap.c redis.c log.c
 
 libdcplugin_dowse_la_LIBADD = @LDNS_LIBS@ -lhiredis
 

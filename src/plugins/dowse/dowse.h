@@ -1,6 +1,6 @@
 /*  Dowse - public header for libdowse functions
  *
- *  (c) Copyright 2016 Dyne.org foundation, Amsterdam
+ *  (c) Copyright 2016-2024 Dyne.org foundation, Amsterdam
  *  Written by Denis Roio aka jaromil <jaromil@dyne.org>
  *
  * This source code is free software; you can redistribute it and/or
@@ -51,11 +51,11 @@ void act(const char *fmt, ...);
 
 
 // parsetime
-int relative_time(char *utc, char *out);
+// int relative_time(char *utc, char *out);
 
 #define REDIS_PORT 6379
 
-#define MAX_OUTPUT 512
+#define MAX_OUTPUT 2048
 
 /* typedef struct redisReply { */
 /*     int type;            // REDIS_REPLY */

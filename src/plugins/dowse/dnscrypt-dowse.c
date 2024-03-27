@@ -1,6 +1,6 @@
 /*  Dowse - DNSCrypt proxy plugin for DNS management
  *
- *  (c) Copyright 2016-2018 Dyne.org foundation, Amsterdam
+ *  (c) Copyright 2016-202430 Dyne.org foundation, Amsterdam
  *  Written by Denis Roio aka jaromil <jaromil@dyne.org>
  *
  * This source code is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@
 #include <ldns/ldns.h>
 
 #include <hiredis/hiredis.h>
-#include <jemalloc/jemalloc.h>
+// #include <jemalloc/jemalloc.h>
 
 // #include <epoch.h>
 
@@ -210,7 +210,7 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 	size_t answer_size = 0;
 	uint8_t *outbuf = NULL;
 
-	char rr_to_redirect[1024];
+	char rr_to_redirect[2048];
 	int party_mode=0;
 	int enable_to_browse = 0;
 
@@ -337,12 +337,12 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 			                        reverse_str);
 			if(data->reply)
 				if(data->reply->len) { // it exists, return that
-					char tmprr[1024];
+					char tmprr[2048];
 
 					if(data->debug)
 						func("found local reverse: %s", data->reply->str);
 
-					snprintf(tmprr, 1024, "%s 0 IN PTR %s",
+					snprintf(tmprr, 2048, "%s 0 IN PTR %s",
 					         question_str, data->reply->str);
 					freeReplyObject(data->reply);
 					// render the packet into wire format (outbuf is saved with a memcpy)
@@ -427,7 +427,7 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 		    warn("can't resolv mac address of IP: %s", data->ip4);
 		    warn("redirect on captive portal due to ip2mac() internal error");
 		    if(data->query && data->ownip4)
-			    snprintf(rr_to_redirect, 1024, "%s 0 IN A %s", data->query, data->ownip4);
+			    snprintf(rr_to_redirect, 2048, "%s 0 IN A %s", data->query, data->ownip4);
 		    // double free?!
 		    // if(data->reply)
 			//     freeReplyObject(data->reply);
@@ -468,7 +468,7 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 		    if(!enable_to_browse) {
 			    // redirect to dowse if it is not authorized
 			    func("redirect on captive portal for ip %s mac %s", data->ip4, data->mac);
-			    snprintf(rr_to_redirect, 1024, "%s 0 IN A %s", data->query, data->ownip4);
+			    snprintf(rr_to_redirect, 2048, "%s 0 IN A %s", data->query, data->ownip4);
 
 			    // return a wire packet immediately
 			    outbuf = answer_to_question(packet_id, question_rr, rr_to_redirect, &answer_size);
@@ -494,12 +494,12 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 		if(data->reply->len) { // it exists, return that
 			size_t answer_size = 0;
 			uint8_t *outbuf = NULL;
-			char tmprr[1024];
+			char tmprr[2048];
 
 			if(data->debug)
 				func("local lease found: %s", data->reply->str);
 
-			snprintf(tmprr, 1024, "%s 0 IN A %s", data->query, data->reply->str);
+			snprintf(tmprr, 2048, "%s 0 IN A %s", data->query, data->reply->str);
 			freeReplyObject(data->reply);
 
 			outbuf = answer_to_question(packet_id, question_rr,
@@ -552,11 +552,11 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 	if(data->offline) {
 		size_t answer_size = 0;
 		uint8_t *outbuf = NULL;
-		char tmprr[1024];
+		char tmprr[2048];
 		if(data->reverse)
-			snprintf(tmprr, 1024, "%s 0 IN PTR localhost", question_str);
+			snprintf(tmprr, 2048, "%s 0 IN PTR localhost", question_str);
 		else
-			snprintf(tmprr, 1024, "%s 0 IN A 127.0.0.1", data->query);
+			snprintf(tmprr, 2048, "%s 0 IN A 127.0.0.1", data->query);
 
 		outbuf = answer_to_question(packet_id, question_rr,
 		                            tmprr, &answer_size);

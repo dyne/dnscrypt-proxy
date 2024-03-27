@@ -1,6 +1,6 @@
 /*  Dowse - DNSCrypt proxy plugin for DNS management
  *
- *  (c) Copyright 2016 Dyne.org foundation, Amsterdam
+ *  (c) Copyright 2016-2024 Dyne.org foundation, Amsterdam
  *  Written by Denis Roio aka jaromil <jaromil@dyne.org>
  *
  * This source code is free software; you can redistribute it and/or
@@ -24,13 +24,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
+#include <errno.h>
 #include <dirent.h>
 
 #include <dnscrypt/plugin.h>
 
 #include <hiredis/hiredis.h>
-#include <jemalloc/jemalloc.h>
 
 #include <dnscrypt-dowse.h>
 
@@ -81,7 +80,7 @@ void load_domainlist(plugin_data_t *data) {
 	// parse all files in directory
 	listdir = opendir(data->listpath);
 	if(!listdir) {
-		perror(data->listpath);
+		err("domainlist cannot open dir: %s",strerror(errno));
 		exit(1); }
 
 	// read file by file
@@ -92,7 +91,7 @@ void load_domainlist(plugin_data_t *data) {
 		// open and read line by line
 		fp = fopen(fullpath,"r");
 		if(!fp) {
-			perror(fullpath);
+      err("domainlist cannot open file %s: %s",fullpath,strerror(errno));
 			continue; }
 		while(fgets(line,MAX_LINE, fp)) {
 			// save lines in hashmap with filename as value
