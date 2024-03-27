@@ -502,6 +502,7 @@ AC_CONFIG_FILES([Makefile
                  src/plugins/example/Makefile
                  src/plugins/example-cache/Makefile
                  src/plugins/example-logging/Makefile
+                 src/plugins/dowse/Makefile
                  src/plugins/example-ldns-aaaa-blocking/Makefile
                  src/plugins/example-ldns-blocking/Makefile
                  src/plugins/example-ldns-forwarding/Makefile
