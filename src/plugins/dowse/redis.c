@@ -59,25 +59,10 @@ redisReply *cmd_redis(redisContext *redis, const char *format, ...) {
 redisContext *connect_redis(int db) {
 
 	redisContext *rx = NULL;
-	int port;
-	char *redis_type;
-
+	int const port = 6379;
 	struct timeval timeout = { 1, 500 };
 
-	switch(db) {
-	case db_runtime:
-	case db_dynamic:
-		port = 6378;
-		redis_type = "volatile";
-		break;
-
-	case db_storage:
-		port = 6379;
-		redis_type = "storage";
-		break;
-	}
-
-	act ("Connecting to %s redis on port %u", redis_type, port);
+	act ("Connecting to redis on port %u", port);
 
 	rx = redisConnectWithTimeout("127.0.0.1", port, timeout);
 
@@ -95,4 +80,3 @@ redisContext *connect_redis(int db) {
 
 	return rx;
 }
-
