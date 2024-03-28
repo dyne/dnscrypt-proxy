@@ -1,20 +1,12 @@
-[![DNSCrypt](https://raw.github.com/dyne/dnscrypt-proxy/master/dnscrypt-small.png)](https://dowse.eu)
-
-[![Build Status](https://travis-ci.org/dyne/dnscrypt-proxy.png?branch=master)](https://travis-ci.org/dyne/dnscrypt-proxy)
+![image](https://github.com/dyne/dnscrypt-proxy/assets/148059/4b242442-e1cf-4d0e-9ff7-d599ba3b6e81)
 
 ## Status of the project
 
-This project was taken offline by its creator and maintainer Frank Denis on the 6th December 2017, after announcing in November 2017 that [the project needs a new maintainer](https://twitter.com/jedisct1/status/928942292202860544).
+The DNScrypt v2 C++ implementation was taken offline by its creator and maintainer Frank Denis on the 6th December 2017, after announcing in November 2017 that [the project needs a new maintainer](https://twitter.com/jedisct1/status/928942292202860544).
 
-The old webpage [dnscrypt.org]() now points to a new domain, endorsing the usage of competing protocol "DNS-over-TLS" and competing software in particular the "getdns" library and an immature implementation that could substitute dnscrypt-proxy, called "stubby".
+The [dnscrypt.org](https://dnscrypt.org) webpage lists a good number of end-user resources built from a new implementation written in Go.  
 
-The new website also links a [critical analysis of DNSCrypt vs DNS-over-TLS protocols](https://tenta.com/blog/post/2017/12/dns-over-tls-vs-dnscrypt) by a company marketing their own open-source Android web browser and offering a new DNS resolver implemented in Go.
-
-While this sounds all very new and exciting to us, at Dyne.org we already rely on DNSCrypt-proxy for our project [Dowse.eu]() and are intentioned to maintain this software unless a viable and mature alternative arises, supporting our application of it in Dowse.
-
-We intend to maintain the DNSCrypt-proxy codebase without the intention of adding any new features, just patch bugs. We are also available to archive older versions and setup the website and the wiki, if we are given these archives. Frank Denis: if you are reading this please contact us on info@dyne.org. It won't take long and we are happy to keep your project alive, many thanks for all the fish so far!
-
-Anyone running a DNSCrypt server, interested in the future of this software, willing to share more insights or wanting to help with development and documentation: be welcome to [join our dnscrypt mailinglist](https://mailinglists.dyne.org/cgi-bin/mailman/listinfo/dnscrypt) where we are setting up a campfire for all of us to make a sustainable plan and take collectively informed decisions.
+At Dyne.org we rely on the v2 of the DNScrypt protocol and this older but still working C++ implementation of dnscrypt-proxy for our [Dowse.eu](https://dyne.org/software/dowse) project and we keep maintaining the C++ implementation of dnscrypt-proxy.
 
 ## What is DNSCrypt
 
@@ -26,16 +18,15 @@ While not providing end-to-end security, it protects the local network, which
 is often the weakest point of the chain, against man-in-the-middle attacks.
 
 `dnscrypt-proxy` is a client-implementation of the protocol. It
-requires a DNS server available via the [DNSCrypt
-wrapper](https://github.com/cofyc/dnscrypt-wrapper) to function. A
-number of public DNSCrypt servers are already available.
+requires a DNS server made available by the [DNSCrypt](https://github.com/DNSCrypt/) project.
 
 Plugins
 -------
 
-Aside from implementing the protocol, dnscrypt-proxy can be extended
+Aside from implementing the DNSCrypt v2 protocol, the C++ dnscrypt-proxy can be extended
 with plug-ins, and gives a lot of control on the local DNS traffic:
 
+- Provide nifty real-time traffic visualization using the Dowse plugin.
 - Review the DNS traffic originating from your network in real time,
 and detect compromised hosts and applications phoning home.
 - Locally block ads, trackers, malware, spam, and any website whose
