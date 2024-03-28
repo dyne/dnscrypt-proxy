@@ -88,7 +88,11 @@ int dcplugin_init(DCPlugin * const dcplugin, int argc, char *argv[]) {
 
 	data->cache = NULL;
 	data->offline = 0;
+  data->domainlist = NULL;
 	data->debug = DEBUG;
+  data->query[0] = 0x0;
+  data->ownip4[0] = 0x0;
+
 	if(data->debug) act("BUILD TIME DEBUG ON");
 
 	for(i=0; i<argc; i++) {
@@ -178,7 +182,7 @@ int dcplugin_destroy(DCPlugin * const dcplugin) {
 		act("dnscrypt dowse plugin quit");
 	}
 
-	free_domainlist(data);
+	if(data->domainlist) free_domainlist(data);
 	redisFree(data->redis);
 	redisFree(data->redis_stor);
 	if(data->cache) redisFree(data->cache);
@@ -426,7 +430,7 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 
 		    warn("can't resolv mac address of IP: %s", data->ip4);
 		    warn("redirect on captive portal due to ip2mac() internal error");
-		    if(data->query && data->ownip4)
+		    if(data->query[0] && data->ownip4[0])
 			    snprintf(rr_to_redirect, 2048, "%s 0 IN A %s", data->query, data->ownip4);
 		    // double free?!
 		    // if(data->reply)
@@ -560,15 +564,17 @@ DCPluginSyncFilterResult dcplugin_sync_pre_filter(DCPlugin *dcplugin, DCPluginDN
 
 		outbuf = answer_to_question(packet_id, question_rr,
 		                            tmprr, &answer_size);
-		if(!outbuf)
+		if(!outbuf) {
 			ldns_pkt_free(packet);
 			return DCP_SYNC_FILTER_RESULT_KILL;
-
+    }
 		dcplugin_set_wire_data(dcp_packet, outbuf, answer_size);
 
-		if(outbuf) LDNS_FREE(outbuf);
-		ldns_pkt_free(packet);
-		return DCP_SYNC_FILTER_RESULT_DIRECT;
+		if(outbuf) {
+      LDNS_FREE(outbuf);
+      ldns_pkt_free(packet);
+      return DCP_SYNC_FILTER_RESULT_DIRECT;
+    }
 	}
 
 
@@ -714,7 +720,7 @@ uint8_t *answer_to_question(uint16_t pktid, ldns_rr *question_rr, char *answer, 
 
 
 /* a debug tool */
-void print_data_redis( redisContext *redis,char*prefix) {
+void print_data_redis( redisContext *redis, char*prefix) {
     #define PRINT_POINTER(p) {\
     FILE *fp=fopen("log.txt","a+");\
     fprintf(fp,"%s %s %p\n",prefix,#p,p);\
