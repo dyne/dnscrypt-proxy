@@ -19,3 +19,15 @@ libdcplugin_dowse_la_LDFLAGS = \
 libdcplugin_dowse_la_CPPFLAGS = \
 	$(LTDLINCL) \
 	-I../../include
+
+
+
+bin_PROGRAMS = \
+	dowse-to-gource
+
+dowse_to_gource_SOURCES = \
+  dowse-to-gource.c log.c redis.c dowse.h
+
+dowse_to_gource_LDADD = -lhiredis
+
+AM_CFLAGS = @CWFLAGS@
