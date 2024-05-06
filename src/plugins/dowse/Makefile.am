@@ -23,11 +23,19 @@ libdcplugin_dowse_la_CPPFLAGS = \
 
 
 bin_PROGRAMS = \
-	dowse-to-gource
+	dowse-to-gource dowse-to-osc dowse-to-mqtt
 
 dowse_to_gource_SOURCES = \
   dowse-to-gource.c log.c redis.c dowse.h
 
+dowse_to_osc_SOURCES = \
+  dowse-to-osc.c log.c redis.c dowse.h
+
+dowse_to_mqtt_SOURCES = \
+  dowse-to-mqtt.c log.c redis.c dowse.h
+
 dowse_to_gource_LDADD = -lhiredis
+dowse_to_osc_LDADD = -lhiredis -llo
+dowse_to_mqtt_LDADD = -lhiredis -lmosquitto
 
 AM_CFLAGS = @CWFLAGS@
