@@ -730,7 +730,7 @@ void print_data_redis( redisContext *redis, char*prefix) {
     PRINT_POINTER(redis->obuf);
     PRINT_POINTER(redis->reader);
     PRINT_POINTER(redis->reader->fn);
-    PRINT_POINTER(redis->reader->rstack);
+//    PRINT_POINTER(redis->reader->rstack);
 }
 
 
