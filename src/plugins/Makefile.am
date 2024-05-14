@@ -6,6 +6,7 @@ SUBDIRS = \
 
 if USE_LDNS
 SUBDIRS += \
+  dowse \
 	example-ldns-aaaa-blocking \
 	example-ldns-blocking \
 	example-ldns-forwarding \
